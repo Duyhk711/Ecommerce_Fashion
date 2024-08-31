@@ -244,9 +244,9 @@
                                         </li>
                                         <li><a href="register.html"><i class="icon anm anm-user-al"></i>Register</a>
                                         </li>
-                                        <li><a href="my-account.html"><i class="icon anm anm-user-cil"></i>My
+                                        <li><a href="/myaccount"><i class="icon anm anm-user-cil"></i>My
                                                 Account</a></li>
-                                        <li><a href="wishlist-style1.html"><i
+                                        <li><a href="/wishlist"><i
                                                     class="icon anm anm-heart-l"></i>Wishlist</a></li>
                                         <li><a href="compare-style1.html"><i
                                                     class="icon anm anm-random-r"></i>Compare</a></li>
@@ -716,9 +716,9 @@
                             class="ms-1 text-link">Terms &amp; conditions</a>
                     </div>
                     <div class="minicart-action d-flex mt-3">
-                        <a href="checkout-style1.html" class="proceed-to-checkout btn btn-primary w-50 me-1">Check
+                        <a href="/checkout" class="proceed-to-checkout btn btn-primary w-50 me-1">Check
                             Out</a>
-                        <a href="cart-style1.html" class="cart-btn btn btn-secondary w-50 ms-1">View Cart</a>
+                        <a href="/cart" class="cart-btn btn btn-secondary w-50 ms-1">View Cart</a>
                     </div>
                 </div>
             </div>
