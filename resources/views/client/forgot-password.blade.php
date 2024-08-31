@@ -40,5 +40,5 @@
             </div>
         </div>
     </div>
-</div><br><br>
+</div><br>
 @endsection
