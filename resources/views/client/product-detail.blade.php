@@ -24,7 +24,7 @@
                     <!-- Product Main -->
                     <div class="zoompro-wrap">
                         <!-- Product Image -->
-                        <div class="zoompro-span"><img id="zoompro" class="zoompro" src="assets/images/products/product1.jpg" data-zoom-image="assets/images/products/product1.jpg" alt="product" width="625" height="808" /></div>
+                        <div class="zoompro-span"><img id="zoompro" class="zoompro" src="{{ asset('client/images/products/product1.jpg') }}" data-zoom-image="assets/images/products/product1.jpg" alt="product" width="625" height="808" /></div>
                         <!-- End Product Image -->
                         <!-- Product Label -->
                         <div class="product-labels"><span class="lbl pr-label1">New</span><span class="lbl on-sale">Sale</span></div>
