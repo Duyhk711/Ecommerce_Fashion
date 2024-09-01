@@ -367,7 +367,7 @@
                                             <!-- Start Product Image -->
                                             <div class="product-image">
                                                 <!-- Start Product Image -->
-                                                <a href="product-layout1.html" class="product-img rounded-3"><img
+                                                <a href="/product-detail" class="product-img rounded-3"><img
                                                         class="blur-up lazyload"
                                                         src="{{ asset('client/images/products/product1.jpg') }}"
                                                         alt="Product" title="Product" width="625"

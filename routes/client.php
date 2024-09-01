@@ -22,6 +22,7 @@ Route::view('/order-success', 'client.order-success');
 Route::view('/wishlist', 'client.wishlist');
 Route::view('/empty', 'client.empty');
 Route::view('/cart', 'client.cart');
+Route::view('/product-detail', 'client.product-detail');
 Route::view('/login', 'client.login');
 Route::view('/forgot-password', 'client.forgot-password');
 Route::view('/myaccount', 'client.my-account');
