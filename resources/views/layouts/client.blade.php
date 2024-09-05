@@ -152,9 +152,10 @@
                     <div class="col-1 col-sm-1 col-md-1 col-lg-8 align-self-center d-menu-col">
                         <nav class="navigation" id="AccessibleNav">
                             <ul id="siteNav" class="site-nav medium center">
-                                <li class="lvl1 parent dropdown"><a href="/home">Trang chủ </i></a>
+                                <li class="lvl1 parent dropdown"><a href="{{ route('pages.home') }}">Trang chủ
+                                        </i></a>
                                 </li>
-                                <li class="lvl1 parent megamenu"><a href="/shop">Cửa hàng</a>
+                                <li class="lvl1 parent megamenu"><a href="{{ route('pages.shop') }}">Cửa hàng</a>
                                     <div class="megamenu style1">
 
                                     </div>
@@ -240,16 +241,17 @@
                             <div id="accountBox">
                                 <div class="customer-links">
                                     <ul class="m-0">
-                                        <li><a href="login.html"><i class="icon anm anm-sign-in-al"></i>Sign In</a>
+                                        <li><a href="{{ route('pages.login') }}"><i
+                                                    class="icon anm anm-sign-in-al"></i>Sign In</a>
                                         </li>
-                                        <li><a href="register.html"><i class="icon anm anm-user-al"></i>Register</a>
+                                        <li><a href="{{ route('pages.login') }}"><i
+                                                    class="icon anm anm-user-al"></i>Register</a>
                                         </li>
-                                        <li><a href="my-account.html"><i class="icon anm anm-user-cil"></i>My
+                                        <li><a href="{{ route('pages.myAccount') }}"><i
+                                                    class="icon anm anm-user-cil"></i>My
                                                 Account</a></li>
-                                        <li><a href="wishlist-style1.html"><i
+                                        <li><a href="{{ route('pages.wishlist') }}"><i
                                                     class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                        <li><a href="compare-style1.html"><i
-                                                    class="icon anm anm-random-r"></i>Compare</a></li>
                                         <li><a href="login.html"><i class="icon anm anm-sign-out-al"></i>Sign out</a>
                                         </li>
                                     </ul>
@@ -443,11 +445,11 @@
                 <li class="mobile-menu-bottom">
                     <div class="mobile-links">
                         <ul class="list-inline d-inline-flex flex-column w-100">
-                            <li><a href="login.html" class="d-flex align-items-center"><i
+                            <li><a href="{{ route('pages.login') }}" class="d-flex align-items-center"><i
                                         class="icon anm anm-sign-in-al"></i>Sign In</a></li>
-                            <li><a href="register.html" class="d-flex align-items-center"><i
+                            <li><a href="{{ route('pages.login') }}" class="d-flex align-items-center"><i
                                         class="icon anm anm-user-al"></i>Register</a></li>
-                            <li><a href="my-account.html" class="d-flex align-items-center"><i
+                            <li><a href="{{ route('pages.myAccount') }}" class="d-flex align-items-center"><i
                                         class="icon anm anm-user-cil"></i>My Account</a></li>
                             <li class="title h5">Need Help?</li>
                             <li><a href="tel:401234567890" class="d-flex align-items-center"><i
