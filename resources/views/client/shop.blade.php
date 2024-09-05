@@ -12,9 +12,10 @@
                             <h1>Shop Left Sidebar</h1>
                         </div>
                         <!--Breadcrumbs-->
-                        <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span
-                                class="title"><i class="icon anm anm-angle-right-l"></i>Shop</span><span
-                                class="main-title"><i class="icon anm anm-angle-right-l"></i>Shop Left Sidebar</span></div>
+                        <div class="breadcrumbs"><a href="{{ route('pages.home') }}"
+                                title="Back to the home page">Home</a><span class="title"><i
+                                    class="icon anm anm-angle-right-l"></i>Shop</span><span class="main-title"><i
+                                    class="icon anm anm-angle-right-l"></i>Shop Left Sidebar</span></div>
                         <!--End Breadcrumbs-->
                     </div>
                 </div>
@@ -27,9 +28,9 @@
             <!--Category Slider-->
             <div class="collection-slider-6items gp10 slick-arrow-dots sub-collection section pt-0">
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection1.jpg')}}"
+                                data-src="{{ asset('client/images/collection/sub-collection1.jpg') }}"
                                 src="assets/images/collection/sub-collection1.jpg" alt="Men's" title="Men's"
                                 width="365" height="365" /></div>
                         <div class="details text-center">
@@ -39,11 +40,11 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection2.jpg')}}"
-                                src="{{asset('client/images/collection/sub-collection2.jpg')}}" alt="Women's" title="Women's"
-                                width="365" height="365" /></div>
+                                data-src="{{ asset('client/images/collection/sub-collection2.jpg') }}"
+                                src="{{ asset('client/images/collection/sub-collection2.jpg') }}" alt="Women's"
+                                title="Women's" width="365" height="365" /></div>
                         <div class="details text-center">
                             <h4 class="category-title mb-0">Women's</h4>
                             <p class="counts">24 Items</p>
@@ -51,11 +52,11 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection3.jpg')}}"
-                                src="{{asset('client/images/collection/sub-collection3.jpg')}}" alt="Top" title="Top"
-                                width="365" height="365" /></div>
+                                data-src="{{ asset('client/images/collection/sub-collection3.jpg') }}"
+                                src="{{ asset('client/images/collection/sub-collection3.jpg') }}" alt="Top"
+                                title="Top" width="365" height="365" /></div>
                         <div class="details text-center">
                             <h4 class="category-title mb-0">Top</h4>
                             <p class="counts">13 Items</p>
@@ -63,11 +64,11 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection4.jpg')}}"
-                                src="{{asset('client/images/collection/sub-collection4.jpg')}}" alt="Bottom" title="Bottom"
-                                width="365" height="365" /></div>
+                                data-src="{{ asset('client/images/collection/sub-collection4.jpg') }}"
+                                src="{{ asset('client/images/collection/sub-collection4.jpg') }}" alt="Bottom"
+                                title="Bottom" width="365" height="365" /></div>
                         <div class="details text-center">
                             <h4 class="category-title mb-0">Bottom</h4>
                             <p class="counts">26 Items</p>
@@ -75,11 +76,11 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection5.jpg')}}"
-                                src="{{asset('client/images/collection/sub-collection5.jpg')}}" alt="T-Shirts" title="T-Shirts"
-                                width="365" height="365" /></div>
+                                data-src="{{ asset('client/images/collection/sub-collection5.jpg') }}"
+                                src="{{ asset('client/images/collection/sub-collection5.jpg') }}" alt="T-Shirts"
+                                title="T-Shirts" width="365" height="365" /></div>
                         <div class="details text-center">
                             <h4 class="category-title mb-0">T-Shirts</h4>
                             <p class="counts">18 Items</p>
@@ -87,11 +88,11 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection6.jpg')}}"
-                                src="{{asset('client/images/collection/sub-collection6.jpg')}}" alt="Shirts" title="Shirts"
-                                width="365" height="365" /></div>
+                                data-src="{{ asset('client/images/collection/sub-collection6.jpg') }}"
+                                src="{{ asset('client/images/collection/sub-collection6.jpg') }}" alt="Shirts"
+                                title="Shirts" width="365" height="365" /></div>
                         <div class="details text-center">
                             <h4 class="category-title mb-0">Shirts</h4>
                             <p class="counts">11 Items</p>
@@ -99,11 +100,11 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{ route('pages.shop') }}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{asset('client/images/collection/sub-collection24.jpg')}}"
-                                src="{{asset('client/images/collection/sub-collection24.jpg')}}" alt="Jeans" title="Jeans"
-                                width="365" height="365" /></div>
+                                data-src="{{ asset('client/images/collection/sub-collection24.jpg') }}"
+                                src="{{ asset('client/images/collection/sub-collection24.jpg') }}" alt="Jeans"
+                                title="Jeans" width="365" height="365" /></div>
                         <div class="details text-center">
                             <h4 class="category-title mb-0">Jeans</h4>
                             <p class="counts">28 Items</p>
@@ -208,20 +209,20 @@
                             <div class="widget-content filter-color filterDD">
                                 <ul class="swacth-list swatches d-flex-center clearfix pt-0">
                                     <li class="swatch large radius available active"><img
-                                            src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                            width="70" height="70" data-bs-toggle="tooltip"
+                                            src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                            alt="image" width="70" height="70" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Blue" /></li>
                                     <li class="swatch large radius available"><img
-                                            src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                            width="70" height="70" data-bs-toggle="tooltip"
+                                            src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                            alt="image" width="70" height="70" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Black" /></li>
                                     <li class="swatch large radius available"><img
-                                            src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                            width="70" height="70" data-bs-toggle="tooltip"
+                                            src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                            alt="image" width="70" height="70" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Pink" /></li>
                                     <li class="swatch large radius available"><img
-                                            src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                            width="70" height="70" data-bs-toggle="tooltip"
+                                            src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                            alt="image" width="70" height="70" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Red" /></li>
                                     <li class="swatch large radius available black"><span class="swatchLbl"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Black"></span></li>
@@ -325,10 +326,10 @@
                         <!--End Product Tags-->
                         <!--Banner-->
                         <div class="sidebar-widget static-banner p-0">
-                            <a href="shop-left-sidebar.html"><img class="rounded-0 blur-up lazyload"
-                                    data-src="{{asset('client/images/banners/shop-banner.jpg')}}"
-                                    src="{{asset('client/images/banners/shop-banner.jpg')}}" alt="image" width="274"
-                                    height="367"></a>
+                            <a href="{{ route('pages.shop') }}"><img class="rounded-0 blur-up lazyload"
+                                    data-src="{{ asset('client/images/banners/shop-banner.jpg') }}"
+                                    src="{{ asset('client/images/banners/shop-banner.jpg') }}" alt="image"
+                                    width="274" height="367"></a>
                         </div>
                         <!--End Banner-->
                     </div>
@@ -398,10 +399,10 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0"><img
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0"><img
                                                 class="rounded-0 blur-up lazyload"
-                                                src="{{asset('client/images/products/product1.jpg')}}" alt="Product" title="Product"
-                                                width="625" height="808" /></a>
+                                                src="{{ asset('client/images/products/product1.jpg') }}" alt="Product"
+                                                title="Product" width="625" height="808" /></a>
                                         <!-- End Product Image -->
                                         <!-- Product label -->
                                         <div class="product-labels"><span class="lbl on-sale">Sale</span></div>
@@ -452,7 +453,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Oxford Cuban Shirt</a>
+                                            <a href="{{ route('pages.productDetail') }}">Oxford Cuban Shirt</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -478,20 +479,20 @@
                                         <ul class="variants-clr swatches">
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Navy"><img
-                                                        src="{{asset('client/images/products/product1.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product1.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Green"><img
-                                                        src="{{asset('client/images/products/product1-1.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product1-1.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Gray"><img
-                                                        src="{{asset('client/images/products/product1-2.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product1-2.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Orange"><img
-                                                        src="{{asset('client/images/products/product1-3.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product1-3.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                         </ul>
                                         <!-- End Variant -->
                                         <!-- Product Button -->
@@ -517,17 +518,17 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product2.jpg')}}"
-                                                src="{{asset('client/images/products/product2.jpg')}}" alt="Product" title="Product"
-                                                width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product2.jpg') }}"
+                                                src="{{ asset('client/images/products/product2.jpg') }}" alt="Product"
+                                                title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product2-1.jpg')}}"
-                                                src="{{asset('client/images/products/product2-1.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product2-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product2-1.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
@@ -575,7 +576,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Cuff Beanie Cap</a>
+                                            <a href="{{ route('pages.productDetail') }}">Cuff Beanie Cap</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -601,28 +602,28 @@
                                         <ul class="variants-clr swatches">
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Navy"><img
-                                                        src="{{asset('client/images/products/product2.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product2.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Green"><img
-                                                        src="{{asset('client/images/products/product2-1.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product2-1.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Gray"><img
-                                                        src="{{asset('client/images/products/product2-2.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product2-2.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Orange"><img
-                                                        src="{{asset('client/images/products/product2-3.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product2-3.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Yellow"><img
-                                                        src="{{asset('client/images/products/product2-4.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product2-4.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                             <li class="swatch medium radius"><span class="swatchLbl"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Blue"><img
-                                                        src="{{asset('client/images/products/product2-5.jpg')}}" alt="img"
-                                                        width="625" height="808"></span></li>
+                                                        src="{{ asset('client/images/products/product2-5.jpg') }}"
+                                                        alt="img" width="625" height="808"></span></li>
                                         </ul>
                                         <!-- End Variant -->
                                         <!-- Product Button -->
@@ -648,17 +649,17 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product3.jpg')}}"
-                                                src="{{asset('client/images/products/product3.jpg')}}" alt="Product" title="Product"
-                                                width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product3.jpg') }}"
+                                                src="{{ asset('client/images/products/product3.jpg') }}" alt="Product"
+                                                title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product3-1.jpg')}}"
-                                                src="{{asset('client/images/products/product3-1.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product3-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product3-1.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
@@ -709,7 +710,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Flannel Collar Shirt</a>
+                                            <a href="{{ route('pages.productDetail') }}">Flannel Collar Shirt</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -766,17 +767,17 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product4.jpg')}}"
-                                                src="{{asset('client/images/products/product4.jpg')}}" alt="Product" title="Product"
-                                                width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product4.jpg') }}"
+                                                src="{{ asset('client/images/products/product4.jpg') }}" alt="Product"
+                                                title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product4-1.jpg')}}"
-                                                src="{{asset('client/images/products/product4-1.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product4-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product4-1.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
@@ -841,7 +842,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Cotton Hooded Hoodie</a>
+                                            <a href="{{ route('pages.productDetail') }}">Cotton Hooded Hoodie</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -866,17 +867,20 @@
                                         <!-- Variant -->
                                         <ul class="variants-clr swatches">
                                             <li class="swatch medium radius black"><img
-                                                    src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                                    width="70" height="70" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="black" /></li>
+                                                    src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                                    alt="image" width="70" height="70"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="black" />
+                                            </li>
                                             <li class="swatch medium radius navy"><img
-                                                    src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                                    width="70" height="70" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="navy" /></li>
+                                                    src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                                    alt="image" width="70" height="70"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="navy" />
+                                            </li>
                                             <li class="swatch medium radius darkgreen"><img
-                                                    src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                                    width="70" height="70" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="darkgreen" /></li>
+                                                    src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                                    alt="image" width="70" height="70"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="darkgreen" />
+                                            </li>
                                         </ul>
                                         <!-- End Variant -->
                                         <!-- Product Button -->
@@ -901,17 +905,17 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product5.jpg')}}"
-                                                src="{{asset('client/images/products/product5.jpg')}}" alt="Product" title="Product"
-                                                width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product5.jpg') }}"
+                                                src="{{ asset('client/images/products/product5.jpg') }}" alt="Product"
+                                                title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product5-1.jpg')}}"
-                                                src="{{asset('client/images/products/product5-1.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product5-1.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
@@ -962,7 +966,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Hooded Neck Hoodies</a>
+                                            <a href="{{ route('pages.productDetail') }}">Hooded Neck Hoodies</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1016,18 +1020,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product6.jpg')}}"
-                                                src="{{asset('client/images/products/product6.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product6.jpg') }}"
+                                                src="{{ asset('client/images/products/product6.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product6-1.jpg')}}"
-                                                src="{{asset('client/images/products/product6-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product6-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product6-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1077,7 +1081,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Foldable Duffel Bag</a>
+                                            <a href="{{ route('pages.productDetail') }}">Foldable Duffel Bag</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1138,18 +1142,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product7.jpg')}}"
-                                                src="{{asset('client/images/products/product7.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product7.jpg') }}"
+                                                src="{{ asset('client/images/products/product7.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product7-1.jpg')}}"
-                                                src="{{asset('client/images/products/product7-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product7-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product7-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1199,7 +1203,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">High-Waisted Pant</a>
+                                            <a href="{{ route('pages.productDetail') }}">High-Waisted Pant</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1224,13 +1228,15 @@
                                         <!-- Variant -->
                                         <ul class="variants-clr swatches">
                                             <li class="swatch medium radius black"><img
-                                                    src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                                    width="70" height="70" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="black" /></li>
+                                                    src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                                    alt="image" width="70" height="70"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="black" />
+                                            </li>
                                             <li class="swatch medium radius maroon"><img
-                                                    src="{{asset('client/images/products/swatches/blue-red.jpg')}}" alt="image"
-                                                    width="70" height="70" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="maroon" /></li>
+                                                    src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                                                    alt="image" width="70" height="70"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="maroon" />
+                                            </li>
                                         </ul>
                                         <!-- End Variant -->
                                         <!-- Product Button -->
@@ -1255,18 +1261,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product8.jpg')}}"
-                                                src="{{asset('client/images/products/product8.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product8.jpg') }}"
+                                                src="{{ asset('client/images/products/product8.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product8-1.jpg')}}"
-                                                src="{{asset('client/images/products/product8-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product8-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product8-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1313,7 +1319,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Narror Neck Tie</a>
+                                            <a href="{{ route('pages.productDetail') }}">Narror Neck Tie</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1370,18 +1376,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product9.jpg')}}"
-                                                src="{{asset('client/images/products/product9.jpg')}}" alt="Product"
+                                                data-src="{{ asset('client/images/products/product9.jpg') }}"
+                                                src="{{ asset('client/images/products/product9.jpg') }}" alt="Product"
                                                 title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product9-1.jpg')}}"
-                                                src="{{asset('client/images/products/product9-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product9-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product9-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1431,7 +1437,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Men's Cheater Jacket</a>
+                                            <a href="{{ route('pages.productDetail') }}">Men's Cheater Jacket</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1475,18 +1481,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product10.jpg')}}"
-                                                src="{{asset('client/images/products/product10.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product10.jpg') }}"
+                                                src="{{ asset('client/images/products/product10.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product10-1.jpg')}}"
-                                                src="{{asset('client/images/products/product10-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product10-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product10-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1533,7 +1539,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Casual Mustard Shirt</a>
+                                            <a href="{{ route('pages.productDetail') }}">Casual Mustard Shirt</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1577,18 +1583,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product11.jpg')}}"
-                                                src="{{asset('client/images/products/product11.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product11.jpg') }}"
+                                                src="{{ asset('client/images/products/product11.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product11-1.jpg')}}"
-                                                src="{{asset('client/images/products/product11-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product11-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product11-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1635,7 +1641,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Sleeve Round T-Shirt</a>
+                                            <a href="{{ route('pages.productDetail') }}">Sleeve Round T-Shirt</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1679,18 +1685,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product12.jpg')}}"
-                                                src="{{asset('client/images/products/product12.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product12.jpg') }}"
+                                                src="{{ asset('client/images/products/product12.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product12-1.jpg')}}"
-                                                src="{{asset('client/images/products/product12-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product12-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product12-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1737,7 +1743,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Backpack Laptop Bag</a>
+                                            <a href="{{ route('pages.productDetail') }}">Backpack Laptop Bag</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1781,18 +1787,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product13.jpg')}}"
-                                                src="{{asset('client/images/products/product13.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product13.jpg') }}"
+                                                src="{{ asset('client/images/products/product13.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product13-1.jpg')}}"
-                                                src="{{asset('client/images/products/product13-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product13-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product13-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1839,7 +1845,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Cotton Casual Tshirt</a>
+                                            <a href="{{ route('pages.productDetail') }}">Cotton Casual Tshirt</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1883,18 +1889,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product14.jpg')}}"
-                                                src="{{asset('client/images/products/product14.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product14.jpg') }}"
+                                                src="{{ asset('client/images/products/product14.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product14-1.jpg')}}"
-                                                src="{{asset('client/images/products/product14-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product14-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product14-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -1941,7 +1947,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Ankle Casual Pants</a>
+                                            <a href="{{ route('pages.productDetail') }}">Ankle Casual Pants</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -1985,18 +1991,18 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0">
+                                        <a href="{{ route('pages.productDetail') }}" class="product-img rounded-0">
                                             <!-- Image -->
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product15.jpg')}}"
-                                                src="{{asset('client/images/products/product15.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product15.jpg') }}"
+                                                src="{{ asset('client/images/products/product15.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Image -->
                                             <!-- Hover Image -->
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{asset('client/images/products/product15-1.jpg')}}"
-                                                src="{{asset('client/images/products/product15-1.jpg')}}" alt="Product"
-                                                title="Product" width="625" height="808" />
+                                                data-src="{{ asset('client/images/products/product15-1.jpg') }}"
+                                                src="{{ asset('client/images/products/product15-1.jpg') }}"
+                                                alt="Product" title="Product" width="625" height="808" />
                                             <!-- End Hover Image -->
                                         </a>
                                         <!-- End Product Image -->
@@ -2043,7 +2049,7 @@
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
-                                            <a href="product-layout1.html">Straight Fit Trousers</a>
+                                            <a href="{{ route('pages.productDetail') }}">Straight Fit Trousers</a>
                                         </div>
                                         <!-- End Product Name -->
                                         <!-- Product Price -->
@@ -2119,13 +2125,15 @@
                         @csrf
                         <!-- Product Info -->
                         <div class="row g-0 item mb-3">
-                            <a class="col-4 product-image" href="product-layout1.html"><img class="blur-up lazyload"
+                            <a class="col-4 product-image" href="{{ route('pages.productDetail') }}"><img
+                                    class="blur-up lazyload"
                                     data-src="{{ asset('client/images/products/addtocart-modal.jpg') }}"
                                     src="{{ asset('client/images/products/addtocart-modal.jpg') }}" alt="Product"
                                     title="Product" width="625" height="800" /></a>
                             <div class="col-8 product-details">
                                 <div class="product-variant ps-3">
-                                    <a class="product-title" href="product-layout1.html">Weave Hoodie Sweatshirt</a>
+                                    <a class="product-title" href="{{ route('pages.productDetail') }}">Weave Hoodie
+                                        Sweatshirt</a>
                                     <div class="priceRow mt-2 mb-3">
                                         <div class="product-price m-0">
                                             <span class="old-price">$114.00</span><span class="price">$99.00</span>
@@ -2215,7 +2223,7 @@
                         </div>
                         <!-- End Product Action -->
                         <div class="text-center mt-3">
-                            <a class="text-link" href="product-layout1.html">View More Details</a>
+                            <a class="text-link" href="{{ route('pages.productDetail') }}">View More Details</a>
                         </div>
                     </form>
                 </div>
@@ -2239,7 +2247,8 @@
                         <div class="row d-flex-center text-center">
                             <div class="col-md-6">
                                 <!-- Product Image -->
-                                <a class="product-image" href="product-layout1.html"><img class="blur-up lazyload"
+                                <a class="product-image" href="{{ route('pages.productDetail') }}"><img
+                                        class="blur-up lazyload"
                                         data-src="{{ asset('client/images/products/addtocart-modal.jpg') }}"
                                         src="{{ asset('client/images/products/addtocart-modal.jpg') }}" alt="Product"
                                         title="Product" width="625" height="800" /></a>
@@ -2248,7 +2257,8 @@
                             <div class="col-md-6 mt-3 mt-md-0">
                                 <!-- Product Info -->
                                 <div class="product-details">
-                                    <a class="product-title" href="product-layout1.html">Cuff Beanie Cap</a>
+                                    <a class="product-title" href="{{ route('pages.productDetail') }}">Cuff Beanie
+                                        Cap</a>
                                     <p class="product-clr my-2 text-muted">Black / XL</p>
                                 </div>
                                 <div class="addcart-total rounded-5">
@@ -2336,8 +2346,8 @@
                                             data-bs-slide-to="0" data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2.jpg') }}" alt="product"
-                                                title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2.jpg') }}"
+                                                alt="product" title="Product" width="625" height="808" />
                                         </div>
                                         <div class="list-inline-item" id="carousel-selector-1" data-bs-slide-to="1"
                                             data-bs-target="#quickView">
@@ -2389,7 +2399,7 @@
                             </div>
                             <!-- End Model Thumbnail -->
                             <div class="text-center mt-3">
-                                <a href="product-layout1.html" class="text-link">View More Details</a>
+                                <a href="{{ route('pages.productDetail') }}" class="text-link">View More Details</a>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-6 col-lg-6">
