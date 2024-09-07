@@ -1,27 +1,8 @@
 @extends('layouts.client')
 
 @section('content')
-    <!-- Body Container -->
-    <div id="page-content">
-        <!--Page Header-->
-        <div class="page-header text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
-                        <div class="page-title">
-                            <h1>Shop Left Sidebar</h1>
-                        </div>
-                        <!--Breadcrumbs-->
-                        <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span
-                                class="title"><i class="icon anm anm-angle-right-l"></i>Shop</span><span
-                                class="main-title"><i class="icon anm anm-angle-right-l"></i>Shop Left Sidebar</span></div>
-                        <!--End Breadcrumbs-->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--End Page Header-->
-
+@include('client.component.page_header')
+<div class="container" style="max-width: 80%;">
         <!--Main Content-->
         <div class="container">
             <!--Category Slider-->
@@ -39,7 +20,7 @@
                     </a>
                 </div>
                 <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
+                    <a href="{{route('shop')}}" class="category-link clr-none">
                         <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
                                 data-src="{{asset('client/images/collection/sub-collection2.jpg')}}"
                                 src="{{asset('client/images/collection/sub-collection2.jpg')}}" alt="Women's" title="Women's"
@@ -398,7 +379,7 @@
                                     <!-- Start Product Image -->
                                     <div class="product-image">
                                         <!-- Start Product Image -->
-                                        <a href="product-layout1.html" class="product-img rounded-0"><img
+                                        <a href="{{route('productDetail')}}" class="product-img rounded-0"><img
                                                 class="rounded-0 blur-up lazyload"
                                                 src="{{asset('client/images/products/product1.jpg')}}" alt="Product" title="Product"
                                                 width="625" height="808" /></a>
@@ -2105,9 +2086,9 @@
             </div>
         </div>
         <!--End Main Content-->
-    </div>
-    <!-- End Body Container -->
-
+</div>
+@endsection
+@section('modal')
     <!-- Product Quickshop Modal-->
     <div class="quickshop-modal modal fade" id="quickshop_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
