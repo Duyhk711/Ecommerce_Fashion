@@ -1,24 +1,8 @@
 @extends('layouts.client')
 
 @section('content')
-
-    <!-- Body Container -->
-    <div id="page-content"> 
-        <!--Page Header-->
-        <div class="page-header text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
-                        <div class="page-title"><h1>My Account</h1></div>
-                        <!--Breadcrumbs-->
-                        <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="title"><i class="icon anm anm-angle-right-l"></i>Pages</span><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>My Account</span></div>
-                        <!--End Breadcrumbs-->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--End Page Header-->
-
+@include('client.component.page_header')
+<div class="container" style="max-width: 80%;">
         <!--Main Content-->
         <div class="container">
             <div class="row">
@@ -1158,6 +1142,6 @@
         </div>
         <!--End Main Content-->
     </div>
-    <!-- End Body Container -->
+
 
 @endsection

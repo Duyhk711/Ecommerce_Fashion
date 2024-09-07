@@ -1,94 +1,33 @@
 @extends('layouts.client')
 
 @section('content')
-    <!-- Body Container -->
-    <div id="page-content" class="mb-0">
-        <!--Home Slideshow-->
-        <section class="slideshow slideshow-wrapper">
-            <div class="home-slideshow slick-arrow-dots">
-                <div class="slide">
-                    <div class="slideshow-wrap">
-                        <picture>
-                            <source media="(max-width:767px)"
-                                srcset="{{ asset('client/images/slideshow/demo1-banner1-mbl.jpg') }}" width="1150"
-                                height="800" />
-                            <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner1.jpg') }}"
-                                alt="slideshow" title="" width="1920" height="795" />
-                        </picture>
-                        <div class="container">
-                            <div class="slideshow-content slideshow-overlay middle-left">
-                                <div class="slideshow-content-in">
-                                    <div class="wrap-caption animation style1">
-                                        <p class="ss-small-title">Elegant design</p>
-                                        <h2 class="ss-mega-title">
-                                            Making someone feel <br />pretty is an art
-                                        </h2>
-                                        <p class="ss-sub-title xs-hide">
-                                            Perfectly designed to ensures ultimate comfort and
-                                            style
-                                        </p>
-                                        <div class="ss-btnWrap">
-                                            <a class="btn btn-primary" href="shop-grid-view.html">Shop Women</a>
-                                            <a class="btn btn-secondary" href="shop-grid-view.html">Shop Men</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="slideshow-wrap">
-                        <picture>
-                            <source media="(max-width:767px)"
-                                srcset="{{ asset('client/images/slideshow/demo1-banner2-mbl.jpg') }}" width="1150"
-                                height="800" />
-                            <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner2.jpg') }}"
-                                alt="slideshow" title="" width="1920" height="795" />
-                        </picture>
-                        <div class="container">
-                            <div class="slideshow-content slideshow-overlay middle-right">
-                                <div class="slideshow-content-in">
-                                    <div class="wrap-caption animation style1">
-                                        <h2 class="ss-mega-title">
-                                            Spread Positive <br />Energy With Hema
-                                        </h2>
-                                        <p class="ss-sub-title xs-hide">
-                                            The must-have closet essential women wardrobe for the
-                                            year
-                                        </p>
-                                        <div class="ss-btnWrap d-flex-justify-start">
-                                            <a class="btn btn-primary" href="shop-grid-view.html">Explore Now!</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="slideshow-wrap">
-                        <picture>
-                            <source media="(max-width:767px)"
-                                srcset="{{ asset('client/images/slideshow/demo1-banner3-mbl.jpg') }}" width="1150"
-                                height="800" />
-                            <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner3.jpg') }}"
-                                alt="slideshow" title="" width="1920" height="795" />
-                        </picture>
-                        <div class="container">
-                            <div class="slideshow-content slideshow-overlay middle-right">
-                                <div class="slideshow-content-in">
-                                    <div class="wrap-caption animation style1">
-                                        <h2 class="ss-mega-title">
-                                            Design Your Next <br />Favourite Wear
-                                        </h2>
-                                        <p class="ss-sub-title xs-hide">
-                                            The outfit that blend elegance and style for your
-                                            casual wear
-                                        </p>
-                                        <div class="ss-btnWrap">
-                                            <a class="btn btn-primary" href="shop-grid-view.html">Shop now</a>
-                                        </div>
+    <!--Home Slideshow-->
+    <section class="slideshow slideshow-wrapper">
+        <div class="home-slideshow slick-arrow-dots">
+            <div class="slide">
+                <div class="slideshow-wrap">
+                    <picture>
+                        <source media="(max-width:767px)"
+                            srcset="{{ asset('client/images/slideshow/demo1-banner1-mbl.jpg') }}" width="1150"
+                            height="800" />
+                        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner1.jpg') }}"
+                            alt="slideshow" title="" width="1920" height="795" />
+                    </picture>
+                    <div class="container">
+                        <div class="slideshow-content slideshow-overlay middle-left">
+                            <div class="slideshow-content-in">
+                                <div class="wrap-caption animation style1">
+                                    <p class="ss-small-title">Elegant design</p>
+                                    <h2 class="ss-mega-title">
+                                        Making someone feel <br />pretty is an art
+                                    </h2>
+                                    <p class="ss-sub-title xs-hide">
+                                        Perfectly designed to ensures ultimate comfort and
+                                        style
+                                    </p>
+                                    <div class="ss-btnWrap">
+                                        <a class="btn btn-primary" href="shop-grid-view.html">Shop Women</a>
+                                        <a class="btn btn-secondary" href="shop-grid-view.html">Shop Men</a>
                                     </div>
                                 </div>
                             </div>
@@ -96,9 +35,68 @@
                     </div>
                 </div>
             </div>
-        </section>
-        <!--End Home Slideshow-->
-
+            <div class="slide">
+                <div class="slideshow-wrap">
+                    <picture>
+                        <source media="(max-width:767px)"
+                            srcset="{{ asset('client/images/slideshow/demo1-banner2-mbl.jpg') }}" width="1150"
+                            height="800" />
+                        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner2.jpg') }}"
+                            alt="slideshow" title="" width="1920" height="795" />
+                    </picture>
+                    <div class="container">
+                        <div class="slideshow-content slideshow-overlay middle-right">
+                            <div class="slideshow-content-in">
+                                <div class="wrap-caption animation style1">
+                                    <h2 class="ss-mega-title">
+                                        Spread Positive <br />Energy With Hema
+                                    </h2>
+                                    <p class="ss-sub-title xs-hide">
+                                        The must-have closet essential women wardrobe for the
+                                        year
+                                    </p>
+                                    <div class="ss-btnWrap d-flex-justify-start">
+                                        <a class="btn btn-primary" href="shop-grid-view.html">Explore Now!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slideshow-wrap">
+                    <picture>
+                        <source media="(max-width:767px)"
+                            srcset="{{ asset('client/images/slideshow/demo1-banner3-mbl.jpg') }}" width="1150"
+                            height="800" />
+                        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner3.jpg') }}"
+                            alt="slideshow" title="" width="1920" height="795" />
+                    </picture>
+                    <div class="container">
+                        <div class="slideshow-content slideshow-overlay middle-right">
+                            <div class="slideshow-content-in">
+                                <div class="wrap-caption animation style1">
+                                    <h2 class="ss-mega-title">
+                                        Design Your Next <br />Favourite Wear
+                                    </h2>
+                                    <p class="ss-sub-title xs-hide">
+                                        The outfit that blend elegance and style for your
+                                        casual wear
+                                    </p>
+                                    <div class="ss-btnWrap">
+                                        <a class="btn btn-primary" href="shop-grid-view.html">Shop now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--End Home Slideshow-->
+    <div class="container" style="max-width: 80%;">
         <!--Service Section-->
         <section class="section service-section pb-0">
             <div class="container">
@@ -234,7 +232,7 @@
                         </a>
                     </div>
                     <div class="category-item zoomscal-hov">
-                        <a href="shop-left-sidebar.html" class="category-link clr-none">
+                        <a href="{{route('shop')}}" class="category-link clr-none">
                             <div class="zoom-scal zoom-scal-nopb rounded-3">
                                 <img class="blur-up lazyload"
                                     data-src="{{ asset('client/images/collection/sub-collection3.jpg') }}"
@@ -367,7 +365,7 @@
                                             <!-- Start Product Image -->
                                             <div class="product-image">
                                                 <!-- Start Product Image -->
-                                                <a href="product-layout1.html" class="product-img rounded-3"><img
+                                                <a href="{{route('productDetail')}}" class="product-img rounded-3"><img
                                                         class="blur-up lazyload"
                                                         src="{{ asset('client/images/products/product1.jpg') }}"
                                                         alt="Product" title="Product" width="625"
@@ -1237,7 +1235,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="shop-left-sidebar.html" class="btn btn-secondary btn-lg">View
+                                    <a href="{{route('shop')}}" class="btn btn-secondary btn-lg">View
                                         Collection</a>
                                 </div>
                             </div>
@@ -1977,7 +1975,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="shop-left-sidebar.html" class="btn btn-secondary btn-lg">View
+                                    <a href="{{route('shop')}}" class="btn btn-secondary btn-lg">View
                                         Collection</a>
                                 </div>
                             </div>
@@ -2780,7 +2778,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="shop-left-sidebar.html" class="btn btn-secondary btn-lg">View
+                                    <a href="{{route('shop')}}" class="btn btn-secondary btn-lg">View
                                         Collection</a>
                                 </div>
                             </div>
@@ -2815,7 +2813,7 @@
                                 customers a smooth shopping experience which can be used for
                                 various kinds of stores such as fashion.
                             </p>
-                            <a href="shop-left-sidebar.html" class="hero-btn btn btn-light">Shop now</a>
+                            <a href="{{route('shop')}}" class="hero-btn btn btn-light">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -3081,41 +3079,9 @@
         </section>
         <!--End Blog Post-->
     </div>
-    <!-- End Body Container -->
+@endsection
 
-    <!--Sticky Menubar Mobile-->
-    <div class="menubar-mobile d-flex align-items-center justify-content-between d-lg-none">
-        <div class="menubar-shop menubar-item">
-            <a href="shop-grid-view.html"><i class="menubar-icon anm anm-th-large-l"></i><span
-                    class="menubar-label">Shop</span></a>
-        </div>
-        <div class="menubar-account menubar-item">
-            <a href="my-account.html"><i class="menubar-icon icon anm anm-user-al"></i><span
-                    class="menubar-label">Account</span></a>
-        </div>
-        <div class="menubar-search menubar-item">
-            <a href="index.html"><span class="menubar-icon anm anm-home-l"></span><span
-                    class="menubar-label">Home</span></a>
-        </div>
-        <div class="menubar-wish menubar-item">
-            <a href="wishlist-style1.html">
-                <span class="span-count position-relative text-center"><i
-                        class="menubar-icon icon anm anm-heart-l"></i><span
-                        class="wishlist-count counter menubar-count">0</span></span>
-                <span class="menubar-label">Wishlist</span>
-            </a>
-        </div>
-        <div class="menubar-cart menubar-item">
-            <a href="#;" class="btn-minicart" data-bs-toggle="offcanvas" data-bs-target="#minicart-drawer">
-                <span class="span-count position-relative text-center"><i
-                        class="menubar-icon icon anm anm-cart-l"></i><span
-                        class="cart-count counter menubar-count">2</span></span>
-                <span class="menubar-label">Cart</span>
-            </a>
-        </div>
-    </div>
-    <!--End Sticky Menubar Mobile-->
-
+@section('modal')
     <!-- Product Quickshop Modal-->
     <div class="quickshop-modal modal fade" id="quickshop_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
