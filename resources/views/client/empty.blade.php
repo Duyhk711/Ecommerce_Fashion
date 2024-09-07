@@ -1,24 +1,6 @@
 @extends('layouts.client')
 
 @section('content')
-
-  <!-- Body Container -->
-  <div id="page-content"> 
-    <!--Page Header-->
-    <div class="page-header text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
-                    <div class="page-title"><h1>Collection Empty</h1></div>
-                    <!--Breadcrumbs-->
-                    <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="title"><i class="icon anm anm-angle-right-l"></i>Shop</span><span class="main-title"><i class="icon anm anm-angle-right-l"></i>Collection Empty</span></div>
-                    <!--End Breadcrumbs-->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--End Page Header-->
-
     <!--Main Content-->
     <div class="container">     
         <!--Category Empty-->
@@ -33,7 +15,5 @@
         <!--End Category Empty-->
     </div>
     <!--End Main Content-->
-</div>
-<!-- End Body Container -->
 
 @endsection
