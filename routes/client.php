@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 // Example Routes
+
 Route::view('/home', 'client.home')->name('home');
 Route::view('/shop', 'client.shop')->name('shop');
 Route::view('/productDetail', 'client.product-detail')->name('productDetail');
@@ -26,3 +27,4 @@ Route::view('/login', 'client.login')->name('login');
 Route::view('/register', 'client.register')->name('register');
 Route::view('/forgot-password', 'client.forgot-password')->name('forgot-password');
 Route::view('/myaccount', 'client.my-account')->name('myaccount');
+
