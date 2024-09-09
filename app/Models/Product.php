@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-
+    use HasFactory; // thiếu và đã bổ sung 9/9
     protected $fillable = [
         'catalogue_id',
         'name',

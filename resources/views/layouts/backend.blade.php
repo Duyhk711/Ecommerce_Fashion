@@ -7,22 +7,23 @@
 
   <title>Dashmix - Bootstrap 5 Admin Template &amp; UI Framework</title>
 
-  <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave">
+  <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
   <meta name="author" content="pixelcave">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="noindex, nofollow">
 
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
-  <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin.media/favicons/favicon-192x192.png') }}">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin.media/favicons/apple-touch-icon-180x180.png') }}">
-
+  <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
+   
   <!-- Modules -->
+  
   @yield('css')
   @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/dashmix/themes/xwork.scss', 'resources/js/dashmix/app.js']) --}}
-  @yield('js')
+
 </head>
 
 <body>
@@ -73,10 +74,43 @@
         
     DARK MODE
 
-    
       'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
   -->
-   
+  @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Dashmix.helpers('jq-notify', {
+                type: 'success',
+                icon: 'fa fa-check me-1',
+                message: '{{ session('success') }}'
+            });
+        });
+    </script>
+  @endif
+
+  @if (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Dashmix.helpers('jq-notify', {
+                type: 'danger',
+                icon: 'fa fa-times me-1',
+                message: '{{ session('error') }}'
+            });
+        });
+    </script>
+  @elseif(session('errors'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @foreach ($errors->all() as $error)
+                Dashmix.helpers('jq-notify', {
+                    type: 'danger',
+                    icon: 'fa fa-times me-1',
+                    message: '{{ $error }}'
+                });
+            @endforeach
+        });
+    </script>
+  @endif
   <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow">
     <!-- Side Overlay-->
     <aside id="side-overlay">
@@ -277,126 +311,109 @@
                 </li>
               </ul>
             </li>
+            
            {{-- SAN PHAM --}}
-            <li class="nav-main-item{{ request()->is('products*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon fa fa-box"></i>
-                  <span class="nav-main-link-name">Quản lý Sản phẩm</span>
+            <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-box"></i>
+                <span class="nav-main-link-name">Quản lý Sản phẩm</span>
               </a>
-              <ul class="nav-main-submenu">
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('products') ? ' active' : '' }}" href="/products">
-                          <span class="nav-main-link-name">Sản phẩm</span>
-                      </a>
-                  </li>
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('product-variants') ? ' active' : '' }}" href="/product-variants">
-                          <span class="nav-main-link-name">Biến thể sản phẩm</span>
-                      </a>
-                  </li>
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('product-images') ? ' active' : '' }}" href="/product-images">
-                          <span class="nav-main-link-name">Hình ảnh sản phẩm</span>
-                      </a>
-                  </li>
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('categories') ? ' active' : '' }}" href="/categories">
-                          <span class="nav-main-link-name">Danh mục sản phẩm</span>
-                      </a>
-                  </li>
+              <ul class="nav-main-submenu{{ request()->is('admin/products*') || request()->is('admin/products') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/products') ? ' active' : '' }}" href="{{ route('admin.products.index') }}">
+                    <span class="nav-main-link-name">Sản phẩm</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/catalogues') ? ' active' : '' }}" href="{{ route('admin.catalogues.index') }}">
+                    <span class="nav-main-link-name">Danh mục sản phẩm</span>
+                  </a>
+                </li>
               </ul>
-          </li>
-          
-          {{-- THUOC TINH --}}
-          <li class="nav-main-item{{ request()->is('attributes*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon fa fa-tags"></i>
-                  <span class="nav-main-link-name">Quản lý Thuộc tính</span>
+            </li>
+
+            {{-- THUOC TINH --}}
+            <li class="nav-main-item{{ request()->is('admin/attributes*') || request()->is('admin/attribute_values')  ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/attributes*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-tags"></i>
+                <span class="nav-main-link-name">Quản lý Thuộc tính</span>
               </a>
-              <ul class="nav-main-submenu">
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('variant-attributes') ? ' active' : '' }}" href="/variant-attributes">
-                        <span class="nav-main-link-name">Thuộc tính biến thể</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('attribute-values') ? ' active' : '' }}" href="/attribute-values">
-                          <span class="nav-main-link-name">Giá trị thuộc tính</span>
-                      </a>
-                  </li>
-                  
+              <ul class="nav-main-submenu{{ request()->is('admin/attributes*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/attributes') ? ' active' : '' }}" href="{{ route('admin.attributes.index') }}">
+                    <span class="nav-main-link-name">Thuộc tính biến thể</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/attribute_values') ? ' active' : '' }}" href="{{ route('admin.attribute_values.index') }}">
+                    <span class="nav-main-link-name">Giá trị thuộc tính</span>
+                  </a>
+                </li>
               </ul>
-          </li>
-          
-          {{-- USER --}}
-          <li class="nav-main-item{{ request()->is('customers*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon fa fa-users"></i>
-                  <span class="nav-main-link-name">Quản lý Khách hàng</span>
+            </li>
+
+            {{-- USER --}}
+            <li class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-users"></i>
+                <span class="nav-main-link-name">Quản lý Khách hàng</span>
               </a>
-              <ul class="nav-main-submenu">
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('customers') ? ' active' : '' }}" href="/customers">
-                          <span class="nav-main-link-name">Người dùng</span>
-                      </a>
-                  </li>
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('customer-addresses') ? ' active' : '' }}" href="/customer-addresses">
-                          <span class="nav-main-link-name">Địa chỉ</span>
-                      </a>
-                  </li>
+              <ul class="nav-main-submenu{{ request()->is('admin/users*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}" href="{{ route('admin.users.index') }}">
+                    <span class="nav-main-link-name">Người dùng</span>
+                  </a>
+                </li>
               </ul>
-          </li>
-          
-          {{-- DON HANG --}}
-          <li class="nav-main-item{{ request()->is('orders*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon fa fa-receipt"></i>
-                  <span class="nav-main-link-name">Quản lý Đơn hàng</span>
+            </li>
+
+            {{-- DON HANG --}}
+            <li class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders')  ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/orders*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-receipt"></i>
+                <span class="nav-main-link-name">Quản lý Đơn hàng</span>
               </a>
-              <ul class="nav-main-submenu">
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('orders') ? ' active' : '' }}" href="/orders">
-                          <span class="nav-main-link-name">Đơn hàng</span>
-                      </a>
-                  </li>
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('order-items') ? ' active' : '' }}" href="/order-items">
-                          <span class="nav-main-link-name">Chi tiết đơn hàng</span>
-                      </a>
-                  </li>
+              <ul class="nav-main-submenu{{ request()->is('admin/orders*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/orders') ? ' active' : '' }}" href="{{ route('admin.orders.index') }}">
+                    <span class="nav-main-link-name">Đơn hàng</span>
+                  </a>
+                </li>
               </ul>
-          </li>
-          
-          {{-- VOUCHER --}}
-          <li class="nav-main-item{{ request()->is('promotions*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon fa fa-gift"></i>
-                  <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
+            </li>
+
+            {{-- VOUCHER --}}
+            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-gift"></i>
+                <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
               </a>
-              <ul class="nav-main-submenu">
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('vouchers') ? ' active' : '' }}" href="/vouchers">
-                          <span class="nav-main-link-name">Voucher</span>
-                      </a>
-                  </li>
+              <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
+                    <span class="nav-main-link-name">Voucher</span>
+                  </a>
+                </li>
               </ul>
-          </li>
-          
-          {{-- BANNER --}}
-          <li class="nav-main-item{{ request()->is('banners*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon fa fa-image"></i>
-                  <span class="nav-main-link-name">Quản lý Banner</span>
+            </li> --}}
+
+            {{-- BANNER --}}
+            {{-- <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý Banner</span>
               </a>
-              <ul class="nav-main-submenu">
-                  <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('banners') ? ' active' : '' }}" href="/banners">
-                          <span class="nav-main-link-name">Banner</span>
-                      </a>
-                  </li>
+              <ul class="nav-main-submenu{{ request()->is('admin/banners*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('banners.index') }}">
+                    <span class="nav-main-link-name">Banner</span>
+                  </a>
+                </li>
               </ul>
-          </li>
+            </li> --}}
+
+
+
           
             <li class="nav-main-heading">More</li>
             <li class="nav-main-item">
@@ -608,10 +625,10 @@
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">
-            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold" href="https://pixelcave.com" target="_blank">pixelcave</a>
+            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold"  target="_blank">pixelcave</a>
           </div>
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold" href="https://pixelcave.com/products/dashmix" target="_blank">Dashmix</a> &copy;
+            <a class="fw-semibold"  target="_blank">Dashmix</a> &copy;
             <span data-toggle="year-copy"></span>
           </div>
         </div>
@@ -620,22 +637,9 @@
     <!-- END Footer -->
   </div>
   <!-- END Page Container -->
-    {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> --}}
-
-    <!-- jQuery (required for BS Notify plugin) -->
-    <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-
-    <!-- Page JS Plugins -->
-    <script src="{{ asset('admin/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-    <!-- Page JS Helpers (BS Notify Plugin) -->
-    <script>
-        Dashmix.helpersOnLoad(['jq-notify']);
-    </script>
-
-    <script src="{{ asset('admin/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-
-    <!-- Page JS Code -->
-    <script src="{{ asset('admin/js/lib/be_comp_dialogs.js') }}"></script>
+  <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 </body>
+@yield('js')
 
 </html>
