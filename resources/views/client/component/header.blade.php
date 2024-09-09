@@ -186,7 +186,7 @@
                                 </li>
                                 <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My
                                         Account</a></li>
-                                <li><a href="{{route('whishlist')}}"><i
+                                <li><a href="{{route('wishlist')}}"><i
                                             class="icon anm anm-heart-l"></i>Wishlist</a></li>
                                 <li><a href="{{route('login')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a>
                                 </li>
@@ -196,7 +196,7 @@
                 </div>
                 <!--End Account-->
                 <!--Wishlist-->
-                <div class="wishlist-link iconset" title="Wishlist"><a href="{{route('whishlist')}}"><i
+                <div class="wishlist-link iconset" title="Wishlist"><a href="{{route('wishlist')}}"><i
                             class="hdr-icon icon anm anm-heart-l"></i><span
                             class="wishlist-count">0</span></a></div>
                 <!--End Wishlist-->
