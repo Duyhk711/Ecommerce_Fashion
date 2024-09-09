@@ -82,13 +82,13 @@
 
         @yield('modal')
 
-        @yield('js')
-
+        
         <!-- Including Jquery/Javascript -->
         <!-- Plugins JS -->
         <script src="{{ asset('client/js/plugins.js') }}"></script>
         <!-- Main JS -->
         <script src="{{ asset('client/js/main.js') }}"></script>
+        @yield('js')
 
     </div>
     <!--End Page Wrapper-->
