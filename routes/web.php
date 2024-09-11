@@ -26,3 +26,5 @@ Route::view('/login', 'client.login')->name('login');
 Route::view('/register', 'client.register')->name('register');
 Route::view('/forgot-password', 'client.forgot-password')->name('forgot-password');
 Route::view('/my-account', 'client.my-account')->name('myaccount'); // Sửa thành my-account
+Route::view('/contact', 'client.contact')->name('contact'); 
+Route::view('/support', 'client.support')->name('support'); 
