@@ -132,16 +132,15 @@
                     <div id="accountBox">
                         <div class="customer-links">
                             <ul class="m-0">
-                                <li><a href="{{route('login')}}"><i class="icon anm anm-sign-in-al"></i>Sign In</a>
-                                </li>
-                                <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a>
-                                </li>
-                                <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My
-                                        Account</a></li>
-                                <li><a href="{{route('wishlist')}}"><i
-                                            class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                <li><a href="{{route('login')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a>
-                                </li>
+                                @if(!Auth::check())
+                                    <li><a href="{{route('login')}}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
+                                    <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a></li>
+                                @endif
+                                <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My Account</a></li>
+                                <li><a href="{{route('wishlist')}}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                @if (Auth::check())
+                                <li><a href="{{route('logout')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>

@@ -22,7 +22,5 @@ Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // 
 Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính tả từ 'whishlist' thành 'wishlist'
 Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hóa cho giỏ hàng rỗng
 Route::view('/cart', 'client.cart')->name('cart');
-Route::view('/login', 'client.login')->name('login');
-Route::view('/register', 'client.register')->name('register');
 Route::view('/forgot-password', 'client.forgot-password')->name('forgot-password');
 Route::view('/my-account', 'client.my-account')->name('myaccount'); // Sửa thành my-account
