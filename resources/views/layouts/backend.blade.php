@@ -398,19 +398,19 @@
             </li> --}}
 
             {{-- BANNER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+            <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-image"></i>
                 <span class="nav-main-link-name">Quản lý Banner</span>
               </a>
               <ul class="nav-main-submenu{{ request()->is('admin/banners*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('banners.index') }}">
+                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('admin.banners.index') }}">
                     <span class="nav-main-link-name">Banner</span>
                   </a>
                 </li>
               </ul>
-            </li> --}}
+            </li>
 
 
 
