@@ -68,7 +68,7 @@
             </div>
 
             <div class="contact-info">
-                <p><strong>Giờ làm việc:</strong> Thứ 2 - Thứ 6 vào lúc: 8:00 AM -5:00 PM</p>
+                <p><strong>Giờ làm việc:</strong> Thứ 2 - Thứ 6 hàng tuần vào lúc: 8:00 AM -5:00 PM</p>
             </div>
 
             <p>Chúng tôi luôn sẵn sàng hỗ trợ bạn trong mọi thắc mắc hoặc yêu cầu. Vui lòng liên hệ với chúng tôi qua bất kỳ kênh nào thuận tiện nhất cho bạn.</p>
