@@ -39,6 +39,10 @@
         margin: 0;
         font-size: 25px;
     }
+    .contact-barter h2{
+        margin: 0;
+        font-size: 30px;
+    }
 </style>
 <!DOCTYPE html>
 <html lang="en">
