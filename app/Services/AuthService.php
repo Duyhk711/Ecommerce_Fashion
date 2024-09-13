@@ -21,7 +21,7 @@ class AuthService
         }
         return false;
     }
-    public function postRegister(Request $request,User $user)
+    public function postRegister(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -29,24 +29,16 @@ class AuthService
             'password' => 'required|string|min:8|confirmed',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $data=$request->except('avatar');
-        // Xử lý file avatar nếu có
+        $data = $request->except('avatar');
         $data['avatar'] = '';
         if ($request->hasFile('avatar')) {
-            // Lưu file avatar vào storage (thư mục public/avatars)
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-
-        // Tạo người dùng mới
         $user->query()->create($data);
-
-        // Nếu người dùng được tạo thành công, trả về true
         if ($user) {
             return true;
         }
-
-        // Nếu không thành công, trả về false
         return false;
     }
     public function logout()
@@ -55,46 +47,31 @@ class AuthService
     }
     public function sendOtp($email)
     {
-        // Tạo mã OTP ngẫu nhiên
         $otp = rand(100000, 999999);
-
-        // Lưu OTP và email vào session với thời gian sống là 5 phút
         Session::put('otp', $otp);
         Session::put('email', $email);
-        Session::put('otp_expires_at', now()->addMinutes(5));
-
-        // Gửi OTP qua email
+        Session::put('otp_expires_at', now()->addMinutes(2));
         Mail::to($email)->send(new OtpMail($otp));
 
         return $otp;
     }
     public function verifyOtp($otp)
     {
-        // Lấy mã OTP và thời gian hết hạn từ session
         $storedOtp = Session::get('otp');
         $otpExpiresAt = Session::get('otp_expires_at');
-
-        // Kiểm tra mã OTP và thời gian sống
         if (!$storedOtp || $storedOtp != $otp) {
-            return false; // Mã OTP không hợp lệ
+            return false;
         }
-
         if (now()->greaterThan($otpExpiresAt)) {
-            return false; // OTP đã hết hạn
+            return false;
         }
-
-        // Xác minh thành công, xóa OTP khỏi session nhưng giữ email
         Session::forget('otp');
         Session::forget('otp_expires_at');
 
         return true;
     }
-
-
-    // Lấy email liên quan đến OTP từ session
     public function getEmailFromSession()
     {
         return Session::get('email');
     }
 }
-
