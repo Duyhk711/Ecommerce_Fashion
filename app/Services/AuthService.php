@@ -74,4 +74,19 @@ class AuthService
     {
         return Session::get('email');
     }
+    public function setEmailToSession($email)
+    {
+        Session::put('email', $email);
+    }
+    public function updatePassword($email, $password)
+    {
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            $user->password = bcrypt($password);
+            $user->save();
+            return true;
+        }
+        return false;
+    }
 }

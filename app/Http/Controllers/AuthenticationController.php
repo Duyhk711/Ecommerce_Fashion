@@ -55,7 +55,8 @@ class AuthenticationController extends Controller
         if (!$user) {
             return redirect()->back()->with('error', 'Email không tồn tại trong hệ thống.');
         }
-        $otp = $this->authService->sendOtp($request->email);
+        $this->authService->setEmailToSession($email);
+        $this->authService->sendOtp($email);
         return redirect('/verify-otp')->with('success', 'OTP đã được gửi đến email của bạn.');
     }
     public function showVerifyOtpForm()
@@ -68,8 +69,6 @@ class AuthenticationController extends Controller
         if (!$this->authService->verifyOtp($request->otp)) {
             return back()->with('error', 'Mã OTP không hợp lệ hoặc đã hết hạn.');
         }
-        $email = $this->authService->getEmailFromSession();
-        Session::put('email', $email);
         return redirect('/reset-password')->with('success', 'Mã OTP hợp lệ.');
     }
     public function showResetPasswordForm()
@@ -79,27 +78,15 @@ class AuthenticationController extends Controller
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'password' => 'required|confirmed|min:6',
+            'password' => 'required|confirmed|min:8',
         ]);
-
-        $email = Session::get('email');
-
-
+        $email = $this->authService->getEmailFromSession();
         if (!$email) {
             return redirect('/forgot-password')->with('error', 'Phiên của bạn đã hết hạn. Vui lòng thử lại.');
         }
-
-        // Cập nhật mật khẩu mới
-        $user = User::where('email', $email)->first();
-
-        if ($user) {
-            $user->password = bcrypt($request->password);
-            $user->save();
-        } else {
+        if (!$this->authService->updatePassword($email, $request->password)) {
             return redirect('/forgot-password')->with('error', 'Người dùng không tồn tại.');
         }
-
-        // Xóa session sau khi đổi mật khẩu thành công
         Session::forget('email');
 
         return redirect('/login')->with('success', 'Mật khẩu đã được thay đổi thành công.');
