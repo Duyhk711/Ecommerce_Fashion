@@ -32,16 +32,16 @@ class HomeService
             ->get();
     }
 
-    public function getBannerShowHome() {
+    public function getBannerShowHome()
+    {
         $mainBanners = Banner::where('type', 'main')->where('is_active', true)->get();
         $topBanners = Banner::where('type', 'sub')->where('position', 'top')->where('is_active', true)->get();
         $middleBanners = Banner::where('type', 'sub')->where('position', 'middle')->where('is_active', true)->get();
-        
+
         return [
             'mainBanners' => $mainBanners,
             'topBanners' => $topBanners,
             'middleBanners' => $middleBanners,
         ];
     }
-    
 }

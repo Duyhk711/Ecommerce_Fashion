@@ -492,12 +492,23 @@
                                                 <!-- Variant -->
                                                 <ul class="variants-clr swatches">
                                                     @if($product->variants->isNotEmpty())
+                                                        @php
+                                                            $colors = [];
+                                                        @endphp
                                                         @foreach($product->variants as $variant)
                                                             @foreach($variant->variantAttributes as $variantAttribute)
-                                                                @if($variantAttribute->attribute->slug === 'color') <!-- Thay 'Color' bằng slug thuộc tính màu sắc -->
-                                                                    <li class="swatch medium radius" style="background-color: {{ $variantAttribute->attributeValue->color_code }}">
-                                                                        <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $variantAttribute->attributeValue->value }}"></span>
-                                                                    </li>
+                                                                @if($variantAttribute->attribute->slug === 'color')
+                                                                    @php
+                                                                        $colorCode = $variantAttribute->attributeValue->color_code;
+                                                                    @endphp
+                                                                    @if(!in_array($colorCode, $colors))
+                                                                        @php
+                                                                            $colors[] = $colorCode;
+                                                                        @endphp
+                                                                        <li class="swatch medium radius" style="background-color: {{ $colorCode }}">
+                                                                            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $variantAttribute->attributeValue->value }}"></span>
+                                                                        </li>
+                                                                    @endif
                                                                 @endif
                                                             @endforeach
                                                         @endforeach
