@@ -135,16 +135,15 @@
                     <div id="accountBox">
                         <div class="customer-links">
                             <ul class="m-0">
-                                <li><a href="{{route('login')}}"><i class="icon anm anm-sign-in-al"></i>Sign In</a>
-                                </li>
-                                <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a>
-                                </li>
-                                <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My
-                                        Account</a></li>
-                                <li><a href="{{route('wishlist')}}"><i
-                                            class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                <li><a href="{{route('login')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a>
-                                </li>
+                                @if(!Auth::check())
+                                    <li><a href="{{route('login')}}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
+                                    <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a></li>
+                                @endif
+                                <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My Account</a></li>
+                                <li><a href="{{route('wishlist')}}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                @if (Auth::check())
+                                <li><a href="{{route('logout')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -158,8 +157,17 @@
                 <!--Minicart-->
                 <div class="header-cart iconset" title="Cart">
                     <a href="#;" class="header-cart btn-minicart clr-none" data-bs-toggle="offcanvas"
-                        data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i><span
-                            class="cart-count">2</span></a>
+                        data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i>
+                        <span class="cart-count">
+                            @auth
+                                {{-- Người dùng đã đăng nhập, lấy số lượng sản phẩm từ database --}}
+                                {{ \App\Models\Cart::where('user_id', auth()->id())->with('cartItems')->count() }}
+                            @else
+                                {{-- Người dùng chưa đăng nhập, lấy số lượng sản phẩm từ session --}}
+                                {{ session()->has('cart') ? count(session('cart')) : 0 }}
+                            @endauth
+                        </span>
+                    </a>
                 </div>
                 <!--End Minicart-->
                 <!--Mobile Toggle-->

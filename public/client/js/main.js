@@ -7,7 +7,7 @@
 
 /* =======================================================================
  Table of Content:
- 
+
  1. Preloader Loading
  2. Sticky Header
  3. Mobile Main Menu
@@ -68,7 +68,7 @@
     ("use strict");
 
     /*-----------------------------------------
-     01. Preloader Loading 
+     01. Preloader Loading
      -----------------------------------------*/
     function pre_loader() {
         $("#load").fadeOut();
@@ -1292,7 +1292,7 @@
     }
     footer_dropdown();
 
-    // Resize Function 
+    // Resize Function
     var resizeTimer;
     $(window).resize(function(e) {
         clearTimeout(resizeTimer);
@@ -1544,3 +1544,36 @@
 
 
 })(jQuery);
+
+document.getElementById('ProfilePicture').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  const imagePreview = document.getElementById('imagePreview');
+  imagePreview.innerHTML = ''; // Clear any previous previews
+
+  if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.width = '150px';
+          img.style.height = '150px';
+          img.style.borderRadius = '50%';
+          img.style.objectFit = 'cover';
+          img.style.display = 'block';
+          img.style.margin = '0 auto';
+
+          imagePreview.style.width = '150px';
+          imagePreview.style.height = '150px';
+          imagePreview.style.borderRadius = '50%';
+          imagePreview.style.overflow = 'hidden';
+          imagePreview.style.display = 'flex';
+          imagePreview.style.justifyContent = 'center';
+          imagePreview.style.alignItems = 'center';
+
+          imagePreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+  }
+});
+
+
