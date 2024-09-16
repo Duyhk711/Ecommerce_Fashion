@@ -26,9 +26,14 @@ Route::view('/cart', 'client.cart')->name('cart');
 Route::view('/forgot-password', 'client.forgot-password')->name('forgot-password');
 Route::view('/my-account', 'client.my-account')->name('myaccount'); // Sửa thành my-account
 
+Route::view('/contact', 'client.contact')->name('contact'); 
+Route::view('/support', 'client.support')->name('support'); 
+Route::view('/barter', 'client.barter')->name('barter');
+
+
 
 // Trang chủ hiển thị 12 sản phẩm
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Tìm kiếm sản phẩm
 Route::get('/search', [HomeController::class, 'search'])->name('search');
+
