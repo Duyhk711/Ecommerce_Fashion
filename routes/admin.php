@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CatalogueController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
-Route::view('/', 'landing');
+// Route::view('/', 'landing');
 Route::match(['get', 'post'], '/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
@@ -28,7 +29,7 @@ Route::view('/pages/blank', 'pages.blank');
 Route::prefix('admin')
     ->as('admin.')
     ->group(function () {
-         // ATTRIBUTE
+        // ATTRIBUTE
         Route::resource('attributes', AttributeController::class);
 
         // ATTRIBUTE VALUE
@@ -41,7 +42,7 @@ Route::prefix('admin')
         Route::resource('products', ProductController::class);
 
         // ORDER
-        Route::resource('orders',OrderController::class);
+        Route::resource('orders', OrderController::class);
         Route::view('order/show', 'admin.orders.show')->name('order.show');
 
         // USER
