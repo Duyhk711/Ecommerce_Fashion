@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
+
 
 Route::prefix('admin')
     ->as('admin.')
@@ -36,7 +38,7 @@ Route::prefix('admin')
         Route::resource('products', ProductController::class);
 
         // ORDER
-        Route::resource('orders',OrderController::class);
+        Route::resource('orders', OrderController::class);
         Route::view('order/show', 'admin.orders.show')->name('order.show');
 
         // USER
