@@ -155,8 +155,17 @@
                 <!--Minicart-->
                 <div class="header-cart iconset" title="Cart">
                     <a href="#;" class="header-cart btn-minicart clr-none" data-bs-toggle="offcanvas"
-                        data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i><span
-                            class="cart-count">2</span></a>
+                        data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i>
+                        <span class="cart-count">
+                            @auth
+                                {{-- Người dùng đã đăng nhập, lấy số lượng sản phẩm từ database --}}
+                                {{ \App\Models\Cart::where('user_id', auth()->id())->with('cartItems')->count() }}
+                            @else
+                                {{-- Người dùng chưa đăng nhập, lấy số lượng sản phẩm từ session --}}
+                                {{ session()->has('cart') ? count(session('cart')) : 0 }}
+                            @endauth
+                        </span>
+                    </a>
                 </div>
                 <!--End Minicart-->
                 <!--Mobile Toggle-->
