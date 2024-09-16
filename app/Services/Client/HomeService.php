@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Services\Client;
-
+use App\Models\Banner;
 use App\Models\Product;
 
 class HomeService
 {
-    // Lấy 12 sản phẩm trang chủ
+  // lấy 12 sp trang chủ
     public function getHomeProducts()
     {
         $products = Product::with(['variants.variantAttributes.attributeValue'])
@@ -31,16 +31,17 @@ class HomeService
             ->get();
     }
 
-    // public function getBannerShowHome() {
-    //     $mainBanners = Banner::where('type', 'main')->where('is_active', true)->get();
-    //     $topBanners = Banner::where('type', 'sub')->where('position', 'top')->where('is_active', true)->get();
-    //     $middleBanners = Banner::where('type', 'sub')->where('position', 'middle')->where('is_active', true)->get();
 
-    //     return [
-    //         'mainBanners' => $mainBanners,
-    //         'topBanners' => $topBanners,
-    //         'middleBanners' => $middleBanners,
-    //     ];
-    // }
+    public function getBannerShowHome()
+    {
+        $mainBanners = Banner::where('type', 'main')->where('is_active', true)->get();
+        $topBanners = Banner::where('type', 'sub')->where('position', 'top')->where('is_active', true)->get();
+        $middleBanners = Banner::where('type', 'sub')->where('position', 'middle')->where('is_active', true)->get();
 
+        return [
+            'mainBanners' => $mainBanners,
+            'topBanners' => $topBanners,
+            'middleBanners' => $middleBanners,
+        ];
+    }
 }

@@ -27,14 +27,14 @@
         <div class="minicart-content">
             <ul class="m-0 clearfix">
                 <li class="item d-flex justify-content-center align-items-center">
-                    <a class="product-image rounded-3" href="{{route('productDetail')}}">
+                    <a class="product-image rounded-3" href="">
                         <img class="blur-up lazyload"
                             data-src="{{ asset('client/images/products/cart-product-img1.jpg') }}"
                             src="{{ asset('client/images/products/cart-product-img1.jpg') }}" alt="product"
                             title="Product" width="120" height="170" />
                     </a>
                     <div class="product-details">
-                        <a class="product-title" href="{{route('productDetail')}}">Women Sandals</a>
+                        <a class="product-title" href="">Women Sandals</a>
                         <div class="variant-cart my-2">Black / XL</div>
                         <div class="priceRow">
                             <div class="product-price">
@@ -55,14 +55,14 @@
                     </div>
                 </li>
                 <li class="item d-flex justify-content-center align-items-center">
-                    <a class="product-image rounded-3" href="{{route('productDetail')}}">
+                    <a class="product-image rounded-3" href="">
                         <img class="blur-up lazyload"
                             data-src="{{ asset('client/images/products/cart-product-img2.jpg') }}"
                             src="{{ asset('client/images/products/cart-product-img2.jpg') }}" alt="product"
                             title="Product" width="120" height="170" />
                     </a>
                     <div class="product-details">
-                        <a class="product-title" href="{{route('productDetail')}}">Sleeve Round T-Shirt</a>
+                        <a class="product-title" href="">Sleeve Round T-Shirt</a>
                         <div class="variant-cart my-2">Yellow / M</div>
                         <div class="priceRow">
                             <div class="product-price">

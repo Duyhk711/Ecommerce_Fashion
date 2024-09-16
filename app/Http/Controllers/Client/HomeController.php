@@ -19,16 +19,15 @@ class HomeController extends Controller
     public function index()
     {
         $products = $this->homeService->getHomeProducts();
-        // $banners = $this->homeService->getBannerShowHome();
+        $banners  = $this->homeService->getBannerShowHome();
         // dd($banners);
-        // dd($products);
-        return view('client.home', compact('products'));
+        return view('client.home', compact('products', 'banners'));
     }
 
     // Tìm kiếm sản phẩm theo tên
     public function search(Request $request)
     {
-        $query = $request->get('query', '');
+        $query    = $request->get('query', '');
         $products = $this->homeService->searchProducts($query);
         return view('client.search', compact('products', 'query'));
     }
