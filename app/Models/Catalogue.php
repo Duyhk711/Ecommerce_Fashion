@@ -28,9 +28,9 @@ class Catalogue extends Model
         return $this->hasMany(Catalogue::class, 'parent_id');
     }
 
-    
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'catalogue_id');
     }
+
 }

@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Services\Client;
-
 use App\Models\Banner;
 use App\Models\Product;
 
 class HomeService
 {
-    // Lấy 12 sản phẩm trang chủ 
+  // lấy 12 sp trang chủ
     public function getHomeProducts()
     {
         $products = Product::with(['variants.variantAttributes.attributeValue'])
@@ -31,6 +30,7 @@ class HomeService
             ->where('is_active', 1)
             ->get();
     }
+
 
     public function getBannerShowHome()
     {
