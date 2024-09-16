@@ -6,14 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Banner extends Model
+class BannerImage extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $fillable = ['banner_id', 'image'];
 
-    protected $fillable = ['type', 'position', 'is_active', 'description'];
-
-    public function images()
+    public function banner()
     {
-        return $this->hasMany(BannerImage::class);
+        return $this->belongsTo(Banner::class);
     }
 }

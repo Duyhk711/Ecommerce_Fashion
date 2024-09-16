@@ -288,29 +288,6 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-            <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon fa fa-lightbulb"></i>
-                <span class="nav-main-link-name">Examples</span>
-              </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="/pages/datatables">
-                    <span class="nav-main-link-name">DataTables</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
-                    <span class="nav-main-link-name">Slick Slider</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">
-                    <span class="nav-main-link-name">Blank</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
             
            {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
@@ -398,19 +375,19 @@
             </li> --}}
 
             {{-- BANNER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+            <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-image"></i>
                 <span class="nav-main-link-name">Quản lý Banner</span>
               </a>
               <ul class="nav-main-submenu{{ request()->is('admin/banners*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('banners.index') }}">
+                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('admin.banners.index') }}">
                     <span class="nav-main-link-name">Banner</span>
                   </a>
                 </li>
               </ul>
-            </li> --}}
+            </li>
 
 
 
