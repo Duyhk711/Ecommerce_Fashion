@@ -288,29 +288,6 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-            <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon fa fa-lightbulb"></i>
-                <span class="nav-main-link-name">Examples</span>
-              </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="/pages/datatables">
-                    <span class="nav-main-link-name">DataTables</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
-                    <span class="nav-main-link-name">Slick Slider</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">
-                    <span class="nav-main-link-name">Blank</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
             
            {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">

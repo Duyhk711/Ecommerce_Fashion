@@ -19,16 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::view('/', 'landing');
-Route::match(['get', 'post'], '/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-Route::view('/pages/slick', 'pages.slick');
-Route::view('/pages/datatables', 'pages.datatables');
-Route::view('/pages/blank', 'pages.blank');
 Route::prefix('admin')
     ->as('admin.')
     ->group(function () {
+        Route::view('dashboard', 'dashboard' )->name('dashboard');
          // ATTRIBUTE
         Route::resource('attributes', AttributeController::class);
 

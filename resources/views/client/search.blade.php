@@ -44,7 +44,7 @@
                                 </a>
                                 <!-- End Product Image -->
                                 <!-- Product label -->
-                                <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
+                                {{-- <div class="product-labels"><span class="lbl pr-label2">Hot</span></div> --}}
                                 <!-- End Product label -->
                                 <!--Product Button-->
                                 <div class="button-set style1">
