@@ -86,7 +86,7 @@
                                     data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="search-body">
-                                <form class="form minisearch" id="header-search" action="#"
+                                <form class="form minisearch" id="header-search" action="{{ route('search') }}"
                                     method="get">
                                     @csrf
                                     <!--Search Field-->
@@ -100,13 +100,15 @@
                                         <div class="input-box d-flex fl-1">
                                             <input type="text"
                                                 class="input-text border-start-0 border-end-0"
-                                                placeholder="Search for products..." value="" />
+                                                placeholder="Search for products..." value="{{ request('query') }}"  name="query" placeholder="Tìm kiếm sản phẩm..." />
                                             <button type="submit"
-                                                class="action search d-flex-justify-center btn rounded-start-0"><i
-                                                    class="icon anm anm-search-l"></i></button>
+                                                class="action search d-flex-justify-center btn rounded-start-0">
+                                                <i class="icon anm anm-search-l"></i>
+                                            </button>
                                         </div>
                                     </div>
                                     <!--End Search Field-->
+                                   
                                     <!--Search popular-->
                                     <div class="popular-searches d-flex-justify-center mt-3">
                                         <span class="title fw-600">Trending Now:</span>
@@ -120,6 +122,7 @@
                                     <!--Search products-->
                                     <!--End Search products-->
                                 </form>
+                                
                             </div>
                         </div>
                     </div>
@@ -132,16 +135,15 @@
                     <div id="accountBox">
                         <div class="customer-links">
                             <ul class="m-0">
-                                <li><a href="{{route('login')}}"><i class="icon anm anm-sign-in-al"></i>Sign In</a>
-                                </li>
-                                <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a>
-                                </li>
-                                <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My
-                                        Account</a></li>
-                                <li><a href="{{route('wishlist')}}"><i
-                                            class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                <li><a href="{{route('login')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a>
-                                </li>
+                                @if(!Auth::check())
+                                    <li><a href="{{route('login')}}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
+                                    <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a></li>
+                                @endif
+                                <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My Account</a></li>
+                                <li><a href="{{route('wishlist')}}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                @if (Auth::check())
+                                <li><a href="{{route('logout')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
