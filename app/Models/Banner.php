@@ -10,8 +10,10 @@ class Banner extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'image_url',
-        'link',
-    ];
+    protected $fillable = ['type', 'position', 'is_active', 'description'];
+
+    public function images()
+    {
+        return $this->hasMany(BannerImage::class);
+    }
 }

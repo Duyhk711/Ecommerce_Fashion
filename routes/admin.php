@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CatalogueController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,19 +18,13 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
-Route::view('/', 'landing');
-Route::match(['get', 'post'], '/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-Route::view('/pages/slick', 'pages.slick');
-Route::view('/pages/datatables', 'pages.datatables');
-Route::view('/pages/blank', 'pages.blank');
 
 Route::prefix('admin')
     ->as('admin.')
     ->group(function () {
+        Route::view('dashboard', 'dashboard' )->name('dashboard');
          // ATTRIBUTE
         Route::resource('attributes', AttributeController::class);
 
@@ -41,10 +38,15 @@ Route::prefix('admin')
         Route::resource('products', ProductController::class);
 
         // ORDER
-        Route::resource('orders',OrderController::class);
+        Route::resource('orders', OrderController::class);
         Route::view('order/show', 'admin.orders.show')->name('order.show');
 
         // USER
         Route::view('users', 'admin.users.index')->name('users.index');
         Route::view('users/show', 'admin.users.show')->name('users.show');
+
+        Route::resource('banners', BannerController::class);
+        Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
+
+        Route::get('home', [HomeController::class, 'home'])->name('home');
     });
