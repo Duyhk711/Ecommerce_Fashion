@@ -49,7 +49,7 @@
         <p>Chào bạn,</p>
         <p>Mã OTP của bạn để đặt lại mật khẩu là:</p>
         <p class="otp">{{ $otp }}</p>
-        <p>Mã OTP này hợp lệ trong vòng 5 phút.</p>
+        <p>Mã OTP này hợp lệ trong vòng 2 phút.</p>
         <div class="footer">
             <p>Trân trọng,</p>
             <p>Đội ngũ hỗ trợ</p>

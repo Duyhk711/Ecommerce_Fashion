@@ -45,19 +45,19 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group col-12">
+                                {{-- <div class="form-group col-12">
                                     <label for="profile_picture">Ảnh đại diện</label>
                                     <input type="file" name="avatar" id="ProfilePicture" accept="image/*" class="form-control-file" />
                                     <div id="imagePreview" class="image-preview" style="margin-top: 10px; display: flex; justify-content: center; border-radius: 50%;  padding: 5px;">
                                         <!-- Hình ảnh xem trước sẽ được hiển thị ở đây -->
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group col-12">
                                     <div class="login-remember-forgot d-flex justify-content-between align-items-center">
-                                        <div class="remember-check customCheckbox">
+                                        {{-- <div class="remember-check customCheckbox">
                                             <input id="remember" name="remember" type="checkbox" value="remember" />
                                             <label for="remember">Ghi nhớ tôi</label>
-                                        </div>
+                                        </div> --}}
                                         <a href="{{ route('forgot-password') }}">Quên mật khẩu?</a>
                                     </div>
                                 </div>

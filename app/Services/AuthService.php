@@ -50,7 +50,7 @@ class AuthService
         $otp = rand(100000, 999999);
         Session::put('otp', $otp);
         Session::put('email', $email);
-        Session::put('otp_expires_at', now()->addMinutes(2));
+        Session::put('otp_expires_at', now()->addMinutes(1));
         Mail::to($email)->send(new OtpMail($otp));
 
         return $otp;

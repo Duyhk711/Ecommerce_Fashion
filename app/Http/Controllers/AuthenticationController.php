@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use App\Services\AuthService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class AuthenticationController extends Controller
 {
     protected $authService;
-    public function login()
-    {
-        return view('client.login');
-    }
-    public function register()
-    {
-        return view('client.register');
-    }
+
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
-    public function postLogin(Request $request)
+
+    public function login()
+    {
+        return view('client.login');
+    }
+
+    public function register()
+    {
+        return view('client.register');
+    }
+
+    public function postLogin(AuthRequest $request)
     {
         $isAuthenticated = $this->authService->postLogin($request);
 
@@ -32,8 +36,7 @@ class AuthenticationController extends Controller
         return redirect()->back()->withInput()->with('error', 'Email hoặc mật khẩu không chính xác!');
     }
 
-
-    public function postRegister(Request $request, User $user)
+    public function postRegister(AuthRequest $request, User $user)
     {
         $isRegistered = $this->authService->postRegister($request, $user);
         if ($isRegistered) {
@@ -41,15 +44,15 @@ class AuthenticationController extends Controller
         }
         return redirect()->back()->with('error', 'Registration failed. Please try again.');
     }
+
     public function logout()
     {
         $this->authService->logout();
-
         return redirect()->route('home');
     }
-    public function sendOtp(Request $request)
+
+    public function sendOtp(AuthRequest $request)
     {
-        $request->validate(['email' => 'required|email']);
         $email = $request->input('email');
         $user = User::where('email', $email)->first();
         if (!$user) {
@@ -59,27 +62,27 @@ class AuthenticationController extends Controller
         $this->authService->sendOtp($email);
         return redirect('/verify-otp')->with('success', 'OTP đã được gửi đến email của bạn.');
     }
+
     public function showVerifyOtpForm()
     {
         return view('client.verify-otp');
     }
-    public function verifyOtp(Request $request)
+
+    public function verifyOtp(AuthRequest $request)
     {
-        $request->validate(['otp' => 'required']);
         if (!$this->authService->verifyOtp($request->otp)) {
             return back()->with('error', 'Mã OTP không hợp lệ hoặc đã hết hạn.');
         }
         return redirect('/reset-password')->with('success', 'Mã OTP hợp lệ.');
     }
+
     public function showResetPasswordForm()
     {
         return view('client.reset-password');
     }
-    public function resetPassword(Request $request)
+
+    public function resetPassword(AuthRequest $request)
     {
-        $request->validate([
-            'password' => 'required|confirmed|min:8',
-        ]);
         $email = $this->authService->getEmailFromSession();
         if (!$email) {
             return redirect('/forgot-password')->with('error', 'Phiên của bạn đã hết hạn. Vui lòng thử lại.');
