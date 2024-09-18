@@ -75,7 +75,9 @@
         box-shadow: 0 4px 10px;
     }
 </style>
+
 @section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 
