@@ -71,7 +71,7 @@ class ProductSeeder extends Seeder
         ]);
 
         // 4. Seed products using a for loop
-        $numberOfProducts = 10;  // You can change this number to add more or fewer products
+        $numberOfProducts = 20;  // You can change this number to add more or fewer products
 
         for ($i = 1; $i <= $numberOfProducts; $i++) {
             $productId = DB::table('products')->insertGetId([
@@ -79,9 +79,11 @@ class ProductSeeder extends Seeder
                 'name' => 'Product ' . $i,
                 'slug' => Str::slug('Product ' . $i),
                 'sku' => 'PROD' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'img_thumbnail' => 'https://canifa.com/img/1517/2000/resize/6/t/6ts24w004-sw001-thumb.webp',
                 'price_regular' => rand(10, 100),  // Random price for example
                 'price_sale' => rand(5, 50),  // Random sale price
-'description' => 'Description for Product ' . $i,
+                'is_show_home' => rand(0,1),
+                'description' => 'Description for Product ' . $i,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
