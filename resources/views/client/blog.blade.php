@@ -93,9 +93,9 @@
     </main>
 </body>
 <script>
+
     const apiKey = 'a046cdd5c3d946f1bea4b8e1cfb4e68f';
     const apiUrl = `https://newsapi.org/v2/everything?q=fashion&apiKey=${apiKey}`;
-
     const blogContainer = document.getElementById('blog-container');
 
 
@@ -109,11 +109,11 @@
             if (data.articles && data.articles.length > 0) {
                 displayArticles(data.articles);
             } else {
-                blogContainer.innerHTML = '<p>No articles found.</p>';
+                blogContainer.innerHTML = '<p>Không tìm thấy bài viết nào.</p>';
             }
         } catch (error) {
             console.error('Error fetching the articles:', error);
-            blogContainer.innerHTML = `<p>Unable to load articles. Please check your API key and try again.</p>`;
+            blogContainer.innerHTML = `<p>Không thể tải bài viết. Vui lòng kiểm tra khóa API của bạn và thử lại.</p>`;
         }
     }
 
