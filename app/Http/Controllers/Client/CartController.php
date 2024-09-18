@@ -45,7 +45,7 @@ class CartController extends Controller
             ->product_variant_id ?? null;
             $productVariant = ProductVariant::find($productVariantId);
             
-        dd($productVariant->id); // Debug the retrieved product variant
+        // dd($productVariant->id); // Debug the retrieved product variant
         
         
 

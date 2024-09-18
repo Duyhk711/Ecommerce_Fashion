@@ -15,8 +15,9 @@
                             <div class="zoompro-wrap">
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
-                                    <img id="zoompro" class="zoompro" src="{{ $product->img_thumbnail }}" 
-                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625" height="808" />
+                                    <img id="zoompro" class="zoompro" src="{{ $product->img_thumbnail }}"
+                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
+                                        height="808" />
                                 </div>
                                 <!-- End Product Image -->
                                 <!-- Product Label -->
@@ -39,8 +40,10 @@
                             <div class="product-thumb product-horizontal-thumb mt-3">
                                 <div id="gallery" class="product-thumb-horizontal">
                                     @foreach ($product->images as $item)
-                                        <a href="javascript:void(0);" data-image="{{ $item->image }}" data-zoom-image="{{ $item->image }}" class="thumbnail">
-                                            <img class="blur-up lazyload" data-src="{{ $item->image }}" src="{{ $item->image }}" alt="product" width="625" height="808" />
+                                        <a href="javascript:void(0);" data-image="{{ $item->image }}"
+                                            data-zoom-image="{{ $item->image }}" class="thumbnail">
+                                            <img class="blur-up lazyload" data-src="{{ $item->image }}"
+                                                src="{{ $item->image }}" alt="product" width="625" height="808" />
                                         </a>
                                     @endforeach
                                 </div>
@@ -107,7 +110,8 @@
                         <!-- End Product Details -->
 
                         <!-- Product Form -->
-                        <form method="POST" action="{{ route('cart.add') }} " class="product-form product-form-border hidedropdown">
+                        <form method="POST" action="{{ route('cart.add') }} "
+                            class="product-form product-form-border hidedropdown">
                             @csrf
                             <!-- Swatches -->
                             <div class="product-swatches-option">
@@ -115,12 +119,12 @@
                                 <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
                                     <label class="label d-flex align-items-center">Color:<span
                                             class="slVariant ms-1 fw-bold">Blue</span></label>
-                                    <ul class="variants-clr swatches d-flex-center pt-1 clearfix">
+                                    <ul class="variants-clr swatches d-flex-center pt-1 clearfix" id="color-options">
                                         @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
-                                            <li class="swatch x-large available"
+                                            <li class="swatch x-large available color-option"
+                                                style="background-color: {{ $color['colorCode'] }}"
                                                 data-color-code="{{ $color['colorCode'] }}"
-                                                style="background-color: {{ $color['colorCode'] }}; width: 35px; height: 35px;"
-                                                data-bs-toggle="tooltip" data-bs-placement="top" data-attribute-value-id="{{ $color['value'] }}"
+                                                data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
                                                 title="{{ $color['value'] }}">
                                             </li>
                                         @endforeach
@@ -131,11 +135,11 @@
                                 <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
                                     <label class="label d-flex align-items-center">Size:<span
                                             class="slVariant ms-1 fw-bold">S</span></label>
-                                    <ul class="variants-size size-swatches d-flex-center pt-1 clearfix">
+                                    <ul class="variants-size size-swatches d-flex-center pt-1 clearfix" id="size-options">
                                         @foreach ($uniqueAttributes->where('attributeName', 'Size') as $size)
-                                            <li class="swatch x-large available" data-attribute-value-id="{{ $size['value'] }}">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" 
-                                                data-attribute-value-id="{{ $size['value'] }}"
+                                            <li class="swatch x-large available size-option"
+                                                data-attribute-value-id="{{ $size['value'] }}">
+                                                <span class="swatchLbl" data-bs-toggle="tooltip"
                                                     title="{{ $size['value'] }}">
                                                     {{ $size['value'] }}
                                                 </span>
@@ -146,8 +150,8 @@
 
                             </div>
                             <!-- End Swatches -->
-                            <input type="hidden" name="color_id" id="color_id" >
-                            <input type="hidden" name="size_id" id="size_id" >
+                            <input type="hidden" name="color_id" id="color_id">
+                            <input type="hidden" name="size_id" id="size_id">
                             <!-- Product Action -->
                             <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
                                 <!-- Product Quantity -->
@@ -155,7 +159,7 @@
                                     <div class="qtyField">
                                         <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
                                         <input type="text" name="quantity" value="1"
-                                            class="product-form-input qty" id="quantityInput"/>
+                                            class="product-form-input qty" id="quantityInput" />
                                         <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                     </div>
                                 </div>
@@ -713,20 +717,14 @@
                                         <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
                                             available...</p>
                                         <ul class="variants-clr swatches">
-                                            @if ($product->variants->isNotEmpty())
-                                                @foreach ($product->variants as $variant)
-                                                    @foreach ($variant->variantAttributes as $variantAttribute)
-                                                        @if ($variantAttribute->attribute->slug === 'color')
-                                                            <li class="swatch medium radius"
-                                                                style="background-color: {{ $variantAttribute->attributeValue->color_code }}">
-                                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top"
-                                                                    title="{{ $variantAttribute->attributeValue->value }}"></span>
-                                                            </li>
-                                                        @endif
-                                                    @endforeach
-                                                @endforeach
-                                            @endif
+                                            @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
+                                            <li class="swatch x-small available color-option"
+                                                style="background-color: {{ $color['colorCode'] }}"
+                                                data-color-code="{{ $color['colorCode'] }}"
+                                                data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
+                                                title="{{ $color['value'] }}">
+                                            </li>
+                                        @endforeach
                                         </ul>
                                     </div>
                                 </div>
@@ -1199,62 +1197,61 @@
 @endsection
 
 @section('js')
+    {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
+     // chưa check số lượng của biến thể trong kho có đủ không --}}
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-        let selectedColorId = null;
-        let selectedSizeId = null;
+        document.addEventListener('DOMContentLoaded', function() {
+            let selectedColorId = null;
+            let selectedSizeId = null;
 
-        // Handle color selection
-        document.querySelectorAll('.variants-clr .swatch').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
-                    swatch.classList.remove('selected');
+            // lấy color
+            document.querySelectorAll('.variants-clr .swatch').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
+                        swatch.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                    selectedColorId = item.getAttribute('data-attribute-value-id');
+                    document.getElementById('color_id').value = selectedColorId;
                 });
-                item.classList.add('selected');
-                selectedColorId = item.getAttribute('data-attribute-value-id');
-                document.getElementById('color_id').value = selectedColorId;
+            });
+
+            // lấy size
+            document.querySelectorAll('.variants-size .swatch').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
+                        swatch.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                    selectedSizeId = item.getAttribute('data-attribute-value-id');
+                    document.getElementById('size_id').value = selectedSizeId;
+                });
+            });
+
+            // Validate số lượng
+            const amountInput = document.getElementById('quantityInput');
+            amountInput.addEventListener('input', function() {
+                let qty = parseInt(this.value);
+                if (isNaN(qty) || qty < 1) { 
+                    this.value = 1;
+                }
+            });
+
+            // Xử lý nút submit
+            document.querySelector('.product-form').addEventListener('submit', function(event) {
+                // báo lỗi nếu chưa chọn size or màu
+                if (!document.getElementById('color_id').value || !document.getElementById('size_id')
+                    .value) {
+                    event.preventDefault();
+                    alert('Bạn chưa chọn size hoặc màu');
+                    return; 
+                }
             });
         });
-
-        // Handle size selection
-        document.querySelectorAll('.variants-size .swatch').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
-                    swatch.classList.remove('selected');
-                });
-                item.classList.add('selected');
-                selectedSizeId = item.getAttribute('data-attribute-value-id');
-                document.getElementById('size_id').value = selectedSizeId;
-            });
-        });
-
-        // Validate quantity input
-        const amountInput = document.getElementById('quantityInput');
-        amountInput.addEventListener('input', function() {
-            let qty = parseInt(this.value);
-            if (isNaN(qty) || qty < 1) { // Ensure the minimum quantity is 1
-                this.value = 1;
-            }
-        });
-
-        // Handle form submission
-        document.querySelector('.product-form').addEventListener('submit', function(event) {
-            // Prevent form submission if color or size is not selected
-            if (!document.getElementById('color_id').value || !document.getElementById('size_id').value) {
-                event.preventDefault();
-                alert('Please select both color and size.');
-                return; // Stop further execution if validation fails
-            }
-
-            // Otherwise, let the form submit to the Laravel controller
-        });
-    });
-
-
     </script>
 
+    {{-- select ảnh --}}
     <script>
-        // select ảnh
         document.addEventListener('DOMContentLoaded', function() {
             const thumbnails = document.querySelectorAll('.thumbnail');
             const mainImage = document.getElementById('zoompro');
@@ -1264,14 +1261,87 @@
                     event.preventDefault();
                     const newImage = thumbnail.getAttribute('data-image');
                     const newZoomImage = thumbnail.getAttribute('data-zoom-image');
-                    
+
                     mainImage.setAttribute('src', newImage);
                     mainImage.setAttribute('data-zoom-image', newZoomImage);
                 });
             });
         });
-
     </script>
 
-    <script src="{{asset('admin\js\plugins\slick-carousel\slick.js')}}"></script>
+    <script src="{{ asset('admin\js\plugins\slick-carousel\slick.js') }}"></script>
+
+    {{-- check số lượng từng biến thể --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let variantDetails = @json($variantDetails); // Lấy thông tin tồn kho từ backend
+
+            let selectedColor = null;
+            let selectedSize = null;
+
+            // Xử lý khi người dùng chọn màu
+            document.querySelectorAll('.color-option').forEach(function(colorOption) {
+                colorOption.addEventListener('click', function() {
+                    selectedColor = this.getAttribute('data-attribute-value-id');
+                    updateSizeOptions();
+                });
+            });
+
+            // Xử lý khi người dùng chọn size
+            document.querySelectorAll('.size-option').forEach(function(sizeOption) {
+                sizeOption.addEventListener('click', function() {
+                    selectedSize = this.getAttribute('data-attribute-value-id');
+                    updateColorOptions();
+                });
+            });
+
+            // Cập nhật trạng thái các lựa chọn size dựa trên màu đã chọn
+            function updateSizeOptions() {
+                document.querySelectorAll('.size-option').forEach(function(sizeOption) {
+                    let sizeId = sizeOption.getAttribute('data-attribute-value-id');
+                    let variant = variantDetails.find(v => {
+                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr
+                                .value == selectedColor) &&
+                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
+                                sizeId);
+                    });
+
+                    if (variant && variant.stock > 0) {
+                        sizeOption.classList.remove('disabled');
+                    } else {
+                        sizeOption.classList.add('disabled');
+                    }
+                });
+            }
+
+            // Cập nhật trạng thái các lựa chọn màu dựa trên size đã chọn
+            function updateColorOptions() {
+                document.querySelectorAll('.color-option').forEach(function(colorOption) {
+                    let colorId = colorOption.getAttribute('data-attribute-value-id');
+                    let variant = variantDetails.find(v => {
+                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr
+                                .value == colorId) &&
+                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
+                                selectedSize);
+                    });
+
+                    if (variant && variant.stock > 0) {
+                        colorOption.classList.remove('disabled');
+                    } else {
+                        colorOption.classList.add('disabled');
+                    }
+                });
+            }
+        });
+    </script>
+
+@endsection
+
+@section('css')
+    <style>
+        .swatch.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
 @endsection

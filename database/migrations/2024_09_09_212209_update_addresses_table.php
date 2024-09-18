@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('addresses', function (Blueprint $table) {
-            // $table->dropColumn("state");
-            // $table->dropColumn("postal_code");
-            // $table->dropColumn("country");
-            // $table->string("district")->after("city");
-            // $table->string("is_default")->after("address_line2")->default(0);
-            // $table->string("ward")->after("district");
+            $table->dropColumn("state");
+            $table->dropColumn("postal_code");
+            $table->dropColumn("country");
+            $table->string("district")->after("city");
+            $table->string("is_default")->after("address_line2")->default(0);
+            $table->string("ward")->after("district");
         });
     }
 
