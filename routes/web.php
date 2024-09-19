@@ -39,3 +39,4 @@ Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remov
 Route::view('/contact', 'client.contact')->name('contact'); 
 Route::view('/support', 'client.support')->name('support'); 
 Route::view('/barter', 'client.barter')->name('barter');
+Route::view('/blog', 'client.blog')->name('blog');
