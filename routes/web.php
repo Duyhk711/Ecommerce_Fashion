@@ -31,11 +31,12 @@ Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hó
 Route::view('/my-account', 'client.my-account')->name('myaccount'); // Sửa thành my-account
 
 Route::get('/product-detail/{id}', [ProductController::class, "getProductDetail"])->name('productDetail');
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.show');
+Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 
+// Route::get('/cart', [CartController::class, 'viewCart'])->name('client.cart');
 Route::view('/contact', 'client.contact')->name('contact'); 
 Route::view('/support', 'client.support')->name('support'); 
 Route::view('/barter', 'client.barter')->name('barter');
