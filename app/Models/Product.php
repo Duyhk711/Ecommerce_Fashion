@@ -42,6 +42,11 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function scopeFilterByCategory($query, $categories)
     {
         if (!empty($categories) && is_array($categories)) {

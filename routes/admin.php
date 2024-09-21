@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CatalogueController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,5 +47,5 @@ Route::prefix('admin')
         Route::resource('banners', BannerController::class);
         Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
 
-        Route::get('home', [HomeController::class, 'home'])->name('home');
+
     });

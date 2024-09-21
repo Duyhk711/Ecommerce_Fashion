@@ -25,8 +25,13 @@ class ProductController extends Controller
                 'variantDetails' => $data['variantDetails'],
                 'product' => $data['product'],
                 'totalStock' => $data['totalStock'],
-                'relatedProducts' => $data['relatedProducts']
-            ]
+                'relatedProducts' => $data['relatedProducts'],
+                'canComment' => $data['canComment'],
+                'comments' => $data['comments'],
+                'averageRating' => $data['averageRating'],
+                'totalRatings' => $data['totalRatings'],
+                'ratingsPercentage' => $data['ratingsPercentage'],
+            ]   
         );
     }
 }

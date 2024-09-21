@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ShopController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ProductController;
 
 /*
@@ -23,7 +24,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/filterproduct', [ShopController::class, 'filterShop'])->name('filter');
 
-Route::view('/product-detail', 'client.product-detail')->name('productDetail'); // Sửa thành product-detail
+// Route::view('/product-detail', 'client.product-detail')->name('productDetail'); // Sửa thành product-detail
 Route::view('/checkout', 'client.checkout')->name('checkout');
 Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
 Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính tả từ 'whishlist' thành 'wishlist'
@@ -43,4 +44,8 @@ Route::view('/barter', 'client.barter')->name('barter');
 // Trang chủ hiển thị 12 sản phẩm
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
+
+
+// them binh luan
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 

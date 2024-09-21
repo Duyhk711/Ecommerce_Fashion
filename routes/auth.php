@@ -15,4 +15,4 @@ Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtp'])->name
 Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordForm'])->name('reset-password');
 Route::post('/reset-password', [AuthenticationController::class, 'resetPassword'])->name('reset-password');
 
-
+Route::view('/forgot-password', 'client.forgot-password')->name('forgot-password');
