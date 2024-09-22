@@ -33,7 +33,7 @@ class OrderSeeder extends Seeder
         // Seed dữ liệu cho bảng order_items
         DB::table('order_items')->insert([
             'order_id' => $orderId,
-            'product_variant_id' => 10, // ID của product_variant
+            'product_variant_id' => 7, // ID của product_variant
             'quantity' => 1,
             'price' => 200.00,
             'product_name' => 'Sample Product',

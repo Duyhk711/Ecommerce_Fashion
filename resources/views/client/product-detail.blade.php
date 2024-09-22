@@ -16,8 +16,8 @@
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
                                     <img id="zoompro" class="zoompro" src="{{ $product->img_thumbnail }}"
-                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
-                                        height="808" />
+                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="600"
+                                        height="780" />
                                 </div>
                                 <!-- End Product Image -->
                                 <!-- Product Label -->
@@ -59,39 +59,42 @@
                             <h2 class="product-main-title">{{ $product->name }}</h2>
                             <!-- Product Reviews -->
                             <div class="product-review d-flex-center mb-3">
-                                <div class="reviewStar d-flex-center"><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span
-                                        class="caption ms-2">24 Reviews</span></div>
-                                <a class="reviewLink d-flex-center" href="#reviews">Write a Review</a>
+                                <div class="reviewStar d-flex-center">
+                                    <a class=" d-flex-center" href="#reviews">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                        @endfor
+                                        <span class="caption ms-2">{{ $totalRatings }} Đánh giá</span>
+                                    </a>
+                                    
+                                </div>
                             </div>
                             <!-- End Product Reviews -->
                             <!-- Product Info -->
                             <div class="product-info">
-                                <p class="product-stock d-flex">Availability:
+                                <p class="product-stock d-flex">Tình trạng:
                                     <span class="pro-stockLbl ps-0">
                                         @if ($totalStock > 10)
-                                            <span class="d-flex-center stockLbl instock text-uppercase">In stock</span>
+                                            <span class="d-flex-center stockLbl instock text-uppercase">Còn hàng</span>
                                         @elseif($totalStock == 0)
-                                            <span class="d-flex-center stockLbl text-danger text-uppercase">Sould out</span>
+                                            <span class="d-flex-center stockLbl text-danger text-uppercase">Hết hàng</span>
                                         @else
-                                            <span class="d-flex-center stockLbl text-warning text-uppercase">Low
-                                                stock</span>
+                                            <span class="d-flex-center stockLbl text-warning text-uppercase"> Sắp hết hàng</span>
                                         @endif
                                     </span>
                                 </p>
-                                <p class="product-vendor">Vendor:<span class="text"><a href="#">HVL</a></span>
+                                {{-- <p class="product-vendor">Vendor:<span class="text"><a href="#">HVL</a></span> --}}
                                 </p>
-                                <p class="product-type">Product Type:<span class="text">{{ $product->material }}</span>
+                                <p class="product-type">Chất liệu:<span class="text">{{ $product->material }}</span>
                                 </p>
-                                <p class="product-sku">SKU:<span class="text">{{ $product->sku }}</span></p>
+                                <p class="product-sku">MÃ:<span class="text">{{ $product->sku }}</span></p>
                             </div>
 
                             <!-- End Product Info -->
                             <!-- Product Price -->
                             <div class="product-price d-flex-center my-3">
-                                <span class="price old-price">${{ $product->price_regular }}</span><span
-                                    class="price">${{ $product->price_sale }}</span>
+                                <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span><span
+                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                             </div>
                             <!-- End Product Price -->
                             <hr>
@@ -205,9 +208,9 @@
                         <!-- End Product Form -->
 
                         <!-- Product Info -->
-                        <div class="userViewMsg featureText" data-user="20" data-time="11000"><i
+                        {{-- <div class="userViewMsg featureText" data-user="20" data-time="11000"><i
                                 class="icon anm anm-eye-r"></i><b class="uersView">21</b> People are Looking for this
-                            Product</div>
+                            Product</div> --}}
                         <div class="shippingMsg featureText"><i class="icon anm anm-clock-r"></i>Estimated Delivery
                             Between <b id="fromDate">Wed, May 1</b> and <b id="toDate">Tue, May 7</b>.</div>
                         <div class="freeShipMsg featureText" data-price="199"><i class="icon anm anm-truck-r"></i>Spent
@@ -435,6 +438,7 @@
                             believable. If you are going to use a passage.</p>
                     </div>
                     <!--End Shipping &amp; Return-->
+
                     <!--Review-->
                     <h3 class="tabs-ac-style d-md-none" rel="reviews">Đánh giá</h3>
                     <div id="reviews" class="tab-content">
@@ -443,15 +447,15 @@
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                                 <div class="ratings-main">
                                     <div class="avg-rating d-flex-center mb-3">
-                                        <h4 class="avg-mark">{{ number_format($averageRating, 1) }}</h4>
+                                        <h4 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h4>
                                         <div class="avg-content ms-3">
-                                            <p class="text-rating">Average Rating</p>
+                                            <p class="text-rating">Đánh giá sản phẩm</p>
                                             <div class="ratings-full product-review">
                                                 <a class="reviewLink d-flex-center" href="#reviews">
                                                     @for ($i = 0; $i < 5; $i++)
                                                         <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
                                                     @endfor
-                                                    <span class="caption ms-2">{{ $totalRatings }} Ratings</span>
+                                                    <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -494,11 +498,15 @@
                                                             <h5 class="spr-review-header-title text-transform-none mb-0">
                                                                 {{ $comment['user_name'] }}</h5>
                                                             <span class="product-review spr-starratings m-0">
-                                                                <span class="reviewLink">
-                                                                    @for ($i = 0; $i < 5; $i++)
-                                                                        <i class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
-                                                                    @endfor
-                                                                </span>
+                                                                @if ($comment['rating'] == "Không đánh giá")
+                                                                    <span class="reviewLink">Không có đánh giá</span>
+                                                                @else
+                                                                    <span class="reviewLink">
+                                                                        @for ($i = 0; $i < 5; $i++)
+                                                                            <i class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
+                                                                        @endfor
+                                                                    </span>
+                                                                @endif
                                                             </span>
                                                         </div>
                                                     </div>
@@ -547,7 +555,7 @@
                                             <div class="col-12 spr-form-review-body form-group">
                                                 <label class="spr-form-label" for="message">Nội dung<span class="spr-form-review-body-charactersremaining"> tối đa (500) kí tự</span></label>
                                                 <div class="spr-form-input">
-                                                    <textarea class="spr-form-input spr-form-input-textarea" id="message" name="main_comment" rows="3"></textarea>
+                                                    <textarea class="spr-form-input spr-form-input-textarea" required id="message" name="main_comment" rows="3"></textarea>
                                                 </div>
                                             </div>
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -629,11 +637,11 @@
                                             <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
                                         </div>
                                         <div class="product-price">
-                                            @if ($product->product_sale == null)
-                                                <span class="price">${{ $product->price_regular }}</span>
+                                            @if ($product->price_sale == 0)
+                                                <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
                                             @else
-                                                <span class="price old-price">${{ $product->price_regular }}</span>
-                                                <span class="price">${{ $product->price_sale }}</span>
+                                                <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                             @endif
                                         </div>
                                         <div class="product-review">
