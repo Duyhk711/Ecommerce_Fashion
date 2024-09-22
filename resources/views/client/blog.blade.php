@@ -1,139 +1,140 @@
 @extends('layouts.client')
+@section('css')
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: 'Poppins', sans-serif;
-        color: white;
-        text-align: center;
-    }
-
-    main {
-        padding: 1rem;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: 20px;
-    }
-
-    article {
-        border: 1px solid black;
-        height: 150px;
-        background-color: white;
-        border-radius: 10px;
-        padding: 1.5rem;
-        transition: 0.3s, 0.3s;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-        text-align: center;
-    }
-
-    article:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 30px;
-    }
-
-    article img {
+    article img{
         max-width: 100%;
-        border-radius: 10px 10px 0 0;
-    }
-
-    article h2 {
-        font-size: 1.6rem;
-        margin: 1rem 0;
-        color: black;
-        flex-grow: 1;
-    }
-
-    article a {
-        display: inline-block;
-        margin-top: 1rem;
-        padding: 0.7rem 1.5rem;
-        background-color: blue;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        transition: 0.3s, 0.3s;
-        box-shadow: 0 4px 10px;
-    }
-
-    article a:hover {
-        background-color: blue;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 15px;
-    }
-
-    article a:active {
-        transform: translateY(1px);
-        box-shadow: 0 4px 10px;
+        height: 200px;
     }
 </style>
+@endsection
 
 @section('content')
+@include('client.component.page_header')
 
-<!DOCTYPE html>
-<html lang="en">
+<div class="container">
+    <!--Toolbar-->
+    <div class="toolbar toolbar-wrapper blog-toolbar">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6 text-left filters-toolbar-item d-flex justify-content-center justify-content-sm-start">
+                <div class="search-form mb-3 mb-sm-0">
+                    <form class="d-flex" action="#">
+                        <input class="search-input" type="text" placeholder="Blog search...">
+                        <button type="submit" class="search-btn"><i class="icon anm anm-search-l"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6 text-right filters-toolbar-item d-flex justify-content-between justify-content-sm-end">
+                <div class="filters-item d-flex align-items-center">
+                    <label for="ShowBy" class="mb-0 me-2">Show:</label>
+                    <select name="ShowBy" id="ShowBy" class="filters-toolbar-sort">
+                        <option value="title-ascending" selected="selected">10</option>
+                        <option>15</option>
+                        <option>20</option>
+                        <option>25</option>
+                        <option>30</option>
+                    </select>
+                </div>
+                <div class="filters-item d-flex align-items-center ms-3">
+                    <label for="SortBy" class="mb-0 me-2">Sort:</label>
+                    <select name="SortBy" id="SortBy" class="filters-toolbar-sort">
+                        <option value="title-ascending" selected="selected">Featured</option>
+                        <option>Newest</option>
+                        <option>Most comments</option>
+                        <option>Release Date</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Toolbar-->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <!--Blog Grid-->
+    <div class="blog-grid-view">
+        <div id="blog-container" class="row col-row row-cols-lg-3 row-cols-sm-2 row-cols-1">
 
-<body>
-    <main id="blog-container">
+        </div>
 
-    </main>
-</body>
+        <!-- Pagination -->
+        <nav class="clearfix pagination-bottom">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled"><a class="page-link" href="#"><i class="icon anm anm-angle-left-l"></i></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="icon anm anm-angle-right-l"></i></a></li>
+            </ul>
+        </nav>
+        <!-- End Pagination -->
+    </div>
+    <!--End Blog Grid-->
+</div>
+
+@endsection
+@section('js')
 <script>
-
     const apiKey = 'a046cdd5c3d946f1bea4b8e1cfb4e68f';
     const apiUrl = `https://newsapi.org/v2/everything?q=fashion&apiKey=${apiKey}`;
     const blogContainer = document.getElementById('blog-container');
-
 
     async function fetchFashionArticles() {
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(` error!: ${response.status}`);
             }
             const data = await response.json();
             if (data.articles && data.articles.length > 0) {
                 displayArticles(data.articles);
             } else {
+
                 blogContainer.innerHTML = '<p>Không tìm thấy bài viết nào.</p>';
             }
         } catch (error) {
-            console.error('Error fetching the articles:', error);
-            blogContainer.innerHTML = `<p>Không thể tải bài viết. Vui lòng kiểm tra khóa API của bạn và thử lại.</p>`;
+            console.error('Lỗi khi tải bài viết:', error);
+            blogContainer.innerHTML = `<p>Không thể tải bài viết.</p>`;
         }
     }
-
-
+    
     function displayArticles(articles) {
+
         blogContainer.innerHTML = '';
+
+
+        if (!articles || articles.length === 0) {
+            blogContainer.innerHTML = '<p>Không có dữ liệu để hiển thị.</p>';
+            return;
+        }
+
+
         articles.forEach(article => {
-            const articleElement = document.createElement('article');
-            articleElement.innerHTML = `
-            <img src="${article.urlToImage || 'https://via.placeholder.com/300'}" alt="${article.title}">
-            <h2>${article.title}</h2>
-            <p>${article.description || 'No description available.'}</p>
-            <a href="${article.url}" target="_blank">Read more</a>
-        `;
-            blogContainer.appendChild(articleElement);
+            if (article.title && article.url && article.urlToImage && article.description) {
+                const articleElement = document.createElement('article');
+                articleElement.classList.add('col-item');
+                articleElement.innerHTML = `
+            <div class="blog-item col-item">
+                <div class="blog-article zoomscal-hov">
+                    <div class="blog-img">
+                      <a class="featured-image rounded-0 zoom-scal" href="${article.url}" target="_blank"><img class="rounded-0 blur-up lazyload" data-src="${article.urlToImage}" src="${article.urlToImage}" alt="${article.title}" width="740" height="410" /></a>
+                    </div>
+                    <div class="blog-content">
+                            <h2 class="h3"><a href="${article.url}" target="_blank">${article.title}</a></h2>
+                                <ul class="publish-detail d-flex-wrap">                      
+                                    <li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Posted by:</span> ${article.author || 'Lỗi'}</li>
+                                    <li><i class="icon anm anm-clock-r"></i> <time datetime="${new Date(article.publishedAt).toISOString()}">${new Date(article.publishedAt).toLocaleDateString()}</time></li>
+                                    <li><i class="icon anm anm-comments-l"></i> <a href="#">Comments</a></li>
+                                </ul>
+                    <p class="content">${article.description}</p>
+                    <a href="${article.url}" target="_blank" class="btn btn-secondary btn-sm">Read more</a>
+                    </div>
+                </div>
+            </div>
+            `;
+                blogContainer.appendChild(articleElement);
+            }
         });
     }
 
     fetchFashionArticles();
 </script>
-
-</html>
 @endsection

@@ -18,8 +18,9 @@ use App\Http\Controllers\Client\ProductController;
  */
 
 // Example Routes
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/filterproduct', [ShopController::class, 'filterShop'])->name('filter');
 
