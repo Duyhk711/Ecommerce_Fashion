@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Client\HomeController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 // Example Routes
-Route::view('/home', 'client.home')->name('home');
+// Route::view('/home', 'client.home')->name('home');
 Route::view('/shop', 'client.shop')->name('shop');
 Route::view('/product-detail', 'client.product-detail')->name('productDetail'); // Sửa thành product-detail
 Route::view('/checkout', 'client.checkout')->name('checkout');
@@ -26,3 +28,16 @@ Route::view('/login', 'client.login')->name('login');
 Route::view('/register', 'client.register')->name('register');
 Route::view('/forgot-password', 'client.forgot-password')->name('forgot-password');
 Route::view('/my-account', 'client.my-account')->name('myaccount'); // Sửa thành my-account
+
+
+// Trang chủ hiển thị 12 sản phẩm
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Tìm kiếm sản phẩm
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+
+// web.php
+
+
+
+

@@ -9,18 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('vouchers', function (Blueprint $table) {
+        Schema::create('banner_images', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->enum('discount_type', ['percentage', 'fixed']);
-            $table->double('discount_value');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->foreignId('banner_id')->constrained()->onDelete('cascade');
+            $table->string('image'); // Địa chỉ URL của ảnh
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vouchers');
+        Schema::dropIfExists('banner_images');
     }
 };
