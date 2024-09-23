@@ -22,7 +22,7 @@ class VoucherController extends Controller
     public function index()
     {
         $vouchers = $this->voucherService->getAllVouchers();
-       
+
         return view('admin.vouchers.index', compact('vouchers'));
     }
 
@@ -62,5 +62,4 @@ class VoucherController extends Controller
             return redirect()->route('admin.vouchers.index')->with('error', 'Voucher không tồn tại.');
         }
     }
-
 }

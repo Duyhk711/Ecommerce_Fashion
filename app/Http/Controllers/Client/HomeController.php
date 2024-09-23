@@ -21,7 +21,7 @@ class HomeController extends Controller
     {
         $products = $this->homeService->getHomeProducts();
         $banners  = $this->homeService->getBannerShowHome();
-        $catalogues=$this->homeService->getAllCatalogues();
+        $catalogues = $this->homeService->getAllCatalogues();
         // dd($banners);
         return view('client.home', compact('products', 'banners', 'catalogues'));
     }

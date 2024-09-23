@@ -38,6 +38,7 @@ Route::prefix('admin')
 
         // CATALOGUES
         Route::resource('catalogues', CatalogueController::class);
+        //ACTIVATE
         Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
         Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
         // PRODUCT

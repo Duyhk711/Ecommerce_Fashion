@@ -46,5 +46,3 @@ class VoucherRequest extends FormRequest
         ];
     }
 }
-
-

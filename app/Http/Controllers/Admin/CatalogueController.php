@@ -107,7 +107,6 @@ class CatalogueController extends Controller
             // $childrens = $this->catalogueService->getAllCatalogues()->where('parend_id', $catalogue->id);
 
             Catalogue::where('parent_id', $catalogue->id)->update(['is_active' => false]);
-
         }
 
         // Kích hoạt danh mục hiện tại
