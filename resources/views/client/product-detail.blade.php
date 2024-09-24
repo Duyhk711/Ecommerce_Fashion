@@ -1,5 +1,42 @@
 @extends('layouts.client')
 
+@section('css')
+    <style>
+        .swatch.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+
+    {{-- Rating stars --}}
+    <style>
+        .review-rating {
+            display: flex;
+            flex-direction: row; /* Để các sao ngược lại */
+            justify-content: flex-start;
+        }
+
+        .review-rating input[type="radio"] {
+            display: none; /* Ẩn các input radio */
+        }
+
+        .review-rating label {
+            font-size: 2em; /* Kích thước của icon sao */
+            cursor: pointer; /* Con trỏ trỏ vào sao khi di chuột */
+        }
+
+        /* Icon sao mặc định (chưa được chọn) sẽ có class anm-star-o */
+        .review-rating label i {
+            color: #ccc; /* Màu trắng mặc định cho sao */
+        }
+
+        /* Khi sao được chọn (anm-star) */
+        .review-rating label .anm-star {
+            color: #ffcc00; /* Màu vàng cho sao được chọn */
+        }
+    </style>
+@endsection
+
 @section('content')
     @include('client.component.page_header')
     <div class="container" style="max-width: 80%;">
@@ -59,39 +96,42 @@
                             <h2 class="product-main-title">{{ $product->name }}</h2>
                             <!-- Product Reviews -->
                             <div class="product-review d-flex-center mb-3">
-                                <div class="reviewStar d-flex-center"><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span
-                                        class="caption ms-2">24 Reviews</span></div>
-                                <a class="reviewLink d-flex-center" href="#reviews">Write a Review</a>
+                                <div class="reviewStar d-flex-center">
+                                    <a class=" d-flex-center" href="#reviews">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                        @endfor
+                                        <span class="caption ms-2">{{ $totalRatings }} Đánh giá</span>
+                                    </a>
+                                    
+                                </div>
                             </div>
                             <!-- End Product Reviews -->
                             <!-- Product Info -->
                             <div class="product-info">
-                                <p class="product-stock d-flex">Availability:
+                                <p class="product-stock d-flex">Tình trạng:
                                     <span class="pro-stockLbl ps-0">
                                         @if ($totalStock > 10)
-                                            <span class="d-flex-center stockLbl instock text-uppercase">In stock</span>
+                                            <span class="d-flex-center stockLbl instock text-uppercase">Còn hàng</span>
                                         @elseif($totalStock == 0)
-                                            <span class="d-flex-center stockLbl text-danger text-uppercase">Sould out</span>
+                                            <span class="d-flex-center stockLbl text-danger text-uppercase">Hết hàng</span>
                                         @else
-                                            <span class="d-flex-center stockLbl text-warning text-uppercase">Low
-                                                stock</span>
+                                            <span class="d-flex-center stockLbl text-warning text-uppercase"> Sắp hết hàng</span>
                                         @endif
                                     </span>
                                 </p>
-                                <p class="product-vendor">Vendor:<span class="text"><a href="#">HVL</a></span>
+                                {{-- <p class="product-vendor">Vendor:<span class="text"><a href="#">HVL</a></span> --}}
                                 </p>
-                                <p class="product-type">Product Type:<span class="text">{{ $product->material }}</span>
+                                <p class="product-type">Chất liệu:<span class="text">{{ $product->material }}</span>
                                 </p>
-                                <p class="product-sku">SKU:<span class="text">{{ $product->sku }}</span></p>
+                                <p class="product-sku">MÃ:<span class="text">{{ $product->sku }}</span></p>
                             </div>
 
                             <!-- End Product Info -->
                             <!-- Product Price -->
                             <div class="product-price d-flex-center my-3">
-                                <span class="price old-price">${{ $product->price_regular }}</span><span
-                                    class="price">${{ $product->price_sale }}</span>
+                                <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span><span
+                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                             </div>
                             <!-- End Product Price -->
                             <hr>
@@ -102,18 +142,17 @@
                             <!-- End Sort Description -->
                             <hr>
                             <!-- Countdown -->
-                            <h3 class="text-uppercase mb-0">Hurry up! Sales Ends In</h3>
+                            {{-- <h3 class="text-uppercase mb-0">Hurry up! Sales Ends In</h3>
                             <div class="product-countdown d-flex-center text-center my-3" data-countdown="2028/12/12">
-                            </div>
+                            </div> --}}
                             <!-- End Countdown -->
                         </div>
                         <!-- End Product Details -->
 
                         <!-- Product Form -->
-                        <form method="POST" action="{{ route('cart.add') }}"
+                        <form method="POST" action="{{ route('cart.add') }} "
                             class="product-form product-form-border hidedropdown">
                             @csrf
-
                             <!-- Swatches -->
                             <div class="product-swatches-option">
                                 <!-- Swatches Color -->
@@ -124,6 +163,7 @@
                                         @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
                                             <li class="swatch x-large available color-option"
                                                 style="background-color: {{ $color['colorCode'] }}"
+                                                data-color-code="{{ $color['colorCode'] }}"
                                                 data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
                                                 title="{{ $color['value'] }}">
                                             </li>
@@ -149,7 +189,7 @@
                                 </div>
                             </div>
                             <!-- End Swatches -->
-
+                            
                             <input type="hidden" name="color_id" id="color_id">
                             <input type="hidden" name="size_id" id="size_id">
                             <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
@@ -203,9 +243,9 @@
                         <!-- End Product Form -->
 
                         <!-- Product Info -->
-                        <div class="userViewMsg featureText" data-user="20" data-time="11000"><i
+                        {{-- <div class="userViewMsg featureText" data-user="20" data-time="11000"><i
                                 class="icon anm anm-eye-r"></i><b class="uersView">21</b> People are Looking for this
-                            Product</div>
+                            Product</div> --}}
                         <div class="shippingMsg featureText"><i class="icon anm anm-clock-r"></i>Estimated Delivery
                             Between <b id="fromDate">Wed, May 1</b> and <b id="toDate">Tue, May 7</b>.</div>
                         <div class="freeShipMsg featureText" data-price="199"><i class="icon anm anm-truck-r"></i>Spent
@@ -237,9 +277,9 @@
             <!--Product Tabs-->
             <div class="tabs-listing section pb-0">
                 <ul class="product-tabs style2 list-unstyled d-flex-wrap d-flex-justify-center d-none d-md-flex">
-                    <li rel="description" class="active"><a class="tablink">Description</a></li>
-                    <li rel="shipping-return"><a class="tablink">Shipping &amp; Return</a></li>
-                    <li rel="reviews"><a class="tablink">Reviews</a></li>
+                    <li rel="description" class="active"><a class="tablink">Mô tả</a></li>
+                    <li rel="shipping-return"><a class="tablink">Giao hàng &amp; Trả hàng</a></li>
+                    <li rel="reviews"><a class="tablink">Đánh giá</a></li>
                 </ul>
 
                 <div class="tab-container">
@@ -433,207 +473,138 @@
                             believable. If you are going to use a passage.</p>
                     </div>
                     <!--End Shipping &amp; Return-->
+
                     <!--Review-->
-                    <h3 class="tabs-ac-style d-md-none" rel="reviews">Review</h3>
+                    <h3 class="tabs-ac-style d-md-none" rel="reviews">Đánh giá</h3>
                     <div id="reviews" class="tab-content">
                         <div class="row">
+                            {{-- Danh sách bình luận --}}
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                                 <div class="ratings-main">
                                     <div class="avg-rating d-flex-center mb-3">
-                                        <h4 class="avg-mark">5.0</h4>
+                                        <h4 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h4>
                                         <div class="avg-content ms-3">
-                                            <p class="text-rating">Average Rating</p>
+                                            <p class="text-rating">Đánh giá sản phẩm</p>
                                             <div class="ratings-full product-review">
-                                                <a class="reviewLink d-flex-center" href="#reviews"><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i><span class="caption ms-2">24
-                                                        Ratings</span></a>
+                                                <a class="reviewLink d-flex-center" href="#reviews">
+                                                    @for ($i = 0; $i < 5; $i++)
+                                                        <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                    @endfor
+                                                    <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-
+                            
                                     <div class="ratings-list">
-                                        <div class="ratings-container d-flex align-items-center mt-1">
-                                            <div class="ratings-full product-review m-0">
-                                                <a class="reviewLink d-flex align-items-center" href="#reviews"><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i></a>
+                                        @foreach ($ratingsPercentage as $rating => $percentage)
+                                            <div class="ratings-container d-flex align-items-center mt-1">
+                                                <div class="ratings-full product-review m-0">
+                                                    <a class="reviewLink d-flex align-items-center" href="#reviews">
+                                                        @for ($i = 0; $i < 5; $i++)
+                                                            <i class="icon anm anm-star {{ $i < $rating ? '' : 'anm-star-o' }}"></i>
+                                                        @endfor
+                                                    </a>
+                                                </div>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ $percentage }}"
+                                                         aria-valuemin="0" aria-valuemax="100" style="width:{{ $percentage }}%;"></div>
+                                                </div>
+                                                <div class="progress-value">{{ number_format($percentage, 1) }}%</div>
                                             </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="99"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width:99%;"></div>
-                                            </div>
-                                            <div class="progress-value">99%</div>
-                                        </div>
-                                        <div class="ratings-container d-flex align-items-center mt-1">
-                                            <div class="ratings-full product-review m-0">
-                                                <a class="reviewLink d-flex align-items-center" href="#reviews"><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i></a>
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="75"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width:75%;"></div>
-                                            </div>
-                                            <div class="progress-value">75%</div>
-                                        </div>
-                                        <div class="ratings-container d-flex align-items-center mt-1">
-                                            <div class="ratings-full product-review m-0">
-                                                <a class="reviewLink d-flex align-items-center" href="#reviews"><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i></a>
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="50"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width:50%;"></div>
-                                            </div>
-                                            <div class="progress-value">50%</div>
-                                        </div>
-                                        <div class="ratings-container d-flex align-items-center mt-1">
-                                            <div class="ratings-full product-review m-0">
-                                                <a class="reviewLink d-flex align-items-center" href="#reviews"><i
-                                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i></a>
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="25"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width:25%;"></div>
-                                            </div>
-                                            <div class="progress-value">25%</div>
-                                        </div>
-                                        <div class="ratings-container d-flex align-items-center mt-1">
-                                            <div class="ratings-full product-review m-0">
-                                                <a class="reviewLink d-flex align-items-center" href="#reviews"><i
-                                                        class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i></a>
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="5"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width:5%;"></div>
-                                            </div>
-                                            <div class="progress-value">05%</div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
+                            
                                 <hr />
+                            
                                 <div class="spr-reviews">
-                                    <h3 class="spr-form-title">Customer Reviews</h3>
+                                    <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
                                     <div class="review-inner">
-                                        <div class="spr-review d-flex w-100">
-                                            <div class="spr-review-profile flex-shrink-0">
-                                                <img class="blur-up lazyload" data-src="assets/images/users/user-img1.jpg"
-                                                    src="assets/images/users/user-img1.jpg" alt="" width="200"
-                                                    height="200" />
-                                            </div>
-                                            <div class="spr-review-content flex-grow-1">
-                                                <div class="d-flex justify-content-between flex-column mb-2">
-                                                    <div
-                                                        class="title-review d-flex align-items-center justify-content-between">
-                                                        <h5 class="spr-review-header-title text-transform-none mb-0">
-                                                            Eleanor Pena</h5>
-                                                        <span class="product-review spr-starratings m-0"><span
-                                                                class="reviewLink"><i class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star"></i></span></span>
-                                                    </div>
+                                        @foreach ($comments as $comment)
+                                            <div class="spr-review d-flex w-100">
+                                                <div class="spr-review-profile flex-shrink-0">
+                                                    <img class="blur-up lazyload" 
+                                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                        alt="" width="200" height="200" 
+                                                    />
                                                 </div>
-                                                <b class="head-font">Good and High quality</b>
-                                                <p class="spr-review-body">There are many variations of passages of Lorem
-                                                    Ipsum available, but the majority have suffered alteration in some form,
-                                                    by injected humour.</p>
-                                            </div>
-                                        </div>
-                                        <div class="spr-review d-flex w-100">
-                                            <div class="spr-review-profile flex-shrink-0">
-                                                <img class="blur-up lazyload"
-                                                    data-src="assets/images/users/testimonial1.jpg"
-                                                    src="assets/images/users/testimonial1.jpg" alt=""
-                                                    width="200" height="200" />
-                                            </div>
-                                            <div class="spr-review-content flex-grow-1">
-                                                <div class="d-flex justify-content-between flex-column mb-2">
-                                                    <div
-                                                        class="title-review d-flex align-items-center justify-content-between">
-                                                        <h5 class="spr-review-header-title text-transform-none mb-0">
-                                                            Courtney Henry</h5>
-                                                        <span class="product-review spr-starratings m-0"><span
-                                                                class="reviewLink"><i class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star"></i><i
-                                                                    class="icon anm anm-star-o"></i><i
-                                                                    class="icon anm anm-star-o"></i></span></span>
+                                                <div class="spr-review-content flex-grow-1">
+                                                    <div class="d-flex justify-content-between flex-column mb-2">
+                                                        <div class="title-review d-flex align-items-center justify-content-between">
+                                                            <h5 class="spr-review-header-title text-transform-none mb-0">
+                                                                {{ $comment['user_name'] }}</h5>
+                                                            <span class="product-review spr-starratings m-0">
+                                                                @if ($comment['rating'] == "Không đánh giá")
+                                                                    <span class="reviewLink">Không có đánh giá</span>
+                                                                @else
+                                                                    <span class="reviewLink">
+                                                                        @for ($i = 0; $i < 5; $i++)
+                                                                            <i class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
+                                                                        @endfor
+                                                                    </span>
+                                                                @endif
+                                                            </span>
+                                                        </div>
                                                     </div>
+                                                    <b class="head-font">{{ $comment['title'] }}</b>
+                                                    <p class="spr-review-body">{{ $comment['body'] }}</p>
                                                 </div>
-                                                <b class="head-font">Feature Availability</b>
-                                                <p class="spr-review-body">The standard chunk of Lorem Ipsum used since the
-                                                    1500s is reproduced below for those interested. Sections 1.10.32 and
-                                                    1.10.33</p>
                                             </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
-
+                            
+                            {{-- Form gửi bình luận --}}
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
-                                <form method="post" action="#" class="product-review-form new-review-form">
-                                    <h3 class="spr-form-title">Write a Review</h3>
-                                    <p>Your email address will not be published. Required fields are marked *</p>
-                                    <fieldset class="row spr-form-contact">
-                                        <div class="col-sm-6 spr-form-contact-name form-group">
-                                            <label class="spr-form-label" for="nickname">Name <span
-                                                    class="required">*</span></label>
-                                            <input class="spr-form-input spr-form-input-text" id="nickname"
-                                                type="text" name="name" required />
-                                        </div>
-                                        <div class="col-sm-6 spr-form-contact-email form-group">
-                                            <label class="spr-form-label" for="email">Email <span
-                                                    class="required">*</span></label>
-                                            <input class="spr-form-input spr-form-input-email " id="email"
-                                                type="email" name="email" required />
-                                        </div>
-                                        <div class="col-sm-6 spr-form-review-title form-group">
-                                            <label class="spr-form-label" for="review">Review Title </label>
-                                            <input class="spr-form-input spr-form-input-text " id="review"
-                                                type="text" name="review" />
-                                        </div>
-                                        <div class="col-sm-6 spr-form-review-rating form-group">
-                                            <label class="spr-form-label">Rating</label>
-                                            <div class="product-review pt-1">
-                                                <div class="review-rating">
-                                                    <a href="#;"><i class="icon anm anm-star-o"></i></a><a
-                                                        href="#;"><i class="icon anm anm-star-o"></i></a><a
-                                                        href="#;"><i class="icon anm anm-star-o"></i></a><a
-                                                        href="#;"><i class="icon anm anm-star-o"></i></a><a
-                                                        href="#;"><i class="icon anm anm-star-o"></i></a>
+                                @if ($canComment === 'not_logged_in')
+                                    <span>Bạn cần <a href="{{ route('login') }}"><b>đăng nhập</b></a> để bình luận.</span>
+                                @elseif ($canComment === 'not_purchased')
+                                    <span>Bạn cần mua sản phẩm này để bình luận.</span>
+                                @elseif ($canComment === 'purchased' || $canComment === 'new_purchase')
+                                    <!-- Form bình luận -->
+                                    <form id="commentForm" method="POST" action="{{ route('comments.store') }}" class="product-review-form new-review-form">
+                                        @csrf
+                                        <h3 class="spr-form-title">Viết bình luận</h3>
+                                        <fieldset class="row spr-form-contact">
+                                            <div class="col-sm-6 spr-form-review-title form-group">
+                                                <label class="spr-form-label" for="review">Tiêu đề</label>
+                                                <input class="spr-form-input spr-form-input-text" id="review" type="text" name="comment_title" />
+                                            </div>
+                                            <div class="col-sm-6 spr-form-review-rating form-group">
+                                                <label class="spr-form-label">Đánh giá</label>
+                                                <div class="product-review pt-1">
+                                                    <div class="review-rating">
+                                                        <input type="radio" id="star1" name="rating" value="1">
+                                                        <label for="star1"><i class="icon anm anm-star-o"></i></label>
+                                                        <input type="radio" id="star2" name="rating" value="2">
+                                                        <label for="star2"><i class="icon anm anm-star-o"></i></label>
+                                                        <input type="radio" id="star3" name="rating" value="3">
+                                                        <label for="star3"><i class="icon anm anm-star-o"></i></label>
+                                                        <input type="radio" id="star4" name="rating" value="4">
+                                                        <label for="star4"><i class="icon anm anm-star-o"></i></label>
+                                                        <input type="radio" id="star5" name="rating" value="5">
+                                                        <label for="star5"><i class="icon anm anm-star-o"></i></label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 spr-form-review-body form-group">
-                                            <label class="spr-form-label" for="message">Body of Review <span
-                                                    class="spr-form-review-body-charactersremaining">(1500) characters
-                                                    remaining</span></label>
-                                            <div class="spr-form-input">
-                                                <textarea class="spr-form-input spr-form-input-textarea" id="message" name="message" rows="3"></textarea>
+                                            <div class="col-12 spr-form-review-body form-group">
+                                                <label class="spr-form-label" for="message">Nội dung<span class="spr-form-review-body-charactersremaining"> tối đa (500) kí tự</span></label>
+                                                <div class="spr-form-input">
+                                                    <textarea class="spr-form-input spr-form-input-textarea" required id="message" name="main_comment" rows="3"></textarea>
+                                                </div>
                                             </div>
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        </fieldset>
+                                        <div class="spr-form-actions clearfix">
+                                            <input type="submit" class="btn btn-primary spr-button spr-button-primary" value="Gửi đánh giá" />
                                         </div>
-                                    </fieldset>
-                                    <div class="spr-form-actions clearfix">
-                                        <input type="submit" class="btn btn-primary spr-button spr-button-primary"
-                                            value="Submit Review" />
-                                    </div>
-                                </form>
+                                    </form>
+                                @elseif ($canComment === 'commented')
+                                    <span>Bạn đã bình luận cho sản phẩm này. Mua hàng mới để bình luận thêm.</span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -704,7 +675,12 @@
                                             <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
                                         </div>
                                         <div class="product-price">
-                                            <span class="price">{{ $product->price_sale }}đ</span>
+                                            @if ($product->price_sale == 0)
+                                                <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                            @else
+                                                <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                            @endif
                                         </div>
                                         <div class="product-review">
                                             <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
@@ -716,13 +692,13 @@
                                             available...</p>
                                         <ul class="variants-clr swatches">
                                             @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
-                                                <li class="swatch x-small available color-option"
-                                                    style="background-color: {{ $color['colorCode'] }}"
-                                                    data-color-code="{{ $color['colorCode'] }}"
-                                                    data-attribute-value-id="{{ $color['value'] }}"
-                                                    data-bs-toggle="tooltip" title="{{ $color['value'] }}">
-                                                </li>
-                                            @endforeach
+                                            <li class="swatch x-small available color-option"
+                                                style="background-color: {{ $color['colorCode'] }}"
+                                                data-color-code="{{ $color['colorCode'] }}"
+                                                data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
+                                                title="{{ $color['value'] }}">
+                                            </li>
+                                        @endforeach
                                         </ul>
                                     </div>
                                 </div>
@@ -1315,8 +1291,6 @@
      </script>
      
 
-
-
     {{-- select ảnh --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1401,13 +1375,57 @@
             }
         });
     </script>
+    
+    {{-- select sao --}}
+    <script>
+         // Bắt tất cả các label và radio inputs
+        const stars = document.querySelectorAll('.review-rating label');
+        const inputs = document.querySelectorAll('.review-rating input[type="radio"]');
+
+        // Lặp qua tất cả các label (sao)
+        stars.forEach((star, index) => {
+            // Thêm sự kiện click vào mỗi label (sao)
+            star.addEventListener('click', function() {
+                // Lấy giá trị của input tương ứng (lấy giá trị đánh giá)
+                inputs[index].checked = true;
+
+                // Reset lại tất cả các sao thành class `anm-star-o` (trắng)
+                stars.forEach(s => s.querySelector('i').className = 'icon anm anm-star-o');
+
+                // Tô vàng tất cả các sao từ vị trí hiện tại trở về trước (bao gồm sao vừa click)
+                for (let i = 0; i <= index; i++) {
+                    stars[i].querySelector('i').className = 'icon anm anm-star';
+                }
+            });
+        });
+    </script>
+
+    {{-- Gửi bình luận --}}
+    <script>
+        $(document).ready(function() {
+            $('#commentForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{ route('comments.store') }}", // Đường dẫn tới route lưu comment
+                    type: "POST",
+                    data: $(this).serialize(), // Lấy tất cả dữ liệu từ form
+                    success: function(response) {
+                        if (response.success) {
+                            // Hiển thị thông báo đã bình luận và disable form
+                            $('#commentForm').html('<span>Bạn đã bình luận cho sản phẩm này.</span>');
+                        } else {
+                            alert('Đã có lỗi xảy ra!');
+                        }
+                    },
+                    console.log(response);
+                    
+                    error: function(response) {
+                        alert('Đã có lỗi xảy ra!');
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
 
-@section('css')
-    <style>
-        .swatch.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-    </style>
-@endsection
+

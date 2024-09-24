@@ -22,4 +22,3 @@ Route::post('/reset-password', [AuthenticationController::class, 'resetPassword'
 Route::get('auth/facebook', [SocialAuthController::class, 'redirectToProvider'])->name('auth.facebook');
 Route::get('auth/facebook/callback', [SocialAuthController::class, 'handleProviderCallback']);
 
-
