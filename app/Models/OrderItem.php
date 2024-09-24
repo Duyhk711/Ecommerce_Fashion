@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderItem extends Model
 {
-
+   use HasFactory; // thiếu và đã bổ sung 9/9
     protected $fillable = [
         'order_id',
         'product_variant_id',
