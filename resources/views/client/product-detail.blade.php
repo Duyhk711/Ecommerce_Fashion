@@ -484,13 +484,16 @@
                                 <hr />
                             
                                 <div class="spr-reviews">
-                                    <h3 class="spr-form-title">Customer Reviews</h3>
+                                    <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
                                     <div class="review-inner">
                                         @foreach ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div class="spr-review-profile flex-shrink-0">
-                                                    <img class="blur-up lazyload" data-src="{{ asset($comment['user_image']) }}"
-                                                         src="{{ asset($comment['user_image']) }}" alt="" width="200" height="200" />
+                                                    <img class="blur-up lazyload" 
+                                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                        alt="" width="200" height="200" 
+                                                    />
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div class="d-flex justify-content-between flex-column mb-2">
