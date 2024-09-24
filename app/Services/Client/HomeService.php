@@ -49,5 +49,4 @@ class HomeService
     {
         return Catalogue::all();
     }
-
 }

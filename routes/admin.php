@@ -61,7 +61,7 @@ Route::prefix('admin')
 
 
         // Route resource cho CRUD operations
-        Route::resource('vouchers', VoucherController::class);
+            Route::resource('vouchers', VoucherController::class);
 
 
 
