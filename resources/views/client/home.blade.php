@@ -157,7 +157,7 @@
                         @foreach($banners['topBanners'] as $banner)
                             @php
                                 $bannerImages = $banner->images;
-                                $imageIndex = 0;
+                                $imageIndex = 0; 
                                 $selectedImage = $bannerImages->get($imageIndex);
                             @endphp
                             @if($selectedImage)
@@ -216,7 +216,7 @@
 
                                 @php
                                     $bannerImages = $banner->images;
-                                    $imageIndex = 2;
+                                    $imageIndex = 2; 
                                     $selectedImage = $bannerImages->get($imageIndex);
                                 @endphp
                                 @if($selectedImage)
@@ -250,7 +250,7 @@
         <!--End Collection banner-->
 
         <!--Popular Categories-->
-        <section class="section collection-slider pb-0">
+        {{-- <section class="section collection-slider pb-0">
             <div class="container">
                 <div class="section-header">
                     <p class="mb-2 mt-0">Shop by category</p>
@@ -358,7 +358,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
         <!--End Popular Categories-->
 
         <!--Products With Tabs-->
@@ -382,14 +382,14 @@
                             <button class="nav-link head-font" id="newarrivals-tab" data-bs-toggle="tab"
                                 data-bs-target="#newarrivals" type="button" role="tab" aria-controls="newarrivals"
                                 aria-selected="false">
-                                New Arrivals
+                                {{-- New Arrivals --}}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link head-font" id="toprated-tab" data-bs-toggle="tab"
                                 data-bs-target="#toprated" type="button" role="tab" aria-controls="toprated"
                                 aria-selected="false">
-                                Top Rated
+                                {{-- Top Rated --}}
                             </button>
                         </li>
                     </ul>
@@ -436,25 +436,25 @@
                                                     </a>
                                                     <!--End Cart Button-->
                                                     <!--Quick View Button-->
-                                                    <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                                    {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
                                                         data-bs-toggle="modal" data-bs-target="#quickview_modal">
                                                         <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                             data-bs-toggle="tooltip" data-bs-placement="left"
                                                             title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
                                                                 class="text">Quick View</span></span>
-                                                    </a>
+                                                    </a> --}}
                                                     <!--End Quick View Button-->
                                                     <!--Wishlist Button-->
-                                                    <a href="wishlist-style2.html" class="btn-icon wishlist"
+                                                    {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                            class="text">Add To Wishlist</span></a>
+                                                            class="text">Add To Wishlist</span></a> --}}
                                                     <!--End Wishlist Button-->
                                                     <!--Compare Button-->
-                                                    <a href="compare-style2.html" class="btn-icon compare"
+                                                    {{-- <a href="compare-style2.html" class="btn-icon compare"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="Add to Compare"><i class="icon anm anm-random-r"></i><span
-                                                            class="text">Add to Compare</span></a>
+                                                            class="text">Add to Compare</span></a> --}}
                                                     <!--End Compare Button-->
                                                 </div>
                                                 <!--End Product Button-->
@@ -463,7 +463,7 @@
                                             <!-- Start Product Details -->
                                             <div class="product-details text-center">
                                                 <!--Product Vendor-->
-                                                {{-- <div class="product-vendor">{{$product->catalogue->name}}</div> --}}
+                                                <div class="product-vendor">{{$product->catalogue->name}}</div>
                                                 <!--End Product Vendor-->
                                                 <!-- Product Name -->
                                                 <div class="product-name">
@@ -514,7 +514,7 @@
                                                         @endforeach
                                                     @endif
                                                 </ul>
-
+                                                
                                                 <!-- End Variant -->
                                                 <!-- Product Button -->
                                                 <div class="button-action hidden">
@@ -583,7 +583,7 @@
                                 </div>
                             </div>
                         </div>
-
+                   
             </div>
         </div>
         <!--End Parallax Banner-->

@@ -38,7 +38,7 @@ Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính t
 Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hóa cho giỏ hàng rỗng
 
 // cart
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.show');
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');

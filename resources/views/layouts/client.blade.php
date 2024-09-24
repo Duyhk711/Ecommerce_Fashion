@@ -88,11 +88,11 @@
 
         <!-- Including Jquery/Javascript -->
          <!-- Main JS -->
+         <!-- Plugins JS -->
+         <script src="{{ asset('client/js/plugins.js') }}"></script>
+         
          <script src="{{ asset('client/js/main.js') }}"></script>
-        <!-- Plugins JS -->
-        <script src="{{ asset('client/js/plugins.js') }}"></script>
-       
-        @yield('js')
+         @yield('js')
 
     </div>
     <!--End Page Wrapper-->
