@@ -140,11 +140,12 @@
                                 <input type="hidden" name="price" id="priceRange" />
                                 <div class="row">
                                     <div class="col-6">
-                                        <input id="amount" type="text" name="price_text" readonly />
+                                        <input id="amount" type="text" name="price_text" readonly
+                                            style="font-size: 10px" />
                                     </div>
                                     <div class="col-6 text-right">
                                         <button class="btn btn-sm" type="submit"
-                                            onclick="filterProducts(); return false;">Filter</button>
+                                            onclick="filterProducts();">Filter</button>
                                     </div>
                                 </div>
                             </form>
@@ -231,7 +232,7 @@
                             @php
                                 $page = 'shop';
                                 if (isset($filter) && $filter == 'filter') {
-                                    $filter = 'filter';
+                                    $page = 'filter';
                                 }
                             @endphp
                             <form method="GET" action="{{ route($page) }}"
@@ -297,6 +298,12 @@
                                         </option>
                                     </select>
                                 </div>
+                                @foreach (request()->query() as $key => $value)
+                                    @if ($key !== 'ShowBy' && $key !== 'SortBy')
+                                        <!-- Không gửi lại các tham số từ form -->
+                                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                    @endif
+                                @endforeach
                             </form>
                         </div>
                     </div>
@@ -315,8 +322,8 @@
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
                                                     data-src="{{ $product->img_thumbnail }}"
-                                                    src="{{ asset('client/images/products/product5.jpg') }}"
-                                                    alt="Product" title="Product" width="625" height="808" />
+                                                    src="{{ $product->img_thumbnail }}" alt="Product" title="Product"
+                                                    width="625" height="808" />
                                                 <!-- End Image -->
                                                 <!-- Hover Image -->
                                                 <img class="hover rounded-0 blur-up lazyload"
@@ -371,7 +378,7 @@
                                             <!-- End Product Name -->
                                             <!-- Product Price -->
                                             <div class="product-price">
-                                                <span class="price">{{ $product->price_sale }}đ</span>
+                                                <span class="price">{{ $product->price_regular }}đ</span>
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
@@ -394,16 +401,27 @@
                                             <!-- Variant -->
                                             <ul class="variants-clr swatches">
                                                 @if ($product->variants->isNotEmpty())
+                                                    @php
+                                                        $colors = [];
+                                                    @endphp
                                                     @foreach ($product->variants as $variant)
                                                         @foreach ($variant->variantAttributes as $variantAttribute)
                                                             @if ($variantAttribute->attribute->slug === 'color')
-                                                                <!-- Thay 'Color' bằng slug thuộc tính màu sắc -->
-                                                                <li class="swatch medium radius"
-                                                                    style="background-color: {{ $variantAttribute->attributeValue->color_code }}">
-                                                                    <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                                        data-bs-placement="top"
-                                                                        title="{{ $variantAttribute->attributeValue->value }}"></span>
-                                                                </li>
+                                                                @php
+                                                                    $colorCode =
+                                                                        $variantAttribute->attributeValue->color_code;
+                                                                @endphp
+                                                                @if (!in_array($colorCode, $colors))
+                                                                    @php
+                                                                        $colors[] = $colorCode;
+                                                                    @endphp
+                                                                    <li class="swatch medium radius"
+                                                                        style="background-color: {{ $colorCode }}">
+                                                                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                                                                            data-bs-placement="top"
+                                                                            title="{{ $variantAttribute->attributeValue->value }}"></span>
+                                                                    </li>
+                                                                @endif
                                                             @endif
                                                         @endforeach
                                                     @endforeach

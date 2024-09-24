@@ -4,43 +4,42 @@
     <!--Home Slideshow-->
     <section class="slideshow slideshow-wrapper">
         <div class="home-slideshow slick-arrow-dots">
-            @foreach($banners['mainBanners'] as $banner)
-            @php
-                $bannerImages = $banner->images;
-            @endphp
-             @foreach($bannerImages as $bannerImage)
-                <div class="slide">
-                    <div class="slideshow-wrap">
-                        <picture>
-                            <source media="(max-width:767px)"
-                                srcset="{{ Storage::url($bannerImage->image) }}" width="1150"
-                                height="800" />
-                            <img class="blur-up lazyload" src="{{ Storage::url($bannerImage->image) }}"
-                                alt="slideshow" title="" width="1920" height="795" />
-                        </picture>
-                        <div class="container">
-                            <div class="slideshow-content slideshow-overlay middle-left">
-                                <div class="slideshow-content-in">
-                                    <div class="wrap-caption animation style1">
-                                        <p class="ss-small-title">Elegant design</p>
-                                        <h2 class="ss-mega-title">
-                                            Making someone feel <br />pretty is an art
-                                        </h2>
-                                        <p class="ss-sub-title xs-hide">
-                                            Perfectly designed to ensures ultimate comfort and
-                                            style
-                                        </p>
-                                        <div class="ss-btnWrap">
-                                            <a class="btn btn-primary" href="shop-grid-view.html">Shop Women</a>
-                                            <a class="btn btn-secondary" href="shop-grid-view.html">Shop Men</a>
+            @foreach ($banners['mainBanners'] as $banner)
+                @php
+                    $bannerImages = $banner->images;
+                @endphp
+                @foreach ($bannerImages as $bannerImage)
+                    <div class="slide">
+                        <div class="slideshow-wrap">
+                            <picture>
+                                <source media="(max-width:767px)" srcset="{{ Storage::url($bannerImage->image) }}"
+                                    width="1150" height="800" />
+                                <img class="blur-up lazyload" src="{{ Storage::url($bannerImage->image) }}" alt="slideshow"
+                                    title="" width="1920" height="795" />
+                            </picture>
+                            <div class="container">
+                                <div class="slideshow-content slideshow-overlay middle-left">
+                                    <div class="slideshow-content-in">
+                                        <div class="wrap-caption animation style1">
+                                            <p class="ss-small-title">Elegant design</p>
+                                            <h2 class="ss-mega-title">
+                                                Making someone feel <br />pretty is an art
+                                            </h2>
+                                            <p class="ss-sub-title xs-hide">
+                                                Perfectly designed to ensures ultimate comfort and
+                                                style
+                                            </p>
+                                            <div class="ss-btnWrap">
+                                                <a class="btn btn-primary" href="shop-grid-view.html">Shop Women</a>
+                                                <a class="btn btn-secondary" href="shop-grid-view.html">Shop Men</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
             @endforeach
             {{-- <div class="slide">
                 <div class="slideshow-wrap">
@@ -154,24 +153,21 @@
             <div class="container">
                 <div class="collection-banner-grid">
                     <div class="row sp-row">
-                        @foreach($banners['topBanners'] as $banner)
+                        @foreach ($banners['topBanners'] as $banner)
                             @php
                                 $bannerImages = $banner->images;
-                                $imageIndex = 0; 
+                                $imageIndex = 0;
                                 $selectedImage = $bannerImages->get($imageIndex);
                             @endphp
-                            @if($selectedImage)
+                            @if ($selectedImage)
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 collection-banner-item">
                                     <div class="collection-item sp-col">
                                         <a href="shop-left-sidebar.html" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
-                                                    src="{{ Storage::url($selectedImage->image) }}"
-                                                    alt="Banner Image"
-                                                    title="Banner Image"
-                                                    style="height:723px ; width:100%"
-                                                    />
+                                                    src="{{ Storage::url($selectedImage->image) }}" alt="Banner Image"
+                                                    title="Banner Image" style="height:723px ; width:100%" />
                                             </div>
                                             <div class="details middle-right">
                                                 <div class="inner">
@@ -191,17 +187,14 @@
                                     $imageIndex = 1;
                                     $selectedImage = $bannerImages->get($imageIndex);
                                 @endphp
-                                @if($selectedImage)
+                                @if ($selectedImage)
                                     <div class="collection-item sp-col">
                                         <a href="shop-left-sidebar.html" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
-                                                    src="{{ Storage::url($selectedImage->image) }}"
-                                                    alt="Banner Image"
-                                                    title="Banner Image"
-                                                    style="height:350px ; width:100%"
-                                                    />
+                                                    src="{{ Storage::url($selectedImage->image) }}" alt="Banner Image"
+                                                    title="Banner Image" style="height:350px ; width:100%" />
                                             </div>
                                             <div class="details middle-left">
                                                 <div class="inner">
@@ -216,20 +209,17 @@
 
                                 @php
                                     $bannerImages = $banner->images;
-                                    $imageIndex = 2; 
+                                    $imageIndex = 2;
                                     $selectedImage = $bannerImages->get($imageIndex);
                                 @endphp
-                                @if($selectedImage)
-                                    <div class="collection-item sp-col" >
+                                @if ($selectedImage)
+                                    <div class="collection-item sp-col">
                                         <a href="shop-left-sidebar.html" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
-                                                    src="{{ Storage::url($selectedImage->image) }}"
-                                                    alt="Banner Image"
-                                                    title="Banner Image"
-                                                    style="height:349px ; width:100%"
-                                                    />
+                                                    src="{{ Storage::url($selectedImage->image) }}" alt="Banner Image"
+                                                    title="Banner Image" style="height:349px ; width:100%" />
                                             </div>
                                             <div class="details middle-right">
                                                 <div class="inner">
@@ -240,7 +230,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                 @endif
+                                @endif
                             </div>
                         @endforeach
                     </div>
@@ -399,145 +389,165 @@
                             aria-labelledby="bestsellers-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
-                                <div class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
+                                <div
+                                    class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
                                     @foreach ($products as $product)
-                                    <div class="item col-item">
-                                        <div class="product-box">
-                                            <!-- Start Product Image -->
-                                            <div class="product-image">
+                                        <div class="item col-item">
+                                            <div class="product-box">
                                                 <!-- Start Product Image -->
-                                                <a href="product-layout1.html" class="product-img rounded-0">
-                                                    <!-- Image -->
-                                                    <img class="primary rounded-0 blur-up lazyload"
-                                                        data-src="{{$product->img_thumbnail}}"
-                                                        src="{{asset('client/images/products/product5.jpg')}}" alt="Product" title="Product"
-                                                        width="625" height="808" />
-                                                    <!-- End Image -->
-                                                    <!-- Hover Image -->
-                                                    <img class="hover rounded-0 blur-up lazyload"
-                                                        data-src="{{asset('client/images/products/product5-1.jpg')}}"
-                                                        src="{{asset('client/images/products/product5-1.jpg')}}" alt="Product"
-                                                        title="Product" width="625" height="808" />
-                                                    <!-- End Hover Image -->
-                                                </a>
-                                                <!-- End Product Image -->
-                                                <!-- Product label -->
-                                                <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
-                                                <!-- End Product label -->
-                                                <!--Product Button-->
-                                                <div class="button-set style1">
-                                                    <!--Cart Button-->
-                                                    <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                        data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
-                                                                class="text">Add to Cart</span></span>
+                                                <div class="product-image">
+                                                    <!-- Start Product Image -->
+                                                    <a href="product-layout1.html" class="product-img rounded-0">
+                                                        <!-- Image -->
+                                                        <img class="primary rounded-0 blur-up lazyload"
+                                                            data-src="{{ $product->img_thumbnail }}"
+                                                            src="{{ asset('client/images/products/product5.jpg') }}"
+                                                            alt="Product" title="Product" width="625"
+                                                            height="808" />
+                                                        <!-- End Image -->
+                                                        <!-- Hover Image -->
+                                                        <img class="hover rounded-0 blur-up lazyload"
+                                                            data-src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                            src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                            alt="Product" title="Product" width="625"
+                                                            height="808" />
+                                                        <!-- End Hover Image -->
                                                     </a>
-                                                    <!--End Cart Button-->
-                                                    <!--Quick View Button-->
-                                                    {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                                    <!-- End Product Image -->
+                                                    <!-- Product label -->
+                                                    <div class="product-labels"><span class="lbl pr-label2">Hot</span>
+                                                    </div>
+                                                    <!-- End Product label -->
+                                                    <!--Product Button-->
+                                                    <div class="button-set style1">
+                                                        <!--Cart Button-->
+                                                        <a href="#addtocart-modal"
+                                                            class="btn-icon addtocart add-to-cart-modal"
+                                                            data-bs-toggle="modal" data-bs-target="#addtocart_modal">
+                                                            <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                                data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                title="Add to Cart"><i
+                                                                    class="icon anm anm-cart-l"></i><span
+                                                                    class="text">Add to Cart</span></span>
+                                                        </a>
+                                                        <!--End Cart Button-->
+                                                        <!--Quick View Button-->
+                                                        {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
                                                         data-bs-toggle="modal" data-bs-target="#quickview_modal">
                                                         <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                             data-bs-toggle="tooltip" data-bs-placement="left"
                                                             title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
                                                                 class="text">Quick View</span></span>
                                                     </a> --}}
-                                                    <!--End Quick View Button-->
-                                                    <!--Wishlist Button-->
-                                                    {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
+                                                        <!--End Quick View Button-->
+                                                        <!--Wishlist Button-->
+                                                        {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
                                                             class="text">Add To Wishlist</span></a> --}}
-                                                    <!--End Wishlist Button-->
-                                                    <!--Compare Button-->
-                                                    {{-- <a href="compare-style2.html" class="btn-icon compare"
+                                                        <!--End Wishlist Button-->
+                                                        <!--Compare Button-->
+                                                        {{-- <a href="compare-style2.html" class="btn-icon compare"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="Add to Compare"><i class="icon anm anm-random-r"></i><span
                                                             class="text">Add to Compare</span></a> --}}
-                                                    <!--End Compare Button-->
-                                                </div>
-                                                <!--End Product Button-->
-                                            </div>
-                                            <!-- End Product Image -->
-                                            <!-- Start Product Details -->
-                                            <div class="product-details text-center">
-                                                <!--Product Vendor-->
-                                                <div class="product-vendor">{{$product->catalogue->name}}</div>
-                                                <!--End Product Vendor-->
-                                                <!-- Product Name -->
-                                                <div class="product-name">
-                                                    <a href="product-layout1.html">{{$product->name}}</a>
-                                                </div>
-                                                <!-- End Product Name -->
-                                                <!-- Product Price -->
-                                                <div class="product-price">
-                                                    <span class="price">{{$product->price_sale}}đ</span>
-                                                </div>
-                                                <!-- End Product Price -->
-                                                <!-- Product Review -->
-                                                <div class="product-review">
-                                                    <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                        class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
-                                                        class="icon anm anm-star-o"></i>
-                                                    <span class="caption hidden ms-1">3 Reviews</span>
-                                                </div>
-                                                <!-- End Product Review -->
-                                                <!--Sort Description-->
-                                                <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
-                                                    available, but the majority have suffered alteration in some form, by injected
-                                                    humour, or randomised words which don't look even slightly believable. If you
-                                                    are going to use a passage...</p>
-                                                <!--End Sort Description-->
-                                                <!-- Variant -->
-                                                <ul class="variants-clr swatches">
-                                                    @if($product->variants->isNotEmpty())
-                                                        @php
-                                                            $colors = [];
-                                                        @endphp
-                                                        @foreach($product->variants as $variant)
-                                                            @foreach($variant->variantAttributes as $variantAttribute)
-                                                                @if($variantAttribute->attribute->slug === 'color')
-                                                                    @php
-                                                                        $colorCode = $variantAttribute->attributeValue->color_code;
-                                                                    @endphp
-                                                                    @if(!in_array($colorCode, $colors))
-                                                                        @php
-                                                                            $colors[] = $colorCode;
-                                                                        @endphp
-                                                                        <li class="swatch medium radius" style="background-color: {{ $colorCode }}">
-                                                                            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $variantAttribute->attributeValue->value }}"></span>
-                                                                        </li>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
-                                                        @endforeach
-                                                    @endif
-                                                </ul>
-                                                
-                                                <!-- End Variant -->
-                                                <!-- Product Button -->
-                                                <div class="button-action hidden">
-                                                    <div class="addtocart-btn">
-                                                        <form class="addtocart" action="#" method="post">
-                                                            <a href="#addtocart-modal" class="btn btn-md add-to-cart-modal"
-                                                                data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                                <i class="icon anm anm-cart-l me-2"></i><span class="text">Add
-                                                                    to Cart</span>
-                                                            </a>
-                                                        </form>
+                                                        <!--End Compare Button-->
                                                     </div>
+                                                    <!--End Product Button-->
                                                 </div>
-                                                <!-- End Product Button -->
+                                                <!-- End Product Image -->
+                                                <!-- Start Product Details -->
+                                                <div class="product-details text-center">
+                                                    <!--Product Vendor-->
+                                                    <div class="product-vendor">{{ $product->catalogue->name }}</div>
+                                                    <!--End Product Vendor-->
+                                                    <!-- Product Name -->
+                                                    <div class="product-name">
+                                                        <a href="product-layout1.html">{{ $product->name }}</a>
+                                                    </div>
+                                                    <!-- End Product Name -->
+                                                    <!-- Product Price -->
+                                                    <div class="product-price">
+                                                        <span class="price">{{ $product->price_sale }}đ</span>
+                                                    </div>
+                                                    <!-- End Product Price -->
+                                                    <!-- Product Review -->
+                                                    <div class="product-review">
+                                                        <i class="icon anm anm-star"></i><i
+                                                            class="icon anm anm-star"></i><i
+                                                            class="icon anm anm-star-o"></i><i
+                                                            class="icon anm anm-star-o"></i><i
+                                                            class="icon anm anm-star-o"></i>
+                                                        <span class="caption hidden ms-1">3 Reviews</span>
+                                                    </div>
+                                                    <!-- End Product Review -->
+                                                    <!--Sort Description-->
+                                                    <p class="sort-desc hidden">There are many variations of passages of
+                                                        Lorem Ipsum
+                                                        available, but the majority have suffered alteration in some form,
+                                                        by injected
+                                                        humour, or randomised words which don't look even slightly
+                                                        believable. If you
+                                                        are going to use a passage...</p>
+                                                    <!--End Sort Description-->
+                                                    <!-- Variant -->
+                                                    <ul class="variants-clr swatches">
+                                                        @if ($product->variants->isNotEmpty())
+                                                            @php
+                                                                $colors = [];
+                                                            @endphp
+                                                            @foreach ($product->variants as $variant)
+                                                                @foreach ($variant->variantAttributes as $variantAttribute)
+                                                                    @if ($variantAttribute->attribute->slug === 'color')
+                                                                        @php
+                                                                            $colorCode =
+                                                                                $variantAttribute->attributeValue
+                                                                                    ->color_code;
+                                                                        @endphp
+                                                                        @if (!in_array($colorCode, $colors))
+                                                                            @php
+                                                                                $colors[] = $colorCode;
+                                                                            @endphp
+                                                                            <li class="swatch medium radius"
+                                                                                style="background-color: {{ $colorCode }}">
+                                                                                <span class="swatchLbl"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="{{ $variantAttribute->attributeValue->value }}"></span>
+                                                                            </li>
+                                                                        @endif
+                                                                    @endif
+                                                                @endforeach
+                                                            @endforeach
+                                                        @endif
+                                                    </ul>
+
+                                                    <!-- End Variant -->
+                                                    <!-- Product Button -->
+                                                    <div class="button-action hidden">
+                                                        <div class="addtocart-btn">
+                                                            <form class="addtocart" action="#" method="post">
+                                                                <a href="#addtocart-modal"
+                                                                    class="btn btn-md add-to-cart-modal"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#addtocart_modal">
+                                                                    <i class="icon anm anm-cart-l me-2"></i><span
+                                                                        class="text">Add
+                                                                        to Cart</span>
+                                                                </a>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Product Button -->
+                                                </div>
+                                                <!-- End product details -->
                                             </div>
-                                            <!-- End product details -->
                                         </div>
-                                    </div>
                                     @endforeach
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="{{route('shop')}}" class="btn btn-secondary btn-lg">View
+                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">View
                                         Collection</a>
                                 </div>
                             </div>
@@ -552,38 +562,38 @@
         <!--Parallax Banner-->
         <div class="section parallax-banner-style1 py-0">
             <div class="hero hero-large hero-overlay bg-size">
-                @foreach($banners['middleBanners'] as $banner)
+                @foreach ($banners['middleBanners'] as $banner)
                     @php
                         $bannerImages = $banner->images;
                     @endphp
-                    @foreach($bannerImages as $bannerImage)
-                        <img class="bg-img" src="{{ Storage::url($bannerImage->image)}}"
+                    @foreach ($bannerImages as $bannerImage)
+                        <img class="bg-img" src="{{ Storage::url($bannerImage->image) }}"
                             alt="Clearance Sale - Flat 50% Off" width="1920" height="645" />
-                            @endforeach
-                            @endforeach
-                        <div class="hero-inner d-flex-justify-center">
-                            <div class="container">
-                                <div class="wrap-text center text-white">
-                                    <h1 class="hero-title text-white">
-                                        Clearance Sale - Flat 50% Off
-                                    </h1>
-                                    <p class="hero-subtitle h3 text-white">
-                                        Sale will end soon in
-                                    </p>
-                                    <!--Countdown Timer-->
-                                    <div class="hero-saleTime d-flex-center text-center justify-content-center"
-                                        data-countdown="2028/10/01"></div>
-                                    <!--End Countdown Timer-->
-                                    <p class="hero-details">
-                                        Hema Multipurpose Template that will give you and your
-                                        customers a smooth shopping experience which can be used for
-                                        various kinds of stores such as fashion.
-                                    </p>
-                                    <a href="{{route('shop')}}" class="hero-btn btn btn-light">Shop now</a>
-                                </div>
-                            </div>
+                    @endforeach
+                @endforeach
+                <div class="hero-inner d-flex-justify-center">
+                    <div class="container">
+                        <div class="wrap-text center text-white">
+                            <h1 class="hero-title text-white">
+                                Clearance Sale - Flat 50% Off
+                            </h1>
+                            <p class="hero-subtitle h3 text-white">
+                                Sale will end soon in
+                            </p>
+                            <!--Countdown Timer-->
+                            <div class="hero-saleTime d-flex-center text-center justify-content-center"
+                                data-countdown="2028/10/01"></div>
+                            <!--End Countdown Timer-->
+                            <p class="hero-details">
+                                Hema Multipurpose Template that will give you and your
+                                customers a smooth shopping experience which can be used for
+                                various kinds of stores such as fashion.
+                            </p>
+                            <a href="{{ route('shop') }}" class="hero-btn btn btn-light">Shop now</a>
                         </div>
-                   
+                    </div>
+                </div>
+
             </div>
         </div>
         <!--End Parallax Banner-->
@@ -873,8 +883,7 @@
                                         </div>
                                     </div>
                                     <div class="qtyField">
-                                        <a class="qtyBtn minus" href="#;"><i
-                                                class="icon anm anm-minus-r"></i></a>
+                                        <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
                                         <input type="text" name="quantity" value="1" class="qty" />
                                         <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                     </div>
@@ -888,19 +897,19 @@
                                     class="slVariant ms-1 fw-bold">Black</span></label>
                             <ul class="swatches d-flex-justify-center pt-1 clearfix">
                                 <li class="swatch large radius available active">
-                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                        alt="image" width="70" height="70" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Blue" />
+                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}" alt="image"
+                                        width="70" height="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Blue" />
                                 </li>
                                 <li class="swatch large radius available">
-                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                        alt="image" width="70" height="70" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Black" />
+                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}" alt="image"
+                                        width="70" height="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Black" />
                                 </li>
                                 <li class="swatch large radius available">
-                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                        alt="image" width="70" height="70" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Pink" />
+                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}" alt="image"
+                                        width="70" height="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Pink" />
                                 </li>
                                 <li class="swatch large radius available green">
                                     <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -1007,8 +1016,8 @@
                                         Shopping</a>
                                     <a href="cart-style1.html"
                                         class="btn btn-secondary product-viewcart w-100 my-2 my-md-3">View Cart</a>
-                                    <a href="checkout-style1.html"
-                                        class="btn btn-primary product-checkout w-100">Proceed to checkout</a>
+                                    <a href="checkout-style1.html" class="btn btn-primary product-checkout w-100">Proceed
+                                        to checkout</a>
                                 </div>
                                 <!-- End Product Action -->
                             </div>
@@ -1077,43 +1086,43 @@
                                             data-bs-slide-to="0" data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2.jpg') }}" alt="product"
+                                                title="Product" width="625" height="808" />
                                         </div>
                                         <div class="list-inline-item" id="carousel-selector-1" data-bs-slide-to="1"
                                             data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2-1.jpg') }}" alt="product"
+                                                title="Product" width="625" height="808" />
                                         </div>
                                         <div class="list-inline-item" id="carousel-selector-2" data-bs-slide-to="2"
                                             data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2-2.jpg') }}" alt="product"
+                                                title="Product" width="625" height="808" />
                                         </div>
                                         <div class="list-inline-item" id="carousel-selector-3" data-bs-slide-to="3"
                                             data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2-3.jpg') }}" alt="product"
+                                                title="Product" width="625" height="808" />
                                         </div>
                                         <div class="list-inline-item" id="carousel-selector-4" data-bs-slide-to="4"
                                             data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2-4.jpg') }}" alt="product"
+                                                title="Product" width="625" height="808" />
                                         </div>
                                         <div class="list-inline-item" id="carousel-selector-5" data-bs-slide-to="5"
                                             data-bs-target="#quickView">
                                             <img class="blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
+                                                src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
+                                                title="Product" width="625" height="808" />
                                         </div>
                                     </div>
                                     <!-- End Thumbnail slide -->
@@ -1200,12 +1209,12 @@
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Pink" />
                                             </li>
                                             <li class="swatch large radius available green">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="Green"></span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Green"></span>
                                             </li>
                                             <li class="swatch large radius soldout yellow">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="Yellow"></span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Yellow"></span>
                                             </li>
                                         </ul>
                                     </div>
@@ -1215,24 +1224,24 @@
                                                 class="slVariant ms-1 fw-bold">S</span></label>
                                         <ul class="variants-size size-swatches d-flex-center pt-1 clearfix">
                                             <li class="swatch large radius soldout">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="XS">XS</span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="XS">XS</span>
                                             </li>
                                             <li class="swatch large radius available active">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="S">S</span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="S">S</span>
                                             </li>
                                             <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="M">M</span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="M">M</span>
                                             </li>
                                             <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="L">L</span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="L">L</span>
                                             </li>
                                             <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="XL">XL</span>
+                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="XL">XL</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -1248,8 +1257,7 @@
                                             </div>
                                         </div>
                                         <div class="addtocart ms-3 fl-1">
-                                            <button type="submit" name="add"
-                                                class="btn product-cart-submit w-100">
+                                            <button type="submit" name="add" class="btn product-cart-submit w-100">
                                                 <span>Add to cart</span>
                                             </button>
                                         </div>
@@ -1260,8 +1268,8 @@
                                 <a class="add-wishlist d-flex-center me-3" href="wishlist-style1.html"
                                     title="Add to Wishlist"><i class="icon anm anm-heart-l me-1"></i>
                                     <span>Add to Wishlist</span></a>
-                                <a class="add-compare d-flex-center" href="compare-style1.html"
-                                    title="Add to Compare"><i class="icon anm anm-random-r me-2"></i>
+                                <a class="add-compare d-flex-center" href="compare-style1.html" title="Add to Compare"><i
+                                        class="icon anm anm-random-r me-2"></i>
                                     <span>Add to Compare</span></a>
                             </div>
                             <!-- Social Sharing -->
@@ -1273,8 +1281,7 @@
                                         class="share-title d-none">Facebook</span></a>
                                 <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Tweet on Twitter"><i
-                                        class="icon anm anm-twitter"></i><span
-                                        class="share-title d-none">Tweet</span></a>
+                                        class="icon anm anm-twitter"></i><span class="share-title d-none">Tweet</span></a>
                                 <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Pin on Pinterest"><i
                                         class="icon anm anm-pinterest-p"></i>
