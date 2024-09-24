@@ -61,7 +61,7 @@
                                             <input id="remember" name="remember" type="checkbox" value="remember" />
                                             <label for="remember"> Ghi nhớ tôi</label>
                                         </div>
-                                        <a href="{{ route('forgot-password') }}">Quên mật khẩu?</a>
+                                        {{-- <a href="{{ route('forgot-password') }}">Quên mật khẩu?</a> --}}
                                     </div>
                                 </div>
                                 <div class="form-group col-12 mb-0">

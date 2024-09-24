@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Services\Client;
+
 use App\Models\Banner;
+use App\Models\Catalogue;
 use App\Models\Product;
 
 class HomeService
 {
-  // lấy 12 sp trang chủ
+    // Lấy 12 sản phẩm trang chủ
     public function getHomeProducts()
     {
         $products = Product::with(['variants.variantAttributes.attributeValue'])
@@ -31,7 +33,6 @@ class HomeService
             ->get();
     }
 
-
     public function getBannerShowHome()
     {
         $mainBanners = Banner::where('type', 'main')->where('is_active', true)->get();
@@ -43,5 +44,9 @@ class HomeService
             'topBanners' => $topBanners,
             'middleBanners' => $middleBanners,
         ];
+    }
+    public function getAllCatalogues()
+    {
+        return Catalogue::all();
     }
 }

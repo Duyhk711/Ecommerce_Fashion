@@ -9,6 +9,8 @@
     <meta name="description" content="description">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- CSS MENU --}}
+    <link rel="stylesheet" href="{{asset('client/css/menu.css')}}">
     <!-- Title Of Site -->
     <title>Hema - Multipurpose eCommerce Bootstrap 5 Html Template</title>
     <!-- Favicon -->
@@ -85,10 +87,11 @@
 
 
         <!-- Including Jquery/Javascript -->
+         <!-- Main JS -->
+         <script src="{{ asset('client/js/main.js') }}"></script>
         <!-- Plugins JS -->
         <script src="{{ asset('client/js/plugins.js') }}"></script>
-        <!-- Main JS -->
-        <script src="{{ asset('client/js/main.js') }}"></script>
+       
         @yield('js')
 
     </div>

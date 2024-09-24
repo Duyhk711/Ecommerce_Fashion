@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique(); 
-            $table->enum('discount_type', ['percentage', 'fixed']); 
-            $table->double('discount_value'); 
-            $table->date('start_date'); 
-            $table->date('end_date'); 
+            $table->string('code')->unique();
+            $table->enum('discount_type', ['percentage', 'fixed']);
+            $table->double('discount_value');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
-            $table->softDeletes(); 
+            $table->softDeletes();
 
         });
     }

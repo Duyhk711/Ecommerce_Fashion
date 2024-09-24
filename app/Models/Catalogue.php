@@ -14,6 +14,7 @@ class Catalogue extends Model
         'parent_id',
         'name',
         'slug',
+        'cover',
         'description',
         'is_active',
     ];
@@ -28,9 +29,9 @@ class Catalogue extends Model
         return $this->hasMany(Catalogue::class, 'parent_id');
     }
 
+
     public function products()
     {
-        return $this->hasMany(Product::class, 'catalogue_id');
+        return $this->hasMany(Product::class);
     }
-
 }
