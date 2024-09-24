@@ -8,7 +8,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="description">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- CSS MENU --}}
     <link rel="stylesheet" href="{{asset('client/css/menu.css')}}">
     <!-- Title Of Site -->
@@ -87,11 +87,12 @@
 
 
         <!-- Including Jquery/Javascript -->
-        <!-- Plugins JS -->
-        <script src="{{ asset('client/js/plugins.js') }}"></script>
-        <!-- Main JS -->
-        <script src="{{ asset('client/js/main.js') }}"></script>
-        @yield('js')
+         <!-- Main JS -->
+         <!-- Plugins JS -->
+         <script src="{{ asset('client/js/plugins.js') }}"></script>
+         
+         <script src="{{ asset('client/js/main.js') }}"></script>
+         @yield('js')
 
     </div>
     <!--End Page Wrapper-->
