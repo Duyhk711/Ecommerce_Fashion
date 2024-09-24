@@ -253,6 +253,272 @@
       Adding 'smini-visible' to an element will show it (display: inline-block) only when the sidebar is in mini mode
       Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
     -->
+    <nav id="sidebar" aria-label="Main Navigation">
+      <!-- Side Header -->
+      <div class="bg-header-dark">
+        <div class="content-header bg-white-5">
+          <!-- Logo -->
+          <a class="fw-semibold text-white tracking-wide" href="/">
+            <span class="smini-visible">
+              D<span class="opacity-75">x</span>
+            </span>
+            <span class="smini-hidden">
+              Dash<span class="opacity-75">mix</span>
+            </span>
+          </a>
+          <!-- END Logo -->
+
+          <!-- Options -->
+          <div>
+            <!-- Toggle Sidebar Style -->
+            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+            <!-- Class Toggle, functionality initialized in Helpers.dmToggleClass() -->
+            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="class-toggle" data-target="#sidebar-style-toggler" data-class="fa-toggle-off fa-toggle-on" onclick="Dashmix.layout('sidebar_style_toggle');Dashmix.layout('header_style_toggle');">
+              <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
+            </button>
+            <!-- END Toggle Sidebar Style -->
+
+            <!-- Dark Mode -->
+            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="class-toggle" data-target="#dark-mode-toggler" data-class="far fa" onclick="Dashmix.layout('dark_mode_toggle');">
+              <i class="far fa-moon" id="dark-mode-toggler"></i>
+            </button>
+            <!-- END Dark Mode -->
+
+            <!-- Close Sidebar, Visible only on mobile screens -->
+            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+            <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none" data-toggle="layout" data-action="sidebar_close">
+              <i class="fa fa-times-circle"></i>
+            </button>
+            <!-- END Close Sidebar -->
+          </div>
+          <!-- END Options -->
+        </div>
+      </div>
+      <!-- END Side Header -->
+
+      <!-- Sidebar Scrolling -->
+      <div class="js-sidebar-scroll">
+        <!-- Side Navigation -->
+        <div class="content-side content-side-full">
+          <ul class="nav-main">
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="/dashboard">
+                <i class="nav-main-link-icon fa fa-location-arrow"></i>
+                <span class="nav-main-link-name">Dashboard</span>
+                <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span>
+              </a>
+            </li>
+            <li class="nav-main-heading">Various</li>
+            
+           {{-- SAN PHAM --}}
+            <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-box"></i>
+                <span class="nav-main-link-name">Quản lý Sản phẩm</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/products*') || request()->is('admin/products') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/products') ? ' active' : '' }}" href="{{ route('admin.products.index') }}">
+                    <span class="nav-main-link-name">Sản phẩm</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/catalogues') ? ' active' : '' }}" href="{{ route('admin.catalogues.index') }}">
+                    <span class="nav-main-link-name">Danh mục sản phẩm</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            {{-- THUOC TINH --}}
+            <li class="nav-main-item{{ request()->is('admin/attributes*') || request()->is('admin/attribute_values')  ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/attributes*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-tags"></i>
+                <span class="nav-main-link-name">Quản lý Thuộc tính</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/attributes*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/attributes') ? ' active' : '' }}" href="{{ route('admin.attributes.index') }}">
+                    <span class="nav-main-link-name">Thuộc tính biến thể</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/attribute_values') ? ' active' : '' }}" href="{{ route('admin.attribute_values.index') }}">
+                    <span class="nav-main-link-name">Giá trị thuộc tính</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            {{-- USER --}}
+            <li class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-users"></i>
+                <span class="nav-main-link-name">Quản lý Khách hàng</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/users*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}" href="{{ route('admin.users.index') }}">
+                    <span class="nav-main-link-name">Người dùng</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            {{-- DON HANG --}}
+            <li class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders')  ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/orders*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-receipt"></i>
+                <span class="nav-main-link-name">Quản lý Đơn hàng</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/orders*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/orders') ? ' active' : '' }}" href="{{ route('admin.orders.index') }}">
+                    <span class="nav-main-link-name">Đơn hàng</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            {{-- VOUCHER --}}
+            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-gift"></i>
+                <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
+                    <span class="nav-main-link-name">Voucher</span>
+                  </a>
+                </li>
+              </ul>
+            </li> --}}
+
+            {{-- BANNER --}}
+            <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý Banner</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/banners*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('admin.banners.index') }}">
+                    <span class="nav-main-link-name">Banner</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+
+
+          
+            <li class="nav-main-heading">More</li>
+            <li class="nav-main-item">
+              <a class="nav-main-link" href="/">
+                <i class="nav-main-link-icon fa fa-globe"></i>
+                <span class="nav-main-link-name">Landing</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- END Side Navigation -->
+      </div>
+      <!-- END Sidebar Scrolling -->
+    </nav>
+    <!-- END Sidebar -->
+
+    <!-- Header -->
+    <header id="page-header">
+      <!-- Header Content -->
+      <div class="content-header">
+        <!-- Left Section -->
+        <div class="space-x-1">
+          <!-- Toggle Sidebar -->
+          <!-- Layout API, functionality initialized in Template._uiApiLayout()-->
+          <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="sidebar_toggle">
+            <i class="fa fa-fw fa-bars"></i>
+          </button>
+          <!-- END Toggle Sidebar -->
+
+          <!-- Open Search Section -->
+          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+          <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
+            <i class="fa fa-fw opacity-50 fa-search"></i> <span class="ms-1 d-none d-sm-inline-block">Search</span>
+          </button>
+          <!-- END Open Search Section -->
+        </div>
+        <!-- END Left Section -->
+
+        <!-- Right Section -->
+        <div class="space-x-1">
+          <!-- User Dropdown -->
+          <div class="dropdown d-inline-block">
+            <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-fw fa-user d-sm-none"></i>
+              @if(Auth::check())
+                  <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
+              @else
+              <span class="d-none d-sm-inline-block">Admin</span>
+              @endif
+              
+              <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
+              <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
+                User Options
+              </div>
+              <div class="p-2">
+                <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
+                  <i class="far fa-fw fa-user me-1"></i> Profile
+                </a>
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
+                  <span><i class="far fa-fw fa-envelope me-1"></i> Inbox</span>
+                  <span class="badge bg-primary rounded-pill">3</span>
+                </a>
+                <a class="dropdown-item" href="javascript:void(0)">
+                  <i class="far fa-fw fa-file-alt me-1"></i> Invoices
+                </a>
+                <div role="separator" class="dropdown-divider"></div>
+
+                <!-- Toggle Side Overlay -->
+                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                <a class="dropdown-item" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_toggle">
+                  <i class="far fa-fw fa-building me-1"></i> Settings
+                </a>
+                <!-- END Side Overlay -->
+
+                <div role="separator" class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
+                  </a>
+                  <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
+                    @csrf
+                  </form>
+                </div>
+            </div>
+          </div>
+          <!-- END User Dropdown -->
+
+          <!-- Notifications Dropdown -->
+          <div class="dropdown d-inline-block">
+            <button type="button" class="btn btn-alt-secondary" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-fw fa-bell"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+              <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
+                Notifications
+              </div>
+              <ul class="nav-items my-2">
+                <li>
+                  <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                    <div class="flex-shrink-0 mx-3">
+                      <i class="fa fa-fw fa-check-circle text-success"></i>
+                    </div>
+                    <div class="flex-grow-1 fs-sm pe-2">
+                      <div class="fw-semibold">App was updated to v5.6!</div>
+                      <div class="text-muted">3 min ago</div>
         <nav id="sidebar" aria-label="Main Navigation">
             <!-- Side Header -->
             <div class="bg-header-dark">
