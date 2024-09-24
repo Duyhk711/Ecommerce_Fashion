@@ -89,4 +89,19 @@ class AuthService
         }
         return false;
     }
+    //admin
+    public function postAdminLogin(Request $request)
+    {
+        $data = $request->only('email', 'password');
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return true;
+            } else {
+                Auth::logout(); 
+                return 'not_admin'; 
+            }
+        }
+        return false; 
+    }
 }
