@@ -18,8 +18,9 @@ use App\Http\Controllers\Client\ProductController;
  */
 
 // Example Routes
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/filterproduct', [ShopController::class, 'filterShop'])->name('filter');
 
@@ -39,8 +40,4 @@ Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remov
 Route::view('/contact', 'client.contact')->name('contact'); 
 Route::view('/support', 'client.support')->name('support'); 
 Route::view('/barter', 'client.barter')->name('barter');
-
-// Trang chủ hiển thị 12 sản phẩm
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/search', [HomeController::class, 'search'])->name('search');
-
+Route::view('/blog', 'client.blog')->name('blog');
