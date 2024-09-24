@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('addresses', function (Blueprint $table) {
-            // $table->dropColumn("district", "ward", "is_default");
+            $table->dropColumn("district", "ward", "is_default");
         });
     }
 };

@@ -21,7 +21,7 @@ class ProductVariant extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function variantAttributes()
@@ -38,7 +38,7 @@ class ProductVariant extends Model
     {
         return $this->hasMany(CartItem::class);
     }
-    
+
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id');

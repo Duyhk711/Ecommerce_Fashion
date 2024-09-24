@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Services\ProductDetailService;
 use Illuminate\Http\Request;
 
@@ -26,8 +27,6 @@ class ProductController extends Controller
         $commentsData = $this->productDetailService->getCommentsData($product);
         $averageRating = $this->productDetailService->calculateAverageRating($product);
         $ratingsPercentage = $this->productDetailService->calculateRatingsPercentage($product);
-        // dd($commentsData);
-        // dd($data['uniqueAttributes']);
         return view('client.product-detail', 
             [   
                 'product' => $product,
@@ -41,6 +40,8 @@ class ProductController extends Controller
                 'totalRatings' => $product->comments->count(),
                 'ratingsPercentage' => $ratingsPercentage
             ]   
+
         );
     }
+    
 }

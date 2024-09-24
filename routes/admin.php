@@ -6,8 +6,8 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CatalogueController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\VoucherController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,14 +17,19 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
- */
+*/
 
-
+// Route::view('/', 'landing');
+Route::match(['get', 'post'], '/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+Route::view('/pages/slick', 'pages.slick');
+Route::view('/pages/datatables', 'pages.datatables');
+Route::view('/pages/blank', 'pages.blank');
 Route::prefix('admin')
     ->as('admin.')
     ->group(function () {
-        Route::view('dashboard', 'dashboard' )->name('dashboard');
-         // ATTRIBUTE
+        // ATTRIBUTE
         Route::resource('attributes', AttributeController::class);
 
         // ATTRIBUTE VALUE
@@ -32,7 +37,9 @@ Route::prefix('admin')
 
         // CATALOGUES
         Route::resource('catalogues', CatalogueController::class);
-
+        //ACTIVATE
+        Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
+        Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
         // PRODUCT
         Route::resource('products', ProductController::class);
 
@@ -43,9 +50,13 @@ Route::prefix('admin')
         // USER
         Route::view('users', 'admin.users.index')->name('users.index');
         Route::view('users/show', 'admin.users.show')->name('users.show');
-
+      
+        // BANNER
         Route::resource('banners', BannerController::class);
         Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
+        
+        // VOUCHER
+        Route::resource('vouchers', VoucherController::class);
 
 
     });

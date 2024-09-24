@@ -1,0 +1,54 @@
+
+
+ /* Căn các danh mục cha theo hàng ngang */
+ .parent-menu {
+     list-style-type: none;
+     display: flex;
+     /* Hiển thị theo hàng ngang */
+     flex-wrap: wrap;
+     /* Tự động xuống hàng nếu không đủ không gian */
+     padding: 0;
+     margin: 0;
+ }
+
+ .parent-menu>li {
+     position: relative;
+     margin-right: 20px;
+     /* Khoảng cách giữa các danh mục cha */
+ }
+
+ .parent-menu>li a {
+     text-decoration: none;
+     padding: 10px;
+     display: block;
+     color: #333;
+ }
+
+ .parent-menu>li:hover a {
+     color: #007bff;
+     /* Màu khi hover */
+ }
+
+
+
+
+ /* Hiển thị danh mục con khi hover vào cha */
+
+
+ .subLinks li {
+     margin: 0;
+ }
+
+ .subLinks li a {
+     padding: 8px 15px;
+     display: block;
+     color: #333;
+     text-decoration: none;
+ }
+
+ .subLinks li a:hover {
+     background-color: #f1f1f1;
+     /* Màu nền khi hover vào danh mục con */
+ }
+
+

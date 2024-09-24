@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\CartItem;
 use App\Services\Client\ShopService;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,6 @@ class ShopController extends Controller
         $this->shopService = $shopService;
     }
 
-    // Lấy 12 sản phẩm trang chủ
     public function index(Request $request)
     {
         $categories = $this->shopService->getCategories();
@@ -49,6 +49,6 @@ class ShopController extends Controller
         $products = $this->shopService->getFilteredProducts($request, session('perPage'), session('sortBy'));
         $filter = 'filter';
 
-        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues'));
+        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'filter'));
     }
 }

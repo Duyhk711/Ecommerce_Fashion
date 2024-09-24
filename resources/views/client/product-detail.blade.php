@@ -1,5 +1,42 @@
 @extends('layouts.client')
 
+@section('css')
+    <style>
+        .swatch.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+
+    {{-- Rating stars --}}
+    <style>
+        .review-rating {
+            display: flex;
+            flex-direction: row; /* Để các sao ngược lại */
+            justify-content: flex-start;
+        }
+
+        .review-rating input[type="radio"] {
+            display: none; /* Ẩn các input radio */
+        }
+
+        .review-rating label {
+            font-size: 2em; /* Kích thước của icon sao */
+            cursor: pointer; /* Con trỏ trỏ vào sao khi di chuột */
+        }
+
+        /* Icon sao mặc định (chưa được chọn) sẽ có class anm-star-o */
+        .review-rating label i {
+            color: #ccc; /* Màu trắng mặc định cho sao */
+        }
+
+        /* Khi sao được chọn (anm-star) */
+        .review-rating label .anm-star {
+            color: #ffcc00; /* Màu vàng cho sao được chọn */
+        }
+    </style>
+@endsection
+
 @section('content')
     @include('client.component.page_header')
     <div class="container" style="max-width: 80%;">
@@ -16,8 +53,8 @@
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
                                     <img id="zoompro" class="zoompro" src="{{ $product->img_thumbnail }}"
-                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="600"
-                                        height="780" />
+                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
+                                        height="808" />
                                 </div>
                                 <!-- End Product Image -->
                                 <!-- Product Label -->
@@ -150,11 +187,13 @@
                                         @endforeach
                                     </ul>
                                 </div>
-
                             </div>
                             <!-- End Swatches -->
+                            
                             <input type="hidden" name="color_id" id="color_id">
                             <input type="hidden" name="size_id" id="size_id">
+                            <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="product_variant_id" id="product_variant_id">
                             <!-- Product Action -->
                             <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
                                 <!-- Product Quantity -->
@@ -167,21 +206,15 @@
                                     </div>
                                 </div>
                                 <!-- End Product Quantity -->
+
                                 <!-- Product Add -->
                                 <div class="product-form-submit addcart fl-1 ms-3">
                                     <button type="submit" class="btn btn-secondary product-form-cart-submit">
                                         <span>Add to cart</span>
                                     </button>
-                                    {{-- <button type="button" name="add"
-                                        class="btn btn-secondary product-form-sold-out d-none" disabled="disabled">
-                                        <span>Out of stock</span>
-                                    </button>
-                                    <button type="button" name="add"
-                                        class="btn btn-secondary product-form-pre-order d-none">
-                                        <span>Pre-order Now</span>
-                                    </button> --}}
                                 </div>
-                                <!-- Product Add -->
+                                <!-- End Product Add -->
+
                                 <!-- Product Buy -->
                                 <div class="product-form-submit buyit fl-1 ms-3">
                                     <button type="button" class="btn btn-primary proceed-to-checkout">
@@ -205,6 +238,8 @@
                             </p>
                             <!-- End Product Info link -->
                         </form>
+
+
                         <!-- End Product Form -->
 
                         <!-- Product Info -->
@@ -1138,56 +1173,123 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let selectedColorId = null;
-            let selectedSizeId = null;
-
-            // lấy color
-            document.querySelectorAll('.variants-clr .swatch').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
-                        swatch.classList.remove('selected');
-                    });
-                    item.classList.add('selected');
-                    selectedColorId = item.getAttribute('data-attribute-value-id');
-                    document.getElementById('color_id').value = selectedColorId;
-                });
-            });
-
-            // lấy size
-            document.querySelectorAll('.variants-size .swatch').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
-                        swatch.classList.remove('selected');
-                    });
-                    item.classList.add('selected');
-                    selectedSizeId = item.getAttribute('data-attribute-value-id');
-                    document.getElementById('size_id').value = selectedSizeId;
-                });
-            });
-
-            // Validate số lượng
-            const amountInput = document.getElementById('quantityInput');
-            amountInput.addEventListener('input', function() {
-                let qty = parseInt(this.value);
-                if (isNaN(qty) || qty < 1) { 
-                    this.value = 1;
-                }
-            });
-
-            // Xử lý nút submit
-            document.querySelector('.product-form').addEventListener('submit', function(event) {
-                // báo lỗi nếu chưa chọn size or màu
-                if (!document.getElementById('color_id').value || !document.getElementById('size_id')
-                    .value) {
-                    event.preventDefault();
-                    alert('Bạn chưa chọn size hoặc màu');
-                    return; 
-                }
-            });
-        });
-    </script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             let selectedColorId = null;
+             let selectedSizeId = null;
+             let selectedProductVariantId = null;
+             let variantDetails = @json($variantDetails); // Chuyển biến PHP sang JavaScript
+         
+             // Kiểm tra Flash Messages và hiển thị popup nếu có
+             @if(session('success'))
+                 Swal.fire({
+                     icon: 'success',
+                     title: 'Thành công!',
+                     text: '{{ session('success') }}',
+                     showConfirmButton: false,
+                     timer: 2000
+                 });
+             @elseif(session('error'))
+                 Swal.fire({
+                     icon: 'error',
+                     title: 'Lỗi',
+                     text: '{{ session('error') }}',
+                     showConfirmButton: true,
+                     confirmButtonText: 'OK'
+                 });
+             @endif
+         
+             // Lấy màu
+             document.querySelectorAll('.variants-clr .swatch').forEach(item => {
+                 item.addEventListener('click', function() {
+                     document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
+                         swatch.classList.remove('selected');
+                     });
+                     item.classList.add('selected');
+                     selectedColorId = item.getAttribute('data-attribute-value-id');
+                     document.getElementById('color_id').value = selectedColorId;
+                     updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
+                 });
+             });
+         
+             // Lấy kích thước
+             document.querySelectorAll('.variants-size .swatch').forEach(item => {
+                 item.addEventListener('click', function() {
+                     document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
+                         swatch.classList.remove('selected');
+                     });
+                     item.classList.add('selected');
+                     selectedSizeId = item.getAttribute('data-attribute-value-id');
+                     document.getElementById('size_id').value = selectedSizeId;
+                     updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
+                 });
+             });
+         
+             // Hàm lấy ID biến thể dựa trên thuộc tính và giá trị
+             function getAttributeValueId(colorId, sizeId) {
+                 for (let variant of variantDetails) {
+                     let attributes = variant.attributes; // Giả định attributes chứa các thuộc tính của biến thể
+                     let colorMatch = false;
+                     let sizeMatch = false;
+                     for (let attr of attributes) {
+                         if (attr.attributeName === 'Color' && attr.value === colorId) {
+                             colorMatch = true;
+                         }
+                         if (attr.attributeName === 'Size' && attr.value === sizeId) {
+                             sizeMatch = true;
+                         }
+                     }
+                     if (colorMatch && sizeMatch) {
+                         return variant.id;
+                     }
+                 }
+                 return null;
+             }
+         
+             // Hàm cập nhật ID biến thể sản phẩm
+             function updateProductVariantId() {
+                 if (selectedColorId && selectedSizeId) {
+                     selectedProductVariantId = getAttributeValueId(selectedColorId, selectedSizeId);
+                     if (selectedProductVariantId) {
+                         document.getElementById('product_variant_id').value = selectedProductVariantId;
+                     } else {
+                         document.getElementById('product_variant_id').value = ''; // Clear if no match found
+                     }
+                 }
+             }
+         
+             // Xác thực số lượng
+             const amountInput = document.getElementById('quantityInput');
+             amountInput.addEventListener('input', function() {
+                 let qty = parseInt(this.value, 10);
+                 if (isNaN(qty) || qty < 1) {
+                     this.value = 1;
+                 }
+             });
+         
+             // Xử lý nút submit
+             document.querySelector('.product-form').addEventListener('submit', function(event) {
+                 const colorId = document.getElementById('color_id').value;
+                 const sizeId = document.getElementById('size_id').value;
+                 const variantId = document.getElementById('product_variant_id').value;
+         
+                 // Kiểm tra xem người dùng đã chọn màu, kích thước và biến thể chưa
+                 if (!colorId || !sizeId || !variantId) {
+                     event.preventDefault();
+                     
+                     // Hiển thị popup lỗi với SweetAlert2
+                     Swal.fire({
+                         icon: 'error',
+                         title: 'Lỗi',
+                         text: 'Bạn chưa chọn màu, kích thước hoặc biến thể sản phẩm!',
+                         confirmButtonText: 'OK'
+                     });
+                 }
+             });
+         });
+     </script>
+     
 
     {{-- select ảnh --}}
     <script>
@@ -1326,39 +1428,4 @@
     </script>
 @endsection
 
-@section('css')
-    <style>
-        .swatch.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-    </style>
 
-    {{-- Rating stars --}}
-    <style>
-        .review-rating {
-            display: flex;
-            flex-direction: row; /* Để các sao ngược lại */
-            justify-content: flex-start;
-        }
-
-        .review-rating input[type="radio"] {
-            display: none; /* Ẩn các input radio */
-        }
-
-        .review-rating label {
-            font-size: 2em; /* Kích thước của icon sao */
-            cursor: pointer; /* Con trỏ trỏ vào sao khi di chuột */
-        }
-
-        /* Icon sao mặc định (chưa được chọn) sẽ có class anm-star-o */
-        .review-rating label i {
-            color: #ccc; /* Màu trắng mặc định cho sao */
-        }
-
-        /* Khi sao được chọn (anm-star) */
-        .review-rating label .anm-star {
-            color: #ffcc00; /* Màu vàng cho sao được chọn */
-        }
-    </style>
-@endsection
