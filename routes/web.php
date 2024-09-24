@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
-
+use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\ShopController;
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,7 +64,9 @@ Route::post('/addresses/{id}/default', [UserController::class, 'setDefault'])->n
 //profile
 Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
-
+// checkout
+Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
 
 
 
