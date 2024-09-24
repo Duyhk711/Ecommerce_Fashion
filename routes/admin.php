@@ -39,7 +39,7 @@ Route::prefix('admin')
         Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
         Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
       
-        Route::middleware('checkAdmin')->group(function (){
+        // Route::middleware('checkAdmin')->group(function (){
           
         Route::view('dashboard', 'dashboard' )->name('dashboard');
         // ATTRIBUTE
@@ -77,3 +77,4 @@ Route::prefix('admin')
         Route::resource('vouchers', VoucherController::class);
      
     });
+// });
