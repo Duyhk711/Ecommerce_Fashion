@@ -100,7 +100,9 @@
     <div class="container" style="max-width: 80%;">
         <!--Main Content-->
         <div class="container">
-            <form action="">
+            <form action="{{ route('postCheckout') }}" method="POST" id="checkout">
+                @csrf
+
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         <!--Nav step checkout-->
@@ -127,10 +129,14 @@
                                     <div class="block-content">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h3 class="title mb-3">Shipping Address</h3>
-                                            <a style="padding-bottom: 16px" data-bs-toggle="offcanvas"
-                                                href="#offcanvasRight" aria-controls="offcanvasRight">
-                                                Thay đổi
-                                            </a>
+                                            @auth
+                                                @if (Auth::check())
+                                                    <a style="padding-bottom: 16px" data-bs-toggle="offcanvas"
+                                                        href="#offcanvasRight" aria-controls="offcanvasRight">
+                                                        Thay đổi
+                                                    </a>
+                                                @endif
+                                            @endauth
 
                                         </div>
 
@@ -139,22 +145,25 @@
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="customer_name" class="form-label">Họ tên <span
                                                             class="required">*</span></label>
-                                                    <input name="customer_name" value="" id="customer_name"
-                                                        type="text" required class="form-control">
+                                                    <input name="customer_name" id="customer_name" type="text" required
+                                                        class="form-control"
+                                                        value="{{ $address == '' ? '' : $address->customer_name }}">
                                                 </div>
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="customer_phone" class="form-label">Số điện thoại <span
                                                             class="required">*</span></label>
-                                                    <input name="customer_phone" value="" id="customer_phone"
-                                                        type="tel" required class="form-control">
+                                                    <input name="customer_phone" id="customer_phone" type="tel" required
+                                                        class="form-control"
+                                                        value="{{ $address == '' ? '' : $address->customer_phone }}">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="email" class="form-label">E-Mail <span
                                                             class="required">*</span></label>
-                                                    <input name="email" value="" id="email" type="email"
-                                                        required="" class="form-control">
+                                                    <input name="email"
+                                                        value="{{ Auth::check() ? Auth::user()->email : '' }}"
+                                                        id="email" type="email" required="" class="form-control">
                                                 </div>
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="city" class="form-label">Tỉnh/Thành phố <span
@@ -189,17 +198,17 @@
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="address_line1" class="form-label">Địa chỉ <span
                                                             class="required">*</span></label>
-                                                    <input name="address_line1" value="" id="address_line1"
-                                                        type="text" required placeholder="Địa chỉ đường phố"
-                                                        class="form-control">
+                                                    <input name="address_line1" id="address_line1" type="text" required
+                                                        placeholder="Địa chỉ đường phố" class="form-control"
+                                                        value="{{ $address == '' ? '' : $address->address_line1 }}">
                                                 </div>
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="address_line1"
                                                         class="form-label d-none d-sm-block">&nbsp;</label>
-                                                    <input name="address_line2" value="" id="address_line2"
-                                                        type="text"
+                                                    <input name="address_line2" id="address_line2" type="text"
                                                         placeholder="Số nhà, dãy phòng, căn hộ, v.v. (tùy chọn)"
-                                                        class="form-control">
+                                                        class="form-control"
+                                                        value="{{ $address == '' ? '' : $address->address_line2 }}">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -231,66 +240,55 @@
                                                     <table class="table table-hover align-middle mb-0">
                                                         <thead>
                                                             <tr>
-                                                                <th class="action">&nbsp;</th>
-                                                                <th class="text-start">Image</th>
-                                                                <th class="text-start proName">Product</th>
-                                                                <th class="text-center">Qty</th>
-                                                                <th class="text-center">Price</th>
-                                                                <th class="text-center">Subtotal</th>
+                                                                <th class="text-start">Ảnh</th>
+                                                                <th class="text-start proName">Sản phẩm</th>
+                                                                <th class="text-center">SL</th>
+                                                                <th class="text-center">giá</th>
+                                                                <th class="text-center">Tổng</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td class="text-center cart-delete"><a href="#"
-                                                                        class="btn btn-secondary cart-remove remove-icon position-static"
-                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                        title="Remove to Cart"><i
-                                                                            class="icon anm anm-times-r"></i></a></td>
-                                                                <td class="text-start"><a href="product-layout1.html"
-                                                                        class="thumb"><img
-                                                                            class="rounded-0 blur-up lazyload"
-                                                                            data-src="assets/images/products/product1-120x170.jpg"
-                                                                            src="assets/images/products/product1-120x170.jpg"
-                                                                            alt="product" title="product" width="120"
-                                                                            height="170" /></a></td>
-                                                                <td class="text-start proName">
-                                                                    <div class="list-view-item-title">
-                                                                        <a href="product-layout1.html">Oxford Cuban
-                                                                            Shirt</a>
-                                                                    </div>
-                                                                    <div class="cart-meta-text">
-                                                                        Color: Black<br>Size: Small
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-center">2</td>
-                                                                <td class="text-center">$99.00</td>
-                                                                <td class="text-center"><strong>$198.00</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-center cart-delete"><a href="#"
-                                                                        class="btn btn-secondary cart-remove remove-icon position-static"
-                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                        title="Remove to Cart"><i
-                                                                            class="icon anm anm-times-r"></i></a></td>
-                                                                <td class="text-start"><a href="product-layout1.html"
-                                                                        class="thumb"><img
-                                                                            class="rounded-0 blur-up lazyload"
-                                                                            data-src="assets/images/products/product2-120x170.jpg"
-                                                                            src="assets/images/products/product2-120x170.jpg"
-                                                                            alt="product" title="product" width="120"
-                                                                            height="170" /></a></td>
-                                                                <td class="text-start proName">
-                                                                    <div class="list-view-item-title">
-                                                                        <a href="product-layout1.html">Cuff Beanie Cap</a>
-                                                                    </div>
-                                                                    <div class="cart-meta-text">
-                                                                        Color: Black<br>Size: Small
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-center">1</td>
-                                                                <td class="text-center">$128.00</td>
-                                                                <td class="text-center"><strong>$128.00</strong></td>
-                                                            </tr>
+                                                            @php
+                                                                $total = 0;
+                                                            @endphp
+                                                            <input type="hidden" name="cartItem"
+                                                                value="{{ $dataCart }}">
+                                                            @foreach ($dataCart as $item)
+                                                                <tr>
+                                                                    <td class="text-start"><a
+                                                                            href="{{ route('productDetail', $item->product_variant_id) }}"
+                                                                            class="thumb"><img
+                                                                                class="rounded-0 blur-up lazyload"
+                                                                                data-src="{{ $item->productVariant->image }}"
+                                                                                src="{{ $item->productVariant->image }}"
+                                                                                alt="product" title="product"
+                                                                                width="120" height="170" /></a></td>
+                                                                    <td class="text-start proName">
+                                                                        <div class="list-view-item-title">
+                                                                            <a href="product-layout1.html">
+                                                                                {{ $item->productVariant->product->name }}
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="cart-meta-text">
+                                                                            @foreach ($item->productVariant->variantAttributes as $attribute)
+                                                                                {{ $attribute->attributeValue->attribute->name }}:{{ $attribute->attributeValue->value }}<br>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">{{ $item->quantity }}</td>
+                                                                    <td class="text-center">
+                                                                        {{ $item->price }}đ
+                                                                    </td>
+                                                                    @php
+                                                                        $total += $item->price * $item->quantity;
+                                                                    @endphp
+                                                                    <td class="text-center">
+                                                                        <strong>{{ $item->price * $item->quantity }}đ</strong>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -328,7 +326,7 @@
                                                         <input id="coupon-code" required="" type="text"
                                                             class="form-control" placeholder="Promotion/Discount Code">
                                                         <button class="coupon-btn btn btn-primary"
-                                                            type="submit">Apply</button>
+                                                            type="button">Apply</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -370,7 +368,7 @@
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">$311.00</b></span>
+                                                            class="money">{{ $total }}đ</b></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -607,8 +605,13 @@
                                                             class="money">$311.00</b></span>
                                                 </div>
 
-                                                <a href="order-success.html" id="cartCheckout"
-                                                    class="btn btn-lg my-4 checkout w-100">Đặt hàng</a>
+                                                <button type="submit" id="cartCheckout"
+                                                    class="btn btn-lg my-4 checkout w-100">Đặt hàng</button>
+                                                <script>
+                                                    document.getElementById('cartCheckout').addEventListener('click', function(event) {
+                                                        document.getElementById('checkout').submit();
+                                                    });
+                                                </script>
                                             </div>
                                         </div>
                                         <!--Cart Summary-->
@@ -631,49 +634,39 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="address-item d-flex gap-2">
-                <div class="check-icon">
-                    <input type="radio" name="address" checked>
-                </div>
-                <div>
-                    <div class="d-flex justify-content-sm-start gap-1">
-                        <p class="language">việt</p>
-                        <p class="phone">0813754231</p>
+            <form method="GET" action="{{ route('checkout') }}">
+                @foreach ($dataAddress as $add)
+                    <div class="address-item d-flex gap-2">
+                        <div class="check-icon">
+                            <input type="radio" value="{{ $add->id }}" name="address"
+                                @if ($add->id == $address->id) {{ 'checked' }} @endif>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-sm-start gap-1">
+                                <p class="language">{{ $add->customer_name }}</p>
+                                <p class="phone">{{ $add->customer_phone }}</p>
+                            </div>
+                            <div class="address">
+                                {{ $add->address_line2 }} {{ $add->address_line1 }}
+                            </div>
+                            <div class="address">
+                                Mã vùng: {{ $add->ward }} - {{ $add->district }} - {{ $add->city }}
+                            </div>
+                            @if ($add->is_default == 1)
+                                <div class="buttons">
+                                    <a href="#" class="button bg-white">Địa chỉ nhận hàng mặc định</a>
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                    <div class="address">
-                        địa chỉ: tờ 1 số nhà 93
-                    </div>
-                    <div class="address">
-                        Mã vùng: Điện Biên - Thành Phố Điện Biên Phủ - Phường Thanh Bình
-                    </div>
-                    <div class="buttons">
-                        <a href="#" class="button bg-white">Địa chỉ nhận hàng mặc định</a>
-                    </div>
-                </div>
-            </div>
+                @endforeach
 
-            <div class="address-item d-flex gap-2">
-                <div class="check-icon">
-                    <input type="radio" name="address">
-                </div>
-                <div>
-                    <div class="d-flex justify-content-sm-start gap-1">
-                        <p class="language">việt</p>
-                        <p class="phone">0813754231</p>
-                    </div>
-                    <div class="address">
-                        địa chỉ: tờ 1 số nhà 93
-                    </div>
-                    <div class="address">
-                        Mã vùng: Điện Biên - Thành Phố Điện Biên Phủ - Phường Thanh Bình
-                    </div>
-                </div>
-            </div>
 
-            <div class="action-buttons">
-                <button class="action-button cancel" data-bs-dismiss="offcanvas" aria-label="Close">HỦY</button>
-                <button class="action-button save">LƯU</button>
-            </div>
+                <div class="action-buttons">
+                    <button class="action-button cancel" data-bs-dismiss="offcanvas" aria-label="Close">HỦY</button>
+                    <button class="action-button save">LƯU</button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
@@ -737,42 +730,89 @@
         var citis = document.getElementById("city");
         var districts = document.getElementById("district");
         var wards = document.getElementById("ward");
-        var Parameter = {
-            url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
-            method: "GET",
-            responseType: "application/json",
-        };
-        var promise = axios(Parameter);
-        promise.then(function(result) {
-            renderCity(result.data);
-        });
+
+        // Giá trị được lưu trong database
+        var selectedCity = '{{ $address == '' ? '' : $address->city }}';
+        var selectedDistrict = '{{ $address == '' ? '' : $address->district }}';
+        var selectedWard = '{{ $address == '' ? '' : $address->ward }}';
+
+        axios.get("/address.json")
+            .then(function(result) {
+                renderCity(result.data);
+                setDefaultValues();
+            })
+            .catch(function(error) {
+                console.error("Lỗi khi tải dữ liệu:", error);
+            });
 
         function renderCity(data) {
-            for (const x of data) {
-                citis.options[citis.options.length] = new Option(x.Name, x.Id);
-            }
+            // citis.innerHTML = ""; // Reset các option của thành phố
+            data.forEach(city => {
+                citis.options[citis.options.length] = new Option(city.Name, city.Name);
+            });
+
+            // Gọi hàm cập nhật quận/huyện nếu có giá trị đã chọn
             citis.onchange = function() {
-                district.length = 1;
-                ward.length = 1;
-                if (this.value != "") {
-                    const result = data.filter(n => n.Id === this.value);
-
-                    for (const k of result[0].Districts) {
-                        district.options[district.options.length] = new Option(k.Name, k.Id);
-                    }
-                }
+                updateDistricts(data);
             };
-            district.onchange = function() {
-                ward.length = 1;
-                const dataCity = data.filter((n) => n.Id === citis.value);
-                if (this.value != "") {
-                    const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
 
-                    for (const w of dataWards) {
-                        wards.options[wards.options.length] = new Option(w.Name, w.Id);
-                    }
+            // Cập nhật quận/huyện nếu có giá trị đã chọn
+            if (selectedCity) {
+                citis.value = selectedCity;
+                citis.onchange(); // Cập nhật quận/huyện
+            }
+        }
+
+        function updateDistricts(data) {
+            districts.innerHTML = ""; // Reset quận/huyện
+            wards.innerHTML = ""; // Reset phường/xã
+
+            if (citis.value) {
+                const cityData = data.find(n => n.Name === citis.value);
+                if (cityData) {
+                    cityData.Districts.forEach(district => {
+                        districts.options[districts.options.length] = new Option(district.Name, district.Name);
+                    });
                 }
+            }
+
+            districts.onchange = function() {
+                updateWards(data);
             };
+
+            // Cập nhật phường/xã nếu có giá trị đã chọn
+            if (selectedDistrict) {
+                districts.value = selectedDistrict;
+                districts.onchange();
+            }
+        }
+
+        function updateWards(data) {
+            wards.innerHTML = ""; // Reset phường/xã
+
+            const cityData = data.find(n => n.Name === citis.value);
+            console.log('City data for wards:', cityData); // Kiểm tra dữ liệu thành phố
+            if (districts.value && cityData) {
+                const districtData = cityData.Districts.find(d => d.Name === districts.value);
+                console.log('District data:', districtData); // Kiểm tra dữ liệu quận/huyện
+                if (districtData) {
+                    districtData.Wards.forEach(ward => {
+                        wards.options[wards.options.length] = new Option(ward.Name, ward.Name);
+                    });
+                }
+            }
+
+            // Đặt giá trị đã chọn cho phường/xã
+            if (selectedWard) {
+                wards.value = selectedWard;
+            }
+        }
+
+        function setDefaultValues() {
+            if (selectedCity) {
+                citis.value = selectedCity;
+                citis.onchange(); // Cập nhật quận/huyện
+            }
         }
     </script>
 @endsection

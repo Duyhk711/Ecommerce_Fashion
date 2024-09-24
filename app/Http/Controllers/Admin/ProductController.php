@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -25,10 +26,10 @@ class ProductController extends Controller
     {
         $catalogues = Catalogue::all();
         $attributes = Attribute::with('values')->get();
-    
+
         // Tạo SKU random trực tiếp
         $sku = 'PRD-' . Str::upper(Str::random(8)); // PRD-XXXXXXXX
-    
+
         return view('admin.products.create', compact('catalogues', 'attributes', 'sku'));
     }
 

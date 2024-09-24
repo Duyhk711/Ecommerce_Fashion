@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Catalogue;
 use App\Services\Client\HomeService;
 use Illuminate\Http\Request;
 
@@ -20,8 +21,9 @@ class HomeController extends Controller
     {
         $products = $this->homeService->getHomeProducts();
         $banners  = $this->homeService->getBannerShowHome();
+        $catalogues = $this->homeService->getAllCatalogues();
         // dd($banners);
-        return view('client.home', compact('products', 'banners'));
+        return view('client.home', compact('products', 'banners', 'catalogues'));
     }
 
     // Tìm kiếm sản phẩm theo tên

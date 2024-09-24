@@ -22,29 +22,67 @@
                                 </div>
                             @endif
 
-                            <form method="post" action="{{ route('send-otp') }}" class="customer-form">
-                                @csrf
-                                <h2 class="text-center fs-4 mb-3">Quên Mật Khẩu</h2>
-                                <p class="text-center mb-4">Vui lòng nhập địa chỉ email của bạn bên dưới. Bạn sẽ nhận được liên kết để đặt lại mật khẩu của mình.</p>
-                                <div class="form-row">
-                                    <div class="form-group col-12 mb-4">
-                                        <label for="CustomerEmail" class="d-none">Nhập email của bạn <span class="required">*</span></label>
-                                        <input type="email" name="email" placeholder="Nhập email của bạn" id="CustomerEmail"
-                                            value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required />
-                                        @error('email')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-12 mb-0">
-                                        <div class="login-remember-forgot d-flex justify-content-between align-items-center">
-                                            <input type="submit" class="btn btn-primary btn-lg" value="Đặt lại mật khẩu" />
-                                            <a href="{{ route('login') }}" class="d-flex justify-content-center btn-link">
-                                                <i class="icon anm anm-angle-left-r me-2"></i> Quay lại Đăng Nhập
-                                            </a>
+                            <!-- Hiển thị form dựa trên giá trị của method -->
+                            @if (!request('method') || request('method') == 'email')
+                                <!-- Form gửi OTP qua Email -->
+                                <form method="post" action="{{ route('send-otp') }}" class="customer-form">
+                                    @csrf
+                                    <h2 class="text-center fs-4 mb-3">Gửi OTP qua Email</h2>
+                                    <p class="text-center mb-4">Vui lòng nhập số điện thoại của bạn bên dưới để nhận mã OTP.</p>
+                                    <div class="form-row">
+                                        <div class="form-group col-12 mb-4">
+                                            <label for="CustomerEmail">Nhập email của bạn <span class="required">*</span></label>
+                                            <input type="email" name="email" placeholder="Nhập email của bạn" id="CustomerEmail"
+                                                value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required />
+                                            @error('email')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-right">
+                                                <small><a href="{{ url()->current() }}?method=phone">Gửi OTP qua Số Điện Thoại</a></small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 mb-0">
+                                            <div class="login-remember-forgot d-flex justify-content-between align-items-center">
+                                                <input type="submit" class="btn btn-primary btn-lg" value="Đặt lại mật khẩu" />
+                                                <a href="{{ route('login') }}" class="d-flex justify-content-center btn-link">
+                                                    <i class="icon anm anm-angle-left-r me-2"></i> Quay lại Đăng Nhập
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                    <!-- Dòng chuyển sang gửi OTP bằng số điện thoại -->
+
+                                </form>
+                            @elseif (request('method') == 'phone')
+                                <!-- Form gửi OTP qua Số Điện Thoại -->
+                                <form method="post" action="" class="customer-form">
+                                    @csrf
+                                    <h2 class="text-center fs-4 mb-3">Gửi OTP qua Số Điện Thoại</h2>
+                                    <p class="text-center mb-4">Vui lòng nhập số điện thoại của bạn bên dưới để nhận mã OTP.</p>
+                                    <div class="form-row">
+                                        <div class="form-group col-12 mb-4">
+                                            <label for="CustomerPhone">Nhập số điện thoại của bạn <span class="required">*</span></label>
+                                            <input type="text" name="phone" placeholder="Nhập số điện thoại của bạn" id="CustomerPhone"
+                                                value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" required />
+                                            @error('phone')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-right">
+                                                <small><a href="{{ url()->current() }}?method=email">Gửi OTP qua Email</a></small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 mb-0">
+                                            <div class="login-remember-forgot d-flex justify-content-between align-items-center">
+                                                <input type="submit" class="btn btn-primary btn-lg" value="Đặt lại mật khẩu" />
+                                                <a href="{{ route('login') }}" class="d-flex justify-content-center btn-link">
+                                                    <i class="icon anm anm-angle-left-r me-2"></i> Quay lại Đăng Nhập
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Dòng chuyển sang gửi OTP bằng email -->
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

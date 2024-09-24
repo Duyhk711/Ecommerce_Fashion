@@ -64,7 +64,7 @@
                                 <span class="badge bg-danger">Không hoạt động</span>
                             @endif
                         </td>
-                       
+
                         <td class="text-center">
                             <div class="btn-group">
                                 <!-- ACTIVATE -->
@@ -76,12 +76,12 @@
                                     </button>
                                 </form>
                                 @endif
-                        
+
                                 <!-- EDIT -->
                                 <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Edit">
                                     <i class="fa fa-pencil-alt"></i>
                                 </a>
-                        
+
                                 <!-- DELETE -->
                                 <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST" style="display:inline;" class="form-delete">
                                     @csrf
@@ -97,7 +97,7 @@
                 </tbody>
             </table>
         </div>
-        
+
     </div>
     <hr>
     <div class="block block-rounded">
@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="block-content">
             <table class="table table-hover align-middle table-striped js-dataTable-full">
                 <thead>
@@ -125,7 +125,7 @@
                 <tbody>
                     @foreach ($banners->where('type', 'sub') as  $banner)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td> 
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="d-none d-sm-table-cell">{{ $banner->description }}</td>
                         <td class="d-none d-sm-table-cell">{{ $banner->position }}</td>
                         <td>
@@ -151,12 +151,12 @@
                                     </button>
                                 </form>
                                 @endif
-                        
+
                                 <!-- EDIT -->
                                 <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Edit">
                                     <i class="fa fa-pencil-alt"></i>
                                 </a>
-                        
+
                                 <!-- DELETE -->
                                 <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST" style="display:inline;" class="form-delete">
                                     @csrf
@@ -171,13 +171,13 @@
                     @endforeach
                 </tbody>
             </table>
-            
+
         </div>
     </div>
-    
+
 
      </div>
-    
+
 </div>
 @endsection
 @section('js')

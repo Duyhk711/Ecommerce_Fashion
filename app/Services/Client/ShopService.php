@@ -27,21 +27,23 @@ class ShopService
         $products = Product::with(['variants.variantAttributes.attributeValue'])
             ->where('is_active', 1); // Chỉ lấy sản phẩm đang hoạt động
 
-        dd($products);
+        // dd($products);
 
         // Kiểm tra xem có bộ lọc nào được áp dụng hay không
         if ($request->has('categories')) {
             $products->filterByCategory($request->input('categories'));
-        } else if ($request->has('price')) {
-            $products->filterByPrice($request->input('price'));
+        } else if ($request->has('price_text')) {
+            $products->filterByPrice($request->input('price_text'));
         } else if ($request->has('colors')) {
-            $products->filterByColors($request->input('colors'));
+            $products->filterByAttributes($request->input('colors'));
         } else if ($request->has('size')) {
-            $products->filterBySize($request->input('size'));
+            $products->filterByAttributes($request->input('size'));
         }
         // dd($products->toSql(), $products->getBindings());
         // Gọi hàm sắp xếp
         $this->applySorting($products, $sortBy);
+
+        // dd($products);
 
         // Phân trang
         return $products->paginate($perPage);
@@ -91,10 +93,10 @@ class ShopService
                 $query->orderBy('name', 'desc');
                 break;
             case 'price-ascending':
-                $query->orderBy('price_sale', 'asc');
+                $query->orderBy('price_regular', 'asc');
                 break;
             case 'price-descending':
-                $query->orderBy('price_sale', 'desc');
+                $query->orderBy('price_regular', 'desc');
                 break;
             case 'created-ascending':
                 $query->orderBy('created_at', 'asc');

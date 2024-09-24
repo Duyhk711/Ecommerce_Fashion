@@ -32,6 +32,13 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-12">
+                                    <label for="phone">Số điện thoại <span class="required">*</span></label>
+                                    <input type="phone" name="phone" placeholder="Số điện thoại" id="CustomerPhone" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" />
+                                    @error('phone')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-12">
                                     <label for="password">Mật khẩu <span class="required">*</span></label>
                                     <input type="password" name="password" placeholder="Mật khẩu" id="CustomerPassword" class="form-control @error('password') is-invalid @enderror" />
                                     @error('password')
@@ -45,13 +52,13 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                {{-- <div class="form-group col-12">
+                                <div class="form-group col-12">
                                     <label for="profile_picture">Ảnh đại diện</label>
                                     <input type="file" name="avatar" id="ProfilePicture" accept="image/*" class="form-control-file" />
                                     <div id="imagePreview" class="image-preview" style="margin-top: 10px; display: flex; justify-content: center; border-radius: 50%;  padding: 5px;">
                                         <!-- Hình ảnh xem trước sẽ được hiển thị ở đây -->
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="form-group col-12">
                                     <div class="login-remember-forgot d-flex justify-content-between align-items-center">
                                         {{-- <div class="remember-check customCheckbox">

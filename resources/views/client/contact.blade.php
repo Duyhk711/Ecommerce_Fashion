@@ -2,52 +2,61 @@
 
 @section('content')
 <style>
-    *{
+    * {
         margin: 0;
         padding: 0;
-        box-sizing:  border-box;
+        box-sizing: border-box;
     }
-    body{
+
+    body {
         font-family: 'Poppins', sans-serif;
         background-color: #f7f7f7;
     }
-    .contact-section{
+
+    .contact-section {
         background-color: #ffffff;
         padding: 50px 20px;
     }
-    .container{
+
+    .container {
         width: 80%;
         margin: 0 auto;
         max-width: 1200px;
         text-align: left;
     }
-    .h1{
-        
+
+    .h1 {
+
         font-size: 35px;
         color: #333;
         line-height: 1.6;
         margin-bottom: 30px;
     }
-    p{
+
+    p {
         font-size: 20px;
         color: #333;
         line-height: 1.6;
         margin-bottom: 20px;
     }
-    .contact-info{
+
+    .contact-info {
         margin-bottom: 20px;
     }
-    .contact-info strong{
+
+    .contact-info strong {
         color: #333;
     }
 </style>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <section class="contact-section">
         <div class="container">
@@ -76,5 +85,6 @@
 
     </section>
 </body>
+
 </html>
 @endsection
