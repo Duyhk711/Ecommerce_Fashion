@@ -115,7 +115,7 @@
             <div class="minicart-action d-flex mt-3">
                 <a href="{{route('checkout')}}" class="proceed-to-checkout btn btn-primary w-50 me-1">Check
                     Out</a>
-                <a href="{{route('cart')}}" class="cart-btn btn btn-secondary w-50 ms-1">View Cart</a>
+                <a href="{{route('cart.show')}}" class="cart-btn btn btn-secondary w-50 ms-1">View Cart</a>
             </div>
         </div>
     </div>
