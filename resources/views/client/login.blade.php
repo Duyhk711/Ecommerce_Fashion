@@ -73,9 +73,9 @@
 
                             <p class="text-center fs-6 text-muted mb-3">Đăng nhập bằng tài khoản mạng xã hội</p>
                             <div class="login-social d-flex justify-content-center">
-                                <a class="social-link facebook rounded-5 d-flex justify-content-center" href="#"><i
+                                <a class="social-link facebook rounded-5 d-flex justify-content-center" href="{{route('auth.facebook')}}"><i
                                         class="icon anm anm-facebook-f me-2"></i> Facebook</a>
-                                <a class="social-link google rounded-5 d-flex justify-content-center" href="#"><i
+                                <a class="social-link google rounded-5 d-flex justify-content-center" href=""><i
                                         class="icon anm anm-google-plus-g me-2"></i> Google</a>
                                 <a class="social-link twitter rounded-5 d-flex justify-content-center" href="#"><i
                                         class="icon anm anm-twitter me-2"></i> Twitter</a>
