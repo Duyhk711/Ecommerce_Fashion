@@ -8,6 +8,9 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="description">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{-- CSS MENU --}}
+    <link rel="stylesheet" href="{{asset('client/css/menu.css')}}">
     <!-- Title Of Site -->
     <title>Hema - Multipurpose eCommerce Bootstrap 5 Html Template</title>
     <!-- Favicon -->
@@ -60,9 +63,9 @@
 
         @include('client.component.header')
 
-        <div id="page-content"> 
+        <div id="page-content">
             <!-- Body Container -->
-                
+
             {{-- main content --}}
                 @yield('content')
             {{-- end main --}}
@@ -70,9 +73,9 @@
         </div>
         @include('client.component.footer')
 
-        
+
         @include('client.component.menubar_mobile')
-       
+
 
         <!--Scoll Top-->
         <div id="site-scroll"><i class="icon anm anm-arw-up"></i></div>
@@ -82,7 +85,7 @@
 
         @yield('modal')
 
-        
+
         <!-- Including Jquery/Javascript -->
         <!-- Plugins JS -->
         <script src="{{ asset('client/js/plugins.js') }}"></script>
