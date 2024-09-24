@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
@@ -30,17 +31,17 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/product-detail/{id}', [ProductController::class, "getProductDetail"])->name('productDetail');
-Route::view('/checkout', 'client.checkout')->name('checkout');
+
+// order
 Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
 Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính tả từ 'whishlist' thành 'wishlist'
 Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hóa cho giỏ hàng rỗng
 
 // cart
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.show');
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-
 
 // page
 Route::view('/contact', 'client.contact')->name('contact'); 
@@ -68,5 +69,6 @@ Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->n
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
 
-
+// them binh luan
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 

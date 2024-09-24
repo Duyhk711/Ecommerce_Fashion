@@ -18,16 +18,29 @@ class ProductController extends Controller
     
 
     public function getProductDetail($id){
-        $data = $this->productDetailService->getProductDetail($id);
-        // dd($data['uniqueAttributes']);
+        $product = $this->productDetailService->getProduct($id);
+        $variantDetails = $this->productDetailService->getVariantDetails($product);
+        $totalStock = $this->productDetailService->calculateTotalStock($product);
+        $uniqueAttributes = $this->productDetailService->getUniqueAttributes($product);
+        $relatedProducts = $this->productDetailService->getRelatedProducts($product, $id);
+        $canComment = $this->productDetailService->getUserCommentStatus($product, $id);
+        $commentsData = $this->productDetailService->getCommentsData($product);
+        $averageRating = $this->productDetailService->calculateAverageRating($product);
+        $ratingsPercentage = $this->productDetailService->calculateRatingsPercentage($product);
         return view('client.product-detail', 
             [   
-                'uniqueAttributes' => $data['uniqueAttributes'],
-                'variantDetails' => $data['variantDetails'],
-                'product' => $data['product'],
-                'totalStock' => $data['totalStock'],
-                'relatedProducts' => $data['relatedProducts']
-            ]
+                'product' => $product,
+                'totalStock' => $totalStock,
+                'variantDetails' => $variantDetails,
+                'uniqueAttributes' => $uniqueAttributes,
+                'relatedProducts' => $relatedProducts,
+                'canComment' => $canComment,
+                'comments' => $commentsData,
+                'averageRating' => $averageRating,
+                'totalRatings' => $product->comments->count(),
+                'ratingsPercentage' => $ratingsPercentage
+            ]   
+
         );
     }
     
