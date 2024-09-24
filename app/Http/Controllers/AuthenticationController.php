@@ -46,23 +46,30 @@ class AuthenticationController extends Controller
         }
         return redirect()->back()->with('error', 'Registration failed. Please try again.');
     }
-
     public function logout()
     {
         $this->authService->logout();
         return redirect()->route('home');
     }
 
+    public function forgotPassword()
+    {
+        return view('client.forgot-password');
+    }
+
     public function sendOtp(AuthRequest $request)
     {
         $email = $request->input('email');
         $user = User::where('email', $email)->first();
+
         if (!$user) {
             return redirect()->back()->with('error', 'Email không tồn tại trong hệ thống.');
         }
+
         $this->authService->setEmailToSession($email);
         $this->authService->sendOtp($email);
-        return redirect('/verify-otp')->with('success', 'OTP đã được gửi đến email của bạn.');
+
+        return redirect('/verify-otp')->with('success', 'Mã OTP đã được gửi đến email của bạn.');
     }
 
     public function showVerifyOtpForm()
@@ -75,6 +82,7 @@ class AuthenticationController extends Controller
         if (!$this->authService->verifyOtp($request->otp)) {
             return back()->with('error', 'Mã OTP không hợp lệ hoặc đã hết hạn.');
         }
+
         return redirect('/reset-password')->with('success', 'Mã OTP hợp lệ.');
     }
 
@@ -86,12 +94,15 @@ class AuthenticationController extends Controller
     public function resetPassword(AuthRequest $request)
     {
         $email = $this->authService->getEmailFromSession();
+
         if (!$email) {
             return redirect('/forgot-password')->with('error', 'Phiên của bạn đã hết hạn. Vui lòng thử lại.');
         }
+
         if (!$this->authService->updatePassword($email, $request->password)) {
             return redirect('/forgot-password')->with('error', 'Người dùng không tồn tại.');
         }
+
         Session::forget('email');
 
         return redirect('/login')->with('success', 'Mật khẩu đã được thay đổi thành công.');

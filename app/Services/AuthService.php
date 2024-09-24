@@ -35,7 +35,7 @@ class AuthService
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-        $user->query()->create($data);
+        $user->query()->create($data);  
         if ($user) {
             return true;
         }

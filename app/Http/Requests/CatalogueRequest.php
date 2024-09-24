@@ -9,11 +9,16 @@ class CatalogueRequest extends FormRequest
     public function rules()
     {
         return [
-            'parent_id' => 'nullable|exists:catalogues,id',
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'is_active' => 'nullable|boolean',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Nếu có trường ảnh bìa
+            'parent_id' => 'nullable|exists:catalogues,id', // Nếu có trường parent_id
         ];
     }
+
+
 
     public function messages()
     {
