@@ -16,13 +16,12 @@ class Address extends Model
         'customer_phone',
         'address_line1',
         'address_line2',
+        'ward',
+        'district',
         'city',
-        'state',
-        'postal_code',
-        'country',
-    ];
-
-    public function user()
+        'type',
+    ]; 
+  public function user()
     {
         return $this->belongsTo(User::class);
     }

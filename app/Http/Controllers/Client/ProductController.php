@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Services\ProductDetailService;
 use Illuminate\Http\Request;
 
@@ -22,10 +23,12 @@ class ProductController extends Controller
         return view('client.product-detail', 
             [   
                 'uniqueAttributes' => $data['uniqueAttributes'],
+                'variantDetails' => $data['variantDetails'],
                 'product' => $data['product'],
                 'totalStock' => $data['totalStock'],
                 'relatedProducts' => $data['relatedProducts']
             ]
         );
     }
+    
 }
