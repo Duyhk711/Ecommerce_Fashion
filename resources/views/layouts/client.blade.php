@@ -84,10 +84,11 @@
 
         
         <!-- Including Jquery/Javascript -->
+         <!-- Main JS -->
+         <script src="{{ asset('client/js/main.js') }}"></script>
         <!-- Plugins JS -->
         <script src="{{ asset('client/js/plugins.js') }}"></script>
-        <!-- Main JS -->
-        <script src="{{ asset('client/js/main.js') }}"></script>
+       
         @yield('js')
 
     </div>

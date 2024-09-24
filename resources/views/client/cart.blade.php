@@ -45,7 +45,6 @@
                                 @foreach ($cartItems as $item)
                                     <!-- Khung để thêm sản phẩm giỏ hàng -->
                                     <tr class="cart-row cart-flex position-relative">
-
                                         <td><input type="checkbox" class="cart-checkbox" data-price="{{ $item['price'] }}"
                                                 data-quantity="{{ $item['quantity'] }}"></td>
                                         <td class="cart-image cart-flex-item">
@@ -74,20 +73,14 @@
                                             <div class="cart-qty d-flex justify-content-end justify-content-md-center">
                                                 <div class="input-group" style="max-width: 150px;">
                                                     @if (isset($item['cart_item_id']))
-                                                        <input type="hidden" name="cart_item_id"
-                                                            value="{{ $item['cart_item_id'] }}">
+                                                        <input type="hidden" name="cart_item_id" value="{{ $item['cart_item_id'] }}">
                                                     @else
-                                                        <input type="hidden" name="variant_id" value="{{ $item['id'] }}">
+                                                        <input type="hidden" name="product_variant_id" value="{{ $item['product_variant_id'] }}">
                                                     @endif
-
-                                                    <button class=" btn-sm" type="button"
-                                                        onclick="changeQuantity(this, -1)">-</button>
-                                                    <input type="number"
-                                                        class="form-control form-control-sm quantity-input text-center"
-                                                        value="{{ $item['quantity'] ?? '0' }}" min="1"
-                                                        data-price="{{ $item['price'] }}" style="max-width: 60px;">
-                                                    <button class=" btn-sm" type="button"
-                                                        onclick="changeQuantity(this, 1)">+</button>
+                                                    <input type="hidden" class="max-stock" value="{{ $item['stock'] }}"> <!-- Thêm số lượng tồn kho -->
+                                                    <button class=" btn-sm decrease-quantity" type="button" onclick="changeQuantity(this, -1)">-</button>
+                                                    <input type="number" class="form-control form-control-sm quantity-input text-center" value="{{ $item['quantity'] ?? '0' }}" min="1" data-price="{{ $item['price'] }}" style="max-width: 60px;">
+                                                    <button class=" btn-sm increase-quantity" type="button" onclick="changeQuantity(this, 1)">+</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -98,7 +91,7 @@
                                                     @if (isset($item['cart_item_id']))
                                                         <input type="hidden" name="cart_item_id" value="{{ $item['cart_item_id'] }}">
                                                     @else
-                                                        <input type="hidden" name="product_variant_id" value="{{ $item['id'] }}">
+                                                        <input type="hidden" name="product_variant_id" value="{{ $item['product_variant_id'] }}">
                                                     @endif
                                                     <button type="submit" class="cart-remove remove-icon" data-bs-toggle="tooltip" title="Xóa">
                                                         <i class="icon anm anm-times-r me-1"></i> 
