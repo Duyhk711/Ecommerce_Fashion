@@ -35,7 +35,7 @@ class AuthService
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-        $user->query()->create($data);
+        $user->query()->create($data);  
         if ($user) {
             return true;
         }
@@ -88,5 +88,20 @@ class AuthService
             return true;
         }
         return false;
+    }
+    //admin
+    public function postAdminLogin(Request $request)
+    {
+        $data = $request->only('email', 'password');
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return true;
+            } else {
+                Auth::logout(); 
+                return 'not_admin'; 
+            }
+        }
+        return false; 
     }
 }

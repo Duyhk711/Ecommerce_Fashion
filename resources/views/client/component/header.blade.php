@@ -63,7 +63,7 @@
                         <li class="lvl1 parent dropdown"><a href="#">Liên hệ </a>
 
                         </li>
-                        <li class="lvl1 parent dropdown"><a href="{{route('blog')}}">Blog <i
+                        <li class="lvl1 parent dropdown"><a href="#">Blog <i
                                     class="icon anm anm-angle-down-l"></i></a>
                         </li>
                     </ul>

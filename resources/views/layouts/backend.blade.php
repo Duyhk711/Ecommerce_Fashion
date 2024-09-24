@@ -435,7 +435,12 @@
           <div class="dropdown d-inline-block">
             <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-fw fa-user d-sm-none"></i>
+              @if(Auth::check())
+                  <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
+              @else
               <span class="d-none d-sm-inline-block">Admin</span>
+              @endif
+              
               <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
@@ -443,7 +448,7 @@
                 User Options
               </div>
               <div class="p-2">
-                <a class="dropdown-item" href="javascript:void(0)">
+                <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
@@ -463,10 +468,13 @@
                 <!-- END Side Overlay -->
 
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Sign Out
-                </a>
-              </div>
+                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
+                  </a>
+                  <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
+                    @csrf
+                  </form>
+                </div>
             </div>
           </div>
           <!-- END User Dropdown -->
