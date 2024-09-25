@@ -107,6 +107,7 @@
                                 </div>
                             </div>
                             <!-- End Product Reviews -->
+
                             <!-- Product Info -->
                             <div class="product-info">
                                 <p class="product-stock d-flex">Tình trạng:
@@ -126,8 +127,8 @@
                                 </p>
                                 <p class="product-sku">MÃ:<span class="text">{{ $product->sku }}</span></p>
                             </div>
-
                             <!-- End Product Info -->
+
                             <!-- Product Price -->
                             <div class="product-price d-flex-center my-3">
                                 <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span><span
@@ -140,12 +141,6 @@
                                 {{ $product->description }}
                             </div>
                             <!-- End Sort Description -->
-                            <hr>
-                            <!-- Countdown -->
-                            {{-- <h3 class="text-uppercase mb-0">Hurry up! Sales Ends In</h3>
-                            <div class="product-countdown d-flex-center text-center my-3" data-countdown="2028/12/12">
-                            </div> --}}
-                            <!-- End Countdown -->
                         </div>
                         <!-- End Product Details -->
 
@@ -210,7 +205,7 @@
                                 <!-- Product Add -->
                                 <div class="product-form-submit addcart fl-1 ms-3">
                                     <button type="submit" class="btn btn-secondary product-form-cart-submit">
-                                        <span>Add to cart</span>
+                                        <span>Thêm giỏ hàng</span>
                                     </button>
                                 </div>
                                 <!-- End Product Add -->
@@ -218,7 +213,7 @@
                                 <!-- Product Buy -->
                                 <div class="product-form-submit buyit fl-1 ms-3">
                                     <button type="button" class="btn btn-primary proceed-to-checkout">
-                                        <span> Buy it now </span>
+                                        <span> Mua ngay </span>
                                     </button>
                                 </div>
                                 <!-- End Product Buy -->
@@ -238,14 +233,10 @@
                             </p>
                             <!-- End Product Info link -->
                         </form>
-
-
                         <!-- End Product Form -->
 
                         <!-- Product Info -->
-                        {{-- <div class="userViewMsg featureText" data-user="20" data-time="11000"><i
-                                class="icon anm anm-eye-r"></i><b class="uersView">21</b> People are Looking for this
-                            Product</div> --}}
+                       
                         <div class="shippingMsg featureText"><i class="icon anm anm-clock-r"></i>Estimated Delivery
                             Between <b id="fromDate">Wed, May 1</b> and <b id="toDate">Tue, May 7</b>.</div>
                         <div class="freeShipMsg featureText" data-price="199"><i class="icon anm anm-truck-r"></i>Spent
@@ -306,149 +297,10 @@
                                         versions from the 1914 translation by H. Rackham.</p>
                                 </div>
 
-                                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                                    <img data-src="assets/images/content/product-detail-img.jpg"
-                                        src="assets/images/content/product-detail-img.jpg" alt="image" width="600"
-                                        height="600" />
-                                </div>
                             </div>
                         </div>
-                        <!--Size Chart-->
-                        <h3 class="tabs-ac-style d-md-none" rel="description">Size Chart</h3>
-                        <div id="description" class="tab-content">
-                            <h4 class="mb-2">Ready to Wear Clothing</h4>
-                            <p class="mb-4">This is a standardised guide to give you an idea of what size you will need,
-                                however some brands may vary from these conversions.</p>
-                            <div class="size-chart-tbl table-responsive px-1">
-                                <table class="table-bordered align-middle mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Size</th>
-                                            <th>XXS - XS</th>
-                                            <th>XS - S</th>
-                                            <th>S - M</th>
-                                            <th>M - L</th>
-                                            <th>L - XL</th>
-                                            <th>XL - XXL</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th>UK</th>
-                                            <td>6</td>
-                                            <td>8</td>
-                                            <td>10</td>
-                                            <td>12</td>
-                                            <td>14</td>
-                                            <td>16</td>
-                                        </tr>
-                                        <tr>
-                                            <th>US</th>
-                                            <td>2</td>
-                                            <td>4</td>
-                                            <td>6</td>
-                                            <td>8</td>
-                                            <td>10</td>
-                                            <td>12</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Italy (IT)</th>
-                                            <td>38</td>
-                                            <td>40</td>
-                                            <td>42</td>
-                                            <td>44</td>
-                                            <td>46</td>
-                                            <td>48</td>
-                                        </tr>
-                                        <tr>
-                                            <th>France (FR/EU)</th>
-                                            <td>34</td>
-                                            <td>36</td>
-                                            <td>38</td>
-                                            <td>40</td>
-                                            <td>42</td>
-                                            <td>44</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Denmark</th>
-                                            <td>32</td>
-                                            <td>34</td>
-                                            <td>36</td>
-                                            <td>38</td>
-                                            <td>40</td>
-                                            <td>42</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Russia</th>
-                                            <td>40</td>
-                                            <td>42</td>
-                                            <td>44</td>
-                                            <td>46</td>
-                                            <td>48</td>
-                                            <td>50</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Germany</th>
-                                            <td>32</td>
-                                            <td>34</td>
-                                            <td>36</td>
-                                            <td>38</td>
-                                            <td>40</td>
-                                            <td>42</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Japan</th>
-                                            <td>5</td>
-                                            <td>7</td>
-                                            <td>9</td>
-                                            <td>11</td>
-                                            <td>13</td>
-                                            <td>15</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Australia</th>
-                                            <td>6</td>
-                                            <td>8</td>
-                                            <td>10</td>
-                                            <td>12</td>
-                                            <td>14</td>
-                                            <td>16</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Korea</th>
-                                            <td>33</td>
-                                            <td>44</td>
-                                            <td>55</td>
-                                            <td>66</td>
-                                            <td>77</td>
-                                            <td>88</td>
-                                        </tr>
-                                        <tr>
-                                            <th>China</th>
-                                            <td>160/84</td>
-                                            <td>165/86</td>
-                                            <td>170/88</td>
-                                            <td>175/90</td>
-                                            <td>180/92</td>
-                                            <td>185/94</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jeans</th>
-                                            <td>24-25</td>
-                                            <td>26-27</td>
-                                            <td>27-28</td>
-                                            <td>29-30</td>
-                                            <td>31-32</td>
-                                            <td>32-33</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <!--End Size Chart-->
                     </div>
                     <!--End Description-->
-
 
                     <!--Shipping &amp; Return-->
                     <h3 class="tabs-ac-style d-md-none" rel="shipping-return">Shipping &amp; Return</h3>
@@ -550,6 +402,13 @@
                                                     </div>
                                                     <b class="head-font">{{ $comment['title'] }}</b>
                                                     <p class="spr-review-body">{{ $comment['body'] }}</p>
+                                                    <div class="d-flex justify-content-end">
+                                                        <a href="#" class=" pb-2 edit-comment" 
+                                                        data-comment-id="" 
+                                                        data-comment-title="{{ $comment['title'] }}" 
+                                                        data-comment-body="{{ $comment['body'] }}" 
+                                                        data-comment-rating="{{ $comment['rating'] }}">Chỉnh Sửa</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -683,11 +542,22 @@
                                             @endif
                                         </div>
                                         <div class="product-review">
-                                            <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
-                                                class="icon anm anm-star-o"></i>
-                                            <span class="caption hidden ms-1">3 Reviews</span>
+                                            @php
+                                                // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                $relatedRating = $relatedRatings->firstWhere('product_id', $product->id);
+                                                // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                $averageRating = $relatedRating['average_rating'] ?? 0;
+                                            @endphp
+
+                                            <div class="related-product">
+                                                <div class="star-rating">
+                                                    @for ($i = 0; $i < 5; $i++)
+                                                        <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
                                         </div>
+                                        
                                         <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
                                             available...</p>
                                         <ul class="variants-clr swatches">
@@ -719,6 +589,51 @@
 @endsection
 
 @section('modal')
+    {{-- edit comment modal --}}
+    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5>Chỉnh sửa bình luận</h5>
+                    <form id="editCommentForm" method="POST" action="">
+                        @csrf
+                        <input type="hidden" name="comment_id" id="comment_id" value="">
+                        <div class="form-group mb-3">
+                            <label for="edit_comment_title">Tiêu đề</label>
+                            <input type="text" class="form-control" id="edit_comment_title" name="comment_title" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_message">Nội dung</label>
+                            <textarea class="form-control" id="edit_message" name="main_comment" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label>Đánh giá</label>
+                            <div class="review-rating">
+                                <input type="radio" id="star1_edit" name="rating" value="1">
+                                <label for="star1_edit"><i class="icon anm anm-star-o"></i></label>
+                                <input type="radio" id="star2_edit" name="rating" value="2">
+                                <label for="star2_edit"><i class="icon anm anm-star-o"></i></label>
+                                <input type="radio" id="star3_edit" name="rating" value="3">
+                                <label for="star3_edit"><i class="icon anm anm-star-o"></i></label>
+                                <input type="radio" id="star4_edit" name="rating" value="4">
+                                <label for="star4_edit"><i class="icon anm anm-star-o"></i></label>
+                                <input type="radio" id="star5_edit" name="rating" value="5">
+                                <label for="star5_edit"><i class="icon anm anm-star-o"></i></label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật bình luận</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {{-- end edit comment modal --}}
+
     <!-- Product Quickshop Modal-->
     <div class="quickshop-modal modal fade" id="quickshop_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1426,6 +1341,32 @@
             });
         });
     </script>
-@endsection
 
-{{-- comment --}}
+    {{-- display edit modal --}}
+    <script>
+        document.querySelectorAll('.edit-comment').forEach(function (element) {
+            element.addEventListener('click', function (event) {
+                event.preventDefault();
+                const commentId = this.getAttribute('data-comment-id');
+                const commentTitle = this.getAttribute('data-comment-title');
+                const commentBody = this.getAttribute('data-comment-body');
+                const commentRating = this.getAttribute('data-comment-rating');
+                
+                // Điền thông tin vào modal
+                document.getElementById('comment_id').value = commentId;
+                document.getElementById('edit_comment_title').value = commentTitle;
+                document.getElementById('edit_message').value = commentBody;
+    
+                // Thiết lập giá trị đánh giá
+                const starRating = document.querySelectorAll('input[name="rating"]');
+                starRating.forEach(function (input) {
+                    input.checked = (input.value == commentRating);
+                });
+    
+                // Hiển thị modal
+                $('#editCommentModal').modal('show');
+            });
+        });
+    </script>
+    
+@endsection

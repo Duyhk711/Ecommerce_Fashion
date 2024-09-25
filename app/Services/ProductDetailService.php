@@ -160,4 +160,16 @@ class ProductDetailService
 
         return $ratingsPercentage;
     }
+
+    public function getRatingsForRelatedProducts($relatedProducts)
+    {
+        // Lấy dữ liệu đánh giá cho từng sản phẩm
+        return $relatedProducts->map(function ($product) {
+            return [
+                'product_id' => $product->id,
+                'average_rating' => $this->calculateAverageRating($product),
+                'ratings_percentage' => $this->calculateRatingsPercentage($product),
+            ];
+        });
+    }
 }
