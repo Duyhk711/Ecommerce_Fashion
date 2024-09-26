@@ -106,17 +106,53 @@ class ProductDetailService
 
     public function getCommentsData($product)
     {
-        // lấy dữ liệu bình luận
-        return $product->comments->map(function ($comment) {
+        // Lấy user đang đăng nhập
+        $currentUserId = auth()->id();
+
+        // Lấy tối đa 3 bình luận cho phần hiển thị chính
+        $comments = $product->comments()
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get()
+            ->map(function ($comment) use ($currentUserId) {
+                return [
+                    'id' => $comment->id,
+                    'user_name' => $comment->user->name,
+                    'user_image' => $comment->user->avatar,
+                    'title' => $comment->title,
+                    'body' => $comment->comment,
+                    'rating' => $comment->rating ?? 'Không đánh giá',
+                    'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
+                    'is_updated' => $comment->updated_at ? true : false,
+                    'is_owner' => $comment->user_id == $currentUserId,
+                ];
+            });
+
+        // Lấy tất cả bình luận để hiển thị trong modal
+        $allComments = $product->comments()->get()->map(function ($comment) use ($currentUserId) {
             return [
+                'id' => $comment->id,
                 'user_name' => $comment->user->name,
                 'user_image' => $comment->user->avatar,
                 'title' => $comment->title,
                 'body' => $comment->comment,
                 'rating' => $comment->rating ?? 'Không đánh giá',
+                'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
+                'is_updated' => $comment->updated_at ? true : false,
+                'is_owner' => $comment->user_id == $currentUserId,
             ];
         });
+
+        return [
+            'comments' => $comments,
+            'total_comments' => $allComments->count(), // Tổng số bình luận
+            'all_comments' => $allComments, // Tất cả bình luận để hiển thị trong modal
+        ];
     }
+
+
+
+
 
     public function calculateAverageRating($product)
     {

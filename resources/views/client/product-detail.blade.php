@@ -373,22 +373,22 @@
                                 <div class="spr-reviews">
                                     <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
                                     <div class="review-inner">
-                                        @foreach ($comments as $comment)
+                                        @foreach ($comments['comments'] as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div class="spr-review-profile flex-shrink-0">
                                                     <img class="blur-up lazyload" 
                                                         data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
                                                         src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                        alt="" width="200" height="200" 
-                                                    />
+                                                        alt="" width="200" height="200" />
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div class="d-flex justify-content-between flex-column mb-2">
                                                         <div class="title-review d-flex align-items-center justify-content-between">
                                                             <h5 class="spr-review-header-title text-transform-none mb-0">
-                                                                {{ $comment['user_name'] }}</h5>
+                                                                {{ $comment['user_name'] }}
+                                                            </h5>
                                                             <span class="product-review spr-starratings m-0">
-                                                                @if ($comment['rating'] == "Không đánh giá")
+                                                                @if ($comment['rating'] == 'Không đánh giá')
                                                                     <span class="reviewLink">Không có đánh giá</span>
                                                                 @else
                                                                     <span class="reviewLink">
@@ -402,16 +402,28 @@
                                                     </div>
                                                     <b class="head-font">{{ $comment['title'] }}</b>
                                                     <p class="spr-review-body">{{ $comment['body'] }}</p>
-                                                    <div class="d-flex justify-content-end">
-                                                        <a href="#" class=" pb-2 edit-comment" 
-                                                        data-comment-id="" 
-                                                        data-comment-title="{{ $comment['title'] }}" 
-                                                        data-comment-body="{{ $comment['body'] }}" 
-                                                        data-comment-rating="{{ $comment['rating'] }}">Chỉnh Sửa</a>
-                                                    </div>
+                                                    <div class="d-flex {{ $comment['is_owner'] && !$comment['is_updated'] ? 'justify-content-between' : 'justify-content-end' }}">
+                                                        <span class="comment-date">
+                                                            {!! $comment['is_updated'] ? '<b>Đã chỉnh sửa</b>: ' : '' !!}{{ $comment['date'] }}
+                                                        </span>
+                                                    
+                                                        @if($comment['is_owner'] && !$comment['is_updated'])
+                                                            <a href="#" class="edit-comment" data-comment-id="{{ $comment['id'] }}" 
+                                                               data-comment-title="{{ $comment['title'] }}" 
+                                                               data-comment-body="{{ $comment['body'] }}" 
+                                                               data-comment-rating="{{ $comment['rating'] }}">Chỉnh Sửa</a>
+                                                        @endif
+                                                    </div>                                                    
                                                 </div>
                                             </div>
                                         @endforeach
+                                
+                                        <!-- Hiển thị nút xem tất cả bình luận nếu có nhiều hơn 4 -->
+                                        @if ($comments['total_comments'] > 3)
+                                            <button type="button" class="btn btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#allCommentsModal">
+                                                Xem tất cả bình luận ({{ $comments['total_comments'] }})
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -589,15 +601,60 @@
 @endsection
 
 @section('modal')
-    {{-- edit comment modal --}}
+
+    <!-- Display more comments -->
+    <div class="modal fade" id="allCommentsModal" tabindex="-1" aria-labelledby="allCommentsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="allCommentsModalLabel">Tất cả bình luận</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @foreach ($comments['all_comments'] as $comment)
+                        <div class="spr-review  w-100">
+                            <div class="d-flex justify-content-around p-5">
+                                <div >
+                                    <img class="blur-up lazyload" 
+                                    data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                    src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                    alt="" width="50" height="50" />
+                                </div>
+                                <div>
+                                    <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }}
+                                    <p>{{ $comment['body'] }}</p>
+                                </div>
+                                <div class="rating justify-content-end">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $comment['rating'])
+                                            <span class="anm anm-star text-warning" ></span> <!-- Sao đầy -->
+                                        @else
+                                            <span class="anm anm-star-o text-warning" ></span> <!-- Sao rỗng -->
+                                        @endif
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- End display more comments -->
+
+    {{-- Edit comment modal --}}
     <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h5>Chỉnh sửa bình luận</h5>
-                    <form id="editCommentForm" method="POST" action="">
+                    <form id="editCommentForm" method="POST" action="{{ route('comments.update', $comment['id']) }}">
                         @csrf
+                        @method('PUT') 
                         <input type="hidden" name="comment_id" id="comment_id" value="">
                         <div class="form-group mb-3">
                             <label for="edit_comment_title">Tiêu đề</label>
@@ -607,7 +664,7 @@
                             <label for="edit_message">Nội dung</label>
                             <textarea class="form-control" id="edit_message" name="main_comment" rows="3" required></textarea>
                         </div>
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-2">
                             <label>Đánh giá</label>
                             <div class="review-rating">
                                 <input type="radio" id="star1_edit" name="rating" value="1">
@@ -622,17 +679,19 @@
                                 <label for="star5_edit"><i class="icon anm anm-star-o"></i></label>
                             </div>
                         </div>
-                        <div class="text-center">
+                        <span>Lưu ý: bạn chỉ được sửa bình luận này 1 lần</span>
+                        <br>
+                        <div class="text-center mt-2">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-primary">Cập nhật bình luận</button>
                         </div>
                     </form>
+                    
                 </div>
             </div>
         </div>
     </div>
-    
-    {{-- end edit comment modal --}}
+    {{-- End edit comment modal --}}
 
     <!-- Product Quickshop Modal-->
     <div class="quickshop-modal modal fade" id="quickshop_modal" tabindex="-1" aria-hidden="true">
@@ -1088,124 +1147,123 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
-     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-             let selectedColorId = null;
-             let selectedSizeId = null;
-             let selectedProductVariantId = null;
-             let variantDetails = @json($variantDetails); // Chuyển biến PHP sang JavaScript
-         
-             // Kiểm tra Flash Messages và hiển thị popup nếu có
-             @if(session('success'))
-                 Swal.fire({
-                     icon: 'success',
-                     title: 'Thành công!',
-                     text: '{{ session('success') }}',
-                     showConfirmButton: false,
-                     timer: 2000
-                 });
-             @elseif(session('error'))
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Lỗi',
-                     text: '{{ session('error') }}',
-                     showConfirmButton: true,
-                     confirmButtonText: 'OK'
-                 });
-             @endif
-         
-             // Lấy màu
-             document.querySelectorAll('.variants-clr .swatch').forEach(item => {
-                 item.addEventListener('click', function() {
-                     document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
-                         swatch.classList.remove('selected');
-                     });
-                     item.classList.add('selected');
-                     selectedColorId = item.getAttribute('data-attribute-value-id');
-                     document.getElementById('color_id').value = selectedColorId;
-                     updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
-                 });
-             });
-         
-             // Lấy kích thước
-             document.querySelectorAll('.variants-size .swatch').forEach(item => {
-                 item.addEventListener('click', function() {
-                     document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
-                         swatch.classList.remove('selected');
-                     });
-                     item.classList.add('selected');
-                     selectedSizeId = item.getAttribute('data-attribute-value-id');
-                     document.getElementById('size_id').value = selectedSizeId;
-                     updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
-                 });
-             });
-         
-             // Hàm lấy ID biến thể dựa trên thuộc tính và giá trị
-             function getAttributeValueId(colorId, sizeId) {
-                 for (let variant of variantDetails) {
-                     let attributes = variant.attributes; // Giả định attributes chứa các thuộc tính của biến thể
-                     let colorMatch = false;
-                     let sizeMatch = false;
-                     for (let attr of attributes) {
-                         if (attr.attributeName === 'Color' && attr.value === colorId) {
-                             colorMatch = true;
-                         }
-                         if (attr.attributeName === 'Size' && attr.value === sizeId) {
-                             sizeMatch = true;
-                         }
-                     }
-                     if (colorMatch && sizeMatch) {
-                         return variant.id;
-                     }
-                 }
-                 return null;
-             }
-         
-             // Hàm cập nhật ID biến thể sản phẩm
-             function updateProductVariantId() {
-                 if (selectedColorId && selectedSizeId) {
-                     selectedProductVariantId = getAttributeValueId(selectedColorId, selectedSizeId);
-                     if (selectedProductVariantId) {
-                         document.getElementById('product_variant_id').value = selectedProductVariantId;
-                     } else {
-                         document.getElementById('product_variant_id').value = ''; // Clear if no match found
-                     }
-                 }
-             }
-         
-             // Xác thực số lượng
-             const amountInput = document.getElementById('quantityInput');
-             amountInput.addEventListener('input', function() {
-                 let qty = parseInt(this.value, 10);
-                 if (isNaN(qty) || qty < 1) {
-                     this.value = 1;
-                 }
-             });
-         
-             // Xử lý nút submit
-             document.querySelector('.product-form').addEventListener('submit', function(event) {
-                 const colorId = document.getElementById('color_id').value;
-                 const sizeId = document.getElementById('size_id').value;
-                 const variantId = document.getElementById('product_variant_id').value;
-         
-                 // Kiểm tra xem người dùng đã chọn màu, kích thước và biến thể chưa
-                 if (!colorId || !sizeId || !variantId) {
-                     event.preventDefault();
-                     
-                     // Hiển thị popup lỗi với SweetAlert2
-                     Swal.fire({
-                         icon: 'error',
-                         title: 'Lỗi',
-                         text: 'Bạn chưa chọn màu, kích thước hoặc biến thể sản phẩm!',
-                         confirmButtonText: 'OK'
-                     });
-                 }
-             });
-         });
-     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let selectedColorId = null;
+            let selectedSizeId = null;
+            let selectedProductVariantId = null;
+            let variantDetails = @json($variantDetails); // Chuyển biến PHP sang JavaScript
+        
+            // Kiểm tra Flash Messages và hiển thị popup nếu có
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        
+            // Lấy màu
+            document.querySelectorAll('.variants-clr .swatch').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
+                        swatch.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                    selectedColorId = item.getAttribute('data-attribute-value-id');
+                    document.getElementById('color_id').value = selectedColorId;
+                    updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
+                });
+            });
+        
+            // Lấy kích thước
+            document.querySelectorAll('.variants-size .swatch').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
+                        swatch.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                    selectedSizeId = item.getAttribute('data-attribute-value-id');
+                    document.getElementById('size_id').value = selectedSizeId;
+                    updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
+                });
+            });
+        
+            // Hàm lấy ID biến thể dựa trên thuộc tính và giá trị
+            function getAttributeValueId(colorId, sizeId) {
+                for (let variant of variantDetails) {
+                    let attributes = variant.attributes; // Giả định attributes chứa các thuộc tính của biến thể
+                    let colorMatch = false;
+                    let sizeMatch = false;
+                    for (let attr of attributes) {
+                        if (attr.attributeName === 'Color' && attr.value === colorId) {
+                            colorMatch = true;
+                        }
+                        if (attr.attributeName === 'Size' && attr.value === sizeId) {
+                            sizeMatch = true;
+                        }
+                    }
+                    if (colorMatch && sizeMatch) {
+                        return variant.id;
+                    }
+                }
+                return null;
+            }
+        
+            // Hàm cập nhật ID biến thể sản phẩm
+            function updateProductVariantId() {
+                if (selectedColorId && selectedSizeId) {
+                    selectedProductVariantId = getAttributeValueId(selectedColorId, selectedSizeId);
+                    if (selectedProductVariantId) {
+                        document.getElementById('product_variant_id').value = selectedProductVariantId;
+                    } else {
+                        document.getElementById('product_variant_id').value = ''; // Clear if no match found
+                    }
+                }
+            }
+        
+            // Xác thực số lượng
+            const amountInput = document.getElementById('quantityInput');
+            amountInput.addEventListener('input', function() {
+                let qty = parseInt(this.value, 10);
+                if (isNaN(qty) || qty < 1) {
+                    this.value = 1;
+                }
+            });
+        
+            // Xử lý nút submit
+            document.querySelector('.product-form').addEventListener('submit', function(event) {
+                const colorId = document.getElementById('color_id').value;
+                const sizeId = document.getElementById('size_id').value;
+                const variantId = document.getElementById('product_variant_id').value;
+        
+                // Kiểm tra xem người dùng đã chọn màu, kích thước và biến thể chưa
+                if (!colorId || !sizeId || !variantId) {
+                    event.preventDefault();
+                    
+                    // Hiển thị popup lỗi với SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Bạn chưa chọn màu, kích thước hoặc biến thể sản phẩm!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+    </script>
      
-
     {{-- select ảnh --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1356,13 +1414,17 @@
                 document.getElementById('comment_id').value = commentId;
                 document.getElementById('edit_comment_title').value = commentTitle;
                 document.getElementById('edit_message').value = commentBody;
-    
+
                 // Thiết lập giá trị đánh giá
                 const starRating = document.querySelectorAll('input[name="rating"]');
                 starRating.forEach(function (input) {
                     input.checked = (input.value == commentRating);
                 });
-    
+
+                // Cập nhật action cho form với comment ID
+                const form = document.getElementById('editCommentForm');
+                form.setAttribute('action', `/comments/${commentId}`);
+                
                 // Hiển thị modal
                 $('#editCommentModal').modal('show');
             });

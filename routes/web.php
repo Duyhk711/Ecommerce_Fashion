@@ -71,4 +71,6 @@ Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('po
 
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+
 
