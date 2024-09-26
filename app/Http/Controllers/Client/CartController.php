@@ -33,6 +33,7 @@ class CartController extends Controller
     {
         $cartItems = $this->cartService->getCartItems();
         // dd($cartItems);
+        // dd(session('cart'));
         return view('client.cart', compact('cartItems'));
     }
 
@@ -49,23 +50,22 @@ class CartController extends Controller
             if ($result['success']) {
                 return response()->json([
                     'success' => true,
-                    'message' => $result['message']
+                    'message' => $result['message'],
                 ], 200);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => $result['message']
+                    'message' => $result['message'],
                 ], 400);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Đã xảy ra lỗi trong quá trình xử lý',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
-
 
     public function removeFromCart(Request $request)
     {
