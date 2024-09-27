@@ -3,8 +3,22 @@
 @section('css')
     <style>
         .swatch.disabled {
+            position: relative; /* Để định vị gạch chéo */
             opacity: 0.5;
+            cursor: not-allowed;
             pointer-events: none;
+        }
+
+        .swatch.disabled::after {
+            content: ''; /* Tạo một phần tử gạch chéo */
+            position: absolute;
+            top: 50%; /* Căn giữa theo chiều dọc */
+            left: -20%;
+            right: -20%;
+            height: 2px; /* Độ dày của gạch chéo */
+            background-color: rgb(0, 0, 0); /* Màu gạch chéo */
+            transform: rotate(45deg); /* Gạch chéo */
+            transform-origin: center;
         }
     </style>
 
@@ -305,21 +319,21 @@
                     <!--Shipping &amp; Return-->
                     <h3 class="tabs-ac-style d-md-none" rel="shipping-return">Shipping &amp; Return</h3>
                     <div id="shipping-return" class="tab-content">
-                        <h4>Shipping &amp; Return</h4>
+                        <h4>Giao hàng &amp; Trả hàng</h4>
                         <ul class="checkmark-info">
-                            <li>Dispatch: Within 24 Hours</li>
-                            <li>1 Year Brand Warranty</li>
-                            <li>Free shipping across all products on a minimum purchase of $50.</li>
-                            <li>International delivery time - 7-10 business days</li>
-                            <li>Cash on delivery might be available</li>
-                            <li>Easy 30 days returns and exchanges</li>
+                            <li>Giao hàng: Trong vòng 24 giờ</li>
+                            <li>Bảo hành thương hiệu 1 năm</li>
+                            <li>Miễn phí vận chuyển cho tất cả các sản phẩm khi mua tối thiểu 500.000đ</li>
+                            <li>Thời gian giao hàng quốc tế - 7-10 ngày làm việc</li>
+                            <li>Có thể thanh toán khi nhận hàng</li>
+                            <li>Trả hàng và đổi hàng dễ dàng trong vòng 30 ngày</li>
                         </ul>
-                        <h4>Free and Easy Returns</h4>
+                        <h4>Trả hàng miễn phí và dễ dàng</h4>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
                             the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
                             of type and scrambled it to make a type specimen book. It has survived not only five centuries,
                             but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                        <h4>Special Financing</h4>
+                        <h4>Tài trợ đặc biệt</h4>
                         <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
                             alteration in some form, by injected humour, or randomised words which don't look even slightly
                             believable. If you are going to use a passage.</p>
@@ -401,7 +415,9 @@
                                                         </div>
                                                     </div>
                                                     <b class="head-font">{{ $comment['title'] }}</b>
-                                                    <p class="spr-review-body">{{ $comment['body'] }}</p>
+                                                    <p class="spr-review-body" style="overflow: hidden; max-width: 200px; word-wrap: break-word;">
+                                                        {{ $comment['body'] }}
+                                                    </p>
                                                     <div class="d-flex {{ $comment['is_owner'] && !$comment['is_updated'] ? 'justify-content-between' : 'justify-content-end' }}">
                                                         <span class="comment-date">
                                                             {!! $comment['is_updated'] ? '<b>Đã chỉnh sửa</b>: ' : '' !!}{{ $comment['date'] }}
@@ -413,7 +429,7 @@
                                                                data-comment-body="{{ $comment['body'] }}" 
                                                                data-comment-rating="{{ $comment['rating'] }}">Chỉnh Sửa</a>
                                                         @endif
-                                                    </div>                                                    
+                                                    </div>                                                                                                      
                                                 </div>
                                             </div>
                                         @endforeach
@@ -603,7 +619,7 @@
 @section('modal')
 
     <!-- Display more comments -->
-    <div class="modal fade" id="allCommentsModal" tabindex="-1" aria-labelledby="allCommentsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="allCommentsModal" tabindex="-1"  aria-labelledby="allCommentsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -611,38 +627,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @foreach ($comments['all_comments'] as $comment)
-                        <div class="spr-review  w-100">
-                            <div class="d-flex justify-content-around p-5">
-                                <div >
-                                    <img class="blur-up lazyload" 
-                                    data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                    src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                    alt="" width="50" height="50" />
-                                </div>
-                                <div>
-                                    <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }}
-                                    <p>{{ $comment['body'] }}</p>
-                                </div>
-                                <div class="rating justify-content-end">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $comment['rating'])
-                                            <span class="anm anm-star text-warning" ></span> <!-- Sao đầy -->
-                                        @else
-                                            <span class="anm anm-star-o text-warning" ></span> <!-- Sao rỗng -->
-                                        @endif
-                                    @endfor
+                    @if (isset($comments['all_comments']) && !empty($comments['all_comments']))
+                        @foreach ($comments['all_comments'] as $comment)
+                            <div class="spr-review  w-100">
+                                <div class=" row  p-3">
+                                    <div class="col-lg-1 mt-1">
+                                        <img class="blur-up lazyload" 
+                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                        alt="" width="50" height="50" />
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }}
+                                        <p class="spr-review-body" style="overflow: hidden; max-width: 200px; word-wrap: break-word;">
+                                            {{ $comment['body'] }}
+                                        </p>
+                                    </div>
+                                    <div class="rating col-lg-4">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $comment['rating'])
+                                                <span class="anm anm-star text-warning" ></span> <!-- Sao đầy -->
+                                            @else
+                                                <span class="anm anm-star-o text-warning" ></span> <!-- Sao rỗng -->
+                                            @endif
+                                        @endfor
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-
+                        @endforeach
+                    @else
+                        <span>Hiện chưa có bình luận nào</span>
+                    @endif
 
                 </div>
             </div>
         </div>
     </div>
-    
     <!-- End display more comments -->
 
     {{-- Edit comment modal --}}
@@ -652,7 +672,8 @@
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h5>Chỉnh sửa bình luận</h5>
-                    <form id="editCommentForm" method="POST" action="{{ route('comments.update', $comment['id']) }}">
+                    <form id="editCommentForm" method="POST" 
+                    action="{{ isset($comment) ? route('comments.update', $comment['id']) : '#' }}">
                         @csrf
                         @method('PUT') 
                         <input type="hidden" name="comment_id" id="comment_id" value="">
