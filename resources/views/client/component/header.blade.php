@@ -42,6 +42,13 @@
             </div>
             <!--End Logo-->
             <!--Menu-->
+            @php
+                use App\Models\Catalogue;
+                $catalogues=Catalogue::whereNull('parent_id') // Lấy các danh mục cha (parent_id = null)
+            ->with('children') // Lấy các danh mục con
+            ->get();
+
+            @endphp
             <div class="col-1 col-sm-1 col-md-1 col-lg-8 align-self-center d-menu-col">
                 <nav class="navigation" id="AccessibleNav">
                     <ul id="siteNav" class="site-nav medium center">
@@ -52,14 +59,36 @@
 
                             </div>
                         </li>
-                        <li class="lvl1 parent megamenu"><a href="#">Danh mục <i
-                                    class="icon anm anm-angle-down-l"></i></a>
-                            <div class="megamenu style2">
-                                <ul class="row mmWrapper">
+                      <li class="lvl1 parent megamenu"><a href="#">Danh mục <i
+                                     class="icon anm anm-angle-down-l"></i></a>
+                             <div class="megamenu style2">
+                                 <ul class="parent-menu">
+                                     @foreach ($catalogues as $category)
+                                         @if (!$category->parent_id && $category->is_active)
+                                             <li class="lvl-1 col-md-3 col-lg-3 w-22">
+                                                 <a href="#;"
+                                                     class="site-nav lvl-1 menu-title">{{ $category->name }}</a>
 
-                                </ul>
-                            </div>
-                        </li>
+                                                 @if ($category->children->isNotEmpty())
+                                                     <ul class="subLinks">
+                                                         @foreach ($category->children as $child)
+                                                             @if ($child->is_active)
+                                                                 <li class="lvl-2">
+                                                                     <a href="your-link/{{ $child->slug }}"
+                                                                         class="site-nav lvl-2">{{ $child->name }}</a>
+                                                                 </li>
+                                                             @endif
+                                                         @endforeach
+                                                     </ul>
+                                                 @endif
+                                             </li>
+                                         @endif
+                                     @endforeach
+                                 </ul>
+
+
+                             </div>
+                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">Liên hệ </a>
 
                         </li>
@@ -108,7 +137,7 @@
                                         </div>
                                     </div>
                                     <!--End Search Field-->
-                                   
+
                                     <!--Search popular-->
                                     <div class="popular-searches d-flex-justify-center mt-3">
                                         <span class="title fw-600">Trending Now:</span>
@@ -122,7 +151,7 @@
                                     <!--Search products-->
                                     <!--End Search products-->
                                 </form>
-                                
+
                             </div>
                         </div>
                     </div>
