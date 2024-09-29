@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductDetailService
 {
-    public function getProduct(string $id)
+    public function getProduct(string $slug)
     {
         // lấy các mối quan hệ liên quan
         return Product::with("variants.variantAttributes.attributeValue", "images", "comments.user")
-            ->findOrFail($id);
+        ->where('slug', $slug)
+        ->firstOrFail();
     }
 
     public function getVariantDetails($product)
@@ -57,15 +58,15 @@ class ProductDetailService
         });
     }
 
-    public function getRelatedProducts($product, string $id)
+    public function getRelatedProducts($product, string $slug)
     {
         // lấy sản phẩm cùng danh mục
         return Product::where('catalogue_id', $product->catalogue_id)
-            ->where('id', '!=', $id)
+            ->where('id', '!=', $product->id)
             ->get();
     }
 
-    public function getUserCommentStatus($product, string $id)
+    public function getUserCommentStatus($product, string $slug)
     {
         // lấy ra trạng thái bình luận (đã bình luận, chưa đăng nhập, chưa mua hàng, có đơn hàng mới chưa bình luận)
         $user = Auth::user();
@@ -80,7 +81,7 @@ class ProductDetailService
 
             if ($hasPurchased) {
                 $latestComment = Comment::where('user_id', $user->id)
-                                        ->where('product_id', $id)
+                                        ->where('product_id', $product->id)
                                         ->latest()
                                         ->first();
                 if ($latestComment) {
@@ -109,10 +110,10 @@ class ProductDetailService
         // Lấy user đang đăng nhập
         $currentUserId = auth()->id();
 
-        // Lấy tối đa 3 bình luận cho phần hiển thị chính
+        // Lấy tối đa 2 bình luận cho phần hiển thị chính
         $comments = $product->comments()
             ->orderBy('created_at', 'desc')
-            ->limit(3)
+            ->limit(2)
             ->get()
             ->map(function ($comment) use ($currentUserId) {
                 return [
@@ -123,7 +124,8 @@ class ProductDetailService
                     'body' => $comment->comment,
                     'rating' => $comment->rating ?? 'Không đánh giá',
                     'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
-                    'is_updated' => $comment->updated_at ? true : false,
+                    'updated_at' => $comment->updated_at,
+                    'created_at' => $comment->created_at,
                     'is_owner' => $comment->user_id == $currentUserId,
                 ];
             });

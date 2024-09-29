@@ -344,11 +344,12 @@
                     <h3 class="tabs-ac-style d-md-none" rel="reviews">Đánh giá</h3>
                     <div id="reviews" class="tab-content">
                         <div class="row">
-                            {{-- Danh sách bình luận --}}
+                            
+                            {{-- đánh giá trung bình --}}
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                                 <div class="ratings-main">
                                     <div class="avg-rating d-flex-center mb-3">
-                                        <h4 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h4>
+                                        <h3 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h3>
                                         <div class="avg-content ms-3">
                                             <p class="text-rating">Đánh giá sản phẩm</p>
                                             <div class="ratings-full product-review">
@@ -381,26 +382,30 @@
                                         @endforeach
                                     </div>
                                 </div>
+                            </div>
                             
-                                <hr />
-                            
-                                <div class="spr-reviews">
-                                    <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
-                                    <div class="review-inner">
-                                        @foreach ($comments['comments'] as $comment)
-                                            <div class="spr-review d-flex w-100">
-                                                <div class="spr-review-profile flex-shrink-0">
-                                                    <img class="blur-up lazyload" 
-                                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                        alt="" width="200" height="200" />
-                                                </div>
-                                                <div class="spr-review-content flex-grow-1">
-                                                    <div class="d-flex justify-content-between flex-column mb-2">
-                                                        <div class="title-review d-flex align-items-center justify-content-between">
-                                                            <h5 class="spr-review-header-title text-transform-none mb-0">
-                                                                {{ $comment['user_name'] }}
-                                                            </h5>
+                           {{-- Danh sách bình luận --}}
+                           <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
+                            <div class="spr-reviews">
+                                <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
+                                <div class="review-inner">
+                                    @foreach ($comments['comments'] as $comment)
+                                        <div class="spr-review d-flex w-100">
+                                            <div class="spr-review-profile " style="width: 50px">
+                                                <img class="" 
+                                                    data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                    src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                    alt="" />
+                                            </div>
+                                            <div class="spr-review-content flex-grow-1">
+                                                <div class="d-flex justify-content-between flex-column mb-2">
+                                                    <div class="title-review d-flex align-items-center justify-content-between">
+                                                        <div>
+                                                            <h5 class="spr-review-header-title text-transform-none mb-0 d-inline">
+                                                                {{ $comment['user_name'] }} 
+                                                            </h5> - {{ $comment['created_at'] ? $comment['updated_at']->format('d-m-Y') : $comment['created_at']->format('d-m-Y') }}
+                                                        </div>
+                                                        <div>
                                                             <span class="product-review spr-starratings m-0">
                                                                 @if ($comment['rating'] == 'Không đánh giá')
                                                                     <span class="reviewLink">Không có đánh giá</span>
@@ -414,38 +419,31 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <b class="head-font">{{ $comment['title'] }}</b>
-                                                    <p class="spr-review-body" style="overflow: hidden; max-width: 200px; word-wrap: break-word;">
-                                                        {{ $comment['body'] }}
-                                                    </p>
-                                                    <div class="d-flex {{ $comment['is_owner'] && !$comment['is_updated'] ? 'justify-content-between' : 'justify-content-end' }}">
-                                                        <span class="comment-date">
-                                                            {!! $comment['is_updated'] ? '<b>Đã chỉnh sửa</b>: ' : '' !!}{{ $comment['date'] }}
-                                                        </span>
-                                                    
-                                                        @if($comment['is_owner'] && !$comment['is_updated'])
-                                                            <a href="#" class="edit-comment" data-comment-id="{{ $comment['id'] }}" 
-                                                               data-comment-title="{{ $comment['title'] }}" 
-                                                               data-comment-body="{{ $comment['body'] }}" 
-                                                               data-comment-rating="{{ $comment['rating'] }}">Chỉnh Sửa</a>
-                                                        @endif
-                                                    </div>                                                                                                      
                                                 </div>
+                                                <b class="head-font">{{ $comment['title'] }}</b>
+                                                <p class="spr-review-body text-truncate" style="max-width: 350px; word-wrap: break-word;">
+                                                    {{ $comment['body'] }}
+                                                </p>                                                                                                                                                  
                                             </div>
-                                        @endforeach
-                                
-                                        <!-- Hiển thị nút xem tất cả bình luận nếu có nhiều hơn 4 -->
-                                        @if ($comments['total_comments'] > 3)
-                                            <button type="button" class="btn btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#allCommentsModal">
-                                                Xem tất cả bình luận ({{ $comments['total_comments'] }})
-                                            </button>
-                                        @endif
+                                        </div>
+                                    @endforeach
+                            
+                                    <!-- Hiển thị nút xem tất cả bình luận nếu có nhiều hơn 2 -->
+                                    @if ($comments['total_comments'] > 2)
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-secondary " data-bs-toggle="modal" data-bs-target="#allCommentsModal">
+                                            Xem tất cả({{ $comments['total_comments'] }})
+                                        </button>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
-                            
+                            </div>
+                            {{-- end list comment --}}
+                           
+
                             {{-- Form gửi bình luận --}}
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
+                            <div>
                                 @if ($canComment === 'not_logged_in')
                                     <span>Bạn cần <a href="{{ route('login') }}"><b>đăng nhập</b></a> để bình luận.</span>
                                 @elseif ($canComment === 'not_purchased')
@@ -493,6 +491,8 @@
                                     <span>Bạn đã bình luận cho sản phẩm này. Mua hàng mới để bình luận thêm.</span>
                                 @endif
                             </div>
+                            {{-- End form --}}
+
                         </div>
                     </div>
                     <!--End Review-->
@@ -519,7 +519,7 @@
                                 <div class="product-box">
                                     <!-- Start Product Image -->
                                     <div class="product-image">
-                                        <a href="{{ route('productDetail', $product->id) }}"
+                                        <a href="{{ route('productDetail', $product->slug) }}"
                                             class="product-img rounded-0">
                                             <img class="primary rounded-0 blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product5.jpg') }}"
@@ -559,7 +559,7 @@
                                     <div class="product-details text-center">
                                         <div class="product-vendor">{{ $product->catalogue->name }}</div>
                                         <div class="product-name">
-                                            <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
+                                            <a href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
                                         </div>
                                         <div class="product-price">
                                             @if ($product->price_sale == 0)
@@ -630,16 +630,19 @@
                     @if (isset($comments['all_comments']) && !empty($comments['all_comments']))
                         @foreach ($comments['all_comments'] as $comment)
                             <div class="spr-review  w-100">
-                                <div class=" row  p-3">
-                                    <div class="col-lg-1 mt-1">
-                                        <img class="blur-up lazyload" 
+                                <div class="row p-3" >
+                                    <div class="col-lg-1 mt-1 ">
+                                        <img class="blur-up lazyload rounded-circle" 
                                         data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
                                         src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                        alt="" width="50" height="50" />
+                                        alt="" width="80" height="80" />
                                     </div>
                                     <div class="col-lg-7">
-                                        <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }}
-                                        <p class="spr-review-body" style="overflow: hidden; max-width: 200px; word-wrap: break-word;">
+                                        <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }} <br>
+                                        @if ($comment['title'] != NULL)
+                                            <b>Tiêu đề: </b> {{$comment['title']}}
+                                        @endif
+                                        <p class="spr-review-body" style="overflow: hidden; max-width: 400px; word-wrap: break-word;">
                                             {{ $comment['body'] }}
                                         </p>
                                     </div>
