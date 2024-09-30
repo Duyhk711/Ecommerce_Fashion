@@ -27,6 +27,9 @@ class ProductController extends Controller
         $commentsData = $this->productDetailService->getCommentsData($product);
         $averageRating = $this->productDetailService->calculateAverageRating($product);
         $ratingsPercentage = $this->productDetailService->calculateRatingsPercentage($product);
+
+        $isFavorite = $this->productDetailService->isProductFavorite($id);
+
         return view('client.product-detail', 
             [   
                 'product' => $product,
@@ -38,7 +41,8 @@ class ProductController extends Controller
                 'comments' => $commentsData,
                 'averageRating' => $averageRating,
                 'totalRatings' => $product->comments->count(),
-                'ratingsPercentage' => $ratingsPercentage
+                'ratingsPercentage' => $ratingsPercentage,
+                'isFavorite' => $isFavorite
             ]   
 
         );

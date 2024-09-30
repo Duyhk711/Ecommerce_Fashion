@@ -10,29 +10,39 @@
 
     {{-- Rating stars --}}
     <style>
+        .wishlist.active i {
+            color: red;
+        }
+
         .review-rating {
             display: flex;
-            flex-direction: row; /* Để các sao ngược lại */
+            flex-direction: row;
+            /* Để các sao ngược lại */
             justify-content: flex-start;
         }
 
         .review-rating input[type="radio"] {
-            display: none; /* Ẩn các input radio */
+            display: none;
+            /* Ẩn các input radio */
         }
 
         .review-rating label {
-            font-size: 2em; /* Kích thước của icon sao */
-            cursor: pointer; /* Con trỏ trỏ vào sao khi di chuột */
+            font-size: 2em;
+            /* Kích thước của icon sao */
+            cursor: pointer;
+            /* Con trỏ trỏ vào sao khi di chuột */
         }
 
         /* Icon sao mặc định (chưa được chọn) sẽ có class anm-star-o */
         .review-rating label i {
-            color: #ccc; /* Màu trắng mặc định cho sao */
+            color: #ccc;
+            /* Màu trắng mặc định cho sao */
         }
 
         /* Khi sao được chọn (anm-star) */
         .review-rating label .anm-star {
-            color: #ffcc00; /* Màu vàng cho sao được chọn */
+            color: #ffcc00;
+            /* Màu vàng cho sao được chọn */
         }
     </style>
 @endsection
@@ -99,11 +109,12 @@
                                 <div class="reviewStar d-flex-center">
                                     <a class=" d-flex-center" href="#reviews">
                                         @for ($i = 0; $i < 5; $i++)
-                                            <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                            <i
+                                                class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
                                         @endfor
                                         <span class="caption ms-2">{{ $totalRatings }} Đánh giá</span>
                                     </a>
-                                    
+
                                 </div>
                             </div>
                             <!-- End Product Reviews -->
@@ -116,7 +127,8 @@
                                         @elseif($totalStock == 0)
                                             <span class="d-flex-center stockLbl text-danger text-uppercase">Hết hàng</span>
                                         @else
-                                            <span class="d-flex-center stockLbl text-warning text-uppercase"> Sắp hết hàng</span>
+                                            <span class="d-flex-center stockLbl text-warning text-uppercase"> Sắp hết
+                                                hàng</span>
                                         @endif
                                     </span>
                                 </p>
@@ -130,7 +142,8 @@
                             <!-- End Product Info -->
                             <!-- Product Price -->
                             <div class="product-price d-flex-center my-3">
-                                <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span><span
+                                <span
+                                    class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span><span
                                     class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                             </div>
                             <!-- End Product Price -->
@@ -189,7 +202,7 @@
                                 </div>
                             </div>
                             <!-- End Swatches -->
-                            
+
                             <input type="hidden" name="color_id" id="color_id">
                             <input type="hidden" name="size_id" id="size_id">
                             <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
@@ -227,18 +240,34 @@
 
                             <!-- Product Info link -->
                             <p class="infolinks d-flex-center justify-content-between">
-                                <a class="text-link wishlist" href="wishlist-style1.html"><i
-                                        class="icon anm anm-heart-l me-2"></i> <span>Add to Wishlist</span></a>
+                                <!-- Kiểm tra trạng thái yêu thích của sản phẩm -->
+                                <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
+                                    data-product-id="{{ $product->id }}">
+                                    <i class="icon anm anm-heart-l me-2"></i>
+                                    <span>{{ $isFavorite ? 'Xoá khỏi sản phẩm yêu thích' : 'Thêm vào sản phẩm yêu thích' }}</span>
+                                </a>
                                 <a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal"
-                                    data-bs-target="#shippingInfo_modal"><i class="icon anm anm-paper-l-plane me-2"></i>
-                                    <span>Delivery &amp; Returns</span></a>
+                                    data-bs-target="#shippingInfo_modal">
+                                    <i class="icon anm anm-paper-l-plane me-2"></i>
+                                    <span>Delivery & Returns</span>
+                                </a>
                                 <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
-                                    data-bs-target="#productInquiry_modal"><i class="icon anm anm-question-cil me-2"></i>
-                                    <span>Enquiry</span></a>
+                                    data-bs-target="#productInquiry_modal">
+                                    <i class="icon anm anm-question-cil me-2"></i>
+                                    <span>Enquiry</span>
+                                </a>
                             </p>
                             <!-- End Product Info link -->
                         </form>
-
+                        {{-- <form method="POST" action="{{ route('wishlist.add') }}">
+                            @csrf
+                            <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="product_variant_id" id="product_variant_id">
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="icon anm anm-heart-l me-2"></i> <span>Add to Wishlist</span>
+                            </button>
+                        </form> --}}
 
                         <!-- End Product Form -->
 
@@ -488,60 +517,64 @@
                                             <div class="ratings-full product-review">
                                                 <a class="reviewLink d-flex-center" href="#reviews">
                                                     @for ($i = 0; $i < 5; $i++)
-                                                        <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                        <i
+                                                            class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
                                                     @endfor
                                                     <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                            
+
                                     <div class="ratings-list">
                                         @foreach ($ratingsPercentage as $rating => $percentage)
                                             <div class="ratings-container d-flex align-items-center mt-1">
                                                 <div class="ratings-full product-review m-0">
                                                     <a class="reviewLink d-flex align-items-center" href="#reviews">
                                                         @for ($i = 0; $i < 5; $i++)
-                                                            <i class="icon anm anm-star {{ $i < $rating ? '' : 'anm-star-o' }}"></i>
+                                                            <i
+                                                                class="icon anm anm-star {{ $i < $rating ? '' : 'anm-star-o' }}"></i>
                                                         @endfor
                                                     </a>
                                                 </div>
                                                 <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ $percentage }}"
-                                                         aria-valuemin="0" aria-valuemax="100" style="width:{{ $percentage }}%;"></div>
+                                                    <div class="progress-bar" role="progressbar"
+                                                        aria-valuenow="{{ $percentage }}" aria-valuemin="0"
+                                                        aria-valuemax="100" style="width:{{ $percentage }}%;"></div>
                                                 </div>
                                                 <div class="progress-value">{{ number_format($percentage, 1) }}%</div>
                                             </div>
                                         @endforeach
                                     </div>
                                 </div>
-                            
+
                                 <hr />
-                            
+
                                 <div class="spr-reviews">
                                     <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
                                     <div class="review-inner">
                                         @foreach ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div class="spr-review-profile flex-shrink-0">
-                                                    <img class="blur-up lazyload" 
+                                                    <img class="blur-up lazyload"
                                                         data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
                                                         src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                        alt="" width="200" height="200" 
-                                                    />
+                                                        alt="" width="200" height="200" />
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div class="d-flex justify-content-between flex-column mb-2">
-                                                        <div class="title-review d-flex align-items-center justify-content-between">
+                                                        <div
+                                                            class="title-review d-flex align-items-center justify-content-between">
                                                             <h5 class="spr-review-header-title text-transform-none mb-0">
                                                                 {{ $comment['user_name'] }}</h5>
                                                             <span class="product-review spr-starratings m-0">
-                                                                @if ($comment['rating'] == "Không đánh giá")
+                                                                @if ($comment['rating'] == 'Không đánh giá')
                                                                     <span class="reviewLink">Không có đánh giá</span>
                                                                 @else
                                                                     <span class="reviewLink">
                                                                         @for ($i = 0; $i < 5; $i++)
-                                                                            <i class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
+                                                                            <i
+                                                                                class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
                                                                         @endfor
                                                                     </span>
                                                                 @endif
@@ -556,7 +589,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {{-- Form gửi bình luận --}}
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                                 @if ($canComment === 'not_logged_in')
@@ -565,33 +598,42 @@
                                     <span>Bạn cần mua sản phẩm này để bình luận.</span>
                                 @elseif ($canComment === 'purchased' || $canComment === 'new_purchase')
                                     <!-- Form bình luận -->
-                                    <form id="commentForm" method="POST" action="{{ route('comments.store') }}" class="product-review-form new-review-form">
+                                    <form id="commentForm" method="POST" action="{{ route('comments.store') }}"
+                                        class="product-review-form new-review-form">
                                         @csrf
                                         <h3 class="spr-form-title">Viết bình luận</h3>
                                         <fieldset class="row spr-form-contact">
                                             <div class="col-sm-6 spr-form-review-title form-group">
                                                 <label class="spr-form-label" for="review">Tiêu đề</label>
-                                                <input class="spr-form-input spr-form-input-text" id="review" type="text" name="comment_title" />
+                                                <input class="spr-form-input spr-form-input-text" id="review"
+                                                    type="text" name="comment_title" />
                                             </div>
                                             <div class="col-sm-6 spr-form-review-rating form-group">
                                                 <label class="spr-form-label">Đánh giá</label>
                                                 <div class="product-review pt-1">
                                                     <div class="review-rating">
-                                                        <input type="radio" id="star1" name="rating" value="1">
+                                                        <input type="radio" id="star1" name="rating"
+                                                            value="1">
                                                         <label for="star1"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star2" name="rating" value="2">
+                                                        <input type="radio" id="star2" name="rating"
+                                                            value="2">
                                                         <label for="star2"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star3" name="rating" value="3">
+                                                        <input type="radio" id="star3" name="rating"
+                                                            value="3">
                                                         <label for="star3"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star4" name="rating" value="4">
+                                                        <input type="radio" id="star4" name="rating"
+                                                            value="4">
                                                         <label for="star4"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star5" name="rating" value="5">
+                                                        <input type="radio" id="star5" name="rating"
+                                                            value="5">
                                                         <label for="star5"><i class="icon anm anm-star-o"></i></label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-12 spr-form-review-body form-group">
-                                                <label class="spr-form-label" for="message">Nội dung<span class="spr-form-review-body-charactersremaining"> tối đa (500) kí tự</span></label>
+                                                <label class="spr-form-label" for="message">Nội dung<span
+                                                        class="spr-form-review-body-charactersremaining"> tối đa (500) kí
+                                                        tự</span></label>
                                                 <div class="spr-form-input">
                                                     <textarea class="spr-form-input spr-form-input-textarea" required id="message" name="main_comment" rows="3"></textarea>
                                                 </div>
@@ -599,7 +641,8 @@
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         </fieldset>
                                         <div class="spr-form-actions clearfix">
-                                            <input type="submit" class="btn btn-primary spr-button spr-button-primary" value="Gửi đánh giá" />
+                                            <input type="submit" class="btn btn-primary spr-button spr-button-primary"
+                                                value="Gửi đánh giá" />
                                         </div>
                                     </form>
                                 @elseif ($canComment === 'commented')
@@ -676,10 +719,13 @@
                                         </div>
                                         <div class="product-price">
                                             @if ($product->price_sale == 0)
-                                                <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                <span class="price">
+                                                    {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
                                             @else
-                                                <span class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
-                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                <span
+                                                    class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                <span
+                                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                             @endif
                                         </div>
                                         <div class="product-review">
@@ -692,13 +738,13 @@
                                             available...</p>
                                         <ul class="variants-clr swatches">
                                             @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
-                                            <li class="swatch x-small available color-option"
-                                                style="background-color: {{ $color['colorCode'] }}"
-                                                data-color-code="{{ $color['colorCode'] }}"
-                                                data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
-                                                title="{{ $color['value'] }}">
-                                            </li>
-                                        @endforeach
+                                                <li class="swatch x-small available color-option"
+                                                    style="background-color: {{ $color['colorCode'] }}"
+                                                    data-color-code="{{ $color['colorCode'] }}"
+                                                    data-attribute-value-id="{{ $color['value'] }}"
+                                                    data-bs-toggle="tooltip" title="{{ $color['value'] }}">
+                                                </li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
@@ -1173,123 +1219,166 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
-     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-             let selectedColorId = null;
-             let selectedSizeId = null;
-             let selectedProductVariantId = null;
-             let variantDetails = @json($variantDetails); // Chuyển biến PHP sang JavaScript
-         
-             // Kiểm tra Flash Messages và hiển thị popup nếu có
-             @if(session('success'))
-                 Swal.fire({
-                     icon: 'success',
-                     title: 'Thành công!',
-                     text: '{{ session('success') }}',
-                     showConfirmButton: false,
-                     timer: 2000
-                 });
-             @elseif(session('error'))
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Lỗi',
-                     text: '{{ session('error') }}',
-                     showConfirmButton: true,
-                     confirmButtonText: 'OK'
-                 });
-             @endif
-         
-             // Lấy màu
-             document.querySelectorAll('.variants-clr .swatch').forEach(item => {
-                 item.addEventListener('click', function() {
-                     document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
-                         swatch.classList.remove('selected');
-                     });
-                     item.classList.add('selected');
-                     selectedColorId = item.getAttribute('data-attribute-value-id');
-                     document.getElementById('color_id').value = selectedColorId;
-                     updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
-                 });
-             });
-         
-             // Lấy kích thước
-             document.querySelectorAll('.variants-size .swatch').forEach(item => {
-                 item.addEventListener('click', function() {
-                     document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
-                         swatch.classList.remove('selected');
-                     });
-                     item.classList.add('selected');
-                     selectedSizeId = item.getAttribute('data-attribute-value-id');
-                     document.getElementById('size_id').value = selectedSizeId;
-                     updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
-                 });
-             });
-         
-             // Hàm lấy ID biến thể dựa trên thuộc tính và giá trị
-             function getAttributeValueId(colorId, sizeId) {
-                 for (let variant of variantDetails) {
-                     let attributes = variant.attributes; // Giả định attributes chứa các thuộc tính của biến thể
-                     let colorMatch = false;
-                     let sizeMatch = false;
-                     for (let attr of attributes) {
-                         if (attr.attributeName === 'Color' && attr.value === colorId) {
-                             colorMatch = true;
-                         }
-                         if (attr.attributeName === 'Size' && attr.value === sizeId) {
-                             sizeMatch = true;
-                         }
-                     }
-                     if (colorMatch && sizeMatch) {
-                         return variant.id;
-                     }
-                 }
-                 return null;
-             }
-         
-             // Hàm cập nhật ID biến thể sản phẩm
-             function updateProductVariantId() {
-                 if (selectedColorId && selectedSizeId) {
-                     selectedProductVariantId = getAttributeValueId(selectedColorId, selectedSizeId);
-                     if (selectedProductVariantId) {
-                         document.getElementById('product_variant_id').value = selectedProductVariantId;
-                     } else {
-                         document.getElementById('product_variant_id').value = ''; // Clear if no match found
-                     }
-                 }
-             }
-         
-             // Xác thực số lượng
-             const amountInput = document.getElementById('quantityInput');
-             amountInput.addEventListener('input', function() {
-                 let qty = parseInt(this.value, 10);
-                 if (isNaN(qty) || qty < 1) {
-                     this.value = 1;
-                 }
-             });
-         
-             // Xử lý nút submit
-             document.querySelector('.product-form').addEventListener('submit', function(event) {
-                 const colorId = document.getElementById('color_id').value;
-                 const sizeId = document.getElementById('size_id').value;
-                 const variantId = document.getElementById('product_variant_id').value;
-         
-                 // Kiểm tra xem người dùng đã chọn màu, kích thước và biến thể chưa
-                 if (!colorId || !sizeId || !variantId) {
-                     event.preventDefault();
-                     
-                     // Hiển thị popup lỗi với SweetAlert2
-                     Swal.fire({
-                         icon: 'error',
-                         title: 'Lỗi',
-                         text: 'Bạn chưa chọn màu, kích thước hoặc biến thể sản phẩm!',
-                         confirmButtonText: 'OK'
-                     });
-                 }
-             });
-         });
-     </script>
-     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let selectedColorId = null;
+            let selectedSizeId = null;
+            let selectedProductVariantId = null;
+            let variantDetails = @json($variantDetails); // Chuyển biến PHP sang JavaScript
+
+            // Kiểm tra Flash Messages và hiển thị popup nếu có
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                });
+            @endif
+
+            // Lấy màu
+            document.querySelectorAll('.variants-clr .swatch').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.variants-clr .swatch').forEach(swatch => {
+                        swatch.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                    selectedColorId = item.getAttribute('data-attribute-value-id');
+                    document.getElementById('color_id').value = selectedColorId;
+                    updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
+                });
+            });
+
+            // Lấy kích thước
+            document.querySelectorAll('.variants-size .swatch').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.variants-size .swatch').forEach(swatch => {
+                        swatch.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                    selectedSizeId = item.getAttribute('data-attribute-value-id');
+                    document.getElementById('size_id').value = selectedSizeId;
+                    updateProductVariantId(); // Cập nhật ID biến thể sản phẩm
+                });
+            });
+
+            // Hàm lấy ID biến thể dựa trên thuộc tính và giá trị
+            function getAttributeValueId(colorId, sizeId) {
+                for (let variant of variantDetails) {
+                    let attributes = variant.attributes; // Giả định attributes chứa các thuộc tính của biến thể
+                    let colorMatch = false;
+                    let sizeMatch = false;
+                    for (let attr of attributes) {
+                        if (attr.attributeName === 'Color' && attr.value === colorId) {
+                            colorMatch = true;
+                        }
+                        if (attr.attributeName === 'Size' && attr.value === sizeId) {
+                            sizeMatch = true;
+                        }
+                    }
+                    if (colorMatch && sizeMatch) {
+                        return variant.id;
+                    }
+                }
+                return null;
+            }
+
+            // Hàm cập nhật ID biến thể sản phẩm
+            function updateProductVariantId() {
+                if (selectedColorId && selectedSizeId) {
+                    selectedProductVariantId = getAttributeValueId(selectedColorId, selectedSizeId);
+                    if (selectedProductVariantId) {
+                        document.getElementById('product_variant_id').value = selectedProductVariantId;
+                    } else {
+                        document.getElementById('product_variant_id').value = ''; // Clear if no match found
+                    }
+                }
+            }
+
+            // Xác thực số lượng
+            const amountInput = document.getElementById('quantityInput');
+            amountInput.addEventListener('input', function() {
+                let qty = parseInt(this.value, 10);
+                if (isNaN(qty) || qty < 1) {
+                    this.value = 1;
+                }
+            });
+
+            // Xử lý nút submit
+            document.querySelector('.product-form').addEventListener('submit', function(event) {
+                const colorId = document.getElementById('color_id').value;
+                const sizeId = document.getElementById('size_id').value;
+                const variantId = document.getElementById('product_variant_id').value;
+
+                // Kiểm tra xem người dùng đã chọn màu, kích thước và biến thể chưa
+                if (!colorId || !sizeId || !variantId) {
+                    event.preventDefault();
+
+                    // Hiển thị popup lỗi với SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Bạn chưa chọn màu, kích thước hoặc biến thể sản phẩm!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+
+        // add favorite
+        document.addEventListener('DOMContentLoaded', function() {
+            const wishlistLink = document.querySelector('.wishlist');
+
+            wishlistLink.addEventListener('click', function(event) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+
+                const productId = this.getAttribute('data-product-id');
+                const isFavorite = this.classList.contains('active');
+
+                // Gửi yêu cầu POST hoặc DELETE để thêm/xóa yêu thích
+                const url = isFavorite ? `/wishlist/remove/${productId}` : `/wishlist/add/${productId}`;
+                const method = isFavorite ? 'DELETE' : 'POST';
+
+                fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content'),
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Thay đổi trạng thái của biểu tượng trái tim
+                            if (isFavorite) {
+                                this.classList.remove('active');
+                                this.querySelector('span').textContent = 'Thêm vào sản phẩm yêu thích';
+                            } else {
+                                this.classList.add('active');
+                                this.querySelector('span').textContent ='Xoá khỏi sản phẩm yêu thích' ;
+                            }
+                        } else {
+                            alert('Lỗi: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                    });
+            });
+        });
+    </script>
+
 
     {{-- select ảnh --}}
     <script>
@@ -1375,10 +1464,10 @@
             }
         });
     </script>
-    
+
     {{-- select sao --}}
     <script>
-         // Bắt tất cả các label và radio inputs
+        // Bắt tất cả các label và radio inputs
         const stars = document.querySelectorAll('.review-rating label');
         const inputs = document.querySelectorAll('.review-rating input[type="radio"]');
 
@@ -1412,13 +1501,14 @@
                     success: function(response) {
                         if (response.success) {
                             // Hiển thị thông báo đã bình luận và disable form
-                            $('#commentForm').html('<span>Bạn đã bình luận cho sản phẩm này.</span>');
+                            $('#commentForm').html(
+                                '<span>Bạn đã bình luận cho sản phẩm này.</span>');
                         } else {
                             alert('Đã có lỗi xảy ra!');
                         }
                     },
                     console.log(response);
-                    
+
                     error: function(response) {
                         alert('Đã có lỗi xảy ra!');
                     }

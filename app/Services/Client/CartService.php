@@ -8,7 +8,7 @@ use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Log;
 
 class CartService
 {
@@ -200,6 +200,11 @@ class CartService
                 return ['success' => false, 'message' => 'Số lượng yêu cầu vượt quá số lượng trong kho'];
             }
 
+            // Kiểm tra nếu số lượng là hợp lệ
+            if ($requestedQuantity < 1) {
+                return ['success' => false, 'message' => 'Số lượng phải lớn hơn 0'];
+            }
+
             // Cập nhật số lượng trong giỏ hàng
             $cartItem->quantity = $requestedQuantity;
             $cartItem->save();
@@ -209,6 +214,7 @@ class CartService
             return ['success' => false, 'message' => 'Không tìm thấy sản phẩm trong giỏ hàng'];
         }
     }
+
 
 
 
@@ -240,6 +246,11 @@ class CartService
                 return ['success' => false, 'message' => 'Số lượng yêu cầu vượt quá số lượng trong kho'];
             }
 
+            // Kiểm tra nếu số lượng là hợp lệ
+            if ($requestedQuantity < 1) {
+                return ['success' => false, 'message' => 'Số lượng phải lớn hơn 0'];
+            }
+
             // Cập nhật số lượng trong giỏ hàng
             $cart[$productVariantId]['quantity'] = $requestedQuantity;
             session()->put('cart', $cart);
@@ -249,6 +260,7 @@ class CartService
             return ['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng'];
         }
     }
+
 
 
     public function removeFromLoggedInUserCart(Request $request)

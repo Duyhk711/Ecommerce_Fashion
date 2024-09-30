@@ -5,16 +5,22 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\StoreAddressRequest;
+use App\Models\Favorite;
 use App\Models\User;
+use App\Services\Client\FavoriteService;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $favoriteService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService,  FavoriteService $favoriteService)
     {
         $this->userService = $userService;
+        $this->favoriteService = $favoriteService;
     }
     public function info()
     {
@@ -23,7 +29,7 @@ class UserController extends Controller
         $totalOrder = $this->userService->getTotalOrders();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
 
-        return view('client.my-account.account-info', compact('currentUser', 'totalOrder','defaultAddress'));
+        return view('client.my-account.account-info', compact('currentUser', 'totalOrder', 'defaultAddress'));
     }
     public function address()
     {
@@ -38,16 +44,68 @@ class UserController extends Controller
     {
         return view('client.my-account.oder-tracking');
     }
+
+    // favorite
+    public function add($productId)
+    {
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
+        }
+
+        $userId = Auth::id();
+
+        $favorite = Favorite::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($favorite) {
+            return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
+        }
+
+        Favorite::create([
+            'user_id' => $userId,
+            'product_id' => $productId,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
+    }
+
+    // Phương thức xóa sản phẩm khỏi danh sách yêu thích
+    public function remove($productId)
+    {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để xóa sản phẩm khỏi danh sách yêu thích.'], 403);
+        }
+
+        $userId = Auth::id();
+
+        $favorite = Favorite::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if (!$favorite) {
+            return response()->json(['success' => false, 'message' => 'Sản phẩm này không có trong danh sách yêu thích.']);
+        }
+
+        $favorite->delete();
+
+        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được xóa khỏi danh sách yêu thích.']);
+    }
+    
+    // Phương thức hiển thị danh sách yêu thích
     public function myWishlist()
     {
-        return view('client.my-account.my-wishlist');
+        $favorites = $this->favoriteService->getFavorites();
+        return view('client.my-account.my-wishlist', compact('favorites'));
     }
+
     public function profile()
     {
         $userId = auth()->id();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
         $currentUser = $this->userService->getCurrentUser();
-        return view('client.my-account.profile', compact('currentUser','defaultAddress'));
+        return view('client.my-account.profile', compact('currentUser', 'defaultAddress'));
     }
 
     //lưu địa chỉ
