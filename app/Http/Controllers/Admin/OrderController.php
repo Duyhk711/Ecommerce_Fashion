@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -12,9 +13,17 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    protected $orderService;
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
     public function index()
     {
-        return view(self::PATH_VIEW.__FUNCTION__);
+        $orders = $this->orderService->getOrder();
+        return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
 
     /**
@@ -36,9 +45,14 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(String $id)
     {
-        // return view(self::PATH_VIEW.__FUNCTION__);
+        $orderDetail = $this->orderService->getOrderDetail($id);
+        $user = $orderDetail->user; 
+        $voucher = $orderDetail->voucher; 
+        $address = $orderDetail->address; 
+        $items = $orderDetail->items;
+        return view(self::PATH_VIEW.__FUNCTION__, compact('orderDetail', 'user','voucher','address','items',));
     }
 
     /**

@@ -12,22 +12,34 @@
                   <i class="fa fa-check text-xeco-dark"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  ORD.01852
+                  {{$orderDetail->sku}}
                 </p>
               </div>
             </a>
           </div>
           <div class="col-6 col-lg-3">
-            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+            {{-- <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
                   <i class="fa fa-check text-xeco-dark"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Payment
+                  Thanh toán
+                </p>
+              </div>
+            </a> --}}
+
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
+                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Chờ Thanh toán
                 </p>
               </div>
             </a>
+
           </div>
           <div class="col-6 col-lg-3">
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
@@ -36,7 +48,7 @@
                   <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Packaging
+                  Trạng Thái
                 </p>
               </div>
             </a>
@@ -48,7 +60,7 @@
                   <i class="fa fa-times text-muted"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Delivery
+                  Giao hàng 
                 </p>
               </div>
             </a>
@@ -59,57 +71,53 @@
         <!-- Products -->
         <div class="block block-rounded">
           <div class="block-header block-header-default">
-            <h3 class="block-title">Products</h3>
+            <h3 class="block-title">Sản phẩm</h3>
           </div>
           <div class="block-content">
             <div class="table-responsive">
               <table class="table table-borderless table-striped table-vcenter fs-sm">
                 <thead>
                   <tr>
-                    <th class="text-center" style="width: 100px;">ID</th>
-                    <th>Product Name</th>
-                    <th class="text-center">Stock</th>
-                    <th class="text-center">Qty</th>
-                    <th class="text-end" style="width: 10%;">Unit Cost</th>
-                    <th class="text-end" style="width: 10%;">Price</th>
+                    <th class="text-center" style="width: 130px;">Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-end" style="width: 15%;">Đơn giá</th>
+                    <th class="text-end" style="width: 15%;">Tổng đơn giá</th>
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach ($items as $item)
+                    <tr>
+                      <td class="text-center"><a href="be_pages_ecom_product_edit.html"><strong>{{$item->productVariant->sku}}</strong></a></td>
+                      <td>
+                        <a href="{{route('productDetail',$item->productVariant->product->slug)}}"><strong>{{$item->product_name}}</strong></a><br>
+                          @foreach ($item->productVariant->variantAttributes as $variantAttribute)
+                            @if ($variantAttribute->attribute->name == 'Size') 
+                                Loại: {{ $variantAttribute->attributeValue->value }}  ,
+                            @endif
+                          @endforeach
+                          @foreach ($item->productVariant->variantAttributes as $variantAttribute)
+                            @if ($variantAttribute->attribute->name == 'Color') 
+                               {{ $variantAttribute->attributeValue->value }}
+                            @endif
+                          @endforeach
+                          </td>
+                      <td class="text-center"><strong>{{$item->quantity}}</strong></td>
+                      <td class="text-end">{{ number_format(($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} đ</td>
+                      <td class="text-end">{{number_format($item->quantity * ($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} đ</td>
+                    </tr>
+                  @endforeach
                   <tr>
-                    <td class="text-center"><a href="be_pages_ecom_product_edit.html"><strong>PID.965</strong></a></td>
-                    <td><a href="be_pages_ecom_product_edit.html"><strong>Dark Souls III</strong></a></td>
-                    <td class="text-center">50</td>
-                    <td class="text-center"><strong>1</strong></td>
-                    <td class="text-end">$59,00</td>
-                    <td class="text-end">$59,00</td>
+                    <td colspan="4" class="text-end"><strong>Tổng đơn hàng:</strong></td>
+                    <td class="text-end">{{number_format(($orderDetail->total_price) *1000, 0, ',', '.')}}đ</td>
                   </tr>
                   <tr>
-                    <td class="text-center"><a href="be_pages_ecom_product_edit.html"><strong>PID.755</strong></a></td>
-                    <td><a href="be_pages_ecom_product_edit.html"><strong>Control</strong></a></td>
-                    <td class="text-center">68</td>
-                    <td class="text-center"><strong>1</strong></td>
-                    <td class="text-end">$59,00</td>
-                    <td class="text-end">$59,00</td>
-                  </tr>
-                  <tr>
-                    <td class="text-center"><a href="be_pages_ecom_product_edit.html"><strong>PID.235</strong></a></td>
-                    <td><a href="be_pages_ecom_product_edit.html"><strong>Forza Motorsport 7</strong></a></td>
-                    <td class="text-center">23</td>
-                    <td class="text-center"><strong>1</strong></td>
-                    <td class="text-end">$59,00</td>
-                    <td class="text-end">$59,00</td>
-                  </tr>
-                  <tr>
-                    <td colspan="5" class="text-end"><strong>Total Price:</strong></td>
-                    <td class="text-end">$177,00</td>
-                  </tr>
-                  <tr>
-                    <td colspan="5" class="text-end"><strong>Total Paid:</strong></td>
-                    <td class="text-end">$177,00</td>
+                    <td colspan="4" class="text-end"><strong>Giảm giá:</strong></td>
+                    <td class="text-end">0 đ</td>
                   </tr>
                   <tr class="table-active">
-                    <td colspan="5" class="text-end text-uppercase"><strong>Total Due:</strong></td>
-                    <td class="text-end"><strong>$0,00</strong></td>
+                    <td colspan="4" class="text-end"><strong>Tổng đã trả:</strong></td>
+                    <td class="text-end"><strong>0 đ </strong></td>
                   </tr>
                 </tbody>
               </table>
@@ -122,18 +130,18 @@
         <div class="row">
           <div class="col-sm-6">
             <!-- Billing Address -->
-            <div class="block block-rounded">
+            <div class="block block-rounded" >
               <div class="block-header block-header-default">
-                <h3 class="block-title">Billing Address</h3>
+                <h3 class="block-title ">Người đặt</h3>
               </div>
               <div class="block-content">
-                <div class="fs-4 mb-1">Helen Jacobs</div>
+                <div class="fs-4 mb-1">{{$user->name}}</div>
                 <address class="fs-sm">
-                  Sunset Str 598<br>
+                  {{-- Sunset Str 598<br>
                   Melbourne<br>
-                  Australia, 11-671<br><br>
-                  <i class="fa fa-phone"></i> (999) 888-77777<br>
-                  <i class="fa fa-envelope-o"></i> <a href="javascript:void(0)">company@example.com</a>
+                  Australia, 11-671<br><br> --}}
+                  <i class="fa fa-phone"></i> {{$user->phone}}<br>
+                  <i class="fa-regular fa-envelope"></i> <a href="javascript:void(0)">{{$user->email}}</a> <br><br> <br>
                 </address>
               </div>
             </div>
@@ -143,16 +151,18 @@
             <!-- Shipping Address -->
             <div class="block block-rounded">
               <div class="block-header block-header-default">
-                <h3 class="block-title">Shipping Address</h3>
+                <h3 class="block-title">Địa chỉ nhận hàng</h3>
               </div>
               <div class="block-content">
-                <div class="fs-4 mb-1">Helen Jacobs</div>
+                <div class="fs-4 mb-1">{{$orderDetail->customer_name}}</div>
                 <address class="fs-sm">
-                  Sunrise Str 620<br>
-                  Melbourne<br>
-                  Australia, 11-587<br><br>
-                  <i class="fa fa-phone"></i> (999) 888-55555<br>
-                  <i class="fa fa-envelope-o"></i> <a href="javascript:void(0)">company@example.com</a>
+                  {{$orderDetail->address_line1}}
+                  {{$orderDetail->address_line2}} <br>
+                  {{$orderDetail->ward}}, 
+                  {{$orderDetail->district}},
+                  {{$orderDetail->city}}<br><br>
+                  <i class="fa fa-phone"></i> {{$orderDetail->customer_phone}}<br>
+                  {{-- <a href="javascript:void(0)">{{$orderDetail->customer_email}}</a> --}}
                 </address>
               </div>
             </div>

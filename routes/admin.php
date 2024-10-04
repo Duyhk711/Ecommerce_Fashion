@@ -58,7 +58,7 @@ Route::prefix('admin')
 
         // ORDER
         Route::resource('orders', OrderController::class);
-        Route::view('order/show', 'admin.orders.show')->name('order.show');
+        Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
 
         // USER
         Route::view('users', 'admin.users.index')->name('users.index');
