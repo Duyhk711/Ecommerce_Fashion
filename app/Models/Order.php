@@ -48,4 +48,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'order_id', 'id'); // Điều chỉnh nếu cần thiết
+    }
+    
 }
