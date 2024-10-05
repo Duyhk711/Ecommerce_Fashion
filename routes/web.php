@@ -56,6 +56,11 @@ Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
 Route::get('/my-order', [MyOrderController::class, 'myOrders'])->name('my.order');
 Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+// Route xem chi tiết đơn hàng
+Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
+//Route hủy đơn hàng
+Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+
 
 //sản phẩm yêu thích
 Route::middleware('auth')->group(function () {
@@ -82,3 +87,5 @@ Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('po
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
 
+// chatbox
+Route::post('/messages', [MessageController::class, 'store'])->name('message');

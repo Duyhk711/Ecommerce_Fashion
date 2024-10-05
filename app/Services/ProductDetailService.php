@@ -15,8 +15,8 @@ class ProductDetailService
     {
         // lấy các mối quan hệ liên quan
         return Product::with("variants.variantAttributes.attributeValue", "images", "comments.user")
-        ->where('slug', $slug)
-        ->firstOrFail();
+            ->where('slug', $slug)
+            ->firstOrFail();
     }
 
     public function getVariantDetails($product)
@@ -82,10 +82,9 @@ class ProductDetailService
 
             if ($hasPurchased) {
                 $latestComment = Comment::where('user_id', $user->id)
-                    ->where('product_id', $id)
+                    ->where('product_id', $product->id)
                     ->latest()
                     ->first();
-
                 if ($latestComment) {
                     $latestOrder = OrderItem::whereHas('order', function ($query) use ($user) {
                         $query->where('user_id', $user->id);
