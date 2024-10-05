@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\OrderStatusChangeController;
 use Illuminate\Support\Facades\Route;
 /*
@@ -85,5 +86,9 @@ Route::prefix('admin')
 
         // VOUCHER
         Route::resource('vouchers', VoucherController::class);
+
+        //COMMENT
+        Route::resource('/comments', CommentController::class);
+        Route::get('admin/comments/{id}', [CommentController::class, 'show']);
     });
 // });
