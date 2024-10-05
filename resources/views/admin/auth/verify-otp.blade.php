@@ -45,14 +45,14 @@
                                     <div class="mb-4">
                                         <label for="otp">Mã xác minh<span class="required">*</span></label>
                                         <div class="input-group input-group-lg">
-                                            <input type="text" name="otp" placeholder="Nhập mã xác minh" id="otp" class="form-control @error('otp') is-invalid @enderror" value="{{ old('otp') }}" required />
+                                            <input type="text" name="otp" placeholder="Nhập mã xác minh" id="otp" class="form-control @error('otp') is-invalid @enderror" value="{{ old('otp') }}"  />
                                             <span class="input-group-text">
                                                 <i class="fa fa-key"></i>
                                             </span>
-                                            @error('otp')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
+                                        {{-- @error('otp')
+                                                <div class="text-danger">{{ $message }}</div>
+                                        @enderror --}}
                                     </div>
                                     <div class="text-center mb-4">
                                         <input type="submit" class="btn btn-hero btn-primary" value="Xác Minh" />

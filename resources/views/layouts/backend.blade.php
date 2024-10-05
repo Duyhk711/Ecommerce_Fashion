@@ -389,7 +389,20 @@
               </ul>
             </li>
 
-
+            {{--COMMENT--}}
+            <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/comments*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý Bình luận</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/comments*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/comments') ? ' active' : '' }}" href="{{ route('admin.comments.index') }}">
+                    <span class="nav-main-link-name">Bình luận</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
 
           
             <li class="nav-main-heading">More</li>
@@ -451,10 +464,7 @@
                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                  <span><i class="far fa-fw fa-envelope me-1"></i> Inbox</span>
-                  <span class="badge bg-primary rounded-pill">3</span>
-                </a>
+                
                 <a class="dropdown-item" href="javascript:void(0)">
                   <i class="far fa-fw fa-file-alt me-1"></i> Invoices
                 </a>
@@ -629,3 +639,4 @@
 @yield('js')
 
 </html>
+  

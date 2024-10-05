@@ -37,11 +37,17 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class,'product_id');
     }
 
+    
     public function images()
     {
         return $this->hasMany(ProductImage::class);
     }
 
+    public function mainImage()
+    {
+        return $this->hasOne(ProductImage::class)->where('is_main', 1);
+    }
+    
     public function comments()
     {
         return $this->hasMany(Comment::class);

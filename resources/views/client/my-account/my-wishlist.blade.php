@@ -1,54 +1,146 @@
 @extends('client.my-account')
-@section('my-wishlist')
-<div>
-    <div class="orders-card mt-0 h-100">
-        <div class="top-sec d-flex-justify-center justify-content-between mb-4">
-            <h2 class="mb-0">My Wishlist</h2>
-        </div>
+@section('css')
+    <style>
+        .btn-delete {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
 
-        <div class="table-bottom-brd table-responsive">
-            <table class="table align-middle text-center order-table">
-                <thead>
-                    <tr class="table-head text-nowrap">
-                        <th scope="col">Image</th>
-                        <th scope="col">Order Id</th>
-                        <th scope="col">Product Details</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><img class="blur-up lazyload" data-src="{{asset('client/images/products/product1-120x170.jpg')}}" src="{{asset('client/images/products/product1-120x170.jpg')}}" width="50" alt="product" title="product" /></td>
-                        <td><span class="id">#12301</span></td>
-                        <td><span class="name">Oxford Cuban Shirt</span></td>
-                        <td><span class="price fw-500">$99.00</span></td>
-                        <td><a href="cart-style1.html" class="btn btn-md text-nowrap">Add to Cart</a></td>
-                    </tr>
-                    <tr>
-                        <td><img class="blur-up lazyload" data-src="{{asset('client/images/products/product2-120x170.jpg')}}" src="{{asset('client/images/products/product2-120x170.jpg')}}" width="50" alt="product" title="product" /></td>
-                        <td><span class="id">#12302</span></td>
-                        <td><span class="name">Cuff Beanie Cap</span></td>
-                        <td><span class="price fw-500">$128.00</span></td>
-                        <td><a href="cart-style1.html" class="btn btn-md text-nowrap">Add to Cart</a></td>
-                    </tr>
-                    <tr>
-                        <td><img class="blur-up lazyload" data-src="{{asset('client/images/products/product3-120x170.jpg')}}" src="{{asset('client/images/products/product3-120x170.jpg')}}" width="50" alt="product" title="product" /></td>
-                        <td><span class="id">#12303</span></td>
-                        <td><span class="name">Flannel Collar Shirt</span></td>
-                        <td><span class="price fw-500">$114.00</span></td>
-                        <td><a href="cart-style1.html" class="btn btn-md text-nowrap">Add to Cart</a></td>
-                    </tr>
-                    <tr>
-                        <td><img class="blur-up lazyload" data-src="{{asset('client/images/products/product4-120x170.jpg')}}" src="{{asset('client/images/products/product4-120x170.jpg')}}" width="50" alt="product" title="product" /></td>
-                        <td><span class="id">#12304</span></td>
-                        <td><span class="name">Cotton Hooded Hoodie</span></td>
-                        <td><span class="price fw-500">$198.00</span></td>
-                        <td><a href="cart-style1.html" class="btn btn-md text-nowrap">Add to Cart</a></td>
-                    </tr>
-                </tbody>
-            </table>
+        .btn-delete:focus {
+            outline: none;
+        }
+
+        .btn-delete i {
+            color: red;
+        }
+
+        p,
+        .color {
+            color: #88837f;
+        }
+
+        th {
+            font-weight: normal;
+            text-transform: none;
+        }
+    </style>
+@endsection
+@section('my-wishlist')
+    <div class="">
+        <div class="orders-card mt-0 h-100">
+            <div class="top-sec d-flex-justify-center justify-content-between mb-4">
+                <h2 class="mb-0">My Wishlist</h2>
+            </div>
+
+            <div class="table-bottom-brd table-responsive">
+                <table class="table align-middle text-center order-table">
+                    <thead>
+                        <tr class="table-head text-nowrap">
+                            <th scope="col" class="color" style="width: 5%;">#</th>
+                            <th scope="col" class="color" style="width: 40%;">Sản phẩm</th>
+                            <th scope="col" class="color" style="width: 20%;">Đơn giá</th>
+                            <th scope="col" class="color" style="width: 20%;">Thao tác</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($favorites as $favorite)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <img class="blur-up lazyload me-2"
+                                        data-src="{{ $favorite->productVariant->image ?? $favorite->product->img_thumbnail }}"
+                                        src="{{ $favorite->productVariant->image ?? $favorite->product->img_thumbnail }}"
+                                        width="50" alt="{{ $favorite->product->name }}"
+                                        title="{{ $favorite->product->name }}" />
+                                    <a href="{{route('productDetail', $favorite->product->id)}}" style="font-weight: 500;">{{ $favorite->product->name }}</a>
+                                </td>
+
+                                <!-- Hiển thị giá sản phẩm -->
+                                <td>
+                                    <span class="price-sale">{{ number_format($favorite->product->price_sale) }}đ</span>
+                                </td>
+
+                                <!-- Nút xóa sản phẩm yêu thích -->
+                                <td>
+                                    <form method="POST" action="{{ route('wishlist.remove', $favorite->product->id) }}"
+                                        class="form-delete">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-delete" data-bs-toggle="tooltip" title="Xoá">
+                                            <i class="icon anm anm-times-r"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5">Không có sản phẩm yêu thích.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+@endsection
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const deleteBtns = document.querySelectorAll('.form-delete');
+
+    for (const btn of deleteBtns) {
+        btn.querySelector('.btn-delete').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: "Xóa sản phẩm này khỏi danh sách yêu thích?",
+                text: "Nếu xóa bạn sẽ không thể khôi phục!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = this.closest('.form-delete');
+                    const actionUrl = form.getAttribute('action');
+
+                    fetch(actionUrl, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            form.closest('tr').remove();
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: data.message,
+                                icon: 'success'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Có lỗi xảy ra, vui lòng thử lại.',
+                                icon: 'error'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            });
+        });
+    }
+});
+
+    </script>
 @endsection
