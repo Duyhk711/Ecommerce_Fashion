@@ -4,17 +4,19 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Comment;
+use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 
 class ProductDetailService
 {
-    public function getProduct(string $id)
+    public function getProduct(string $slug)
     {
         // lấy các mối quan hệ liên quan
         return Product::with("variants.variantAttributes.attributeValue", "images", "comments.user")
-            ->findOrFail($id);
+            ->where('slug', $slug)
+            ->firstOrFail();
     }
 
     public function getVariantDetails($product)
@@ -57,36 +59,36 @@ class ProductDetailService
         });
     }
 
-    public function getRelatedProducts($product, string $id)
+    public function getRelatedProducts($product, string $slug)
     {
         // lấy sản phẩm cùng danh mục
         return Product::where('catalogue_id', $product->catalogue_id)
-            ->where('id', '!=', $id)
+            ->where('id', '!=', $product->id)
             ->get();
     }
 
-    public function getUserCommentStatus($product, string $id)
+    public function getUserCommentStatus($product, string $slug)
     {
         // lấy ra trạng thái bình luận (đã bình luận, chưa đăng nhập, chưa mua hàng, có đơn hàng mới chưa bình luận)
         $user = Auth::user();
         $canComment = null;
 
         if ($user) {
-            $hasPurchased = OrderItem::whereHas('order', function($query) use ($user) {
+            $hasPurchased = OrderItem::whereHas('order', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
-            })->whereHas('productVariant', function($query) use ($product) {
+            })->whereHas('productVariant', function ($query) use ($product) {
                 $query->where('product_id', $product->id);
             })->exists();
 
             if ($hasPurchased) {
                 $latestComment = Comment::where('user_id', $user->id)
-                                        ->where('product_id', $id)
-                                        ->latest()
-                                        ->first();
+                    ->where('product_id', $product->id)
+                    ->latest()
+                    ->first();
                 if ($latestComment) {
-                    $latestOrder = OrderItem::whereHas('order', function($query) use ($user) {
+                    $latestOrder = OrderItem::whereHas('order', function ($query) use ($user) {
                         $query->where('user_id', $user->id);
-                    })->whereHas('productVariant', function($query) use ($product) {
+                    })->whereHas('productVariant', function ($query) use ($product) {
                         $query->where('product_id', $product->id);
                     })->where('created_at', '>', $latestComment->created_at)->exists();
 
@@ -106,17 +108,54 @@ class ProductDetailService
 
     public function getCommentsData($product)
     {
-        // lấy dữ liệu bình luận
-        return $product->comments->map(function ($comment) {
+        // Lấy user đang đăng nhập
+        $currentUserId = auth()->id();
+
+        // Lấy tối đa 2 bình luận cho phần hiển thị chính
+        $comments = $product->comments()
+            ->orderBy('created_at', 'desc')
+            ->limit(2)
+            ->get()
+            ->map(function ($comment) use ($currentUserId) {
+                return [
+                    'id' => $comment->id,
+                    'user_name' => $comment->user->name,
+                    'user_image' => $comment->user->avatar,
+                    'title' => $comment->title,
+                    'body' => $comment->comment,
+                    'rating' => $comment->rating ?? 'Không đánh giá',
+                    'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
+                    'updated_at' => $comment->updated_at,
+                    'created_at' => $comment->created_at,
+                    'is_owner' => $comment->user_id == $currentUserId,
+                ];
+            });
+
+        // Lấy tất cả bình luận để hiển thị trong modal
+        $allComments = $product->comments()->get()->map(function ($comment) use ($currentUserId) {
             return [
+                'id' => $comment->id,
                 'user_name' => $comment->user->name,
                 'user_image' => $comment->user->avatar,
                 'title' => $comment->title,
                 'body' => $comment->comment,
                 'rating' => $comment->rating ?? 'Không đánh giá',
+                'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
+                'is_updated' => $comment->updated_at ? true : false,
+                'is_owner' => $comment->user_id == $currentUserId,
             ];
         });
+
+        return [
+            'comments' => $comments,
+            'total_comments' => $allComments->count(), // Tổng số bình luận
+            'all_comments' => $allComments, // Tất cả bình luận để hiển thị trong modal
+        ];
     }
+
+
+
+
 
     public function calculateAverageRating($product)
     {
@@ -129,9 +168,9 @@ class ProductDetailService
                 $sumRatings += $comment->rating;
                 $validRatingsCount++;
             }
-    }
-    // Trả về trung bình đánh giá, hoặc 0 nếu không có rating hợp lệ
-    return $validRatingsCount > 0 ? $sumRatings / $validRatingsCount : 0;
+        }
+        // Trả về trung bình đánh giá, hoặc 0 nếu không có rating hợp lệ
+        return $validRatingsCount > 0 ? $sumRatings / $validRatingsCount : 0;
     }
 
     public function calculateRatingsPercentage($product)
@@ -159,5 +198,27 @@ class ProductDetailService
         }
 
         return $ratingsPercentage;
+    }
+
+    public function isProductFavorite($productId)
+    {
+        if (Auth::check()) {
+            $userId = Auth::id();
+            return Favorite::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->exists();
+        }
+
+        return false; // Nếu người dùng chưa đăng nhập, trả về false
+    public function getRatingsForRelatedProducts($relatedProducts)
+    {
+        // Lấy dữ liệu đánh giá cho từng sản phẩm
+        return $relatedProducts->map(function ($product) {
+            return [
+                'product_id' => $product->id,
+                'average_rating' => $this->calculateAverageRating($product),
+                'ratings_percentage' => $this->calculateRatingsPercentage($product),
+            ];
+        });
     }
 }

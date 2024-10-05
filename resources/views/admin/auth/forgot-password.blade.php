@@ -54,14 +54,14 @@
                     @csrf
                     <div class="mb-4">
                       <div class="input-group input-group-lg">
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="reminder-credential" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="reminder-credential" name="email" placeholder="Email" value="{{ old('email') }}" >
                         <span class="input-group-text">
                           <i class="fa fa-user-circle"></i>
                         </span>
-                        @error('email')
+                      </div>
+                      @error('email')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
-                      </div>
                     </div>
                     <div class="text-center mb-4">
                       <button type="submit" class="btn btn-hero btn-primary">

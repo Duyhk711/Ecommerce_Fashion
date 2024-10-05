@@ -2,6 +2,44 @@
 
 @section('content')
     <!--Home Slideshow-->
+    <style>
+        .chat-icon {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-size: 30px;
+        }
+        .chat-box {
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            width: 300px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            padding: 15px;
+        }
+
+        .chat-header {
+            font-weight: bold;
+        }
+
+        .chat-footer {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
     <section class="slideshow slideshow-wrapper">
         <div class="home-slideshow slick-arrow-dots">
             @foreach($banners['mainBanners'] as $banner)
@@ -1299,5 +1337,95 @@
             </div>
         </div>
     </div>
+    <div class="chat-icon" onclick="toggleChat()">
+        💬
+    </div>
+    
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">Liên hệ hỗ trợ</div>
+        <form id="contactForm" onsubmit="sendMessage(event)">
+            @csrf
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="text" class="form-control" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="title">Tiêu đề</label>
+                <input type="text" class="form-control" id="title" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Tin nhắn</label>
+                <textarea class="form-control" id="message" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Gửi</button>
+        </form>
+    </div>
+    <script>
+        function toggleChat() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.style.display = chatBox.style.display === 'none' || chatBox.style.display === '' ? 'block' : 'none';
+        }
+    
+        function sendMessage(event) {
+            event.preventDefault(); // Ngăn chặn việc gửi form
+    
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value;
+    
+            // Xử lý gửi tin nhắn ở đây, ví dụ như gửi tới server
+    
+            console.log('Số điện thoại:', phone);
+            console.log('Email:', email);
+            console.log('Tiêu đề:', title);
+            console.log('Tin nhắn:', message);
+    
+            // Reset form
+            document.getElementById('contactForm').reset();
+            toggleChat(); // Đóng chat box sau khi gửi
+        }
+        function sendMessage(event) {
+    event.preventDefault(); // Ngăn chặn việc gửi form
+
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const title = document.getElementById('title').value;
+    const message = document.getElementById('message').value;
+
+    // Gửi dữ liệu tới server
+    $.ajax({
+        url: '/messages', // Địa chỉ API để gửi tin nhắn
+        method: 'POST',
+        data: {
+            phone: phone,
+            email: email,
+            title: title,
+            message: message,
+        },
+        success: function(response) {
+            console.log(response);
+            alert('Tin nhắn đã được gửi thành công!');
+            // Reset form
+            document.getElementById('contactForm').reset();
+            toggleChat(); // Đóng chat box sau khi gửi
+        },
+        error: function(xhr) {
+            console.error(xhr);
+            alert('Có lỗi xảy ra. Vui lòng thử lại.');
+        }
+    });
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+}
+
+    </script>
     <!--End Product Quickview Modal-->
 @endsection
