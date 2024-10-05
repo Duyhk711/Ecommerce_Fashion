@@ -11,13 +11,13 @@
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-          <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Danh sách Sản Phẩm</h1>
+          <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Danh sách Bình luận</h1>
           <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb">
                   <li class="breadcrumb-item">
                       <a href="#" style="color: inherit;">Products</a>
                   </li>
-                  <li class="breadcrumb-item active" aria-current="page">Danh sách Sản Phẩm</li>
+                  <li class="breadcrumb-item active" aria-current="page">Danh sách Bình luận/li>
               </ol>
           </nav>
       </div>
@@ -30,10 +30,11 @@
   <!-- Dynamic Table Full -->
   <div class="block block-rounded">
       <div class="block-header block-header-default">
-          <h3 class="block-title">Danh sách Sản Phẩm</h3>
+          <h3 class="block-title">Danh sách Bình luận</h3>
           <div class="block-options">
               <div class="block-options-item">
-                  <a href="{{route('admin.products.create')}}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
+                //Thêm 
+                  <a href="{{route('admin.comments.create')}}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
                       <i class="fa fa-plus"></i>
                   </a>
               </div>
@@ -43,46 +44,55 @@
           <!-- Table with data -->
           <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
-                  <tr>
-                      <th class="text-center" style="width: 100px;">ID</th>
-                      <th class="d-none d-sm-table-cell text-center">Added</th>
-                      <th class="d-none d-md-table-cell">Product</th>
-                      <th>Status</th>
-                      <th class="d-none d-sm-table-cell text-end">Value</th>
-                      <th class="text-center">Actions</th>
+                  <tr >
+                      <th style="text-align: center;" class="text-center" style="width: 100px;">ID</th>
+                      <th style="text-align: center;" class="d-none d-sm-table-cell text-center">Người dùng</th>
+                      <th style="text-align: center;" class="d-none d-md-table-cell">Sản phẩm</th>
+                      <!-- <th style="text-align: center;" class="d-none d-md-table-cell">Tiêu đề</th> -->
+                      <th style="text-align: center;" class="d-none d-md-table-cell">Bình luận</th>
+                      <th style="text-align: center;">Đánh giá</th>
+                      <!-- <th class="d-none d-sm-table-cell text-end">Value</th> -->
+                      <th style="text-align: center;" class="text-center">Actions</th>
                   </tr>
-              </thead>
+              </thead>   
               <tbody>
+                @foreach( $comments as $comment)
                   <tr>
                       <td class="text-center fs-sm">
-                          <a class="fw-semibold" href="#">
-                              <strong>PID.036535</strong>
-                          </a>
+                         {{$comment->id}}
                       </td>
-                      <td class="d-none d-sm-table-cell text-center fs-sm">02/04/2019</td>
-                      <td class="d-none d-md-table-cell fs-sm">
-                          <a class="fw-semibold" href="#">Product #35</a>
+                      <td class="d-none d-sm-table-cell text-center fs-sm">{{$comment->user->name}}</td>
+                      <td class="d-none d-md-table-cell fs-sm" style="text-align: center;">
+                          <a class="fw-semibold" href="#">{{$comment->product->name}}</a>
                       </td>
-                      <td>
-                          <span class="badge bg-success">Available</span>
+                      <!-- <td style="text-align: center;">
+                          <span  class="badge bg-success">{{$comment->title}}</span>
+                      </td> -->
+                      <td  style="text-align: center;">
+                          <strong>{{$comment->comment}}</strong>
                       </td>
-                      <td class="text-end d-none d-sm-table-cell fs-sm">
-                          <strong>$70,00</strong>
+                       <td  style="text-align: center;">
+                          <strong>{{$comment->rating}}</strong>
                       </td>
                       <td class="text-center fs-sm">
                           <div class="btn-group">
                               <!-- VIEW -->
-                              <a href="#" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="View">
+                              <!-- <a href="{{ route('admin.comments.edit', $comment->id) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="View">
                                   <i class="fa fa-fw fa-eye"></i>
-                              </a>
+                              </a> -->
                               <!-- DELETE -->
-                              <a href="javascript:void(0)" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Delete">
-                                  <i class="fa fa-fw fa-times text-danger"></i>
-                              </a>
+                               <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="post">
+                               @csrf
+                               @method('DELETE')
+                               <button type="submit" class="btn btn-sm btn-alt-secondary">
+                                            <i class="fa fa-fw fa-times text-danger"></i>
+                                        </button>
+                               </form>
+                             
                           </div>
                       </td>
                   </tr>
-                  
+                  @endforeach
               </tbody>
           </table>
       </div>
