@@ -26,6 +26,18 @@ class AuthRequest extends FormRequest
                 return $this->verifyOtpRules();
             case 'resetPassword':
                 return $this->resetPasswordRules();
+            case 'admin.postAdminLogin':
+                return $this->loginRules();
+            case 'admin.send-otp':
+                return $this->otpRules();
+            case 'admin.verify-otp.post':
+                return $this->verifyOtpRules();
+            case 'admin.reset-password.post':
+                return $this->resetPasswordRules();
+            case 'admin.api.profile.update':
+                return $this->profileRules();
+            case 'admin.api.profile.updatePassword':
+                return $this->updatePasswordRules();
             default:
                 return [];
         }
@@ -41,6 +53,15 @@ class AuthRequest extends FormRequest
             'password.min' => 'Mật khẩu phải chứa ít nhất :min ký tự.',
             'name.required' => 'Tên là bắt buộc.',
             'otp.required' => 'Mã OTP là bắt buộc.',
+            'phone.regex' => 'Số điện thoại phải có 10 chữ số và chỉ chứa các số từ 0-9.',
+            'avatar.image' => 'Avatar phải là một tệp hình ảnh.',
+            'avatar.mimes' => 'Avatar phải có định dạng jpeg, png, jpg, gif.',
+            'avatar.max' => 'Kích thước tệp Avatar không được vượt quá 2MB.',
+            'current_password.required' => 'Mật khẩu hiện tại là bắt buộc.',
+            'current_password.current_password' => 'Mật khẩu hiện tại không chính xác.',
+            'new_password.required' => 'Mật khẩu mới là bắt buộc.',
+            'new_password.min' => 'Mật khẩu mới phải chứa ít nhất :min ký tự.',
+            'new_password.confirmed' => 'Xác nhận mật khẩu không khớp.',
         ];
     }
     private function loginRules()
@@ -74,6 +95,23 @@ class AuthRequest extends FormRequest
     {
         return [
             'password' => 'required|confirmed|min:8',
+        ];
+    }
+    public function profileRules()
+    {
+    return [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $this->user()->id,
+        'phone' => 'nullable|regex:/^[0-9]{10}$/',
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ];  
+    }
+
+    public function updatePasswordRules()
+    {
+        return [
+            'current_password' => 'required|current_password',
+            'new_password' => 'required|string|min:8|confirmed',
         ];
     }
 }

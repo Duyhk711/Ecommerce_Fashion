@@ -7,6 +7,7 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\MessageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,3 +73,5 @@ Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('po
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
+// chatbox
+Route::post('/messages', [MessageController::class, 'store'])->name('message');

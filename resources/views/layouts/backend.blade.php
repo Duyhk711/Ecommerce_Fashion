@@ -451,10 +451,7 @@
                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                  <span><i class="far fa-fw fa-envelope me-1"></i> Inbox</span>
-                  <span class="badge bg-primary rounded-pill">3</span>
-                </a>
+                
                 <a class="dropdown-item" href="javascript:void(0)">
                   <i class="far fa-fw fa-file-alt me-1"></i> Invoices
                 </a>

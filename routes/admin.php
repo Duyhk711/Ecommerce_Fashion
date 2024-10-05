@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CatalogueController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\AuthenticationController;
@@ -39,7 +40,7 @@ Route::prefix('admin')
         Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
         Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
       
-        // Route::middleware('checkAdmin')->group(function (){
+         Route::middleware('checkAdmin')->group(function (){
           
         Route::view('dashboard', 'dashboard' )->name('dashboard');
         // ATTRIBUTE
@@ -68,13 +69,19 @@ Route::prefix('admin')
         Route::view('/profile','admin.auth.account-profile')->name('account-profile');
         Route::post('/profile',[AuthenticationController::class,'updateProfile'])->name('update-profile');
         Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
-      
+        
         // BANNER
         Route::resource('banners', BannerController::class);
         Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
         
         // VOUCHER
         Route::resource('vouchers', VoucherController::class);
-     
+
+        Route::post('/profile/update', [AuthenticationController::class, 'updateProfile'])->name('api.profile.update');
+        Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('api.profile.updatePassword');
+            
+        // MESSAGE
+        
+        
     });
-// });
+ });

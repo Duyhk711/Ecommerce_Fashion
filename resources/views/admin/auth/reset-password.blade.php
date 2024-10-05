@@ -33,17 +33,20 @@
                                     <div class="mb-4">
                                         <label for="password">Mật khẩu mới<span class="required">*</span></label>
                                         <div class="input-group input-group-lg">
-                                            <input type="password" name="password" placeholder="Nhập mật khẩu mới" id="password" class="form-control" required />
-                                            @error('password')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
+                                            <input type="password" name="password" placeholder="Nhập mật khẩu mới" id="password" class="form-control"/>
                                         </div>
+                                        {{-- @error('password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                        @enderror --}}
                                     </div>
                                     <div class="mb-4">
                                         <label for="password_confirmation">Xác nhận mật khẩu<span class="required">*</span></label>
                                         <div class="input-group input-group-lg">
-                                            <input type="password" name="password_confirmation" placeholder="Xác nhận mật khẩu" id="password_confirmation" class="form-control" required />
+                                            <input type="password" name="password_confirmation" placeholder="Xác nhận mật khẩu" id="password_confirmation" class="form-control"  />
                                         </div>
+                                        {{-- @error('password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                        @enderror --}}
                                     </div>
                                     <div class="text-center mb-4">
                                         <input type="submit" class="btn btn-hero btn-primary" value="Đặt lại mật khẩu" />
