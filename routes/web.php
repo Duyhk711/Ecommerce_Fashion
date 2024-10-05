@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\OrderController;
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
@@ -89,3 +87,5 @@ Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('po
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
 
+// chatbox
+Route::post('/messages', [MessageController::class, 'store'])->name('message');

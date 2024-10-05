@@ -9,8 +9,8 @@
     <meta name="robots" content="index, follow">
     <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('admin/css/dashmix.min.css') }}">
-    @yield('css')
-    @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
+    {{-- @yield('css')
+    @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js']) --}}
 </head>
 
 <body>

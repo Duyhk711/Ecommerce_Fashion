@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 class AuthenticationController extends Controller
 {
     protected $authService;
@@ -170,24 +171,35 @@ public function resetPasswordAdmin(AuthRequest $request)
     Session::forget('email');
     return redirect('/admin/login')->with('success', 'Mật khẩu đã được thay đổi thành công.');
 }
-
 public function updateProfile(AuthRequest $request)
 {
     $user = User::find(Auth::user()->id);
     $user->name = $request->input('name');
     $user->email = $request->input('email');
+    $user->phone = $request->input('phone');
+    $data = $request->except('avatar');
+    $data['avatar'] = $user->avatar;
+    if ($request->hasFile('avatar')) {
+        if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
+            Storage::delete('public/' . $user->avatar);
+        }
+        $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        $data['avatar'] = $avatarPath; 
+    }
+    $user->avatar = $data['avatar'];
     $user->save();
-    return redirect()->back()->with('success', 'Thông tin đã được cập nhật thành công!');
+    return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công!','avatar' => Storage::url($user->avatar)]);
 }
-public function updatePassword(Request $request)
+
+public function updatePassword(AuthRequest $request)
 {
-    
     $user = User::find(Auth::user()->id);
     if (!Hash::check($request->input('current_password'), $user->password)) {
-        return redirect()->back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
+        return response()->json(['success' => false, 'message' => 'Mật khẩu hiện tại không đúng'], 422);
     }
     $user->password = Hash::make($request->input('new_password'));
     $user->save();
-    return redirect()->back()->with('success', 'Mật khẩu đã được cập nhật thành công!');
+    return response()->json(['success' => true, 'message' => 'Mật khẩu đã được cập nhật thành công!']);
 }
+
 }
