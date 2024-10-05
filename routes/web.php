@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Client\CommentController;
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ProductController;
-use App\Http\Controllers\Client\UserController;
-use App\Http\Controllers\Client\ShopController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\MyOrderController;
+use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 // Trang chủ hiển thị 12 sản phẩm
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/product-detail/{id}', [ProductController::class, "getProductDetail"])->name('productDetail');
+Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 
 // order
 Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
@@ -51,7 +52,7 @@ Route::view('/blog', 'client.blog')->name('blog');
 
 // account
 Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
-Route::get('/my-order', [UserController::class, 'myOrder'])->name('my.order');
+Route::get('/my-order', [MyOrderController::class, 'myOrders'])->name('my.order');
 Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
 Route::get('/my-wishlist', [UserController::class, 'myWishlist'])->name('my.wishlist');
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
@@ -71,4 +72,6 @@ Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('po
 
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+
 

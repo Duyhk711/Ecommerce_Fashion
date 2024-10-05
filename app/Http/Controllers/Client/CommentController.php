@@ -25,4 +25,23 @@ class CommentController extends Controller
         
         return redirect()->back();
     }
+
+    public function update(Request $request, $id)
+    {
+        // Tìm comment theo id
+        $comment = Comment::find($id);
+        
+        if (!$comment) {
+            return redirect()->back()->with('error', 'Comment not found.');
+        }
+
+        // Cập nhật dữ liệu
+        $comment->title = $request->input('comment_title');
+        $comment->comment = $request->input('main_comment');
+        $comment->rating = $request->input('rating');
+        // $comment->updated_at = ;
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Đã sửa bình luận sản phẩm này');
+    }
 }
