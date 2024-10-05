@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Comment;
+use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
@@ -199,6 +200,16 @@ class ProductDetailService
         return $ratingsPercentage;
     }
 
+    public function isProductFavorite($productId)
+    {
+        if (Auth::check()) {
+            $userId = Auth::id();
+            return Favorite::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->exists();
+        }
+
+        return false; // Nếu người dùng chưa đăng nhập, trả về false
     public function getRatingsForRelatedProducts($relatedProducts)
     {
         // Lấy dữ liệu đánh giá cho từng sản phẩm

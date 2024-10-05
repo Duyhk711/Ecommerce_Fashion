@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -12,9 +13,18 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    protected $orderService;
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
     public function index()
     {
-        return view(self::PATH_VIEW.__FUNCTION__);
+        $orders = $this->orderService->getOrder();
+        // dd($orders);
+        return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
 
     /**
@@ -36,9 +46,21 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(String $id)
     {
-        // return view(self::PATH_VIEW.__FUNCTION__);
+        
+        $orderDetail = $this->orderService->getOrderDetail($id);
+        $user = $orderDetail->user; 
+        $voucher = $orderDetail->voucher; 
+        $address = $orderDetail->address; 
+        $items = $orderDetail->items;
+        $statusChanges = $orderDetail->statusChanges;
+        $paymentStatusMessage = '';
+        if ($orderDetail->payment_status == 'da_thanh_toan') {
+            $paymentStatusMessage = 'Đơn hàng đã được thanh toán.';
+        }
+
+        return view(self::PATH_VIEW.__FUNCTION__, compact('orderDetail', 'user','voucher','address','items','statusChanges', 'paymentStatusMessage'));
     }
 
     /**
@@ -52,9 +74,11 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, $id)
     {
-        //
+        $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+
+        return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
 
     /**

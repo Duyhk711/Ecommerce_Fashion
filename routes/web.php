@@ -4,13 +4,14 @@ use App\Http\Controllers\Admin\OrderController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\FavoriteController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
-use App\Http\Controllers\Client\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +44,8 @@ Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hó
 // cart
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.show');
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
 // page
 Route::view('/contact', 'client.contact')->name('contact');
@@ -56,12 +57,19 @@ Route::view('/blog', 'client.blog')->name('blog');
 Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
 Route::get('/my-order', [MyOrderController::class, 'myOrders'])->name('my.order');
 Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
-Route::get('/my-wishlist', [UserController::class, 'myWishlist'])->name('my.wishlist');
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 // Route xem chi tiết đơn hàng
 Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
 //Route hủy đơn hàng
 Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+
+
+//sản phẩm yêu thích
+Route::middleware('auth')->group(function () {
+    Route::get('/my-wishlist', [UserController::class, 'myWishlist'])->name('my.wishlist');
+    Route::post('/wishlist/add/{product_id}', [UserController::class, 'add'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{product_id}', [UserController::class, 'remove'])->name('wishlist.remove');
+});
 
 
 // address
@@ -80,3 +88,4 @@ Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('po
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+

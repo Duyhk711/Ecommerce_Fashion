@@ -54,12 +54,21 @@ Route::prefix('admin')
         //ACTIVATE
         Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
         Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
+       
         // PRODUCT
         Route::resource('products', ProductController::class);
 
+        // Route lấy danh sách các thuộc tính
+        Route::get('/get-attributes', [ProductController::class, 'getAttributes']);
+
+        // Route lấy giá trị thuộc tính theo ID của thuộc tính
+        Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']);
+        Route::post('/products/add', [ProductController::class, 'store']);
+
         // ORDER
         Route::resource('orders', OrderController::class);
-        Route::view('order/show', 'admin.orders.show')->name('order.show');
+        Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
+        Route::put('orders/update/{id}', [OrderController::class, 'update'])->name('order.update');
 
         // USER
         Route::view('users', 'admin.users.index')->name('users.index');
@@ -76,16 +85,5 @@ Route::prefix('admin')
 
         // VOUCHER
         Route::resource('vouchers', VoucherController::class);
-
-  
-
-
-
-
-
-
-
-
-
     });
 // });
