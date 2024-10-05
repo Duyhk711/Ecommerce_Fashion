@@ -621,6 +621,7 @@
     </footer>
     <!-- END Footer -->
   </div>
+  @yield('modal')
   <!-- END Page Container -->
   <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
