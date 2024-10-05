@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CatalogueController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\AuthenticationController;
@@ -41,54 +42,56 @@ Route::prefix('admin')
         Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
         Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
 
-        // Route::middleware('checkAdmin')->group(function (){
+      
+        Route::middleware('checkAdmin')->group(function (){
+          
+          Route::view('dashboard', 'dashboard' )->name('dashboard');
 
-        Route::view('dashboard', 'dashboard')->name('dashboard');
-        // ATTRIBUTE
-        Route::resource('attributes', AttributeController::class);
+          // ATTRIBUTE
+          Route::resource('attributes', AttributeController::class);
 
-        // ATTRIBUTE VALUE
-        Route::resource('attribute_values', AttributeValueController::class);
+          // ATTRIBUTE VALUE
+          Route::resource('attribute_values', AttributeValueController::class);
 
-        // CATALOGUES
-        Route::resource('catalogues', CatalogueController::class);
-        //ACTIVATE
-        Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
-        Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
-       
-        // PRODUCT
-        Route::resource('products', ProductController::class);
+          // CATALOGUES
+          Route::resource('catalogues', CatalogueController::class);
+          //ACTIVATE
+          Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
+          Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
 
-        // Route lấy danh sách các thuộc tính
-        Route::get('/get-attributes', [ProductController::class, 'getAttributes']);
+          // PRODUCT
+          Route::resource('products', ProductController::class);
 
-        // Route lấy giá trị thuộc tính theo ID của thuộc tính
-        Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']);
-        Route::post('/products/add', [ProductController::class, 'store']);
+          // Route lấy danh sách các thuộc tính
+          Route::get('/get-attributes', [ProductController::class, 'getAttributes']);
 
-        // ORDER
-        Route::resource('orders', OrderController::class);
-        Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
-        Route::put('orders/update/{id}', [OrderController::class, 'update'])->name('order.update');
+          // Route lấy giá trị thuộc tính theo ID của thuộc tính
+          Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']);
+          Route::post('/products/add', [ProductController::class, 'store']);
 
-        // USER
-        Route::view('users', 'admin.users.index')->name('users.index');
-        Route::view('users/show', 'admin.users.show')->name('users.show');
+          // ORDER
+          Route::resource('orders', OrderController::class);
+          Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
+          Route::put('orders/update/{id}', [OrderController::class, 'update'])->name('order.update');
 
-        // profile
-        Route::view('/profile', 'admin.auth.account-profile')->name('account-profile');
-        Route::post('/profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
-        Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
+          // USER
+          Route::view('users', 'admin.users.index')->name('users.index');
+          Route::view('users/show', 'admin.users.show')->name('users.show');
 
-        // BANNER
-        Route::resource('banners', BannerController::class);
-        Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
+          // profile
+          Route::view('/profile', 'admin.auth.account-profile')->name('account-profile');
+          Route::post('/profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
+          Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
 
-        // VOUCHER
-        Route::resource('vouchers', VoucherController::class);
+          // BANNER
+          Route::resource('banners', BannerController::class);
+          Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
 
-        //COMMENT
-        Route::resource('/comments', CommentController::class);
-        Route::get('admin/comments/{id}', [CommentController::class, 'show']);
-    });
-// });
+          // VOUCHER
+          Route::resource('vouchers', VoucherController::class);
+
+          //COMMENT
+          Route::resource('/comments', CommentController::class);
+          Route::get('admin/comments/{id}', [CommentController::class, 'show']);
+      });
+  });
