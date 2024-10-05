@@ -140,7 +140,13 @@
                                     <li><a href="{{route('register')}}"><i class="icon anm anm-user-al"></i>Register</a></li>
                                 @endif
                                 <li><a href="{{route('myaccount')}}"><i class="icon anm anm-user-cil"></i>My Account</a></li>
-                                <li><a href="{{route('wishlist')}}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                <li>
+                                    @auth
+                                        <a href="{{ route('my.wishlist') }}">
+                                            <i class="icon anm anm-heart-l"></i>Wishlist
+                                        </a>
+                                    @endauth
+                                </li>
                                 @if (Auth::check())
                                 <li><a href="{{route('logout')}}"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
                                 @endif
@@ -150,9 +156,18 @@
                 </div>
                 <!--End Account-->
                 <!--Wishlist-->
-                <div class="wishlist-link iconset" title="Wishlist"><a href="{{route('wishlist')}}"><i
-                            class="hdr-icon icon anm anm-heart-l"></i><span
-                            class="wishlist-count">0</span></a></div>
+                <div class="wishlist-link iconset" title="Wishlist">
+                    <a href="{{ route('my.wishlist') }}">
+                        <i class="hdr-icon icon anm anm-heart-l"></i>
+                        <span class="wishlist-count">
+                            @auth
+                                {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
+                            @else
+                                0
+                            @endauth
+                        </span>
+                    </a>
+                </div>
                 <!--End Wishlist-->
                 <!--Minicart-->
                 <div class="header-cart iconset" title="Cart">
@@ -160,10 +175,12 @@
                         data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i>
                         <span class="cart-count">
                             @auth
-                                {{-- Người dùng đã đăng nhập, lấy số lượng sản phẩm từ database --}}
-                                {{ \App\Models\Cart::where('user_id', auth()->id())->with('cartItems')->count() }}
+                                @php
+                                    $cart = \App\Models\Cart::where('user_id', auth()->id())->first();
+                                    $count = $cart ? $cart->items()->count() : 0; 
+                                @endphp
+                                {{ $count }}
                             @else
-                                {{-- Người dùng chưa đăng nhập, lấy số lượng sản phẩm từ session --}}
                                 {{ session()->has('cart') ? count(session('cart')) : 0 }}
                             @endauth
                         </span>

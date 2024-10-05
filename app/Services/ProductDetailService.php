@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Comment;
+use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
@@ -73,21 +74,22 @@ class ProductDetailService
         $canComment = null;
 
         if ($user) {
-            $hasPurchased = OrderItem::whereHas('order', function($query) use ($user) {
+            $hasPurchased = OrderItem::whereHas('order', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
-            })->whereHas('productVariant', function($query) use ($product) {
+            })->whereHas('productVariant', function ($query) use ($product) {
                 $query->where('product_id', $product->id);
             })->exists();
 
             if ($hasPurchased) {
                 $latestComment = Comment::where('user_id', $user->id)
-                                        ->where('product_id', $product->id)
-                                        ->latest()
-                                        ->first();
+                    ->where('product_id', $id)
+                    ->latest()
+                    ->first();
+
                 if ($latestComment) {
-                    $latestOrder = OrderItem::whereHas('order', function($query) use ($user) {
+                    $latestOrder = OrderItem::whereHas('order', function ($query) use ($user) {
                         $query->where('user_id', $user->id);
-                    })->whereHas('productVariant', function($query) use ($product) {
+                    })->whereHas('productVariant', function ($query) use ($product) {
                         $query->where('product_id', $product->id);
                     })->where('created_at', '>', $latestComment->created_at)->exists();
 
@@ -167,9 +169,9 @@ class ProductDetailService
                 $sumRatings += $comment->rating;
                 $validRatingsCount++;
             }
-    }
-    // Trả về trung bình đánh giá, hoặc 0 nếu không có rating hợp lệ
-    return $validRatingsCount > 0 ? $sumRatings / $validRatingsCount : 0;
+        }
+        // Trả về trung bình đánh giá, hoặc 0 nếu không có rating hợp lệ
+        return $validRatingsCount > 0 ? $sumRatings / $validRatingsCount : 0;
     }
 
     public function calculateRatingsPercentage($product)
@@ -199,6 +201,16 @@ class ProductDetailService
         return $ratingsPercentage;
     }
 
+    public function isProductFavorite($productId)
+    {
+        if (Auth::check()) {
+            $userId = Auth::id();
+            return Favorite::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->exists();
+        }
+
+        return false; // Nếu người dùng chưa đăng nhập, trả về false
     public function getRatingsForRelatedProducts($relatedProducts)
     {
         // Lấy dữ liệu đánh giá cho từng sản phẩm
