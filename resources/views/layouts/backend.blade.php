@@ -115,12 +115,12 @@
     <!-- Side Overlay-->
     <aside id="side-overlay">
       <!-- Side Header -->
-      <div class="bg-image" style="background-image: url('{{ asset('admin/media/various/bg_side_overlay_header.jpg') }}');">
+      <div class="bg-image" style="background-image: url('{{ asset('media/various/bg_side_overlay_header.jpg') }}');">
         <div class="bg-primary-op">
           <div class="content-header">
             <!-- User Avatar -->
             <a class="img-link me-1" href="javascript:void(0)">
-              <img class="img-avatar img-avatar48" src="{{ asset('admin/media/avatars/avatar10.jpg') }}" alt="">
+              <img class="img-avatar img-avatar48" src="{{ asset('media/avatars/avatar10.jpg') }}" alt="">
             </a>
             <!-- END User Avatar -->
 
@@ -629,3 +629,4 @@
 @yield('js')
 
 </html>
+  

@@ -37,6 +37,11 @@ class Order extends Model
         'customer_name',
         'customer_email',
         'customer_phone',
+        'address_line1',
+        'address_line2',
+        'city',
+        'district',
+        'ward',
         'total_price',
         'discount',
         'status',
@@ -62,11 +67,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-     
+
     public function comments()
     {
         return $this->hasMany(Comment::class, 'order_id', 'id'); // Điều chỉnh nếu cần thiết
     }
+  
     public function changeStatus($newStatus)
     {
         // Kiểm tra xem trạng thái mới có hợp lệ không

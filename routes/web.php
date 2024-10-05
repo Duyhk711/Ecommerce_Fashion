@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
@@ -56,6 +58,11 @@ Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
 Route::get('/my-order', [MyOrderController::class, 'myOrders'])->name('my.order');
 Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+// Route xem chi tiết đơn hàng
+Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
+//Route hủy đơn hàng
+Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+
 
 //sản phẩm yêu thích
 Route::middleware('auth')->group(function () {

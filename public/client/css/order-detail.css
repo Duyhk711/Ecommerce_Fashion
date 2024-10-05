@@ -1,0 +1,243 @@
+.order-detail-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    /* border: 1px solid #ddd; */
+    background-color: #f7f7f7;
+    border-radius: 20px;
+
+}
+.order-header {
+    margin-bottom: 20px;
+}
+.order-header h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    /* Tạo khoảng cách giữa tiêu đề và ngày mua hàng */
+}
+.order-items {
+    margin-top: 20px;
+
+}
+.order-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.back-button {
+    display: inline-block;
+    padding: 5px 10px;
+    /* Tăng padding để nút lớn hơn */
+    background-color: #d3d3d3;
+    /* Màu nền xám */
+    color: #000;
+    /* Màu chữ đen */
+    border: none;
+    /* Bỏ viền */
+    border-radius: 4px;
+    /* Bo góc */
+    text-decoration: none;
+    /* Bỏ gạch chân */
+    font-size: 14px;
+    /* Kích thước chữ */
+    transition: background-color 0.3s ease;
+    /* Hiệu ứng chuyển màu nền */
+    margin-bottom: 20px;
+    /* Tạo khoảng cách giữa nút và tiêu đề */
+}
+.back-button:hover {
+    background-color: #b0b0b0;
+    /* Màu nền khi hover */
+}
+.customer-info,
+.tracking-info {
+    width: 48%;
+}
+.order-total {
+    margin-top: 20px;
+    text-align: right;
+    /* Aligns everything to the right */
+}
+.order-total table {
+    width: auto;
+    /* Keeps table compact */
+    margin-left: auto;
+    /* Aligns the table to the right */
+    border-collapse: collapse;
+    font-size: 16px;
+}
+.order-total table td {
+    padding: 5px 0;
+    vertical-align: top;
+    padding-left: 100px;
+}
+.order-total table tr:first-child td {
+    padding-top: 10px;
+}
+.order-total table tr td:first-child {
+
+    text-align: left;
+    /* Keep the label text aligned left */
+}
+.order-total table tr td:last-child {
+    text-align: right;
+    color: #333;
+    font-weight: 500;
+}
+.order-total table tr.total-row td:first-child {
+    font-weight: bold;
+    font-size: 18px;
+    padding-top: 10px;
+}
+.order-total table tr.total-row td:last-child {
+    font-weight: bold;
+    font-size: 18px;
+    color: inherit;
+    /* Resets the color to the default */
+}
+.order-total .total-amount {
+    color: inherit;
+    /* Reset to default text color */
+}
+ .product-item {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 10px 0;
+     border-bottom: 1px dashed #ccc;
+    padding: 15px;
+        background-color: #fff;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        position: relative;
+            border: 1px solid #ccc;
+ }
+.product-image img {
+      width: 80px;
+      height: auto;
+      border-radius: 5px;
+  }
+.product-details p {
+    margin: 2px 0;
+    /* Maintain existing margins */
+    margin-left: -250px;
+
+    /* Move the content 10px to the left */
+}
+.product-details  {
+   margin-top: -55px;
+}
+
+.product-price {
+    text-align: right;
+}
+.product-price p {
+    margin: 2px 0;
+
+}
+.product-price span {
+    display: block;
+}
+.product-price .original-price {
+    text-decoration: line-through;
+    color: #888;
+}
+.product-price .sale-price {
+    color: #d32f2f;
+    font-weight: bold;
+}
+/* Styling for variant attributes (like color and size) */
+.variant-info {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+.variant-info span {
+    margin-right: 10px;
+}
+.variant-info .color-swatch {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+}
+/* Add space between product items */
+.product-item+.product-item {
+    margin-top: 10px;
+}
+.back-button {
+    display: inline-block;
+    /* Hiển thị như nút */
+    padding: 3px 8px;
+    /* Khoảng cách bên trong nhỏ hơn */
+    background-color: #d3d3d3;
+    /* Màu nền xám */
+    color: #000;
+    /* Màu chữ đen để dễ đọc */
+    border: none;
+    /* Bỏ viền */
+    border-radius: 4px;
+    /* Bo góc */
+    text-decoration: none;
+    /* Bỏ gạch chân */
+    font-size: 12px;
+    /* Kích thước chữ nhỏ hơn */
+    transition: background-color 0.3s ease;
+    /* Hiệu ứng chuyển màu nền */
+    margin-top: -5px;
+    /* Dịch nút lên trên */
+}
+.back-button:hover {
+    background-color: #b0b0b0;
+    /* Màu nền khi hover (tối hơn một chút) */
+}
+.product-item:not(:last-child) {
+    margin-bottom: 10px;
+    /* Đảm bảo có khoảng cách giữa các sản phẩm */
+}
+.product-item:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: 100%;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.5);
+    /* Đường gạch đứt mờ */
+    position: absolute;
+    bottom: -5px;
+    /* Đặt đường gạch đứt ở phía dưới cùng */
+    left: 0;
+}
+.cancel-item {
+    margin-top: -7px;
+    /* Khoảng cách trên nút */
+}
+.btn{
+    border-radius: 10px;
+    height: 30px;
+}
+.btn-cancel {
+    padding: 5px 10px;
+    /* Kích thước của nút */
+    font-size: 12px;
+    /* Kích thước chữ */
+    /* Thêm các thuộc tính khác nếu cần */
+}
+.soft-btn {
+    text-transform: uppercase;
+
+    padding: .35em .65em;
+    border-radius: 5px;
+       /* Bo tròn góc */
+    transition: background-color 0.3s, color 0.3s;
+       /* Hiệu ứng chuyển màu */
+
+}
+.order-link:hover svg path,
+.order-link:hover svg circle {
+    stroke: red;
+}
+
+.cancel-order:hover svg path {
+    fill: darkred;
+}
