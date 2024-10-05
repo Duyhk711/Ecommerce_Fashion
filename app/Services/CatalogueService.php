@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class CatalogueService
 {
     public function getAllCatalogues()
-    {
+    {   
         // Lấy các danh mục cha và kèm theo danh mục con (nếu có)
         return Catalogue::whereNull('parent_id') // Lấy các danh mục cha (parent_id = null)
             ->with('children') // Lấy các danh mục con

@@ -18,6 +18,16 @@ class Comment extends Model
         'rating'
     ];
     
+    public $timestamps = true;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($comment) {
+            $comment->updated_at = null; // Đặt giá trị null cho updated_at khi tạo mới
+        });
+    }
 
     public function user()
     {
