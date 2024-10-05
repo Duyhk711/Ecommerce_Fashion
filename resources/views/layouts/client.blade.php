@@ -20,11 +20,6 @@
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{{ asset('client/css/style-min.css') }}">
     <link rel="stylesheet" href="{{ asset('client/css/responsive.css') }}">
-    {{-- CSS order-detail --}}
-    <link rel="stylesheet" href="{{ asset('client/css/order-detail.css') }}">
-    {{-- link icon  --}}
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     @yield('css')
 </head>
 
@@ -95,7 +90,7 @@
          <!-- Main JS -->
          <!-- Plugins JS -->
          <script src="{{ asset('client/js/plugins.js') }}"></script>
-
+         
          <script src="{{ asset('client/js/main.js') }}"></script>
          @yield('js')
 

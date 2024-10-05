@@ -43,9 +43,9 @@ class ProductController extends Controller
                 'averageRating' => $averageRating,
                 'totalRatings' => $product->comments->count(),
                 'ratingsPercentage' => $ratingsPercentage,
-                'isFavorite' => $isFavorite
-                'relatedRatings' => $relatedRatings,
-            ]   
+                'isFavorite' => $isFavorite,
+                'relatedRatings' => $relatedRatings
+            ]
         );
     }
     

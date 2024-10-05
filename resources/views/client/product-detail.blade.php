@@ -3,21 +3,27 @@
 @section('css')
     <style>
         .swatch.disabled {
-            position: relative; /* Để định vị gạch chéo */
+            position: relative;
+            /* Để định vị gạch chéo */
             opacity: 0.5;
             cursor: not-allowed;
             pointer-events: none;
         }
 
         .swatch.disabled::after {
-            content: ''; /* Tạo một phần tử gạch chéo */
+            content: '';
+            /* Tạo một phần tử gạch chéo */
             position: absolute;
-            top: 50%; /* Căn giữa theo chiều dọc */
+            top: 50%;
+            /* Căn giữa theo chiều dọc */
             left: -20%;
             right: -20%;
-            height: 2px; /* Độ dày của gạch chéo */
-            background-color: rgb(0, 0, 0); /* Màu gạch chéo */
-            transform: rotate(45deg); /* Gạch chéo */
+            height: 2px;
+            /* Độ dày của gạch chéo */
+            background-color: rgb(0, 0, 0);
+            /* Màu gạch chéo */
+            transform: rotate(45deg);
+            /* Gạch chéo */
             transform-origin: center;
         }
     </style>
@@ -272,7 +278,7 @@
                         <!-- End Product Form -->
 
                         <!-- Product Info -->
-                       
+
                         <div class="shippingMsg featureText"><i class="icon anm anm-clock-r"></i>Estimated Delivery
                             Between <b id="fromDate">Wed, May 1</b> and <b id="toDate">Tue, May 7</b>.</div>
                         <div class="freeShipMsg featureText" data-price="199"><i class="icon anm anm-truck-r"></i>Spent
@@ -366,7 +372,7 @@
                     <h3 class="tabs-ac-style d-md-none" rel="reviews">Đánh giá</h3>
                     <div id="reviews" class="tab-content">
                         <div class="row">
-                            
+
                             {{-- đánh giá trung bình --}}
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                                 <div class="ratings-main">
@@ -408,63 +414,68 @@
                                     </div>
                                 </div>
                             </div>
-                           {{-- Danh sách bình luận --}}
-                           <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
-                            <div class="spr-reviews">
-                                <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
-                                <div class="review-inner">
-                                    @foreach ($comments['comments'] as $comment)
-                                        <div class="spr-review d-flex w-100">
-                                            <div class="spr-review-profile " style="width: 50px">
-                                                <img class="" 
-                                                    data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                    src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                    alt="" />
-                                            </div>
-                                            <div class="spr-review-content flex-grow-1">
-                                                <div class="d-flex justify-content-between flex-column mb-2">
-                                                    <div class="title-review d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <h5 class="spr-review-header-title text-transform-none mb-0 d-inline">
-                                                                {{ $comment['user_name'] }} 
-                                                            </h5> - {{ $comment['created_at'] ? $comment['updated_at']->format('d-m-Y') : $comment['created_at']->format('d-m-Y') }}
-                                                        </div>
-                                                        <div>
-                                                            <span class="product-review spr-starratings m-0">
-                                                                @if ($comment['rating'] == 'Không đánh giá')
-                                                                    <span class="reviewLink">Không có đánh giá</span>
-                                                                @else
-                                                                    <span class="reviewLink">
-                                                                        @for ($i = 0; $i < 5; $i++)
-                                                                            <i
-                                                                                class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
-                                                                        @endfor
-                                                                    </span>
-                                                                @endif
-                                                            </span>
+                            {{-- Danh sách bình luận --}}
+                            {{-- <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
+                                <div class="spr-reviews">
+                                    <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
+                                    <div class="review-inner">
+                                        @foreach ($comments['comments'] as $comment)
+                                            <div class="spr-review d-flex w-100">
+                                                <div class="spr-review-profile " style="width: 50px">
+                                                    <img class=""
+                                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                                        alt="" />
+                                                </div>
+                                                <div class="spr-review-content flex-grow-1">
+                                                    <div class="d-flex justify-content-between flex-column mb-2">
+                                                        <div
+                                                            class="title-review d-flex align-items-center justify-content-between">
+                                                            <div>
+                                                                <h5
+                                                                    class="spr-review-header-title text-transform-none mb-0 d-inline">
+                                                                    {{ $comment['user_name'] }}
+                                                                </h5> -
+                                                                {{ $comment['created_at'] ? $comment['updated_at']->format('d-m-Y') : $comment['created_at']->format('d-m-Y') }}
+                                                            </div>
+                                                            <div>
+                                                                <span class="product-review spr-starratings m-0">
+                                                                    @if ($comment['rating'] == 'Không đánh giá')
+                                                                        <span class="reviewLink">Không có đánh giá</span>
+                                                                    @else
+                                                                        <span class="reviewLink">
+                                                                            @for ($i = 0; $i < 5; $i++)
+                                                                                <i
+                                                                                    class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
+                                                                            @endfor
+                                                                        </span>
+                                                                    @endif
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <b class="head-font">{{ $comment['title'] }}</b>
+                                                    <p class="spr-review-body text-truncate"
+                                                        style="max-width: 350px; word-wrap: break-word;">
+                                                        {{ $comment['body'] }}
+                                                    </p>
                                                 </div>
-                                                <b class="head-font">{{ $comment['title'] }}</b>
-                                                <p class="spr-review-body text-truncate" style="max-width: 350px; word-wrap: break-word;">
-                                                    {{ $comment['body'] }}
-                                                </p>                                                                                                                                                  
                                             </div>
-                                        </div>
-                                    @endforeach
-                            
-                                    <!-- Hiển thị nút xem tất cả bình luận nếu có nhiều hơn 2 -->
-                                    @if ($comments['total_comments'] > 2)
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-secondary " data-bs-toggle="modal" data-bs-target="#allCommentsModal">
-                                            Xem tất cả({{ $comments['total_comments'] }})
-                                        </button>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
+                                        @endforeach
 
-                            </div>
+                                        <!-- Hiển thị nút xem tất cả bình luận nếu có nhiều hơn 2 -->
+                                        @if ($comments['total_comments'] > 2)
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-secondary " data-bs-toggle="modal"
+                                                    data-bs-target="#allCommentsModal">
+                                                    Xem tất cả({{ $comments['total_comments'] }})
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            </div> --}}
                             {{-- end list comment --}}
 
                             {{-- Form gửi bình luận --}}
@@ -594,7 +605,8 @@
                                     <div class="product-details text-center">
                                         <div class="product-vendor">{{ $product->catalogue->name }}</div>
                                         <div class="product-name">
-                                            <a href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
+                                            <a
+                                                href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
                                         </div>
                                         <div class="product-price">
                                             @if ($product->price_sale == 0)
@@ -610,7 +622,10 @@
                                         <div class="product-review">
                                             @php
                                                 // Lấy đánh giá tương ứng cho sản phẩm hiện tại
-                                                $relatedRating = $relatedRatings->firstWhere('product_id', $product->id);
+                                                $relatedRating = $relatedRatings->firstWhere(
+                                                    'product_id',
+                                                    $product->id,
+                                                );
                                                 // Nếu không có đánh giá thì thiết lập mặc định là 0
                                                 $averageRating = $relatedRating['average_rating'] ?? 0;
                                             @endphp
@@ -618,12 +633,13 @@
                                             <div class="related-product">
                                                 <div class="star-rating">
                                                     @for ($i = 0; $i < 5; $i++)
-                                                        <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                        <i
+                                                            class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
                                                     @endfor
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
                                             available...</p>
                                         <ul class="variants-clr swatches">
@@ -643,7 +659,7 @@
                     </div>
 
                     <div class="view-collection text-center mt-4 mt-md-5">
-                        <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">View Collection</a>
+                        <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">Xem thêm sản phẩm</a>
                     </div>
                 </div>
                 <!--End Product Grid-->
@@ -657,7 +673,8 @@
 @section('modal')
 
     <!-- Display more comments -->
-    <div class="modal fade" id="allCommentsModal" tabindex="-1"  aria-labelledby="allCommentsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="allCommentsModal" tabindex="-1" aria-labelledby="allCommentsModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -668,28 +685,29 @@
                     @if (isset($comments['all_comments']) && !empty($comments['all_comments']))
                         @foreach ($comments['all_comments'] as $comment)
                             <div class="spr-review  w-100">
-                                <div class="row p-3" >
+                                <div class="row p-3">
                                     <div class="col-lg-1 mt-1 ">
-                                        <img class="blur-up lazyload rounded-circle" 
-                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                        alt="" width="80" height="80" />
+                                        <img class="blur-up lazyload rounded-circle"
+                                            data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                            src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
+                                            alt="" width="80" height="80" />
                                     </div>
                                     <div class="col-lg-7">
                                         <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }} <br>
-                                        @if ($comment['title'] != NULL)
-                                            <b>Tiêu đề: </b> {{$comment['title']}}
+                                        @if ($comment['title'] != null)
+                                            <b>Tiêu đề: </b> {{ $comment['title'] }}
                                         @endif
-                                        <p class="spr-review-body" style="overflow: hidden; max-width: 400px; word-wrap: break-word;">
+                                        <p class="spr-review-body"
+                                            style="overflow: hidden; max-width: 400px; word-wrap: break-word;">
                                             {{ $comment['body'] }}
                                         </p>
                                     </div>
                                     <div class="rating col-lg-4">
                                         @for ($i = 1; $i <= 5; $i++)
                                             @if ($i <= $comment['rating'])
-                                                <span class="anm anm-star text-warning" ></span> <!-- Sao đầy -->
+                                                <span class="anm anm-star text-warning"></span> <!-- Sao đầy -->
                                             @else
-                                                <span class="anm anm-star-o text-warning" ></span> <!-- Sao rỗng -->
+                                                <span class="anm anm-star-o text-warning"></span> <!-- Sao rỗng -->
                                             @endif
                                         @endfor
                                     </div>
@@ -707,20 +725,22 @@
     <!-- End display more comments -->
 
     {{-- Edit comment modal --}}
-    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h5>Chỉnh sửa bình luận</h5>
-                    <form id="editCommentForm" method="POST" 
-                    action="{{ isset($comment) ? route('comments.update', $comment['id']) : '#' }}">
+                    <form id="editCommentForm" method="POST"
+                        action="{{ isset($comment) ? route('comments.update', $comment['id']) : '#' }}">
                         @csrf
-                        @method('PUT') 
+                        @method('PUT')
                         <input type="hidden" name="comment_id" id="comment_id" value="">
                         <div class="form-group mb-3">
                             <label for="edit_comment_title">Tiêu đề</label>
-                            <input type="text" class="form-control" id="edit_comment_title" name="comment_title" required>
+                            <input type="text" class="form-control" id="edit_comment_title" name="comment_title"
+                                required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="edit_message">Nội dung</label>
@@ -748,7 +768,7 @@
                             <button type="submit" class="btn btn-primary">Cập nhật bình luận</button>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
@@ -1017,8 +1037,8 @@
                                             data-bs-target="#quickView">
                                             <img class="carousel-indicator-img"
                                                 data-src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
-                                                title="Product" />
+                                                src="{{ asset('client/images/products/product2-5.jpg') }}"
+                                                alt="product" title="Product" />
                                         </div>
                                     </div>
 
@@ -1209,7 +1229,7 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let selectedColorId = null;
@@ -1349,7 +1369,7 @@
                                 this.querySelector('span').textContent = 'Thêm vào sản phẩm yêu thích';
                             } else {
                                 this.classList.add('active');
-                                this.querySelector('span').textContent ='Xoá khỏi sản phẩm yêu thích' ;
+                                this.querySelector('span').textContent = 'Xoá khỏi sản phẩm yêu thích';
                             }
                         } else {
                             alert('Lỗi: ' + data.message);
@@ -1361,8 +1381,6 @@
             });
         });
     </script>
-
-
 
     {{-- select ảnh --}}
     <script>
@@ -1503,14 +1521,14 @@
 
     {{-- display edit modal --}}
     <script>
-        document.querySelectorAll('.edit-comment').forEach(function (element) {
-            element.addEventListener('click', function (event) {
+        document.querySelectorAll('.edit-comment').forEach(function(element) {
+            element.addEventListener('click', function(event) {
                 event.preventDefault();
                 const commentId = this.getAttribute('data-comment-id');
                 const commentTitle = this.getAttribute('data-comment-title');
                 const commentBody = this.getAttribute('data-comment-body');
                 const commentRating = this.getAttribute('data-comment-rating');
-                
+
                 // Điền thông tin vào modal
                 document.getElementById('comment_id').value = commentId;
                 document.getElementById('edit_comment_title').value = commentTitle;
@@ -1518,18 +1536,17 @@
 
                 // Thiết lập giá trị đánh giá
                 const starRating = document.querySelectorAll('input[name="rating"]');
-                starRating.forEach(function (input) {
+                starRating.forEach(function(input) {
                     input.checked = (input.value == commentRating);
                 });
 
                 // Cập nhật action cho form với comment ID
                 const form = document.getElementById('editCommentForm');
                 form.setAttribute('action', `/comments/${commentId}`);
-                
+
                 // Hiển thị modal
                 $('#editCommentModal').modal('show');
             });
         });
     </script>
-    
 @endsection
