@@ -59,6 +59,7 @@ Route::prefix('admin')
         // ORDER
         Route::resource('orders', OrderController::class);
         Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
+        Route::put('orders/update/{id}', [OrderController::class, 'update'])->name('order.update');
 
         // USER
         Route::view('users', 'admin.users.index')->name('users.index');

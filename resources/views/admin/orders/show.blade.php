@@ -18,17 +18,7 @@
             </a>
           </div>
           <div class="col-6 col-lg-3">
-            {{-- <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
-              <div class="block-content py-5">
-                <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
-                  <i class="fa fa-check text-xeco-dark"></i>
-                </div>
-                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Thanh toán
-                </p>
-              </div>
-            </a> --}}
-
+            @if ($orderDetail->payment_status == "cho_thanh_toan" && $orderDetail->status != "huy_don_hang")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -40,30 +30,157 @@
               </div>
             </a>
 
+            @elseif($orderDetail->payment_status == "da_thanh_toan" && $orderDetail->status != "huy_don_hang")
+              <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+                <div class="block-content py-5">
+                  <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
+                    <i class="fa fa-check text-xeco-dark"></i>
+                  </div>
+                  <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                    Đã thanh toán
+                  </p>
+                </div>
+              </a>
+              @elseif($orderDetail->payment_status == "cho_thanh_toan" && $orderDetail->status == "huy_don_hang")
+              <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+                <div class="block-content py-5">
+                  <div class="item rounded-circle bg-body mx-auto mb-3">
+                    <i class="fa fa-times text-muted"></i>
+                  </div>
+                  <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                    Đã hủy
+                  </p>
+                </div>
+              </a>
+              @elseif($orderDetail->payment_status == "da_thanh_toan" && $orderDetail->status == "huy_don_hang")
+              <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+                <div class="block-content py-5">
+                  <div class="item rounded-circle bg-body mx-auto mb-3">
+                    <i class="fa fa-times text-muted"></i>
+                  </div>
+                  <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                    Đã hủy
+                  </p>
+                </div>
+              </a>
+            @endif
           </div>
+
           <div class="col-6 col-lg-3">
+            @if ($orderDetail->status == "cho_xac_nhan")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
                   <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Trạng Thái
+                  Chờ xác nhận
                 </p>
               </div>
             </a>
-          </div>
-          <div class="col-6 col-lg-3">
+
+            @elseif($orderDetail->status == "da_xac_nhan")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
+                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Đã xác nhận
+                </p>
+              </div>
+            </a>
+
+            @elseif($orderDetail->status == "dang_chuan_bi")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
+                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Đang chuẩn bị
+                </p>
+              </div>
+            </a>
+
+            @elseif($orderDetail->status == "dang_van_chuyen" || $orderDetail->status == "hoan_thanh")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
+                  <i class="fa fa-check text-xeco-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Đơn hàng đã chuẩn bị xong
+                </p>
+              </div>
+            </a>
+
+            @elseif($orderDetail->status == "huy_don_hang")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-body mx-auto mb-3">
                   <i class="fa fa-times text-muted"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Giao hàng 
+                  Đã hủy
                 </p>
               </div>
             </a>
+            @endif
+          </div>
+
+          <div class="col-6 col-lg-3">
+
+            @if ($orderDetail->status == "huy_don_hang")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-body mx-auto mb-3">
+                  <i class="fa fa-times text-muted"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Đã hủy
+                </p>
+              </div>
+            </a>
+
+            @elseif($orderDetail->status == "dang_van_chuyen")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
+                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Đang vận chuyển
+                </p>
+              </div>
+            </a>
+            
+            @elseif($orderDetail->status == "hoan_thanh")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
+                  <i class="fa fa-check text-xeco-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Đã giao hàng
+                </p>
+              </div>
+            </a>
+
+            @elseif( $orderDetail->status != "hoan_thanh" ||$orderDetail->status != "dang_van_chuyen")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-body mx-auto mb-3">
+                  <i class="fa fa-times text-muted"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Giao hàng
+                </p>
+              </div>
+            </a>
+
+            @endif
+            
           </div>
         </div>
         <!-- END Quick Overview -->
@@ -78,8 +195,7 @@
               <table class="table table-borderless table-striped table-vcenter fs-sm">
                 <thead>
                   <tr>
-                    <th class="text-center" style="width: 130px;">Mã sản phẩm</th>
-                    <th>Tên sản phẩm</th>
+                    <th>Sản phẩm</th>
                     <th class="text-center">Số lượng</th>
                     <th class="text-end" style="width: 15%;">Đơn giá</th>
                     <th class="text-end" style="width: 15%;">Tổng đơn giá</th>
@@ -88,36 +204,53 @@
                 <tbody>
                   @foreach ($items as $item)
                     <tr>
-                      <td class="text-center"><a href="be_pages_ecom_product_edit.html"><strong>{{$item->productVariant->sku}}</strong></a></td>
-                      <td>
-                        <a href="{{route('productDetail',$item->productVariant->product->slug)}}"><strong>{{$item->product_name}}</strong></a><br>
-                          @foreach ($item->productVariant->variantAttributes as $variantAttribute)
-                            @if ($variantAttribute->attribute->name == 'Size') 
-                                Loại: {{ $variantAttribute->attributeValue->value }}  ,
-                            @endif
-                          @endforeach
-                          @foreach ($item->productVariant->variantAttributes as $variantAttribute)
-                            @if ($variantAttribute->attribute->name == 'Color') 
-                               {{ $variantAttribute->attributeValue->value }}
-                            @endif
-                          @endforeach
-                          </td>
+                      <td>                      
+                          <div class="d-flex">
+                            <div>
+                              <img src="{{$item->productVariant->image}}" width="70px" alt="">
+                            </div>
+                            <div class="mx-2">
+                              <a class="text-black fs-5"  href="{{route('productDetail',$item->productVariant->product->slug)}}"><strong>{{$item->product_name}}</strong></a><br>
+                              <strong style="font-size: 13px"> {{$item->productVariant->sku}}</strong> <br>
+                              <p style="font-size: 13px"> 
+                              @foreach ($item->productVariant->variantAttributes as $variantAttribute)
+                                  @if ($variantAttribute->attribute->name == 'Size') 
+                                      {{ $variantAttribute->attributeValue->value }}  ,
+                                  @endif
+                                @endforeach
+                                @foreach ($item->productVariant->variantAttributes as $variantAttribute)
+                                  @if ($variantAttribute->attribute->name == 'Color') 
+                                    {{ $variantAttribute->attributeValue->value }}
+                                  @endif
+                                @endforeach
+                              </p> 
+                              </div>
+                          </div>
+                      </td>
                       <td class="text-center"><strong>{{$item->quantity}}</strong></td>
                       <td class="text-end">{{ number_format(($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} đ</td>
                       <td class="text-end">{{number_format($item->quantity * ($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} đ</td>
                     </tr>
                   @endforeach
                   <tr>
-                    <td colspan="4" class="text-end"><strong>Tổng đơn hàng:</strong></td>
+                    <td colspan="3" class="text-end"><strong>Tổng đơn hàng:</strong></td>
                     <td class="text-end">{{number_format(($orderDetail->total_price) *1000, 0, ',', '.')}}đ</td>
                   </tr>
                   <tr>
-                    <td colspan="4" class="text-end"><strong>Giảm giá:</strong></td>
+                    <td colspan="3" class="text-end"><strong>Giảm giá:</strong></td>
                     <td class="text-end">0 đ</td>
                   </tr>
                   <tr class="table-active">
-                    <td colspan="4" class="text-end"><strong>Tổng đã trả:</strong></td>
-                    <td class="text-end"><strong>0 đ </strong></td>
+                    <td colspan="3" class="text-end"><strong>Tổng đã trả:</strong></td>
+                    <td class="text-end">
+                      <strong>
+                          @if (!empty($paymentStatusMessage))
+                            {{number_format(($orderDetail->total_price) *1000, 0, ',', '.')}} đ
+                          @else
+                            0 đ
+                          @endif
+                      </strong>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -174,89 +307,68 @@
         <!-- Log Messages -->
         <div class="block block-rounded">
           <div class="block-header block-header-default">
-            <h3 class="block-title">Log Messages</h3>
+              <h3 class="block-title">Lịch sử</h3>
           </div>
           <div class="block-content">
-            <div class="table-responsive">
-              <table class="table table-borderless table-striped table-vcenter fs-sm">
-                <tbody>
-                  <tr>
-                    <td class="fs-base" style="width: 80px;">
-                      <span class="badge bg-primary">Order</span>
-                    </td>
-                    <td style="width: 220px;">
-                      <span class="fw-semibold">January 17, 2020 - 18:00</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)">Support</a>
-                    </td>
-                    <td class="text-success"><strong>Order Completed</strong></td>
-                  </tr>
-                  <tr>
-                    <td class="fs-base">
-                      <span class="badge bg-primary">Order</span>
-                    </td>
-                    <td>
-                      <span class="fw-semibold">January 17, 2020 - 17:36</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)">Support</a>
-                    </td>
-                    <td class="text-warning"><strong>Preparing Order</strong></td>
-                  </tr>
-                  <tr>
-                    <td class="fs-base">
-                      <span class="badge bg-success">Payment</span>
-                    </td>
-                    <td>
-                      <span class="fw-semibold">January 16, 2020 - 18:10</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)">John Parker</a>
-                    </td>
-                    <td class="text-success"><strong>Payment Completed</strong></td>
-                  </tr>
-                  <tr>
-                    <td class="fs-base">
-                      <span class="badge bg-danger">Email</span>
-                    </td>
-                    <td>
-                      <span class="fw-semibold">January 16, 2020 - 10:35</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)">Support</a>
-                    </td>
-                    <td class="text-danger"><strong>Missing payment details. Email was sent and awaiting for payment before processing</strong></td>
-                  </tr>
-                  <tr>
-                    <td class="fs-base">
-                      <span class="badge bg-primary">Order</span>
-                    </td>
-                    <td>
-                      <span class="fw-semibold">January 15, 2020 - 14:59</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)">Support</a>
-                    </td>
-                    <td>All products are available</td>
-                  </tr>
-                  <tr>
-                    <td class="fs-base">
-                      <span class="badge bg-primary">Order</span>
-                    </td>
-                    <td>
-                      <span class="fw-semibold">January 15, 2020 - 14:29</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)">John Parker</a>
-                    </td>
-                    <td>Order Submitted</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+              <div class="table-responsive">
+                  <table class="table table-borderless table-striped table-vcenter fs-sm">
+                      <tbody>
+                          @if($statusChanges->isNotEmpty())
+                              @foreach($statusChanges as $change)
+                                  <tr>
+                                      <td class="fs-base" style="width: 80px;">
+                                          <span class="badge bg-primary">Order</span>
+                                      </td>
+                                      <td style="width: 220px;">
+                                          <span class="fw-semibold">{{ $change->created_at->format('F d, Y - H:i') }}</span>
+                                      </td>
+                                      <td>
+                                          <a href="javascript:void(0)">{{ $change->user->name ?? 'Support' }}</a>
+                                      </td>
+                                      <td class="{{ $change->new_status == 'hoan_thanh' ? 'text-success' : ($change->new_status == 'huy_don_hang' ? 'text-danger' : 'text-warning') }}">
+                                          <strong>
+                                              @if($change->new_status == 'cho_xac_nhan')
+                                                  Đơn hàng đã đặt thành công
+                                              @elseif($change->new_status == 'da_xac_nhan')
+                                                  Đơn hàng đã được xác nhận
+                                              @elseif($change->new_status == 'dang_chuan_bi')
+                                                  Đơn hàng đang được chuẩn bị giao cho đơn vị vận chuyển
+                                              @elseif($change->new_status == 'dang_van_chuyen')
+                                                  Đơn hàng đang được vận chuyển
+                                              @elseif($change->new_status == 'hoan_thanh')
+                                                  Đơn hàng đã giao thành công
+                                              @elseif($change->new_status == 'huy_don_hang')
+                                                  Đơn hàng đã bị hủy
+                                              @endif
+                                          </strong>
+                                      </td>
+                                  </tr>
+                              @endforeach
+                          @endif
+                          @if(!empty($paymentStatusMessage))
+                                <tr>
+                                  <td class="fs-base" style="width: 80px;">
+                                      <span class="badge bg-success">Payment</span>
+                                  </td>
+                                  <td style="width: 220px;">
+                                      <span class="fw-semibold">{{ $orderDetail->updated_at->format('F d, Y - H:i') }}</span>
+                                  </td>
+                                  <td>
+                                      <a href="javascript:void(0)">{{ $user->name}}</a>
+                                  </td>
+                                  <td class="text-success">
+                                    
+                                      <strong>{{ $paymentStatusMessage }}</strong>
+                                    
+                                  </td>
+                                </tr>
+                            @endif
+                      </tbody>
+                  </table>
+              </div>
           </div>
-        </div>
+      </div>
+      
         <!-- END Log Messages -->
       </div>
       <!-- END Page Content -->

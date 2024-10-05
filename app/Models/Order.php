@@ -85,4 +85,9 @@ class Order extends Model
         // Lưu lại thay đổi
         $this->save(); 
     }
+
+    public function statusChanges()
+    {
+        return $this->hasMany(OrderStatusChange::class);
+    }
 }

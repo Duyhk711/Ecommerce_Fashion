@@ -23,6 +23,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = $this->orderService->getOrder();
+        // dd($orders);
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
 
@@ -47,12 +48,19 @@ class OrderController extends Controller
      */
     public function show(String $id)
     {
+        
         $orderDetail = $this->orderService->getOrderDetail($id);
         $user = $orderDetail->user; 
         $voucher = $orderDetail->voucher; 
         $address = $orderDetail->address; 
         $items = $orderDetail->items;
-        return view(self::PATH_VIEW.__FUNCTION__, compact('orderDetail', 'user','voucher','address','items',));
+        $statusChanges = $orderDetail->statusChanges;
+        $paymentStatusMessage = '';
+        if ($orderDetail->payment_status == 'da_thanh_toan') {
+            $paymentStatusMessage = 'Đơn hàng đã được thanh toán.';
+        }
+
+        return view(self::PATH_VIEW.__FUNCTION__, compact('orderDetail', 'user','voucher','address','items','statusChanges', 'paymentStatusMessage'));
     }
 
     /**
@@ -66,9 +74,11 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, $id)
     {
-        //
+        $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+
+        return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
 
     /**
