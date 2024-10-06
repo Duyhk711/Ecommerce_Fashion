@@ -454,12 +454,14 @@
                                 <ul class="pagination justify-content-center">
                                     @if (!$products->onFirstPage())
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->url(1) }}"
+                                            <a class="page-link"
+                                                href="{{ $products->appends(request()->except('page'))->url(1) }}"
                                                 aria-label="Trang đầu">&laquo;</a>
                                             <!-- Trang đầu -->
                                         </li>
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->previousPageUrl() }}"
+                                            <a class="page-link"
+                                                href="{{ $products->appends(request()->except('page'))->previousPageUrl() }}"
                                                 aria-label="Trang trước">&lt;</a>
                                             <!-- Trang trước -->
                                         </li>
@@ -485,19 +487,22 @@
                                     <!-- Hiển thị các trang -->
                                     @for ($i = $start; $i <= $end; $i++)
                                         <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $products->url($i) }}">{{ $i }}</a>
+                                            <a class="page-link"
+                                                href="{{ $products->appends(request()->except('page'))->url($i) }}">{{ $i }}</a>
                                         </li>
                                     @endfor
 
 
                                     @if ($products->hasMorePages())
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->nextPageUrl() }}"
+                                            <a class="page-link"
+                                                href="{{ $products->appends(request()->except('page'))->nextPageUrl() }}"
                                                 aria-label="Trang tiếp">&gt;</a>
                                             <!-- Trang tiếp -->
                                         </li>
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->url($lastPage) }}"
+                                            <a class="page-link"
+                                                href="{{ $products->appends(request()->except('page'))->url($lastPage) }}"
                                                 aria-label="Trang cuối">&raquo;</a>
                                             <!-- Trang cuối -->
                                         </li>

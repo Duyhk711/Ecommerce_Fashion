@@ -210,6 +210,7 @@ class ProductDetailService
         }
 
         return false; // Nếu người dùng chưa đăng nhập, trả về false
+    }
     public function getRatingsForRelatedProducts($relatedProducts)
     {
         // Lấy dữ liệu đánh giá cho từng sản phẩm
@@ -222,3 +223,4 @@ class ProductDetailService
         });
     }
 }
+
