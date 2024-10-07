@@ -130,7 +130,7 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h3 class="title mb-3">Shipping Address</h3>
                                             @auth
-                                                @if (Auth::check())
+                                                @if (Auth::check() && !$dataAddress->isEmpty())
                                                     <a style="padding-bottom: 16px" data-bs-toggle="offcanvas"
                                                         href="#offcanvasRight" aria-controls="offcanvasRight">
                                                         Thay đổi
@@ -211,7 +211,7 @@
                                                         value="{{ $address == '' ? '' : $address->address_line2 }}">
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <div class="form-group col-md-12 col-lg-12 mb-0">
                                                     <div class="checkout-tearm customCheckbox">
                                                         <input id="checkout_tearm" name="tearm" type="checkbox"
@@ -219,7 +219,7 @@
                                                         <label for="checkout_tearm"> Save address to my account</label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </fieldset>
                                     </div>
                                 </div>
@@ -252,38 +252,36 @@
                                                                 $total = 0;
                                                             @endphp
                                                             <input type="hidden" name="cartItem"
-                                                                value="{{ $dataCart }}">
+                                                                value="{{ json_encode($dataCart) }}">
                                                             @foreach ($dataCart as $item)
                                                                 <tr>
                                                                     <td class="text-start"><a
-                                                                            href="{{ route('productDetail', $item->product_variant_id) }}"
+                                                                            href="{{ route('productDetail', $item['product_variant_id']) }}"
                                                                             class="thumb"><img
                                                                                 class="rounded-0 blur-up lazyload"
-                                                                                data-src="{{ $item->productVariant->image }}"
-                                                                                src="{{ $item->productVariant->image }}"
-                                                                                alt="product" title="product"
-                                                                                width="120" height="170" /></a></td>
+                                                                                data-src="{{ $item['image'] }}"
+                                                                                src="{{ $item['image'] }}" alt="product"
+                                                                                title="product" width="120"
+                                                                                height="170" /></a></td>
                                                                     <td class="text-start proName">
                                                                         <div class="list-view-item-title">
                                                                             <a href="product-layout1.html">
-                                                                                {{ $item->productVariant->product->name }}
+                                                                                {{ $item['product_name'] ?? 'Sản phẩm không xác định' }}
                                                                             </a>
                                                                         </div>
                                                                         <div class="cart-meta-text">
-                                                                            @foreach ($item->productVariant->variantAttributes as $attribute)
-                                                                                {{ $attribute->attributeValue->attribute->name }}:{{ $attribute->attributeValue->value }}<br>
-                                                                            @endforeach
+                                                                            {{ $item['variant_attributes'] ?? 'Không có thuộc tính' }}
                                                                         </div>
                                                                     </td>
-                                                                    <td class="text-center">{{ $item->quantity }}</td>
+                                                                    <td class="text-center">{{ $item['quantity'] }}</td>
                                                                     <td class="text-center">
-                                                                        {{ $item->price }}đ
+                                                                        {{ isset($item['price']) ? number_format($item['price'], 0, ',', '.') . ' VND' : 'Giá không xác định' }}
                                                                     </td>
                                                                     @php
-                                                                        $total += $item->price * $item->quantity;
+                                                                        $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
-                                                                        <strong>{{ $item->price * $item->quantity }}đ</strong>
+                                                                        <strong>{{ $item['price'] * $item['quantity'] }}đ</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -397,9 +395,10 @@
                                                                     data-bs-target="#collapseOne" aria-expanded="true"
                                                                     aria-controls="collapseOne">
                                                                     <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio1" value="1"
-                                                                            name="payment" type="radio" class="radio"
-                                                                            checked="checked" />
+                                                                        <input id="paymentRadio1"
+                                                                            value="THANH_TOAN_ONLINE"
+                                                                            name="payment_method" type="radio"
+                                                                            class="radio" checked="checked" />
                                                                         <label for="paymentRadio1" class="mb-0">Pay with
                                                                             credit card</label>
                                                                     </span>
@@ -476,63 +475,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="accordion-item card mb-2">
-                                                            <div class="card-header" id="headingTwo">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseTwo" aria-expanded="false"
-                                                                    aria-controls="collapseTwo">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio2" value="2"
-                                                                            name="payment" type="radio"
-                                                                            class="radio" />
-                                                                        <label for="paymentRadio2" class="mb-0">Pay with
-                                                                            Paypal</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseTwo" class="accordion-collapse collapse"
-                                                                aria-labelledby="headingTwo"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <p>Pay via PayPal you can pay with your credit card if
-                                                                        you
-                                                                        don't have a PayPal account.</p>
-                                                                    <div class="input-group mb-0 d-flex">
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="paypal@example.com"
-                                                                            required="">
-                                                                        <button class="btn btn-primary" type="submit">Pay
-                                                                            99.00 USD</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="accordion-item card mb-2">
-                                                            <div class="card-header" id="headingThree">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseThree" aria-expanded="false"
-                                                                    aria-controls="collapseThree">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio3" value="3"
-                                                                            name="payment" type="radio"
-                                                                            class="radio" />
-                                                                        <label for="paymentRadio3" class="mb-0">Cheque
-                                                                            Payment</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseThree" class="accordion-collapse collapse"
-                                                                aria-labelledby="headingThree"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <p>Please send your cheque to Store Name, Store Street,
-                                                                        Store Town, Store State / County, Store Postcode.
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="accordion-item card mb-0">
                                                             <div class="card-header" id="headingFour">
                                                                 <button class="card-link" type="button"
@@ -540,11 +482,11 @@
                                                                     data-bs-target="#collapseFour" aria-expanded="false"
                                                                     aria-controls="collapseFour">
                                                                     <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio4" value="4"
-                                                                            name="payment" type="radio"
+                                                                        <input id="paymentRadio4" value="COD"
+                                                                            name="payment_method" type="radio"
                                                                             class="radio" />
-                                                                        <label for="paymentRadio4" class="mb-0">Cash On
-                                                                            Delivery</label>
+                                                                        <label for="paymentRadio4" class="mb-0">Thanh
+                                                                            toán khi nhận hành</label>
                                                                     </span>
                                                                 </button>
                                                             </div>
@@ -602,8 +544,9 @@
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">$311.00</b></span>
+                                                            class="money">{{ $total }}đ</b></span>
                                                 </div>
+                                                <input type="hidden" value="{{ $total }}" name="total_price">
 
                                                 <button type="submit" id="cartCheckout"
                                                     class="btn btn-lg my-4 checkout w-100">Đặt hàng</button>
@@ -671,6 +614,23 @@
     </div>
 @endsection
 @section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function() {
+                    // Điều hướng về trang chủ sau khi thông báo thành công
+                    window.location.href = '/';
+                });
+            @endif
+
+        })
+    </script>
     <script>
         $(document).ready(function() {
             // Thêm lớp active cho tab hiện tại
