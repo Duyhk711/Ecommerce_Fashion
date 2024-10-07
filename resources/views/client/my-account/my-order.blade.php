@@ -1,5 +1,12 @@
 @extends('client.my-account')
 
+@section('css')
+    {{-- CSS order-detail --}}
+    <link rel="stylesheet" href="{{ asset('client/css/order-detail.css') }}">
+    {{-- link icon  --}}
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@endsection
+
 @section('my-order')
     <div>
         <div class="orders-card mt-0 h-100">
@@ -32,21 +39,34 @@
                                 </td>
                                 {{-- Trạng thái đơn hàng với màu sắc --}}
                                 <td>
-                                    <span
-                                        class="badge text-bg
-                                                @if ($item->status == 'Chờ xác nhận') bg-secondary text-dark
-                                                @elseif($item->status == 'Đang chuẩn bị') bg-secondary
-                                                @elseif($item->status == 'Đã chuẩn bị') bg-warning text-dark
-                                                @elseif($item->status == 'Đang vận chuyển') bg-primary
-                                                @elseif($item->status == 'Đã giao hàng') bg-success 
-                                                @elseif($item->status == 'Đơn hàng đã hủy') bg-danger @endif">
-                                        {{ $item->status }}
+                                    @php
+                                        $statusMapping = [
+                                            'cho_xac_nhan' => 'Chờ xác nhận',
+                                            'da_xac_nhan' => 'Đã xác nhận',
+                                            'dang_chuan_bi' => 'Đang chuẩn bị',
+                                            'dang_van_chuyen' => 'Đang vận chuyển',
+                                            'hoan_thanh' => 'Đã giao hàng',
+                                            'huy_don_hang' => 'Đơn hàng đã hủy'
+                                        ];
+                                        $badgeColor = [
+                                            'cho_xac_nhan' => 'bg-warning',    
+                                            'da_xac_nhan' => 'bg-info',        
+                                            'dang_chuan_bi' => 'bg-primary',   
+                                            'dang_van_chuyen' => 'bg-secondary',
+                                            'hoan_thanh' => 'bg-success',      
+                                            'huy_don_hang' => 'bg-danger'    
+                                        ];
+                                        $currentStatus = $item->status;
+                                    @endphp
+                                    <span class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
+                                        {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                     </span>
-
                                 </td>
                                 {{-- Trạng thái thanh toán --}}
-                                <td><span
-                                        class="badge rounded-pill bg-success custom-badge">{{ ucfirst($item->payment_status) }}</span>
+                                <td>
+                                    <span
+                                        class="badge rounded-pill bg-success custom-badge">{{ ucfirst($item->payment_method) }}
+                                    </span>
                                 </td>
                                 {{-- Cột hành động: Nút đánh giá hoặc chi tiết đơn hàng --}}
                                 <td class="cursor-pointer">

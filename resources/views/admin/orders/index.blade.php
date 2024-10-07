@@ -15,8 +15,26 @@
 </style>
 @endsection
 @section('content')
+<div class="bg-body-light">
+  <div class="content content-full">
+    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Danh sách đơn hàng</h1>
+        <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" style="color: inherit;">Đơn hàng</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Danh sách đơn hàng</li>
+            </ol>
+        </nav>
+    </div>
+  </div>
+  
+</div>
      <!-- Page Content -->
      <div class="content">
+      
+      
         {{-- <!-- Quick Overview -->
         <div class="row items-push">
           <div class="col-6 col-lg-3">
@@ -194,7 +212,7 @@
             <!-- END All Orders Table -->
 
             <!-- Pagination -->
-            <nav aria-label="Photos Search Navigation">
+            {{-- <nav aria-label="Photos Search Navigation">
               <ul class="pagination justify-content-end mt-2">
                 <li class="page-item">
                   <a class="page-link" href="javascript:void(0)" tabindex="-1" aria-label="Previous">
@@ -219,7 +237,7 @@
                   </a>
                 </li>
               </ul>
-            </nav>
+            </nav> --}}
             <!-- END Pagination -->
           </div>
         </div>

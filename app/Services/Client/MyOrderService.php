@@ -4,6 +4,7 @@ namespace App\Services\Client;
 
 use App\Models\Order;
 use App\Models\Comment;
+use App\Models\OrderStatusChange;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -45,9 +46,20 @@ class MyOrderService
             return ['success' => false, 'message' => 'Bạn không có quyền hủy đơn hàng này.'];
         }
 
+        if ($order->payment_status == 'da_thanh_toan') {
+            $order->payment_status = 'cho_thanh_toan';  
+        }
+        $oldStatus = $order->status;
         // Cập nhật trạng thái đơn hàng thành "Đã hủy"
-        $order->status = 'Đã hủy';
+        $order->status = 'huy_don_hang';
         $order->save();
+
+        OrderStatusChange::create([
+            'order_id' => $order->id,
+            'user_id' => Auth::id(),        
+            'old_status' => $oldStatus,    
+            'new_status' => 'huy_don_hang', 
+        ]);
 
         return ['success' => true, 'message' => 'Đơn hàng đã được hủy thành công.'];
     }

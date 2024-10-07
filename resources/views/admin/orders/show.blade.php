@@ -317,7 +317,7 @@
                               @foreach($statusChanges as $change)
                                   <tr>
                                       <td class="fs-base" style="width: 80px;">
-                                          <span class="badge bg-primary">Order</span>
+                                          <span class="badge bg-primary">Đơn hàng</span>
                                       </td>
                                       <td style="width: 220px;">
                                           <span class="fw-semibold">{{ $change->created_at->format('F d, Y - H:i') }}</span>
@@ -348,10 +348,10 @@
                           @if(!empty($paymentStatusMessage))
                                 <tr>
                                   <td class="fs-base" style="width: 80px;">
-                                      <span class="badge bg-success">Payment</span>
+                                      <span class="badge bg-success">Thanh toán</span>
                                   </td>
                                   <td style="width: 220px;">
-                                      <span class="fw-semibold">{{ $orderDetail->updated_at->format('F d, Y - H:i') }}</span>
+                                      <span class="fw-semibold">{{ $orderDetail->updated_at->format('d-m-Y H:i') }}</span>
                                   </td>
                                   <td>
                                       <a href="javascript:void(0)">{{ $user->name}}</a>

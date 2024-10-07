@@ -1,5 +1,12 @@
 @extends('client.my-account')
 
+@section('css')
+    {{-- CSS order-detail --}}
+    <link rel="stylesheet" href="{{ asset('client/css/order-detail.css') }}">
+    {{-- link icon  --}}
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@endsection
+
 @section('my-order')
     <div class="order-detail-container ">
         <!-- Header đơn hàng -->
@@ -7,17 +14,26 @@
             <a href="{{ route('my.order') }}" class="btn"> Quay lại</a>
             <h2>
                 Mã đơn hàng: {{ $order->sku }}
-                <span
-                    class="badge text-bg
-                                                @if ($order->status == 'Chờ xác nhận') bg-secondary
-                                                @elseif($order->status == 'Đang chuẩn bị') bg-secondary
-                                                @elseif($order->status == 'Đã chuẩn bị') bg-warning text-dark
-                                                @elseif($order->status == 'Đang vận chuyển') bg-primary
-                                                @elseif($order->status == 'Đã giao hàng') bg-success
-                                                @elseif($order->status == 'Đơn hàng đã hủy') bg-danger @endif">
-                    {{ $order->status }}
+                @php
+                    $statusText = [
+                        'cho_xac_nhan' => 'Chờ xác nhận',
+                        'da_xac_nhan' => 'Đã xác nhận',
+                        'dang_chuan_bi' => 'Đang chuẩn bị',
+                        'dang_van_chuyen' => 'Đang vận chuyển',
+                        'hoan_thanh' => 'Hoàn thành',
+                        'huy_don_hang' => 'Hủy đơn hàng'
+                    ];
+                @endphp
+                <span class="badge text-bg
+                                        @if ($order->status == 'cho_xac_nhan') bg-secondary
+                                        @elseif($order->status == 'da_xac_nhan') bg-secondary
+                                        @elseif($order->status == 'dang_chuan_bi') bg-warning text-dark
+                                        @elseif($order->status == 'dang_van_chuyen') bg-primary
+                                        @elseif($order->status == 'hoan_thanh') bg-success
+                                        @elseif($order->status == 'huy_don_hang') bg-danger @endif">
+                    {{ $statusText[$order->status] ?? $order->status }}
                 </span>
-                @if ($order->status == 'Chờ xác nhận')
+                @if ($order->status == 'cho_xac_nhan')
                     <div class="cancel-item" style="display: inline-block; margin-left: 10px;">
                         <form action="{{ route('order.cancel', ['order_id' => $order->id]) }}" method="POST"
                             id="cancelOrderForm-{{ $order->id }}">
@@ -43,7 +59,13 @@
                     {{ $order->district }},
                     {{ $order->city }}
                 </p>
-                <p><strong>Trạng thái thanh toán:</strong> {{ $order->payment_status }}</p>
+                @php
+                    $paymentText = [
+                        'cho_thanh_toan' => 'Chờ thanh toán',
+                        'da_thanh_toan' => 'Đã thanh toán'
+                    ];
+                @endphp
+                <p><strong>Trạng thái thanh toán:</strong> {{ $paymentText[$order->payment_status] ?? $order->payment_status }}</p>
             </div>
         </div>
 
@@ -53,8 +75,7 @@
     @foreach ($order->items as $item)
         <div class="product-item">
             <div class="product-image">
-                <!-- Display variant image if available, otherwise fallback to product image -->
-                <img src="{{ $item->variant_image ?? $item->product_image_url }}" alt="{{ $item->product_name }}"
+                <img src="{{ $item->productVariant->image  }}" alt="{{ $item->product_name }}"
                     width="100">
             </div>
             <div class="product-details">
@@ -86,12 +107,12 @@
 
             <div class="product-price">
                 <p>
-                    <span style="text-decoration: line-through;">{{ number_format($item->variant_price_regular, 0) }} đ</span>
-                    <span style="color: red; font-weight: bold;">{{ number_format($item->variant_price_sale, 0) }} đ</span>
+                    <span style="text-decoration: line-through;">{{ number_format(($item->variant_price_regular * 1000), 0, '.', ',') }} đ</span>
+                    <span style="color: red; font-weight: bold;">{{ number_format($item->variant_price_sale * 1000, 0, '.', ',') }} đ</span>
                 </p>
                 <p>SL: {{ $item->quantity }}</p>
                   <!-- Hiển thị nút đánh giá ở bên phải dưới sản phẩm -->
-        @if ($order->status == 'Đã giao hàng')
+        @if ($order->status == 'hoan_thanh')
             <div class="review-button-container" style="text-align: right;">
                 <a href="" class="btn btn-primary btn-sm">Xem bình luận</a>
             </div>
@@ -110,13 +131,13 @@
             <table>
                 <tr>
                     <td>Tổng cộng:</td>
-                    <td>{{ number_format($order->total_price, 0) }} đ</td>
+                    <td>{{ number_format($order->total_price * 1000, 0, '.', ',') }} đ</td>
                 </tr>
                 <tr>
                     <td>Giảm giá:</td>
                     <td>
                         @if ($order->voucher)
-                            {{ number_format($order->voucher->discount_value, 0) }} đ
+                            {{ number_format($order->voucher->discount_value * 1000, 0, '.', ',') }} đ
                         @else
                             0 đ
                         @endif
@@ -137,7 +158,7 @@
                                         }
                                     }
                                 @endphp
-                                {{ number_format($order->total_price - $discount, 0) }} đ
+                                {{ number_format(($order->total_price - $discount) * 1000, 0, '.', ',') }} đ
                             </strong>
                         </td>
                     </tr>
