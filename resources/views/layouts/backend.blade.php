@@ -288,29 +288,6 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-            <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon fa fa-lightbulb"></i>
-                <span class="nav-main-link-name">Examples</span>
-              </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="/pages/datatables">
-                    <span class="nav-main-link-name">DataTables</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
-                    <span class="nav-main-link-name">Slick Slider</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">
-                    <span class="nav-main-link-name">Blank</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
             
            {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
@@ -398,21 +375,34 @@
             </li> --}}
 
             {{-- BANNER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+            <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-image"></i>
                 <span class="nav-main-link-name">Quản lý Banner</span>
               </a>
               <ul class="nav-main-submenu{{ request()->is('admin/banners*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('banners.index') }}">
+                  <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('admin.banners.index') }}">
                     <span class="nav-main-link-name">Banner</span>
                   </a>
                 </li>
               </ul>
-            </li> --}}
+            </li>
 
-
+            {{--COMMENT--}}
+            <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/comments*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý Bình luận</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/comments*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/comments') ? ' active' : '' }}" href="{{ route('admin.comments.index') }}">
+                    <span class="nav-main-link-name">Bình luận</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
 
           
             <li class="nav-main-heading">More</li>
@@ -458,7 +448,12 @@
           <div class="dropdown d-inline-block">
             <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-fw fa-user d-sm-none"></i>
+              @if(Auth::check())
+                  <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
+              @else
               <span class="d-none d-sm-inline-block">Admin</span>
+              @endif
+              
               <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
@@ -466,13 +461,10 @@
                 User Options
               </div>
               <div class="p-2">
-                <a class="dropdown-item" href="javascript:void(0)">
+                <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                  <span><i class="far fa-fw fa-envelope me-1"></i> Inbox</span>
-                  <span class="badge bg-primary rounded-pill">3</span>
-                </a>
+                
                 <a class="dropdown-item" href="javascript:void(0)">
                   <i class="far fa-fw fa-file-alt me-1"></i> Invoices
                 </a>
@@ -486,10 +478,13 @@
                 <!-- END Side Overlay -->
 
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Sign Out
-                </a>
-              </div>
+                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
+                  </a>
+                  <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
+                    @csrf
+                  </form>
+                </div>
             </div>
           </div>
           <!-- END User Dropdown -->
@@ -636,6 +631,7 @@
     </footer>
     <!-- END Footer -->
   </div>
+  @yield('modal')
   <!-- END Page Container -->
   <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
@@ -643,3 +639,4 @@
 @yield('js')
 
 </html>
+  
