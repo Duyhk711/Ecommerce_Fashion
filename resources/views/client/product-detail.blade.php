@@ -1,136 +1,7 @@
 @extends('layouts.client')
 
 @section('css')
-    <style>
-        .qtyBtn.disabled {
-            pointer-events: none; /* Ngăn chặn mọi sự kiện chuột */
-            opacity: 0.5; /* Giảm độ sáng */
-        }
-        .swatch.disabled {
-            position: relative;
-            /* Để định vị gạch chéo */
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .swatch.disabled::after {
-            content: '';
-            /* Tạo một phần tử gạch chéo */
-            position: absolute;
-            top: 50%;
-            /* Căn giữa theo chiều dọc */
-            left: -20%;
-            right: -20%;
-            height: 2px;
-            /* Độ dày của gạch chéo */
-            background-color: rgb(0, 0, 0);
-            /* Màu gạch chéo */
-            transform: rotate(45deg);
-            /* Gạch chéo */
-            transform-origin: center;
-        }
-    </style>
-
-    <style>
-       /* Modal */
-        .modal {
-            display: none; /* Ẩn modal theo mặc định */
-            position: fixed; /* Để giữ modal ở vị trí cố định */
-            z-index: 1000; /* Đặt z-index để nó hiển thị trên các phần khác */
-            left: 0;
-            top: 0;
-            width: 100%; /* Chiều rộng toàn bộ màn hình */
-            height: 100%; /* Chiều cao toàn bộ màn hình */
-            background-color: rgba(0, 0, 0, 0.5); /* Màu nền đen trong suốt */
-            justify-content: center; /* Căn giữa theo chiều ngang */
-            align-items: center; /* Căn giữa theo chiều dọc */
-            transition: display 0.3s ease; /* Hiệu ứng chuyển tiếp khi hiển thị */
-        }
-
-        .modal-content {
-            background-color: #fff; /* Màu nền trắng */
-            border-radius: 8px; /* Bo tròn góc */
-            padding: 20px; /* Thêm padding */
-            text-align: center; /* Căn giữa nội dung bên trong */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
-            width: 300px; /* Đặt chiều rộng cho modal */
-        }
-
-        .close {
-            position: absolute; /* Đặt nút đóng ở góc trên bên phải */
-            top: 15px;
-            right: 15px;
-            font-size: 24px; /* Tăng kích thước chữ */
-            cursor: pointer; /* Hiển thị con trỏ khi di chuột qua */
-            color: #333; /* Màu sắc cho nút đóng */
-        }
-
-        .btn {
-            /* background-color: #4CAF50; Màu nền nút */
-            color: white; /* Màu chữ nút */
-            padding: 10px 15px; /* Padding cho nút */
-            border: none; /* Bỏ đường viền */
-            border-radius: 5px; /* Bo tròn góc nút */
-            cursor: pointer; /* Hiển thị con trỏ khi di chuột qua */
-            transition: background-color 0.3s ease; /* Hiệu ứng chuyển tiếp màu nền */
-        }
-
-        .btn:hover {
-            /* background-color: #45a049;  */
-        }
-
-        h2 {
-            margin: 0; /* Bỏ margin cho tiêu đề */
-            font-size: 18px; /* Kích thước chữ tiêu đề */
-            color: #333; /* Màu sắc cho tiêu đề */
-        }
-
-        #popupMessage {
-            margin: 15px 0; /* Thêm margin cho thông điệp */
-            font-size: 16px; /* Kích thước chữ của thông điệp */
-            color: #444; /* Màu sắc cho thông điệp */
-        }
-
-    </style>
-
-    {{-- Rating stars --}}
-    <style>
-        .wishlist.active i {
-            color: red;
-        }
-
-        .review-rating {
-            display: flex;
-            flex-direction: row;
-            /* Để các sao ngược lại */
-            justify-content: flex-start;
-        }
-
-        .review-rating input[type="radio"] {
-            display: none;
-            /* Ẩn các input radio */
-        }
-
-        .review-rating label {
-            font-size: 2em;
-            /* Kích thước của icon sao */
-            cursor: pointer;
-            /* Con trỏ trỏ vào sao khi di chuột */
-        }
-
-        /* Icon sao mặc định (chưa được chọn) sẽ có class anm-star-o */
-        .review-rating label i {
-            color: #ccc;
-            /* Màu trắng mặc định cho sao */
-        }
-
-        /* Khi sao được chọn (anm-star) */
-        .review-rating label .anm-star {
-            color: #ffcc00;
-            /* Màu vàng cho sao được chọn */
-        }
-    </style>
+    <link rel="stylesheet" href="{{asset('client/css/product-detail.css')}}">
 @endsection
 
 @section('content')
@@ -1291,12 +1162,12 @@
     </div>
     <!--End Product Quickview Modal-->
 
+    {{-- popup --}}
     <div id="quantityPopup" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Thông báo</h2>
             <p id="popupMessage"></p>
-            {{-- <button class="btn">OK</button> --}}
         </div>
     </div>
 @endsection
@@ -1304,7 +1175,7 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>   
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let selectedColorId = null;

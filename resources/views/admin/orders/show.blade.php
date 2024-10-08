@@ -67,7 +67,7 @@
           </div>
 
           <div class="col-6 col-lg-3">
-            @if ($orderDetail->status == "cho_xac_nhan")
+            @if ($orderDetail->status == "1")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -79,7 +79,7 @@
               </div>
             </a>
 
-            @elseif($orderDetail->status == "da_xac_nhan")
+            @elseif($orderDetail->status == "2")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -91,7 +91,7 @@
               </div>
             </a>
 
-            @elseif($orderDetail->status == "dang_chuan_bi")
+            @elseif($orderDetail->status == "3")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -103,7 +103,7 @@
               </div>
             </a>
 
-            @elseif($orderDetail->status == "dang_van_chuyen" || $orderDetail->status == "hoan_thanh")
+            @elseif($orderDetail->status == "4" || $orderDetail->status == "5")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
@@ -143,7 +143,7 @@
               </div>
             </a>
 
-            @elseif($orderDetail->status == "dang_van_chuyen")
+            @elseif($orderDetail->status == "4")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -155,7 +155,7 @@
               </div>
             </a>
             
-            @elseif($orderDetail->status == "hoan_thanh")
+            @elseif($orderDetail->status == "5")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
@@ -167,7 +167,7 @@
               </div>
             </a>
 
-            @elseif( $orderDetail->status != "hoan_thanh" ||$orderDetail->status != "dang_van_chuyen")
+            @elseif( $orderDetail->status != "5" ||$orderDetail->status != "4")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-body mx-auto mb-3">
@@ -325,17 +325,17 @@
                                       <td>
                                           <a href="javascript:void(0)">{{ $change->user->name ?? 'Support' }}</a>
                                       </td>
-                                      <td class="{{ $change->new_status == 'hoan_thanh' ? 'text-success' : ($change->new_status == 'huy_don_hang' ? 'text-danger' : 'text-warning') }}">
+                                      <td class="{{ $change->new_status == '5' ? 'text-success' : ($change->new_status == 'huy_don_hang' ? 'text-danger' : 'text-warning') }}">
                                           <strong>
-                                              @if($change->new_status == 'cho_xac_nhan')
+                                              @if($change->new_status == '1')
                                                   Đơn hàng đã đặt thành công
-                                              @elseif($change->new_status == 'da_xac_nhan')
+                                              @elseif($change->new_status == '2')
                                                   Đơn hàng đã được xác nhận
-                                              @elseif($change->new_status == 'dang_chuan_bi')
+                                              @elseif($change->new_status == '3')
                                                   Đơn hàng đang được chuẩn bị giao cho đơn vị vận chuyển
-                                              @elseif($change->new_status == 'dang_van_chuyen')
+                                              @elseif($change->new_status == '4')
                                                   Đơn hàng đang được vận chuyển
-                                              @elseif($change->new_status == 'hoan_thanh')
+                                              @elseif($change->new_status == '5')
                                                   Đơn hàng đã giao thành công
                                               @elseif($change->new_status == 'huy_don_hang')
                                                   Đơn hàng đã bị hủy

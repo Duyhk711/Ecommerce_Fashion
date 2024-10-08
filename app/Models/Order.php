@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,11 +12,11 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     const TRANG_THAI_DON_HANG = [
-        'cho_xac_nhan' => 'Chờ xác nhận',
-        'da_xac_nhan' => 'Đã xác nhận',
-        'dang_chuan_bi' => 'Đang chuẩn bị',
-        'dang_van_chuyen' => 'Đang vận chuyển',
-        'hoan_thanh' => 'Đã giao hàng',
+        '1' => 'Chờ xác nhận',
+        '2' => 'Đã xác nhận',
+        '3' => 'Đang chuẩn bị',
+        '4' => 'Đang vận chuyển',
+        '5' => 'Đã giao hàng',
         'huy_don_hang' => 'Đơn hàng đã hủy',
     ];
 
@@ -81,14 +82,18 @@ class Order extends Model
         }
 
         // Cập nhật trạng thái
-        $this->status = $newStatus;
-
-        // Nếu trạng thái mới là "hoàn thành", cập nhật trạng thái thanh toán
-        if ($newStatus === 'hoan_thanh') {
-            $this->payment_status = 'da_thanh_toan'; // Hoặc bạn có thể sử dụng hằng số
+        
+        if($newStatus <= $this->status || $newStatus == "huy_don_hang"){
+            throw new \Exception("Trạng thái đã được cập nhật, vui lòng chọn trạng thái mới");
+        }else{
+            $this->status = $newStatus;
         }
 
-        // Lưu lại thay đổi
+        // Nếu trạng thái mới là "hoàn thành", cập nhật trạng thái thanh toán
+        if ($newStatus === '5') {
+            $this->payment_status = 'da_thanh_toan'; 
+        }
+
         $this->save(); 
     }
 
