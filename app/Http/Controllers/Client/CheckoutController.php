@@ -116,7 +116,6 @@ class CheckoutController extends Controller
         if ($request->payment_method == 'COD') {
             return view('client.order-success', compact('products', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
         } else {
-            // Nếu là THANH_TOAN_ONLINE, chuyển hướng đến VNPay để thanh toán
             return redirect()->route('vnpay.payment', ['order_id' => $order->id]);
         }
     }
