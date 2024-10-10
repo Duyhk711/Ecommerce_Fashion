@@ -8,6 +8,7 @@ use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,9 +34,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
+Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 
 // order
-Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
+// Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
 Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính tả từ 'whishlist' thành 'wishlist'
 Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hóa cho giỏ hàng rỗng
 
@@ -80,6 +82,7 @@ Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->n
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
+Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
 
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');

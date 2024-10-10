@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVariant;
 use App\Services\Client\CartService;
 use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
@@ -74,13 +75,17 @@ class CheckoutController extends Controller
         $order = new Order();
         $order->user_id = auth()->id();
         $order->customer_name = $request->input('customer_name');
+        $order->session_id = time();
         $order->customer_email = $request->input('customer_email');
         $order->customer_phone = $request->input('customer_phone');
         $order->address_line1 = $request->input('address_line1');
         $order->city = $request->input('city');
+        $order->district = $request->input('district');
+        $order->ward = $request->input('ward');
         $order->address_line1 = $request->input('address_line1');
         $order->address_line1 = $request->input('address_line1');
         $order->total_price = $request->input('total_price');
+        $order->payment_method = $request->input('payment_method');
         $order->save();
 
         // dd($request->input('cartItem'));
@@ -89,6 +94,7 @@ class CheckoutController extends Controller
         // dd($products);
         if (is_array($products) || is_object($products)) {
             foreach ($products as $product) {
+                $prd = ProductVariant::find($product->product_variant_id);
                 $orderItem = new OrderItem();
                 $orderItem->order_id = $order->id;
                 $orderItem->product_variant_id = $product->product_variant_id;
@@ -96,6 +102,9 @@ class CheckoutController extends Controller
                 $orderItem->quantity = $product->quantity;
                 $orderItem->variant_image = $product->image;
                 $orderItem->variant_price_sale = $product->price;
+                $orderItem->variant_price_regular = $prd->price_regular;
+                $orderItem->variant_sku = $prd->sku;
+                $orderItem->product_sku = $prd->product->sku;
                 $orderItem->save();
             }
         } else {
@@ -103,7 +112,12 @@ class CheckoutController extends Controller
             echo "Dữ liệu không hợp lệ";
         }
 
-        return view('client.order-success', compact('products', 'order'));
-        // return redirect()->route('home');
+        // Kiểm tra phương thức thanh toán
+        if ($request->payment_method == 'COD') {
+            return view('client.order-success', compact('products', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
+        } else {
+            // Nếu là THANH_TOAN_ONLINE, chuyển hướng đến VNPay để thanh toán
+            return redirect()->route('vnpay.payment', ['order_id' => $order->id]);
+        }
     }
 }

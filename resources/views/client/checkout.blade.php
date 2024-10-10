@@ -315,16 +315,15 @@
                                         <!--Apply Promocode-->
                                         <div class="block mb-3 apply-code mb-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Apply Promocode</h3>
+                                                <h3 class="title mb-3">ÁP DỤNG MÃ KHUYẾN MẠI</h3>
                                                 <div id="coupon" class="coupon-dec">
-                                                    <p>Got a promo code? Then you're a few randomly combined numbers &
-                                                        letters
-                                                        away from fab savings!</p>
+                                                    <p>Bạn có mã khuyến mãi? Sau đó, bạn chỉ còn một vài số và chữ cái được
+                                                        kết hợp ngẫu nhiên để có được khoản tiết kiệm đáng kể!</p>
                                                     <div class="input-group mb-0 d-flex">
                                                         <input id="coupon-code" required="" type="text"
                                                             class="form-control" placeholder="Promotion/Discount Code">
-                                                        <button class="coupon-btn btn btn-primary"
-                                                            type="button">Apply</button>
+                                                        <button class="coupon-btn btn btn-primary" type="button">Áp
+                                                            dụng</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -334,25 +333,18 @@
                                         <div class="cart-info mb-4">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Subtotal</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
+                                                            cộng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$326.00</span></span>
+                                                            class="money">{{ $total }} VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Coupon
-                                                            Discount</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
+                                                            giá</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-$25.00</span></span>
-                                                </div>
-                                                <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Tax</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$10.00</span></span>
+                                                            class="money">-0 VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span
@@ -366,7 +358,7 @@
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ $total }}đ</b></span>
+                                                            class="money">{{ $total }} VND</b></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -385,121 +377,28 @@
                                         <!--Payment Methods-->
                                         <div class="block mb-3 payment-methods mb-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Payment Methods</h3>
+                                                <h3 class="title mb-3">Phương thức thanh toán</h3>
                                                 <div class="payment-accordion-radio">
-                                                    <div class="accordion" id="accordionExample">
-                                                        <div class="accordion-item card mb-2">
-                                                            <div class="card-header" id="headingOne">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseOne" aria-expanded="true"
-                                                                    aria-controls="collapseOne">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio1"
-                                                                            value="THANH_TOAN_ONLINE"
-                                                                            name="payment_method" type="radio"
-                                                                            class="radio" checked="checked" />
-                                                                        <label for="paymentRadio1" class="mb-0">Pay with
-                                                                            credit card</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseOne" class="accordion-collapse collapse show"
-                                                                aria-labelledby="headingOne"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                                                <label for="input-cardname">Name on Card
-                                                                                    <span class="required">*</span></label>
-                                                                                <input name="cardname" value=""
-                                                                                    placeholder="" id="input-cardname"
-                                                                                    class="form-control" type="text"
-                                                                                    pattern="[0-9\-]*">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                                                <label>Credit Card Type <span
-                                                                                        class="required">*</span></label>
-                                                                                <select name="country_id"
-                                                                                    class="form-control">
-                                                                                    <option value="">Please Select
-                                                                                    </option>
-                                                                                    <option value="1">American Express
-                                                                                    </option>
-                                                                                    <option value="2">Visa Card
-                                                                                    </option>
-                                                                                    <option value="3">Master Card
-                                                                                    </option>
-                                                                                    <option value="4">Discover Card
-                                                                                    </option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4">
-                                                                                <label for="input-cardno">Credit Card
-                                                                                    Number
-                                                                                    <span class="required">*</span></label>
-                                                                                <input name="cardno" value=""
-                                                                                    placeholder="" id="input-cardno"
-                                                                                    class="form-control" type="text"
-                                                                                    pattern="[0-9\-]*">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4">
-                                                                                <label for="input-cvv">CVV Code <span
-                                                                                        class="required">*</span></label>
-                                                                                <input name="cvv" value=""
-                                                                                    placeholder="" id="input-cvv"
-                                                                                    class="form-control" type="text"
-                                                                                    pattern="[0-9\-]*">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4">
-                                                                                <label>Expiration Date <span
-                                                                                        class="required">*</span></label>
-                                                                                <input type="date" name="exdate"
-                                                                                    class="form-control">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4 mb-0">
-                                                                                <button class="btn btn-primary"
-                                                                                    type="submit">Submit</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </fieldset>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="accordion mb-3" id="accordionExample">
                                                         <div class="accordion-item card mb-0">
-                                                            <div class="card-header" id="headingFour">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseFour" aria-expanded="false"
-                                                                    aria-controls="collapseFour">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio4" value="COD"
-                                                                            name="payment_method" type="radio"
-                                                                            class="radio" />
-                                                                        <label for="paymentRadio4" class="mb-0">Thanh
-                                                                            toán khi nhận hành</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseFour" class="accordion-collapse collapse"
-                                                                aria-labelledby="headingFour"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <p>Cash on delivery refers to an arrangement in which
-                                                                        payment for a purchase is made directly by the
-                                                                        purchaser
-                                                                        to the person who delivers the item.</p>
-                                                                </div>
-                                                            </div>
+                                                            <span class="customRadio clearfix mb-0">
+                                                                <input id="paymentRadio4" value="COD"
+                                                                    name="payment_method" type="radio" class="radio"
+                                                                    checked="checked" />
+                                                                <label for="paymentRadio4" class="mb-0">Thanh
+                                                                    toán khi nhận hàng</label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion" id="accordionExample">
+                                                        <div class="accordion-item card mb-0">
+                                                            <span class="customRadio clearfix mb-0">
+                                                                <input id="paymentRadio1" value="THANH_TOAN_ONLINE"
+                                                                    name="payment_method" type="radio"
+                                                                    class="radio" />
+                                                                <label for="paymentRadio1" class="mb-0">Thanh
+                                                                    toán VNPay</label>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -512,25 +411,18 @@
                                         <div class="cart-info">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Subtotal</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
+                                                            cộng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
                                                             class="money">$226.00</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Coupon
-                                                            Discount</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
+                                                            giá</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-$25.00</span></span>
-                                                </div>
-                                                <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Tax</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$10.00</span></span>
+                                                            class="money">-0 VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span
@@ -541,10 +433,10 @@
                                                 </div>
                                                 <div class="row g-0 pt-2">
                                                     <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ $total }}đ</b></span>
+                                                            class="money">{{ $total }} VND</b></span>
                                                 </div>
                                                 <input type="hidden" value="{{ $total }}" name="total_price">
 
