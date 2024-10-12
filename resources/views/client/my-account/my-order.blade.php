@@ -38,7 +38,7 @@
                                                 @elseif($item->status == 'Đang chuẩn bị') bg-secondary
                                                 @elseif($item->status == 'Đã chuẩn bị') bg-warning text-dark
                                                 @elseif($item->status == 'Đang vận chuyển') bg-primary
-                                                @elseif($item->status == 'Đã giao hàng') bg-success 
+                                                @elseif($item->status == 'Đã giao hàng') bg-success
                                                 @elseif($item->status == 'Đơn hàng đã hủy') bg-danger @endif">
                                         {{ $item->status }}
                                     </span>
