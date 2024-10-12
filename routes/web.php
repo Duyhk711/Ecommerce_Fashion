@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\Client\FavoriteController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ShopController;
-use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\VNPayController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +33,10 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
+Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
 
 // order
-Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
+// Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
 Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính tả từ 'whishlist' thành 'wishlist'
 Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hóa cho giỏ hàng rỗng
 
@@ -61,14 +62,12 @@ Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDe
 //Route hủy đơn hàng
 Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
 
-
 //sản phẩm yêu thích
 Route::middleware('auth')->group(function () {
     Route::get('/my-wishlist', [UserController::class, 'myWishlist'])->name('my.wishlist');
     Route::post('/wishlist/add/{product_id}', [UserController::class, 'add'])->name('wishlist.add');
     Route::delete('/wishlist/remove/{product_id}', [UserController::class, 'remove'])->name('wishlist.remove');
 });
-
 
 // address
 Route::get('/address', [UserController::class, 'address'])->name('address');
@@ -82,6 +81,8 @@ Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->n
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
+Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
+Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
