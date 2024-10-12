@@ -17,6 +17,7 @@
               </div>
             </a>
           </div>
+          {{-- ô 2 --}}
           <div class="col-6 col-lg-3">
             @if ($orderDetail->payment_status == "cho_thanh_toan" && $orderDetail->status != "huy_don_hang")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
@@ -66,6 +67,8 @@
             @endif
           </div>
 
+          {{-- ô 3 --}}
+
           <div class="col-6 col-lg-3">
             @if ($orderDetail->status == "1")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
@@ -79,38 +82,14 @@
               </div>
             </a>
 
-            @elseif($orderDetail->status == "2")
-            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
-              <div class="block-content py-5">
-                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
-                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
-                </div>
-                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Đã xác nhận
-                </p>
-              </div>
-            </a>
-
-            @elseif($orderDetail->status == "3")
-            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
-              <div class="block-content py-5">
-                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
-                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
-                </div>
-                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Đang chuẩn bị
-                </p>
-              </div>
-            </a>
-
-            @elseif($orderDetail->status == "4" || $orderDetail->status == "5")
+            @elseif($orderDetail->status == "2" || $orderDetail->status == "3" || $orderDetail->status == "4" )
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
                   <i class="fa fa-check text-xeco-dark"></i>
                 </div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                  Đơn hàng đã chuẩn bị xong
+                  Đã xác nhận
                 </p>
               </div>
             </a>
@@ -129,6 +108,7 @@
             @endif
           </div>
 
+          {{-- ô 4 --}}
           <div class="col-6 col-lg-3">
 
             @if ($orderDetail->status == "huy_don_hang")
@@ -143,7 +123,19 @@
               </div>
             </a>
 
-            @elseif($orderDetail->status == "4")
+            @elseif($orderDetail->status == "2")
+            <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+              <div class="block-content py-5">
+                <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
+                  <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
+                </div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  Chờ vận chuyển
+                </p>
+              </div>
+            </a>
+
+            @elseif($orderDetail->status == "3")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -155,7 +147,7 @@
               </div>
             </a>
             
-            @elseif($orderDetail->status == "5")
+            @elseif($orderDetail->status == "4")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
@@ -167,7 +159,7 @@
               </div>
             </a>
 
-            @elseif( $orderDetail->status != "5" ||$orderDetail->status != "4")
+            @elseif( $orderDetail->status != "3" || $orderDetail->status != "4" || $orderDetail->status != "2")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
                 <div class="item rounded-circle bg-body mx-auto mb-3">
@@ -234,11 +226,11 @@
                   @endforeach
                   <tr>
                     <td colspan="3" class="text-end"><strong>Tổng đơn hàng:</strong></td>
-                    <td class="text-end">{{number_format(($orderDetail->total_price) *1000, 0, ',', '.')}}đ</td>
+                    <td class="text-end">{{number_format(($orderDetail->total_price + $orderDetail->discount) *1000, 0, ',', '.')}}đ</td>
                   </tr>
                   <tr>
                     <td colspan="3" class="text-end"><strong>Giảm giá:</strong></td>
-                    <td class="text-end">0 đ</td>
+                    <td class="text-end">{{number_format(($orderDetail->discount) *1000, 0, ',', '.')}}đ</td>
                   </tr>
                   <tr class="table-active">
                     <td colspan="3" class="text-end"><strong>Tổng đã trả:</strong></td>
@@ -325,18 +317,16 @@
                                       <td>
                                           <a href="javascript:void(0)">{{ $change->user->name ?? 'Support' }}</a>
                                       </td>
-                                      <td class="{{ $change->new_status == '5' ? 'text-success' : ($change->new_status == 'huy_don_hang' ? 'text-danger' : 'text-warning') }}">
+                                      <td class="{{ $change->new_status == '4' ? 'text-success' : ($change->new_status == 'huy_don_hang' ? 'text-danger' : 'text-warning') }}">
                                           <strong>
                                               @if($change->new_status == '1')
                                                   Đơn hàng đã đặt thành công
                                               @elseif($change->new_status == '2')
-                                                  Đơn hàng đã được xác nhận
+                                                  Đơn hàng đã được xác nhận, đang chuẩn bị đơn hàng giao cho đơn vị vận chuyển
                                               @elseif($change->new_status == '3')
-                                                  Đơn hàng đang được chuẩn bị giao cho đơn vị vận chuyển
+                                                  Đơn hàng đã được chuẩn bị giao cho đơn vị vận chuyển
                                               @elseif($change->new_status == '4')
-                                                  Đơn hàng đang được vận chuyển
-                                              @elseif($change->new_status == '5')
-                                                  Đơn hàng đã giao thành công
+                                                  Đơn hàng đã giao thành công 
                                               @elseif($change->new_status == 'huy_don_hang')
                                                   Đơn hàng đã bị hủy
                                               @endif

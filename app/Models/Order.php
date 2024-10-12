@@ -13,10 +13,9 @@ class Order extends Model
 
     const TRANG_THAI_DON_HANG = [
         '1' => 'Chờ xác nhận',
-        '2' => 'Đã xác nhận',
-        '3' => 'Đang chuẩn bị',
-        '4' => 'Đang vận chuyển',
-        '5' => 'Đã giao hàng',
+        '2' => 'Chờ vận chuyển',
+        '3' => 'Đang vận chuyển',
+        '4' => 'Hoàn thành',
         'huy_don_hang' => 'Đơn hàng đã hủy',
     ];
 
@@ -90,7 +89,7 @@ class Order extends Model
         }
 
         // Nếu trạng thái mới là "hoàn thành", cập nhật trạng thái thanh toán
-        if ($newStatus === '5') {
+        if ($newStatus === '4') {
             $this->payment_status = 'da_thanh_toan'; 
         }
 

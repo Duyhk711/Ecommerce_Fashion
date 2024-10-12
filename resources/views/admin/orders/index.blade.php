@@ -45,10 +45,9 @@
                     <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
                         <option value="">Tất cả trạng thái</option>
                         <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
-                        <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Đã xác nhận</option>
-                        <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đang chuẩn bị</option>
-                        <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đang vận chuyển</option>
-                        <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Đã giao hàng</option>
+                        <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
+                        <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
+                        <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành</option>
                         <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                     </select>
                   </form>
@@ -89,18 +88,16 @@
                                         @php
                                             $statusMapping = [
                                                 '1' => 'Chờ xác nhận',
-                                                '2' => 'Đã xác nhận',
-                                                '3' => 'Đang chuẩn bị',
-                                                '4' => 'Đang vận chuyển',
-                                                '5' => 'Đã giao hàng',
+                                                '2' => 'Chờ vận chuyển',
+                                                '3' => 'Đang vận chuyển',
+                                                '4' => 'Hoàn thành',
                                                 'huy_don_hang' => 'Đơn hàng đã hủy',
                                             ];
                                             $badgeColor = [
                                                 '1' => 'bg-warning',
                                                 '2' => 'bg-info',
                                                 '3' => 'bg-primary',
-                                                '4' => 'bg-secondary',
-                                                '5' => 'bg-success',
+                                                '4' => 'bg-success',
                                                 'huy_don_hang' => 'bg-danger',
                                             ];
                                             $currentStatus = $order->status;
@@ -121,7 +118,7 @@
                                     <td class="text-center fs-base fs-sm">
                                         <div class="btn-group">
                                             <!-- Cập nhật trạng thái -->
-                                            @if ($order->status == '5' || $order->status == 'huy_don_hang')
+                                            @if ($order->status == '4' || $order->status == 'huy_don_hang')
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
                                                     style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
                                                     data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
@@ -176,10 +173,9 @@
                             <label for="statusSelect" class="form-label">Chọn trạng thái mới</label>
                             <select id="statusSelect" class="form-select" name="status">
                                 <option value="1">Chờ xác nhận</option>
-                                <option value="2">Xác nhận</option>
-                                <option value="3">Đang chuẩn bị</option>
-                                <option value="4">Đang vận chuyển</option>
-                                <option value="5">Hoàn thành</option>
+                                <option value="2">Chờ vận chuyển</option>
+                                <option value="3">Đang vận chuyển</option>
+                                <option value="4">Hoàn thành</option>
                                 <option value="huy_don_hang" disabled>Hủy bỏ</option>
                             </select>
                         </div>
@@ -225,7 +221,7 @@
               statusSelect.value = orderStatus;
 
               // Array of possible statuses, reflecting the order of progression
-              var statuses = ['1', '2', '3', '4', '5', 'huy_don_hang'];
+              var statuses = ['1', '2', '3', '4', 'huy_don_hang'];
               var currentStatusIndex = statuses.indexOf(orderStatus);
 
               // Loop through the options and disable those that are prior to the current status and 'huy_don_hang'
