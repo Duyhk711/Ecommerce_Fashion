@@ -30,66 +30,70 @@ Route::view('/pages/datatables', 'pages.datatables');
 Route::view('/pages/blank', 'pages.blank');
 
 Route::prefix('admin')
-    ->as('admin.')
-    ->group(function () {
+  ->as('admin.')
+  ->group(function () {
 
-        //AUTH
-        Route::get('/login', [AuthenticationController::class, 'loginAdmin'])->name('loginAdmin');
-        Route::post('/login', [AuthenticationController::class, 'postAdminLogin'])->name('postAdminLogin');
-        Route::post('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logoutAdmin');
-        Route::view('/forgot-password', view: 'admin.auth.forgot-password')->name(name: 'forgot-password');
-        Route::post('/forgot-password', [AuthenticationController::class, 'sendOtpAdmin'])->name(name: 'send-otp');
-        Route::get('/verify-otp', [AuthenticationController::class, 'showVerifyOtpAdminForm'])->name('verify-otp');
-        Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtpAdmin'])->name('verify-otp.post');
-        Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
-        Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
+    //AUTH
+    Route::get('/login', [AuthenticationController::class, 'loginAdmin'])->name('loginAdmin');
+    Route::post('/login', [AuthenticationController::class, 'postAdminLogin'])->name('postAdminLogin');
+    Route::post('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logoutAdmin');
+    Route::view('/forgot-password', view: 'admin.auth.forgot-password')->name(name: 'forgot-password');
+    Route::post('/forgot-password', [AuthenticationController::class, 'sendOtpAdmin'])->name(name: 'send-otp');
+    Route::get('/verify-otp', [AuthenticationController::class, 'showVerifyOtpAdminForm'])->name('verify-otp');
+    Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtpAdmin'])->name('verify-otp.post');
+    Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
+    Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
 
-        Route::middleware('checkAdmin')->group(function () {
+    Route::middleware('checkAdmin')->group(function () {
 
-            Route::view('dashboard', 'dashboard')->name('dashboard');
+      Route::view('dashboard', 'dashboard')->name('dashboard');
 
-            // ATTRIBUTE
-            Route::resource('attributes', AttributeController::class);
+      // ATTRIBUTE
+      Route::resource('attributes', AttributeController::class);
 
-            // ATTRIBUTE VALUE
-            Route::resource('attribute_values', AttributeValueController::class);
+      // ATTRIBUTE VALUE
+      Route::resource('attribute_values', AttributeValueController::class);
 
-            // CATALOGUES
-            Route::resource('catalogues', CatalogueController::class);
-            //ACTIVATE
-            Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
-            Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
+      // CATALOGUES
+      Route::resource('catalogues', CatalogueController::class);
+      //ACTIVATE
+      Route::post('catalogues/{catalogue}/activate', [CatalogueController::class, 'activate'])->name('catalogues.activate');
+      Route::post('catalogues/{catalogue}/deactivate', [CatalogueController::class, 'deactivate'])->name('catalogues.deactivate');
 
-            // PRODUCT
-            Route::resource('products', ProductController::class);
-            Route::get('/get-attributes', [ProductController::class, 'getAttributes']); //lấy danh sách các thuộc tính
-            Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']); //lấy giá trị thuộc tính theo ID của thuộc tính
-            Route::get('/get-product-attributes/{productId}', [ProductController::class, 'getProductAttributes']);
+      // PRODUCT
+      Route::resource('products', ProductController::class);
+      Route::get('/get-attributes', [ProductController::class, 'getAttributes']); //lấy danh sách các thuộc tính
+      Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']); //lấy giá trị thuộc tính theo ID của thuộc tính
+      Route::get('/get-product-attributes/{productId}', [ProductController::class, 'getProductAttributes']);
+      Route::get('/get-product-attributes/{productId}', [ProductController::class, 'getProductAttributes']);
+      Route::get('/variants/{id}/edit', [ProductVariantController::class, 'edit']);
+      Route::put('/variants/{id}', [ProductVariantController::class, 'update']);
+      Route::delete('/variants/{id}', [ProductVariantController::class, 'destroy'])->name('variants.destroy');
 
-            // ORDER
-            Route::resource('orders', OrderController::class);
-            Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
-            Route::put('orders/update/{id}', [OrderController::class, 'update'])->name('order.update');
+      // ORDER
+      Route::resource('orders', OrderController::class);
+      Route::get('orders/{id}', [OrderController::class, 'show'])->name('order.show');
+      Route::put('orders/update/{id}', [OrderController::class, 'update'])->name('order.update');
 
-            // USER
-            Route::resource('users', UserController::class);
-            Route::post('/user/{user}/active', [UserController::class, 'active'])->name('users.active');
-            // Route::view('/users/show', 'admin.users.show')->name('users.show');
+      // USER
+      Route::resource('users', UserController::class);
+      Route::post('/user/{user}/active', [UserController::class, 'active'])->name('users.active');
+      // Route::view('/users/show', 'admin.users.show')->name('users.show');
 
-            // profile
-            Route::view('/profile', 'admin.auth.account-profile')->name('account-profile');
-            Route::post('/profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
-            Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
+      // profile
+      Route::view('/profile', 'admin.auth.account-profile')->name('account-profile');
+      Route::post('/profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
+      Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
 
-            // BANNER
-            Route::resource('banners', BannerController::class);
-            Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
+      // BANNER
+      Route::resource('banners', BannerController::class);
+      Route::post('banners/{banner}/activate', [BannerController::class, 'activate'])->name('banners.activate');
 
-            // VOUCHER
-            Route::resource('vouchers', VoucherController::class);
+      // VOUCHER
+      Route::resource('vouchers', VoucherController::class);
 
-            //COMMENT
-            Route::resource('/comments', CommentController::class);
-            Route::get('admin/comments/{id}', [CommentController::class, 'show']);
-        });
+      //COMMENT
+      Route::resource('/comments', CommentController::class);
+      Route::get('admin/comments/{id}', [CommentController::class, 'show']);
     });
+  });
