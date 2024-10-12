@@ -11,20 +11,28 @@ class MyOrderService
 {
 
 
-    public function getOrder()
-    {
-        // Lấy user_id của người dùng đang đăng nhập
-        $userId = Auth::id();
+    public function getOrder($status = null, $keyword = null)
+{
+    $query = Order::with('items')
+        ->where('user_id', Auth::id());
 
-        // Lấy danh sách đơn hàng của người dùng và tải thông tin đơn hàng chi tiết
-        $orders = Order::with(['items','items.productVariant.product', 'items.productVariant.product.comments' => function ($query) use ($userId) {
-            $query->where('user_id', $userId); // Lọc bình luận theo user_id
-        }]) // Tải thông tin các mục đơn hàng cùng với thông tin sản phẩm variant và bình luận
-            ->where('user_id', $userId) // Lọc theo user_id
-            ->get();
-
-        return $orders; // Trả về danh sách đơn hàng
+    if ($status) {
+        if ($status == 'cho_thanh_toan') {
+            $query->where('payment_method', 'THANH_TOAN_ONLINE')
+                  ->where('payment_status', 'cho_thanh_toan');
+        } else {
+            $query->where('status', $status);
+        }
+    } else {
+        $query->where('status', '<>', 'huy_don_hang');
     }
+
+    if ($keyword) {
+        $query->where('sku', 'LIKE', '%' . $keyword . '%');
+    }
+
+    return $query->paginate(10)->appends(['status' => $status, 'search' => $keyword]);
+}
 
     public function getOrderDetail($id)
     {
@@ -46,9 +54,17 @@ class MyOrderService
         }
 
         // Cập nhật trạng thái đơn hàng thành "Đã hủy"
-        $order->status = 'Đã hủy';
+        $order->status = 'huy_don_hang';
         $order->save();
 
         return ['success' => true, 'message' => 'Đơn hàng đã được hủy thành công.'];
+    }
+
+    public function searchOrders($keyword)
+    {
+        return Order::with('items')
+            ->where('user_id', Auth::id())
+            ->where('sku', 'LIKE', '%' . $keyword . '%') // Tìm kiếm theo mã đơn hàng
+            ->get();
     }
 }

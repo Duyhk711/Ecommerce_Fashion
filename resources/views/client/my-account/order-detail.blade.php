@@ -1,10 +1,12 @@
 @extends('client.my-account')
+@section('css')
 
+@endsection
 @section('my-order')
     <div class="order-detail-container ">
         <!-- Header đơn hàng -->
         <div class="order-header">
-            <a href="{{ route('my.order') }}" class="btn"> Quay lại</a>
+
             <h2>
                 Mã đơn hàng: {{ $order->sku }}
                 <span
@@ -43,9 +45,10 @@
                     {{ $order->district }},
                     {{ $order->city }}
                 </p>
-                <p><strong>Trạng thái thanh toán:</strong> {{ $order->payment_status }}</p>
+                <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
             </div>
         </div>
+    </div>
 
         <!-- Danh sách sản phẩm -->
      <div class="order-items">
@@ -141,10 +144,13 @@
                             </strong>
                         </td>
                     </tr>
+
                 </div>
             </table>
+            <a href="{{ route('my.order') }}" class="btn"> Quay lại</a>
         </div>
     </div>
+
     <script>
         function confirmCancelOrder(orderId) {
             if (confirm("Bạn chắc chắn muốn hủy đơn hàng này?")) {
