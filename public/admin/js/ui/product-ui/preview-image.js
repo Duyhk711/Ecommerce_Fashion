@@ -7,12 +7,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const subImageInput = document.getElementById('sub-image-input');
     const subImagesDisplay = document.getElementById('sub-images-display');
 
-    // Kiểm tra xem các phần tử có tồn tại trước khi thêm event listener không
+    // console.log(mainImageUploadBtn, mainImageInput, mainImageDisplay, subImageUploadBtn, subImageInput, subImagesDisplay);
+
     if (mainImageUploadBtn && mainImageInput && mainImageDisplay &&
         subImageUploadBtn && subImageInput && subImagesDisplay) {
 
         // Khi nhấn nút tải lên ảnh chính
-        mainImageUploadBtn.addEventListener('click', function () {
+        mainImageUploadBtn.addEventListener('click', function (event) {
+            event.preventDefault();
             mainImageInput.click(); // Mở input file để chọn ảnh
         });
 
@@ -29,7 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Khi nhấn nút tải lên ảnh phụ
-        subImageUploadBtn.addEventListener('click', function () {
+        subImageUploadBtn.addEventListener('click', function (event) {
+            event.preventDefault();
             subImageInput.click(); // Mở input file để chọn nhiều ảnh
         });
 
