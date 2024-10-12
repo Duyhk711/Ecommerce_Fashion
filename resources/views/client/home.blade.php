@@ -195,7 +195,7 @@
                         @foreach($banners['topBanners'] as $banner)
                             @php
                                 $bannerImages = $banner->images;
-                                $imageIndex = 0; 
+                                $imageIndex = 0;
                                 $selectedImage = $bannerImages->get($imageIndex);
                             @endphp
                             @if($selectedImage)
@@ -254,7 +254,7 @@
 
                                 @php
                                     $bannerImages = $banner->images;
-                                    $imageIndex = 2; 
+                                    $imageIndex = 2;
                                     $selectedImage = $bannerImages->get($imageIndex);
                                 @endphp
                                 @if($selectedImage)
@@ -444,7 +444,7 @@
                                             <!-- Start Product Image -->
                                             <div class="product-image">
                                                 <!-- Start Product Image -->
-                                                <a href="{{ route('productDetail', $product->id) }}" class="product-img rounded-0">
+                                                <a href="{{ route('productDetail', $product->slug) }}" class="product-img rounded-0">
                                                     <!-- Image -->
                                                     <img class="primary rounded-0 blur-up lazyload"
                                                         data-src="{{$product->img_thumbnail}}"
@@ -552,7 +552,7 @@
                                                         @endforeach
                                                     @endif
                                                 </ul>
-                                                
+
                                                 <!-- End Variant -->
                                                 <!-- Product Button -->
                                                 <div class="button-action hidden">
@@ -621,7 +621,7 @@
                                 </div>
                             </div>
                         </div>
-                   
+
             </div>
         </div>
         <!--End Parallax Banner-->
@@ -1340,7 +1340,7 @@
     <div class="chat-icon" onclick="toggleChat()">
         💬
     </div>
-    
+
     <div class="chat-box" id="chatBox">
         <div class="chat-header">Liên hệ hỗ trợ</div>
         <form id="contactForm" onsubmit="sendMessage(event)">
@@ -1369,22 +1369,22 @@
             const chatBox = document.getElementById('chatBox');
             chatBox.style.display = chatBox.style.display === 'none' || chatBox.style.display === '' ? 'block' : 'none';
         }
-    
+
         function sendMessage(event) {
             event.preventDefault(); // Ngăn chặn việc gửi form
-    
+
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
             const title = document.getElementById('title').value;
             const message = document.getElementById('message').value;
-    
+
             // Xử lý gửi tin nhắn ở đây, ví dụ như gửi tới server
-    
+
             console.log('Số điện thoại:', phone);
             console.log('Email:', email);
             console.log('Tiêu đề:', title);
             console.log('Tin nhắn:', message);
-    
+
             // Reset form
             document.getElementById('contactForm').reset();
             toggleChat(); // Đóng chat box sau khi gửi
