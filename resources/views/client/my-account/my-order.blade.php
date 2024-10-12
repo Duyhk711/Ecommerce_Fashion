@@ -123,14 +123,14 @@
                     <a class="nav-link {{ !$status ? 'active' : '' }}" href="{{ route('my.order') }}">Tất cả</a>
                     <a class="nav-link {{ $status == 'cho_thanh_toan' ? 'active' : '' }}"
                     href="{{ route('my.order', ['status' => 'cho_thanh_toan']) }}">Chờ thanh toán</a>
-                    <a class="nav-link {{ $status == 'cho_xac_nhan' ? 'active' : '' }}"
-                        href="{{ route('my.order', ['status' => 'cho_xac_nhan']) }}">Chờ xác nhận</a>
-                    <a class="nav-link {{ $status == 'dang_chuan_bi' ? 'active' : '' }}"
-                        href="{{ route('my.order', ['status' => 'dang_chuan_bi']) }}">Đang chuẩn bị</a>
-                    <a class="nav-link {{ $status == 'dang_van_chuyen' ? 'active' : '' }}"
-                        href="{{ route('my.order', ['status' => 'dang_van_chuyen']) }}">Đang vận chuyển</a>
-                    <a class="nav-link {{ $status == 'hoan_thanh' ? 'active' : '' }}"
-                        href="{{ route('my.order', ['status' => 'hoan_thanh']) }}">Đã giao hàng</a>
+                    <a class="nav-link {{ $status == '1' ? 'active' : '' }}"
+                        href="{{ route('my.order', ['status' => '1']) }}">Chờ xác nhận</a>
+                    <a class="nav-link {{ $status == '2' ? 'active' : '' }}"
+                        href="{{ route('my.order', ['status' => '2']) }}">Chờ vận chuyển</a>
+                    <a class="nav-link {{ $status == '3' ? 'active' : '' }}"
+                        href="{{ route('my.order', ['status' => '3']) }}">Đang vận chuyển</a>
+                    <a class="nav-link {{ $status == '4' ? 'active' : '' }}"
+                        href="{{ route('my.order', ['status' => '4']) }}">Hoàn thành</a>
                     <a class="nav-link {{ $status == 'huy_don_hang' ? 'active' : '' }}"
                         href="{{ route('my.order', ['status' => 'huy_don_hang']) }}">Đã hủy</a>
                 </nav>
@@ -145,31 +145,26 @@
                                 <h2 class="m-0 font-size">Mã đơn hàng: {{ $item->sku }}</h2>
                                 <span
                                     class="status-label
-                                @if ($item->status == 'cho_xac_nhan') text-secondary
-                                @elseif($item->status == 'da_xac_nhan') text-secondary
-                                @elseif($item->status == 'dang_chuan_bi') text-warning
-                                @elseif($item->status == 'dang_van_chuyen') text-primary
-                                @elseif($item->status == 'hoan_thanh') text-success
+                                @if ($item->status == '1') text-secondary
+                                @elseif($item->status == '2') text-secondary
+                                @elseif($item->status == '3') text-warning
+                                @elseif($item->status == '4') text-primary
                                 @elseif($item->status == 'huy_don_hang') text-danger @endif">
                                     @switch($item->status)
-                                        @case('cho_xac_nhan')
+                                        @case('1')
                                             Chờ xác nhận
                                         @break
 
-                                        @case('da_xac_nhan')
-                                            Đã xác nhận
+                                        @case('2')
+                                            Chờ vận chuyển
                                         @break
 
-                                        @case('dang_chuan_bi')
-                                            Đang chuẩn bị
-                                        @break
-
-                                        @case('dang_van_chuyen')
+                                        @case('3')
                                             Đang vận chuyển
                                         @break
 
-                                        @case('hoan_thanh')
-                                            Đã giao hàng
+                                        @case('4')
+                                            Hoàn thành
                                         @break
 
                                         @case('huy_don_hang')
@@ -208,7 +203,7 @@
                                         Chi tiết
                                     </a>
                                 @endif
-                                @if (in_array($item->status, ['cho_xac_nhan', 'da_xac_nhan', 'dang_chuan_bi']))
+                                @if (in_array($item->status, ['1', '2']))
                                     <div class="cancel-item" style="display: inline-block; margin-left: 10px;">
                                         <form action="{{ route('order.cancel', ['order_id' => $item->id]) }}"
                                             method="POST" id="cancelOrderForm-{{ $item->id }}">
