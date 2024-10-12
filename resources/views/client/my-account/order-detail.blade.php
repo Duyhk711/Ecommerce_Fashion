@@ -239,7 +239,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        @if ($order->status == '5')
+                        @if ($order->status == '4')
                             @if ($commentDataArray[$item->productVariant->product->id]['status'] == "not_comment")
                                 <div class="review-button-container" style="text-align: right;">
                                     <a href="#" class="btn btn-primary btn-sm rounded-2 w-30" 
