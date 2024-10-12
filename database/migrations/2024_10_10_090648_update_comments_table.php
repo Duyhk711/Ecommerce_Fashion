@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->enum('status', [
-                '1',
-                '2',
-                '3',
-                '4',
-                'huy_don_hang'
-            ])->default('1')->change();
+        Schema::table('comments', function (Blueprint $table) {
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('cascade')->after('product_id');
+            $table->string('comment')->nullable()->change();
         });
     }
 
@@ -27,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('order_id');
         });
     }
 };

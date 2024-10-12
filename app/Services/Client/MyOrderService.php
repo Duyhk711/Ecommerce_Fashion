@@ -18,18 +18,18 @@ class MyOrderService
         $userId = Auth::id();
 
         // Lấy danh sách đơn hàng của người dùng và tải thông tin đơn hàng chi tiết
-        $orders = Order::with(['items','items.productVariant.product', 'items.productVariant.product.comments' => function ($query) use ($userId) {
+        $orders = Order::with(['items.productVariant.product', 'items.productVariant.product.comments' => function ($query) use ($userId) {
             $query->where('user_id', $userId); // Lọc bình luận theo user_id
         }]) // Tải thông tin các mục đơn hàng cùng với thông tin sản phẩm variant và bình luận
-            ->where('user_id', $userId) // Lọc theo user_id
-            ->get();
+        ->where('user_id', $userId) // Lọc theo user_id
+        ->get();
 
         return $orders; // Trả về danh sách đơn hàng
     }
 
     public function getOrderDetail($id)
     {
-        return Order::with(['items.productVariant.variantAttributes.attributeValue'])->findOrFail($id);
+        return Order::with(['items.productVariant.variantAttributes.attributeValue', 'items.productVariant.product', 'items.productVariant.product.comments'])->findOrFail($id);
     }
 
     public function cancelOrder($order_id)
@@ -63,4 +63,38 @@ class MyOrderService
 
         return ['success' => true, 'message' => 'Đơn hàng đã được hủy thành công.'];
     }
+
+
+    public function getCommentForProduct($orderId, $productId)
+    {
+        $userId = auth()->id();
+    
+        $comment = Comment::where('order_id', $orderId)
+                    ->where('product_id', $productId)
+                    ->where('user_id', $userId)
+                    ->first();
+    
+        if ($comment == null) {
+            $status = 'not_comment';  // Chưa comment
+            
+        } else {
+            if ($comment->updated_at == null) {
+                // Nếu created_at bằng updated_at -> Đã comment nhưng chưa sửa
+                $status = 'commented';
+            } else {
+                // Nếu comment đã được sửa
+                $status = 'updated';
+            }
+        }
+        // dd($status);
+        return [
+            'comment' => $comment,
+            'status' => $status, 
+        ];
+    }
+
+    public function getCommentById($id){
+        return Comment::find($id);
+    }
+
 }

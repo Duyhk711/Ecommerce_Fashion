@@ -41,19 +41,19 @@
                                 <td>
                                     @php
                                         $statusMapping = [
-                                            'cho_xac_nhan' => 'Chờ xác nhận',
-                                            'da_xac_nhan' => 'Đã xác nhận',
-                                            'dang_chuan_bi' => 'Đang chuẩn bị',
-                                            'dang_van_chuyen' => 'Đang vận chuyển',
-                                            'hoan_thanh' => 'Đã giao hàng',
+                                            '1' => 'Chờ xác nhận',
+                                            '2' => 'Đã xác nhận',
+                                            '3' => 'Đang chuẩn bị',
+                                            '4' => 'Đang vận chuyển',
+                                            '5' => 'Đã giao hàng',
                                             'huy_don_hang' => 'Đơn hàng đã hủy'
                                         ];
                                         $badgeColor = [
-                                            'cho_xac_nhan' => 'bg-warning',    
-                                            'da_xac_nhan' => 'bg-info',        
-                                            'dang_chuan_bi' => 'bg-primary',   
-                                            'dang_van_chuyen' => 'bg-secondary',
-                                            'hoan_thanh' => 'bg-success',      
+                                            '1' => 'bg-warning',    
+                                            '2' => 'bg-info',        
+                                            '3' => 'bg-primary',   
+                                            '4' => 'bg-secondary',
+                                            '5' => 'bg-success',      
                                             'huy_don_hang' => 'bg-danger'    
                                         ];
                                         $currentStatus = $item->status;
