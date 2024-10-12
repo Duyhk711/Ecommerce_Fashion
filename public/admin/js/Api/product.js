@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Xử lý chọn tất cả giá trị
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("select_all_attributes")) {
-      e.preventDefault();
+      e.preventDefault(); // Ngăn chặn gửi form khi nhấn nút
       const select = e.target
         .closest(".card-body")
         .querySelector(".attributes-select");
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Xử lý không chọn giá trị
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("select_no_attributes")) {
-      e.preventDefault();
+      e.preventDefault(); // Ngăn chặn gửi form khi nhấn nút
       const select = e.target
         .closest(".card-body")
         .querySelector(".attributes-select");
@@ -167,7 +167,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Xử lý nút lưu thuộc tính
   document
     .getElementById("save-attributes")
-    .addEventListener("click", function () {
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn gửi form khi nhấn nút "Lưu thuộc tính"
+      
       selectedAttributes = []; // Xóa dữ liệu cũ
 
       // Thu thập dữ liệu thuộc tính đã chọn
@@ -228,8 +230,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  let selectedAttributes = [];
-  let variantsData = []; // Biến để lưu tạm biến thể, cần được định nghĩa ở phạm vi toàn cục
+  let productData = {
+    selectedAttributes: [],
+    variantsData: [],
+  }; // Biến chung để lưu cả thuộc tính và biến thể
   const maxVariants = 50; // Giới hạn tạo tối đa 50 biến thể
 
   // Khởi tạo CKEditor cho phần mô tả chi tiết
@@ -248,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Khi nhấn nút "Tạo ra các biến thể"
   document.getElementById("generate-variants").addEventListener("click", function () {
-    if (selectedAttributes.length === 0) {
+    if (productData.selectedAttributes.length === 0) {
       alert("Vui lòng chọn ít nhất một thuộc tính trước khi tạo biến thể!");
       return;
     }
@@ -271,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return result;
     }
 
-    const variants = generateCombinations(selectedAttributes);
+    const variants = generateCombinations(productData.selectedAttributes);
 
     if (variants.length > maxVariants) {
       alert(`Bạn chỉ có thể tạo tối đa ${maxVariants} biến thể.`);
@@ -301,58 +305,59 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .join("");
 
-      const variantHtml = `
-              <div class="row justify-content-between align-items-center variant-item " style="border: 1px solid rgba(128, 128, 128, 0.318); padding: 10px 0" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}">
-                  <div class="col-8 d-flex">
-                      <div class="variant-number me-2"><strong>#${variantNumber}</strong></div>
-                      ${variantInputs}
+        const variantHtml = `
+        <div class="row justify-content-between align-items-center variant-item " style="border: 1px solid rgba(128, 128, 128, 0.318); padding: 10px 0" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}">
+            <div class="col-8 d-flex">
+                <div class="variant-number me-2"><strong>#${variantNumber}</strong></div>
+                ${variantInputs}
+            </div>
+            <div class="col-4 text-end">
+                <a href="#" class="text-danger remove-variant">Xoá</a>
+            </div>
+        </div>
+        <div class="collapse mt-3" id="${collapseId}">
+            <div class="card card-body mb-3">
+                  <div class="row mb-3"> 
+                   <div class="col-md-6 d-flex align-items-center">
+                      <label for="image-${index}" class="btn  btn btn-alt-primary me-1 mb-3"> <i class="fa fa-fw fa-upload opacity-50 me-1"></i>Tải ảnh lên</label>
+                      <input type="file" id="image-${index}" class="form-control-file hidden-input" accept="image/*" style="display:none;">
+                      <div class="col-md-3">
+                          <img id="preview-${index}" src="#" alt="Xem trước ảnh" style="display: none; width: 100px; margin-top: 0;">
+                      </div>
                   </div>
-                  <div class="col-4 text-end">
-                      <a href="#" class="text-danger remove-variant">Xoá</a>
-                  </div>
-              </div>
-              <div class="collapse mt-3" id="${collapseId}">
-                  <div class="card card-body mb-3">
-                        <div class="row mb-3">
-                         <div class="col-md-6 d-flex align-items-center">
-                            <label for="image-${index}" class="btn  me-2">Tải ảnh lên</label>
-                            <input type="file" id="image-${index}" class="form-control-file hidden-input" name="image[${index}]" accept="image/*" style="display:none;">
-                            <div class="col-md-3">
-                                <img id="preview-${index}" src="#" alt="Xem trước ảnh" style="display: none; width: 100px; margin-top: 0;">
-                            </div>
+      
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Mã sản phẩm: </label>
+                            <input type="text" class="form-control" id="sku-${index}" value="${generatedSKU}">
                         </div>
-
-                          <div class="col-md-6">
-                              <div class="form-group mb-3">
-                                  <label>Mã sản phẩm:</label>
-                                  <input type="text" class="form-control" name="sku[${index}]" value="${generatedSKU}">
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row">
-                          <div class="col-md-6">
-                              <div class="form-group mb-3">
-                                  <label>Giá (₫)</label>
-                                  <input type="text" class="form-control" name="price_regular[${index}]">
-                              </div>
-                          </div>
-                          <div class="col-md-6">
-                              <div class="form-group mb-3">
-                                  <label>Giá ưu đãi (₫)</label>
-                                  <input type="text" class="form-control" name="price_sale[${index}]">
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row">
-                          <div class="col-md-6">
-                              <div class="form-group mb-3">
-                                  <label>Số lượng trong kho</label>
-                                  <input type="number" class="form-control" name="stock[${index}]" value="0" step="any">
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div >`;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Giá: </label>
+                            <input type="number" class="form-control" id="price_regular-${index}" placeholder="Nhập giá sản phẩm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Giá khuyến mãi: </label>
+                            <input type="number" class="form-control" id="price_sale-${index}" placeholder="Nhập giá khuyến mãi">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Số lượng trong kho</label>
+                            <input type="number" class="form-control" id="stock-${index}" value="" placeholder="Nhập vào số lượng">
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>`;
+      
 
       document.getElementById("variant-list").insertAdjacentHTML("beforeend", variantHtml);
       document.getElementById(`image-${index}`).addEventListener("change", function (event) {
@@ -367,7 +372,6 @@ document.addEventListener("DOMContentLoaded", function () {
           reader.readAsDataURL(file);
         }
       });
-   
     });
 
     // Hiển thị nút "Thêm giá" sau khi tạo biến thể
@@ -383,8 +387,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  document.getElementById("save-attributes").addEventListener("click", function () {
-    selectedAttributes = [];
+  document.getElementById("save-attributes").addEventListener("click", function (e) {
+    e.preventDefault();
+    productData.selectedAttributes = []; // Xóa dữ liệu thuộc tính trước đó
 
     document.querySelectorAll("#attributes-container .card").forEach((card) => {
       const attributeId = card.getAttribute("data-attribute-id");
@@ -402,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
       if (selectedValues && selectedValues.length > 0) {
-        selectedAttributes.push({
+        productData.selectedAttributes.push({
           attribute_id: attributeId,
           attribute_name: attributeName,
           values: selectedValueNames,
@@ -410,47 +415,110 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    console.log("Thuộc tính đã được lưu tạm:", selectedAttributes);
+    console.log("Thuộc tính đã được lưu tạm:", productData.selectedAttributes);
   });
 
   document.getElementById("save-variants").addEventListener("click", function () {
-    variantsData = [];
+    productData.variantsData = []; // Xóa dữ liệu biến thể trước đó
 
-    document.querySelectorAll("#variant-list .variant-item").forEach((item, index) => {
-      const variantIndex = index;
-      const attributes = Array.from(
-        item.querySelectorAll(`input[name="variant_attributes[${variantIndex}][]"]`)
-      ).map((input) => input.value);
-      const attributeIds = Array.from(
-        item.querySelectorAll(`input[name="variant_attributes[${variantIndex}][attribute_id]"]`)
-      ).map((input) => input.value);
-      const valueIds = Array.from(
-        item.querySelectorAll(`input[name="variant_attributes[${variantIndex}][value_id]"]`)
-      ).map((input) => input.value);
+    // Lấy tất cả các item variant
+    const items = document.querySelectorAll("#variant-list .variant-item");
+    const promises = []; // Tạo mảng lưu trữ các Promise
 
-      const sku = document.querySelector(`input[name="sku[${variantIndex}]"]`).value;
-      const priceRegular = document.querySelector(`input[name="price_regular[${variantIndex}]"]`).value;
-      const priceSale = document.querySelector(`input[name="price_sale[${variantIndex}]"]`).value;
-      const stock = document.querySelector(`input[name="stock[${variantIndex}]"]`).value;
+    items.forEach((item, index) => {
+        const attributes = Array.from(
+            item.querySelectorAll(`input[name="variant_attributes[${index}][]"]`)
+        ).map((input) => input.value);
+        const attributeIds = Array.from(
+            item.querySelectorAll(`input[name="variant_attributes[${index}][attribute_id]"]`)
+        ).map((input) => input.value);
+        const valueIds = Array.from(
+            item.querySelectorAll(`input[name="variant_attributes[${index}][value_id]"]`)
+        ).map((input) => input.value);
 
-      const imageInput = document.querySelector(`input[name="image[${variantIndex}]"]`);
-      const imageFile = imageInput.files.length > 0 ? imageInput.files[0] : null;
+        // Lấy giá trị từ các trường input dựa trên ID
+        const sku = document.getElementById(`sku-${index}`).value;
+        const priceRegular = document.getElementById(`price_regular-${index}`).value;
+        const priceSale = document.getElementById(`price_sale-${index}`).value;
+        const stock = document.getElementById(`stock-${index}`).value;
 
-      variantsData.push({
-        attributes: attributes,
-        attribute_ids: attributeIds,
-        value_ids: valueIds,
-        sku: sku,
-        price_regular: priceRegular,
-        price_sale: priceSale,
-        stock: stock,
-        image: imageFile, // Lưu đối tượng file thay vì chỉ lưu tên file
-      });
+        // Lấy file ảnh từ input
+        const fileInput = document.getElementById(`image-${index}`);
+        const file = fileInput.files[0]; // File ảnh được chọn
+
+        const variantPromise = new Promise((resolve) => {
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onloadend = function () {
+                    // Thêm dữ liệu biến thể vào productData
+                    productData.variantsData.push({
+                        attributes: attributes,
+                        attribute_ids: attributeIds,
+                        value_ids: valueIds,
+                        sku: sku,
+                        price_regular: priceRegular,
+                        price_sale: priceSale,
+                        stock: stock,
+                        image: reader.result, // Lưu đường dẫn URL của ảnh
+                    });
+                    resolve(); // Giải quyết promise khi đã đọc xong file
+                };
+
+                reader.readAsDataURL(file); // Đọc file ảnh và chuyển đổi thành đường dẫn URL
+            } else {
+                // Nếu không có ảnh, đẩy dữ liệu không có ảnh vào productData
+                productData.variantsData.push({
+                    attributes: attributes,
+                    attribute_ids: attributeIds,
+                    value_ids: valueIds,
+                    sku: sku,
+                    price_regular: priceRegular,
+                    price_sale: priceSale,
+                    stock: stock,
+                    image: null, // Không có ảnh
+                });
+                resolve(); // Giải quyết promise ngay cả khi không có file
+            }
+        });
+
+        promises.push(variantPromise); // Thêm promise vào mảng
     });
 
-    console.log("Biến thể đã được lưu tạm:", variantsData);
-    alert("Biến thể đã được lưu tạm thời.");
-  });
+    // Chờ tất cả promises hoàn thành trước khi cập nhật form
+    Promise.all(promises).then(() => {
+        updateFormInputs();
+        console.log("Biến thể đã được lưu tạm:", productData.variantsData);
+        alert("Biến thể đã được lưu tạm thời.");
+    });
+});
+
+function updateFormInputs() {
+    const variantContainer = document.getElementById("variant-list");
+    // Xóa tất cả input cũ
+    const existingInputs = variantContainer.querySelectorAll('input[name^="product_data"]');
+    existingInputs.forEach(input => input.remove());
+
+    // Tạo input mới cho mỗi biến thể
+    productData.variantsData.forEach((variant, i) => {
+        // Tạo các input cho thuộc tính của biến thể
+        for (const key in variant) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = `product_data[${i}][${key}]`; // Tạo tên dạng mảng
+            // Nếu là mảng, chuyển sang JSON, nếu không thì giữ nguyên giá trị
+            input.value = Array.isArray(variant[key]) ? JSON.stringify(variant[key]) : variant[key];
+            variantContainer.appendChild(input);
+        }
+    });
+}
+
+
+
+
+
+  
+
 
   // Hiển thị popup khi nhấn nút "Thêm giá"
   document.getElementById("apply-price-to-all").addEventListener("click", function () {
@@ -460,19 +528,19 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Nhập giá chung cho các biến thể</h5>
+              <h5 class="modal-title">Nhập giá cho các biến thể</h5>
               <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <div class="form-group">
-                <label for="input-price-for-all">Giá gốc (₫)</label>
-                <input type="text" id="input-price-regular" class="form-control" placeholder="Nhập giá gốc">
+                <label for="input-price-for-all">Giá: </label>
+                <input type="number" id="input-price-regular" class="form-control" placeholder="Nhập giá sản phẩm">
               </div>
               <div class="form-group">
-                <label for="input-price-sale">Giá ưu đãi (₫)</label>
-                <input type="text" id="input-price-sale" class="form-control" placeholder="Nhập giá ưu đãi">
+                <label for="input-price-sale">Giá khuyến mãi: </label>
+                <input type="number" id="input-price-sale" class="form-control" placeholder="Nhập giá khuyến mãi">
               </div>
             </div>
             <div class="modal-footer">
@@ -495,10 +563,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const priceSale = document.getElementById("input-price-sale").value;
 
       // Áp dụng giá gốc và giá sale cho tất cả biến thể
-      document.querySelectorAll(`input[name^="price_regular"]`).forEach(input => {
+      document.querySelectorAll(`input[id^="price_regular"]`).forEach(input => {
         input.value = priceRegular;
       });
-      document.querySelectorAll(`input[name^="price_sale"]`).forEach(input => {
+      document.querySelectorAll(`input[id^="price_sale"]`).forEach(input => {
         input.value = priceSale;
       });
 
@@ -511,103 +579,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // document
-  //   .getElementById("save-product")
-  //   .addEventListener("click", function () {
-  //     const name = document.getElementById("name").value;
-  //     const sku = document.getElementById("sku").value;
-  //     const priceRegular = document.getElementById("price_regular").value;
-  //     const priceSale = document.getElementById("price_sale").value;
-  //     const description = document.getElementById("description").value;
-  //     const catalogue = document.getElementById("catalogue-select").value;
-  //     const content = window.editorInstance
-  //       ? window.editorInstance.getData()
-  //       : "";
 
-  //     const isActive = document.querySelector(
-  //       'input[name="is_active"]'
-  //     ).checked;
-  //     const isNew = document.querySelector('input[name="is_new"]').checked;
-  //     const isHotDeal = document.querySelector(
-  //       'input[name="is_hot_deal"]'
-  //     ).checked;
-  //     const isShowHome = document.querySelector(
-  //       'input[name="is_show_home"]'
-  //     ).checked;
 
-  //     // Lấy ảnh chính
-  //     const mainImage = document.getElementById("main_image").files[0];
-
-  //     // Lấy ảnh phụ
-  //     const galleryImages = document.getElementById("gallery_images").files;
-
-  //     if (variantsData.length === 0) {
-  //       alert("Vui lòng tạo biến thể trước khi gửi sản phẩm!");
-  //       return;
-  //     }
-
-  //     const productData = {
-  //       name: name,
-  //       sku: sku,
-  //       price_regular: priceRegular,
-  //       price_sale: priceSale,
-  //       description: description,
-  //       content: content,
-  //       catalogue: catalogue,
-  //       is_active: isActive,
-  //       is_new: isNew,
-  //       is_hot_deal: isHotDeal,
-  //       is_show_home: isShowHome,
-  //       variants: variantsData.map((variant) => ({
-  //         ...variant,
-  //         image: null, // Chuyển đối tượng file thành null để gửi qua FormData
-  //       })),
-  //     };
-
-  //     console.log("Dữ liệu sản phẩm:", productData);
-
-  //     const formData = new FormData();
-  //     formData.append("productData", JSON.stringify(productData));
-
-  //     // Gửi ảnh chính
-  //     if (mainImage) {
-  //       formData.append("main_image", mainImage);
-  //     }
-
-  //     // Gửi ảnh phụ (gallery_images[])
-  //     Array.from(galleryImages).forEach((file, index) => {
-  //       formData.append(`gallery_images[]`, file);
-  //     });
-
-  //     // Gửi ảnh biến thể (variant_images[index])
-  //     variantsData.forEach((variant, index) => {
-  //       const variantImageInput = document.querySelector(
-  //         `input[name="image[${index}]"]`
-  //       );
-
-  //       if (variantImageInput && variantImageInput.files.length > 0) {
-  //         const variantImageFile = variantImageInput.files[0]; // Lấy file ảnh biến thể
-
-  //         // Kiểm tra và thêm ảnh biến thể vào FormData
-  //         formData.append(`variant_images[${index}]`, variantImageFile); // Gửi file ảnh biến thể qua FormData
-  //       }
-  //     });
-
-  //     // Gửi dữ liệu lên server
-  //     fetch("/admin/products/add", {
-  //       method: "POST",
-  //       headers: {
-  //         "X-CSRF-TOKEN": csrfToken,
-  //       },
-  //       body: formData,
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log("Thành công:", data);
-  //         alert("Sản phẩm đã được thêm thành công!");
-  //       })
-  //       .catch((error) => {
-  //         console.error("Lỗi:", error);
-  //         alert("Có lỗi xảy ra khi thêm sản phẩm.");
-  //       });
-  //   });

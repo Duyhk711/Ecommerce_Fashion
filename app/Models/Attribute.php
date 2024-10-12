@@ -25,4 +25,10 @@ class Attribute extends Model
     {
         return $this->hasMany(VariantAttribute::class);
     }
+    
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'variant_attributes')
+                    ->withPivot('attribute_value_id');
+    }
 }
