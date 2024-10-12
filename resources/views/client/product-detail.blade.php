@@ -179,7 +179,7 @@
 
                         <!-- Product Form -->
                         <form method="POST" action="{{ route('cart.add') }} "
-                            class="product-form product-form-border hidedropdown">
+                            class="product-form product-form-border hidedropdown" id="product-form">
                             @csrf
                             <!-- Swatches -->
                             <div class="product-swatches-option">
@@ -245,7 +245,7 @@
 
                                 <!-- Product Buy -->
                                 <div class="product-form-submit buyit fl-1 ms-3">
-                                    <button type="button" class="btn btn-primary proceed-to-checkout">
+                                    <button type="button" class="btn btn-primary" id="proceed-to-checkout">
                                         <span> Mua ngay </span>
                                     </button>
                                 </div>
@@ -1037,8 +1037,8 @@
                                             data-bs-target="#quickView">
                                             <img class="carousel-indicator-img"
                                                 data-src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                alt="product" title="Product" />
+                                                src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
+                                                title="Product" />
                                         </div>
                                     </div>
 
@@ -1335,6 +1335,37 @@
                         confirmButtonText: 'OK'
                     });
                 }
+            });
+            // Mua ngay
+            document.getElementById('proceed-to-checkout').addEventListener('click', function(event) {
+                const colorElement = document.getElementById('color_id');
+                const sizeElement = document.getElementById('size_id');
+                const variantElement = document.getElementById('product_variant_id');
+
+                const colorId = colorElement ? colorElement.value : null;
+                const sizeId = sizeElement ? sizeElement.value : null;
+                const variantId = variantElement ? variantElement.value : null;
+
+                const form = document.getElementById('product-form');
+
+                // Kiểm tra xem người dùng đã chọn màu, kích thước và biến thể chưa
+                if (!colorId || !sizeId || !variantId) {
+                    event.preventDefault();
+
+                    // Hiển thị popup lỗi với SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Bạn chưa chọn màu, kích thước hoặc biến thể sản phẩm!',
+                        confirmButtonText: 'OK'
+                    });
+
+                    return; // Ngăn không cho tiếp tục thực hiện khi có lỗi
+                }
+
+                // Thay đổi action của form
+                form.action = '{{ route('buyNow') }}';
+                form.submit();
             });
         });
 
