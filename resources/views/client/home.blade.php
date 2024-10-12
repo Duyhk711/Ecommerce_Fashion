@@ -3,121 +3,128 @@
 @section('content')
     <!--Home Slideshow-->
     <style>
-            .chat-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
 
-    .chat-button {
-        background-color: #0084ff;
-        color: white;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        font-size: 25px;
-    }
+        .chat-button {
+            background-color: #0084ff;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 25px;
+        }
 
-    .chat-button i {
-        font-size: 30px;
-    }
+        .chat-button i {
+            font-size: 30px;
+        }
 
-    .chat-button:hover {
-        background-color: #006dbf;
-    }
+        .chat-button:hover {
+            background-color: #006dbf;
+        }
 
-    .chat-box {
-        display: none;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-height: 400px;
-        overflow: hidden;
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 300px;
-    }
+        .chat-box {
+            display: none;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow: hidden;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+        }
 
-    .chat-header {
-        background-color: #65c6f6;
-        color: white;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        .chat-header {
+            background-color: #65c6f6;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .close-chat {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-    }
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
 
-    .chat-body {
-        padding: 10px;
-        height: 280px;
-        overflow-y: auto;
-        border-bottom: 1px solid #ddd;
-    }
-    .message {
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        max-width: 70%;
-    }
-    .sent {
-        margin-left:30%;
-        align-self: flex-end;
-        background-color: #4cdaed;
-        color: white;
-        border-radius: 10px;
-        padding: 10px;
-        text-align: right;
-    }
-    .received {
-        align-self: flex-start;
-        background-color: #f1f1f1;
-        color: black;
-        border-radius: 10px;
-        padding: 10px;
-        text-align: left;
-    }
-    .message-time {
-        font-size: 10px;
-        color: #888;
-        margin-top: 5px;
-    }
-    .chat-footer {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
-    .chat-footer textarea {
-        flex: 1;
-        resize: none;
-        border-radius: 20px;
-        padding-left: 15px;
-    }
-    .chat-footer button {
-        margin-left: 10px;
-        border-radius: 50%;
-        height: 40px;
-        width: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-    }
+        .chat-body {
+            padding: 10px;
+            height: 280px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+        }
+
+        .sent {
+            margin-left: 30%;
+            align-self: flex-end;
+            background-color: #4cdaed;
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: right;
+        }
+
+        .received {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: black;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+
+        .chat-footer textarea {
+            flex: 1;
+            resize: none;
+            border-radius: 20px;
+            padding-left: 15px;
+        }
+
+        .chat-footer button {
+            margin-left: 10px;
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
 
         .voucher-card {
             background-color: #ffffff;
@@ -662,17 +669,18 @@
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
-                                                            data-src="{{ $product->img_thumbnail }}"
-                                                            src="{{ asset('client/images/products/product5.jpg') }}"
+                                                            data-src="{{ asset('storage/products/' . $product->img_thumbnail) }}"
+                                                            src="{{ asset('storage/products/' . $product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
+
                                                         <!-- End Image -->
                                                         <!-- Hover Image -->
-                                                        <img class="hover rounded-0 blur-up lazyload"
+                                                        {{-- <img class="hover rounded-0 blur-up lazyload"
                                                             data-src="{{ asset('client/images/products/product5-1.jpg') }}"
                                                             src="{{ asset('client/images/products/product5-1.jpg') }}"
                                                             alt="Product" title="Product" width="625"
-                                                            height="808" />
+                                                            height="808" /> --}}
                                                         <!-- End Hover Image -->
                                                     </a>
                                                     <!-- End Product Image -->
@@ -1023,11 +1031,11 @@
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                       @if($product->variants->count() > 0)
-                                                    <div class="product-variants">
-                                                        {{-- <h4>Available Variants:</h4>
+                                                        @if ($product->variants->count() > 0)
+                                                            <div class="product-variants">
+                                                                {{-- <h4>Available Variants:</h4>
                                                         <ul>
-                                                            @foreach($product->variants as $variant)
+                                                            @foreach ($product->variants as $variant)
                                                                 <li>
                                                                     Size: {{ $variant->variantAttributes->where('attribute.name', 'Size')->first()->attributeValue->value ?? 'N/A' }},
                                                                     Color: {{ $variant->variantAttributes->where('attribute.name', 'Color')->first()->attributeValue->value ?? 'N/A' }}
@@ -1035,16 +1043,17 @@
                                                             @endforeach
                                                         </ul> --}}
 
-                                                        <!-- Nút "Add to Cart" -->
-                                                        <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#addtocart_modal"
-                                                        data-product-name="{{ $product->name }}"
-                                                        data-product-variant-id=""
-                                                        data-product-variant-stock=""
-                                                        data-product-image="{{ asset($product->img_thumbnail) }}"
-                                                        @php
-                                                            $color = 'N/A';
+                                                                <!-- Nút "Add to Cart" -->
+                                                                <a href="#addtocart-modal"
+                                                                    class="btn-icon addtocart add-to-cart-modal"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#addtocart_modal"
+                                                                    data-product-name="{{ $product->name }}"
+                                                                    data-product-variant-id=""
+                                                                    data-product-variant-stock=""
+                                                                    data-product-image="{{ asset($product->img_thumbnail) }}"
+                                                                    @php
+$color = 'N/A';
                                                             $size = 'N/A';
                                                             // Duyệt qua các thuộc tính của biến thể để tìm màu sắc và kích thước
                                                             if ($product->selected_variant) {
@@ -1055,25 +1064,26 @@
                                                                         $size = $attribute->attributeValue->value;
 }
                                                                 }
-                                                            }
-                                                        @endphp
-                                                        data-product-color="{{ $color }}"
-                                                        data-product-size="{{ $size }}"
-                                                        data-product-price="{{ $product->selected_variant ? $product->selected_variant->price_sale : 'N/A' }}"> <!-- Giá biến thể đã chọn -->
-                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                              data-bs-toggle="tooltip" data-bs-placement="left"
-                                                              title="Add to Cart">
-                                                            <i class="icon anm anm-cart-l"></i>
-                                                            <span class="text">Add to Cart</span>
-                                                        </span>
-                                                     </a>
+                                                            } @endphp
+                                                                    data-product-color="{{ $color }}"
+                                                                    data-product-size="{{ $size }}"
+                                                                    data-product-price="{{ $product->selected_variant ? $product->selected_variant->price_sale : 'N/A' }}">
+                                                                    <!-- Giá biến thể đã chọn -->
+                                                                    <span
+                                                                        class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                        title="Add to Cart">
+                                                                        <i class="icon anm anm-cart-l"></i>
+                                                                        <span class="text">Add to Cart</span>
+                                                                    </span>
+                                                                </a>
 
 
 
-                                                    </div>
-                                                @else
-                                                    <p>No variants available</p>
-                                                @endif
+                                                            </div>
+                                                        @else
+                                                            <p>No variants available</p>
+                                                        @endif
                                                         <!--End Cart Button-->
                                                         <!--Quick View Button-->
                                                         {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
@@ -1987,95 +1997,111 @@
     @vite(['resources/js/app.js'])
     <script>
         $(document).ready(function() {
-       let adminId;
-       let userId = {{ Auth::id() }};
-       $('#chatButton').click(function() {
-           $('#chatBox').show();
-           $.get('/get-first-admin', function(response) {
-               if (response.admin_id) {
-                   adminId = response.admin_id;
-                   $('#chatWithAdminName').text('Chatting with ' + response.admin_name);
-                   $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
-                       $('#chatMessages').empty();
-                       messagesResponse.messages.forEach(function(message) {
-                           let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                           let messageHtml = `
+            let adminId;
+            let userId = {{ Auth::id() }};
+            $('#chatButton').click(function() {
+                $('#chatBox').show();
+                $.get('/get-first-admin', function(response) {
+                    if (response.admin_id) {
+                        adminId = response.admin_id;
+                        $('#chatWithAdminName').text('Chatting with ' + response.admin_name);
+                        $.get('/fetch-messages', {
+                            receiver_id: adminId
+                        }, function(messagesResponse) {
+                            $('#chatMessages').empty();
+                            messagesResponse.messages.forEach(function(message) {
+                                let messageTime = new Date(message.created_at)
+                                    .toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
+                                let messageHtml = `
                                <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
                                    <div class="message-text">${message.message}</div>
                                    <div class="message-time">${messageTime}</div>
                                </div>`;
 
-                           $('#chatMessages').append(messageHtml);
-                       });
+                                $('#chatMessages').append(messageHtml);
+                            });
 
-                       scrollToBottom();
-                   });
-               }
-           });
-       });
+                            scrollToBottom();
+                        });
+                    }
+                });
+            });
 
-       $('#closeChat').click(function() {
-           $('#chatBox').hide();
-       });
+            $('#closeChat').click(function() {
+                $('#chatBox').hide();
+            });
 
-       $('#sendMessage').click(function() {
-           sendMessage();
-       });
+            $('#sendMessage').click(function() {
+                sendMessage();
+            });
 
-       $('#messageInput').keypress(function(event) {
-           if (event.which == 13 && !event.shiftKey) {
-               event.preventDefault();
-               sendMessage();
-           }
-       });
-       function sendMessage() {
-           let message = $('#messageInput').val().trim();
-           if (message) {
-               $.post('/send-message', {
-                   _token: '{{ csrf_token() }}',
-                   message: message,
-                   receiver_id: adminId
-               }, function(response) {
-                   if (response.success) {
-                       let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                       let messageHtml = `
+            $('#messageInput').keypress(function(event) {
+                if (event.which == 13 && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                let message = $('#messageInput').val().trim();
+                if (message) {
+                    $.post('/send-message', {
+                        _token: '{{ csrf_token() }}',
+                        message: message,
+                        receiver_id: adminId
+                    }, function(response) {
+                        if (response.success) {
+                            let messageTime = new Date().toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                            let messageHtml = `
                            <div class="message sent">
                                <div class="message-text">${message}</div>
                                <div class="message-time">${messageTime}</div>
                            </div>`;
 
-                       $('#chatMessages').append(messageHtml);
-                       $('#messageInput').val('');
-                       scrollToBottom();
-                   }
-               });
-           }
-       }
+                            $('#chatMessages').append(messageHtml);
+                            $('#messageInput').val('');
+                            scrollToBottom();
+                        }
+                    });
+                }
+            }
 
-       var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-           cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-           encrypted: true
-       });
+            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+                encrypted: true
+            });
 
 
-       var channel = pusher.subscribe('chat.' + userId);
-       channel.bind('admin-message', function(data) {
-           let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-           let messageHtml = `
+            var channel = pusher.subscribe('chat.' + userId);
+            channel.bind('admin-message', function(data) {
+                let messageTime = new Date(data.created_at).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                let messageHtml = `
                <div class="message received">
                    <div class="message-text">${data.user.name}: ${data.message}</div>
                    <div class="message-time">${messageTime}</div>
                </div>`;
 
-           $('#chatMessages').append(messageHtml);
-           scrollToBottom();
-       });
-       function scrollToBottom() {
-           const chatBody = $('.chat-body');
-           chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
-       }
-   });
-       </script>
+                $('#chatMessages').append(messageHtml);
+                scrollToBottom();
+            });
+
+            function scrollToBottom() {
+                const chatBody = $('.chat-body');
+                chatBody.animate({
+                    scrollTop: chatBody[0].scrollHeight
+                }, 300);
+            }
+        });
+    </script>
 
     <!--End Product Quickview Modal-->
     <script>
@@ -2130,7 +2156,7 @@
                 modal.find('.product-title').text(productName); // Cập nhật tên sản phẩm
                 modal.find('.product-image img').attr('src', productImage); // Cập nhật hình ảnh sản phẩm
                 modal.find('.product-clr').text(productColor + ' / ' +
-                productSize); // Cập nhật màu sắc và kích thước
+                    productSize); // Cập nhật màu sắc và kích thước
                 modal.find('.price').text(productPrice); // Cập nhật giá
                 // modal.find('.price').text(product_variant_id); // Cập nhật giá
 
