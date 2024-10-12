@@ -39,7 +39,7 @@ class CheckoutController extends Controller
             // dd($address);
             $dataCart = session()->get('checkoutItem');
 
-            dd($dataCart);
+            // dd($dataCart);
         } else {
             $dataAddress = [];
             $address = '';
@@ -74,7 +74,7 @@ class CheckoutController extends Controller
 
     public function storeCheckout(Request $request)
     {
-        // dd($request);
+        // dd($request->all());
         $order = new Order();
         $order->user_id = Auth::check() ? auth()->id() : null;
         $order->customer_name = $request->input('customer_name');
@@ -96,6 +96,7 @@ class CheckoutController extends Controller
         $products = json_decode($request->input('cartItem'));
         // dd($products);
         if (is_array($products) || is_object($products)) {
+            $cartItems = [];
             foreach ($products as $product) {
                 $prd = ProductVariant::find($product->product_variant_id);
                 $orderItem = new OrderItem();
