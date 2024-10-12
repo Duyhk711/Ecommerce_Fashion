@@ -139,7 +139,6 @@
                 <!-- Danh Sách Đơn Hàng -->
                 <div class="order-book-section">
                     <div class="row g-4">
-
                         <div class="order-select-box">
                             <div class="order-header d-flex justify-content-between align-items-center">
                                 <h2 class="m-0 font-size">Mã đơn hàng: {{ $item->sku }}</h2>
