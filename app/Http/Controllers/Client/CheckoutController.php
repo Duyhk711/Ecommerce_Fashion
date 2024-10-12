@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
@@ -38,11 +39,13 @@ class CheckoutController extends Controller
             // dd($address);
             $dataCart = session()->get('checkoutItem');
 
-            // dd($dataCart);
+            dd($dataCart);
         } else {
             $dataAddress = [];
             $address = '';
+            session()->put('checkoutItem', $this->checkoutService->getCartItems($request->input('selected_items', [])));
             $dataCart = session('checkoutItem', []);
+            // dd($dataCart);
         }
         // dd(session('checkoutItem'));
         return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
@@ -73,9 +76,9 @@ class CheckoutController extends Controller
     {
         // dd($request);
         $order = new Order();
-        $order->user_id = auth()->id();
+        $order->user_id = Auth::check() ? auth()->id() : null;
         $order->customer_name = $request->input('customer_name');
-        $order->session_id = time();
+        $order->session_id = 'ORD' . time();
         $order->customer_email = $request->input('customer_email');
         $order->customer_phone = $request->input('customer_phone');
         $order->address_line1 = $request->input('address_line1');
@@ -106,6 +109,15 @@ class CheckoutController extends Controller
                 $orderItem->variant_sku = $prd->sku;
                 $orderItem->product_sku = $prd->product->sku;
                 $orderItem->save();
+                if (Auth::check()) {
+                    CartItem::where('id', $product->cart_item_id)->forceDelete();
+                } else {
+                    $cartItems = session('cart', []);
+                    unset($cartItems[$product->product_variant_id]);
+                    // dd($cartItems);
+                    // dd(session('cart'));
+                }
+                session()->put('cart', $cartItems);
             }
         } else {
             // Trường hợp biến không phải là mảng hoặc đối tượng, xử lý lỗi hoặc thông báo
