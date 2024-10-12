@@ -71,7 +71,7 @@ class Order extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'order_id', 'id'); // Điều chỉnh nếu cần thiết
+        return $this->hasMany(Comment::class, 'order_id', 'id');
     }
   
     public function changeStatus($newStatus)
