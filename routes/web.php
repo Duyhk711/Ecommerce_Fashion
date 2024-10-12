@@ -75,6 +75,14 @@ Route::get('/address', [UserController::class, 'address'])->name('address');
 Route::post('/address', [UserController::class, 'storeAddress'])->name('addresses.store');
 Route::delete('/addresses/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
 Route::post('/addresses/{id}/default', [UserController::class, 'setDefault'])->name('addresses.setDefault');
+// Cập nhật địa chỉ
+Route::put('/address/{id}', [UserController::class, 'updateAddress'])->name('addresses.update');
+// Lấy dữ liệu địa chỉ để chỉnh sửa
+Route::get('/address/{id}/edit', [UserController::class, 'editAddress'])->name('addresses.edit');
+
+
+
+
 
 //profile
 Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');

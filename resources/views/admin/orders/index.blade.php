@@ -73,17 +73,17 @@
                         <tbody>
                           @if ($orders->isEmpty())
                             <tr>
-                                <td colspan="7" class="text-center">Không có đơn hàng nào</td>
+                                <td colspan="7" class="text-center fs-sm">Không có đơn hàng nào</td>
                             </tr>
                           @else
                             @foreach ($orders as $order)
                                 <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}">
-                                    <td class="text-center">
+                                    <td class="text-center fs-sm">
                                         <a class="fw-semibold" href="be_pages_ecom_order.html">
                                             <strong>{{ $order->sku }}</strong>
                                         </a>
                                     </td>
-                                    <td class="d-none d-sm-table-cell text-center">
+                                    <td class="d-none d-sm-table-cell text-center fs-sm">
                                         {{ $order->created_at->format('d-m-Y H:i') }}</td>
                                     <td class="fs-base">
                                         @php
@@ -109,16 +109,16 @@
                                             {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                         </span>
                                     </td>
-                                    <td class="d-none d-xl-table-cell">
+                                    <td class="d-none d-xl-table-cell fs-sm">
                                         <a class="fw-semibold">{{ $order->customer_name }}</a>
                                     </td>
-                                    <td class="d-none d-xl-table-cell text-center">
+                                    <td class="d-none d-xl-table-cell text-center fs-sm">
                                         <a class="fw-semibold">{{ $order->items->count() }}</a>
                                     </td>
-                                    <td class="d-none d-sm-table-cell text-end">
+                                    <td class="d-none d-sm-table-cell text-end fs-sm">
                                         <strong>{{ number_format($order->total_price, 3, '.', 0) }} đ</strong>
                                     </td>
-                                    <td class="text-center fs-base">
+                                    <td class="text-center fs-base fs-sm">
                                         <div class="btn-group">
                                             <!-- Cập nhật trạng thái -->
                                             @if ($order->status == '5' || $order->status == 'huy_don_hang')
