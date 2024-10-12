@@ -33,16 +33,14 @@ class UserController extends Controller
     }
     public function address()
     {
+        $currentUser = $this->userService->getCurrentUser();
         $addresses = $this->userService->getAllAddresses();
-        return view('client.my-account.address', compact('addresses'));
+        return view('client.my-account.address', compact('addresses','currentUser'));
     }
-    public function myOrder()
+       public function orderTracking()
     {
-        return view('client.my-account.my-order');
-    }
-    public function orderTracking()
-    {
-        return view('client.my-account.oder-tracking');
+        $currentUser = $this->userService->getCurrentUser();
+        return view('client.my-account.oder-tracking',compact('currentUser'));
     }
 
     // favorite
@@ -96,12 +94,14 @@ class UserController extends Controller
     // Phương thức hiển thị danh sách yêu thích
     public function myWishlist()
     {
+        $currentUser = $this->userService->getCurrentUser();
         $favorites = $this->favoriteService->getFavorites();
-        return view('client.my-account.my-wishlist', compact('favorites'));
+        return view('client.my-account.my-wishlist', compact('favorites','currentUser'));
     }
 
     public function profile()
     {
+
         $userId = auth()->id();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
         $currentUser = $this->userService->getCurrentUser();

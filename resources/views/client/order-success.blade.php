@@ -1,18 +1,18 @@
 @extends('layouts.client')
 
 @section('content')
-@include('client.component.page_header')
-<div class="container" style="max-width: 90%;">
+    @include('client.component.page_header')
+    <div class="container" style="max-width: 90%;">
         <!--Main Content-->
         <div class="container">
             <!--Order success-->
             <div class="success-text checkout-card text-center mb-4 mb-md-5">
                 <i class="icon anm anm-shield-check"></i>
-                <h2>Thank you for your order!</h2>
-                <p class="mb-1">Payment is successfully processsed and your order is on the way</p>
-                <p class="mb-1">You will receive an order confirmation email with details of your order and a link to
-                    track its progress.</p>
-                <p class="text-order badge bg-success mt-3">Transaction ID: GHERT05764</p>
+                <h2>Cảm ơn bạn đã đặt hàng!</h2>
+                <p class="mb-1">Thanh toán được xử lý thành công và đơn hàng của bạn đang được xử lý</p>
+                <p class="mb-1">Bạn sẽ nhận được email xác nhận đơn hàng với chi tiết về đơn đặt hàng của bạn và liên kết
+                    đến theo dõi tiến trình của nó.</p>
+                {{-- <p class="text-order badge bg-success mt-3">Transaction ID: GHERT05764</p> --}}
             </div>
             <!--End Order success-->
 
@@ -21,55 +21,57 @@
                     <!--Order Summary-->
                     <div class="block order-summary">
                         <div class="block-content">
-                            <h3 class="title mb-3">Order Summary</h3>
+                            <h3 class="title mb-3">Tóm tắt đơn hàng</h3>
                             <div class="table-responsive-sm table-bottom-brd order-table">
                                 <table class="table table-hover align-middle mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-start">Image</th>
-                                            <th class="text-start proName">Product</th>
-                                            <th class="text-center">Qty</th>
-                                            <th class="text-center">Price</th>
-                                            <th class="text-center">Subtotal</th>
+                                            <th class="text-start">Ảnh</th>
+                                            <th class="text-start proName">Sản phẩm</th>
+                                            <th class="text-center">SL</th>
+                                            <th class="text-center">giá</th>
+                                            <th class="text-center">Tổng</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-start"><a href="product-layout1.html" class="thumb"><img
-                                                        class="rounded-0 blur-up lazyload"
-                                                        data-src="assets/images/products/product1-120x170.jpg"
-                                                        src="assets/images/products/product1-120x170.jpg" alt="product"
-                                                        title="product" width="120" height="170"></a></td>
-                                            <td class="text-start proName">
-                                                <div class="list-view-item-title">
-                                                    <a href="product-layout1.html">Oxford Cuban Shirt</a>
-                                                </div>
-                                                <div class="cart-meta-text">
-                                                    Color: Black<br>Size: Small
-                                                </div>
-                                            </td>
-                                            <td class="text-center">2</td>
-                                            <td class="text-center">$99.00</td>
-                                            <td class="text-center"><strong>$198.00</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start"><a href="product-layout1.html" class="thumb"><img
-                                                        class="rounded-0 blur-up lazyload"
-                                                        data-src="assets/images/products/product2-120x170.jpg"
-                                                        src="assets/images/products/product2-120x170.jpg" alt="product"
-                                                        title="product" width="120" height="170"></a></td>
-                                            <td class="text-start proName">
-                                                <div class="list-view-item-title">
-                                                    <a href="product-layout1.html">Cuff Beanie Cap</a>
-                                                </div>
-                                                <div class="cart-meta-text">
-                                                    Color: Black<br>Size: Small
-                                                </div>
-                                            </td>
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">$128.00</td>
-                                            <td class="text-center"><strong>$128.00</strong></td>
-                                        </tr>
+                                        @php
+                                            $total = 0;
+                                            $count = is_countable($products);
+                                        @endphp
+                                        @for ($i = 0; $i < $count; $i++)
+                                            @php
+                                                $item = $products[$i];
+                                            @endphp
+                                            <tr>
+                                                <td class="text-start"><a
+                                                        href="{{ route('productDetail', $item->product_variant_id) }}"
+                                                        class="thumb"><img class="rounded-0 blur-up lazyload"
+                                                            data-src="{{ $item->image }}" src="{{ $item->image }}"
+                                                            alt="product" title="product" width="120"
+                                                            height="170" /></a></td>
+                                                <td class="text-start proName">
+                                                    <div class="list-view-item-title">
+                                                        <a href="product-layout1.html">
+                                                            {{ $item->product_name ?? 'Sản phẩm không xác định' }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="cart-meta-text">
+                                                        {{ $item->variant_attributes ?? 'Không có thuộc tính' }}
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">{{ $item->quantity }}</td>
+                                                <td class="text-center">
+                                                    {{ isset($item->price) ? number_format($item->price, 0, ',', '.') . ' VND' : 'Giá không xác định' }}
+                                                </td>
+                                                @php
+                                                    $total += $item->price * $item->quantity;
+                                                @endphp
+                                                <td class="text-center">
+                                                    <strong>{{ $item->price * $item->quantity }}đ</strong>
+                                                </td>
+                                            </tr>
+                                        @endfor
+
                                     </tbody>
                                 </table>
                             </div>
@@ -103,7 +105,7 @@
                             <div class="row g-0 pt-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
                                 <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                        class="money">$311.00</b></span>
+                                        class="money">{{ $order->total_price }}đ</b></span>
                             </div>
                         </div>
                     </div>
@@ -137,7 +139,7 @@
                     </div>
                     <!--Order Address-->
 
-                    <!--Order Method-->
+                    {{-- <!--Order Method-->
                     <div class="block mt-4">
                         <div class="block-content">
                             <div class="row g-0">
@@ -183,13 +185,13 @@
                             </div>
                         </div>
                     </div>
-                    <!--End Order Details-->
+                    <!--End Order Details--> --}}
 
                     <!--Order Delivery-->
                     <div class="d-flex-wrap w-100 mt-4 text-center">
-                        <a href="index.html"
+                        <a href="{{ route('home') }}"
                             class="d-inline-flex align-items-center btn btn-outline-primary me-2 mb-2 me-sm-3"><i
-                                class="me-2 icon an an-angle-left-r"></i>Continue Shopping</a>
+                                class="me-2 icon an an-angle-left-r"></i>Tiếp tục mua hàng</a>
                         <button type="button" class="d-inline-flex align-items-center btn me-2 mb-2 me-sm-3"><i
                                 class="me-2 icon an an-print"></i>Print Order</button>
                         <button type="button" class="d-inline-flex align-items-center btn me-2 mb-2 me-sm-3"><i
@@ -199,5 +201,5 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
 @endsection
