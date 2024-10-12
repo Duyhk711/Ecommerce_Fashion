@@ -93,7 +93,7 @@ class VNPayController extends Controller
             // Thanh toán thành công, cập nhật trạng thái đơn hàng
             $order = Order::where('session_id', $request->get('vnp_TxnRef'))->first();
             $order->payment_status = 'da_thanh_toan';
-            $order->status = '0';
+            $order->status = '1';
             $order->save();
 
             return view('client.order-success')->with('success', 'Giao dịch thành công!');
