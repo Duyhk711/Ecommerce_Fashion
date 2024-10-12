@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
@@ -73,11 +74,14 @@ Route::middleware('auth')->group(function () {
 // address
 Route::get('/address', [UserController::class, 'address'])->name('address');
 Route::post('/address', [UserController::class, 'storeAddress'])->name('addresses.store');
-Route::delete('/address/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
+Route::delete('/addresses/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
 Route::post('/addresses/{id}/default', [UserController::class, 'setDefault'])->name('addresses.setDefault');
 
 //profile
 Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+
+//đổi mật khẩu
+Route::post('/my-account/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
 
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
