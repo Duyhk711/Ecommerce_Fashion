@@ -444,7 +444,7 @@
                                             <!-- Start Product Image -->
                                             <div class="product-image">
                                                 <!-- Start Product Image -->
-                                                <a href="{{ route('productDetail', $product->id) }}" class="product-img rounded-0">
+                                                <a href="{{ route('productDetail', $product->slug) }}" class="product-img rounded-0">
                                                     <!-- Image -->
                                                     <img class="primary rounded-0 blur-up lazyload"
                                                         data-src="{{$product->img_thumbnail}}"

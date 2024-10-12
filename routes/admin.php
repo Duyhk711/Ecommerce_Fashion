@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\OrderStatusChangeController;
+use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,13 +62,9 @@ Route::prefix('admin')
 
             // PRODUCT
             Route::resource('products', ProductController::class);
-
-            // Route lấy danh sách các thuộc tính
-            Route::get('/get-attributes', [ProductController::class, 'getAttributes']);
-
-            // Route lấy giá trị thuộc tính theo ID của thuộc tính
-            Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']);
-            Route::post('/products/add', [ProductController::class, 'store']);
+            Route::get('/get-attributes', [ProductController::class, 'getAttributes']); //lấy danh sách các thuộc tính
+            Route::get('/get-attribute-values/{attributeId}', [ProductController::class, 'getAttributeValues']); //lấy giá trị thuộc tính theo ID của thuộc tính
+            Route::get('/get-product-attributes/{productId}', [ProductController::class, 'getProductAttributes']);
 
             // ORDER
             Route::resource('orders', OrderController::class);
