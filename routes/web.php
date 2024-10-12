@@ -34,7 +34,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
-Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 
 // order
 // Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
@@ -83,6 +82,7 @@ Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->n
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
 Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
+Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');

@@ -32,16 +32,14 @@ class CheckoutService
         $cartItems = [];
 
         // Nếu người dùng đã đăng nhập
-        if (auth()->check()) {
+        if (Auth::check()) {
             $userId = auth()->id();
             $cart = Cart::where('user_id', $userId)->first();
 
             if (!$cart) {
                 return collect([]);
             }
-
-            // Lấy các sản phẩm trong giỏ hàng và sắp xếp theo `created_at` mới nhất
-            // Lấy các sản phẩm trong giỏ hàng, thêm điều kiện nếu có `selectedItems`
+            // dd('ok1');
             $query = CartItem::with([
                 'productVariant.product',
                 'productVariant.variantAttributes.attribute',
@@ -81,6 +79,7 @@ class CheckoutService
             });
         }
 
+        // dd('ok2');
         // Nếu người dùng chưa đăng nhập, lấy giỏ hàng từ session
         $cartItems = session()->get('cart', []);
         // dd($cartItems);
@@ -93,11 +92,10 @@ class CheckoutService
                 return in_array($item['product_variant_id'], $selectedItems);
             });
         }
-
         // Trả về giỏ hàng từ session và sắp xếp dựa trên `created_at` nếu có
         return collect($cartItems)->map(function ($cartItem) {
             return [
-                'id' => $cartItem['variant_id'] ?? null,
+                'cart_item_id' => $cartItem['variant_id'] ?? null,
                 'product_name' => $cartItem['product_name'] ?? 'Unknown Product',
                 'product_variant_id' => $cartItem['product_variant_id'] ?? 'Unknown id',
                 'variant_attributes' => $cartItem['variant_attributes'] ?? 'No Attributes',
