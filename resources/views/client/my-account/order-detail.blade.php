@@ -114,24 +114,22 @@
                 @php
                     $statusText = [
                         '1' => 'Chờ xác nhận',
-                        '2' => 'Đã xác nhận',
-                        '3' => 'Đang chuẩn bị',
-                        '4' => 'Đang vận chuyển',
-                        '5' => 'Hoàn thành',
+                        '2' => 'Chờ vận chuyển',
+                        '3' => 'Đang vận chuyển',
+                        '4' => 'Hoàn thành',
                         'huy_don_hang' => 'Hủy đơn hàng'
                     ];
                 @endphp
                 <span class="badge text-bg
                     @if ($order->status == '1') bg-secondary
                     @elseif($order->status == '2') bg-secondary
-                    @elseif($order->status == '3') bg-warning text-dark
-                    @elseif($order->status == '4') bg-primary
-                    @elseif($order->status == '5') bg-success
+                    @elseif($order->status == '3') bg-primary text-dark
+                    @elseif($order->status == '4') bg-success
                     @elseif($order->status == 'huy_don_hang') bg-danger
                     @endif">
                     {{ $statusText[$order->status] ?? $order->status }}
                 </span>
-                @if ($order->status == 'cho_xac_nhan')
+                @if ($order->status == '1')
                     <div class="cancel-item" style="display: inline-block; margin-left: 10px;">
                         <form action="{{ route('order.cancel', ['order_id' => $order->id]) }}" method="POST"
                             id="cancelOrderForm-{{ $order->id }}">
