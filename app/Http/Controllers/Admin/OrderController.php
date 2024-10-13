@@ -20,9 +20,10 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orders = $this->orderService->getOrder();
+        $status = $request->get('status');
+        $orders = $this->orderService->getOrder($status, 6);
         // dd($orders);
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
@@ -76,7 +77,12 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+       try {
         $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+        return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
+       } catch (\Exception $e) {
+        return redirect()->back()->with('error', $e->getMessage());
+       }
 
         return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
