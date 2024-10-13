@@ -1,70 +1,7 @@
 @extends('layouts.client')
 
 @section('css')
-    <style>
-        .swatch.disabled {
-            position: relative;
-            /* Để định vị gạch chéo */
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .swatch.disabled::after {
-            content: '';
-            /* Tạo một phần tử gạch chéo */
-            position: absolute;
-            top: 50%;
-            /* Căn giữa theo chiều dọc */
-            left: -20%;
-            right: -20%;
-            height: 2px;
-            /* Độ dày của gạch chéo */
-            background-color: rgb(0, 0, 0);
-            /* Màu gạch chéo */
-            transform: rotate(45deg);
-            /* Gạch chéo */
-            transform-origin: center;
-        }
-    </style>
-
-    {{-- Rating stars --}}
-    <style>
-        .wishlist.active i {
-            color: red;
-        }
-
-        .review-rating {
-            display: flex;
-            flex-direction: row;
-            /* Để các sao ngược lại */
-            justify-content: flex-start;
-        }
-
-        .review-rating input[type="radio"] {
-            display: none;
-            /* Ẩn các input radio */
-        }
-
-        .review-rating label {
-            font-size: 2em;
-            /* Kích thước của icon sao */
-            cursor: pointer;
-            /* Con trỏ trỏ vào sao khi di chuột */
-        }
-
-        /* Icon sao mặc định (chưa được chọn) sẽ có class anm-star-o */
-        .review-rating label i {
-            color: #ccc;
-            /* Màu trắng mặc định cho sao */
-        }
-
-        /* Khi sao được chọn (anm-star) */
-        .review-rating label .anm-star {
-            color: #ffcc00;
-            /* Màu vàng cho sao được chọn */
-        }
-    </style>
+    <link rel="stylesheet" href="{{asset('client/css/product-detail.css')}}">
 @endsection
 
 @section('content')
@@ -229,7 +166,7 @@
                                     <div class="qtyField">
                                         <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
                                         <input type="text" name="quantity" value="1"
-                                            class="product-form-input qty" id="quantityInput" />
+                                            class="product-form-input qty" id="quantityInput" data-max-stock="0"/>
                                         <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                     </div>
                                 </div>
@@ -800,7 +737,7 @@
                                     </div>
                                     <div class="qtyField">
                                         <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                        <input type="text" name="quantity" value="1" class="qty" />
+                                        <input type="text" name="quantity" value="1" class="qty"/>
                                         <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                     </div>
                                 </div>
@@ -1224,12 +1161,21 @@
         </div>
     </div>
     <!--End Product Quickview Modal-->
+
+    {{-- popup --}}
+    <div id="quantityPopup" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Thông báo</h2>
+            <p id="popupMessage"></p>
+        </div>
+    </div>
 @endsection
 
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>   
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let selectedColorId = null;
@@ -1436,65 +1382,164 @@
 
     {{-- check số lượng từng biến thể --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let variantDetails = @json($variantDetails); // Lấy thông tin tồn kho từ backend
+        document.addEventListener('DOMContentLoaded', function () {
+        let variantDetails = @json($variantDetails);
 
-            let selectedColor = null;
-            let selectedSize = null;
+        let selectedColor = null;
+        let selectedSize = null;
+        let maxStock = 0;
 
-            // Xử lý khi người dùng chọn màu
-            document.querySelectorAll('.color-option').forEach(function(colorOption) {
-                colorOption.addEventListener('click', function() {
-                    selectedColor = this.getAttribute('data-attribute-value-id');
-                    updateSizeOptions();
-                });
+        // Xử lý khi người dùng chọn màu
+        document.querySelectorAll('.color-option').forEach(function (colorOption) {
+            colorOption.addEventListener('click', function () {
+                selectedColor = this.getAttribute('data-attribute-value-id');
+                updateSizeOptions();
+                updateStock();
             });
+        });
 
-            // Xử lý khi người dùng chọn size
-            document.querySelectorAll('.size-option').forEach(function(sizeOption) {
-                sizeOption.addEventListener('click', function() {
-                    selectedSize = this.getAttribute('data-attribute-value-id');
-                    updateColorOptions();
-                });
+        // Xử lý khi người dùng chọn size
+        document.querySelectorAll('.size-option').forEach(function (sizeOption) {
+            sizeOption.addEventListener('click', function () {
+                selectedSize = this.getAttribute('data-attribute-value-id');
+                updateColorOptions();
+                updateStock();
             });
+        });
 
-            // Cập nhật trạng thái các lựa chọn size dựa trên màu đã chọn
-            function updateSizeOptions() {
-                document.querySelectorAll('.size-option').forEach(function(sizeOption) {
-                    let sizeId = sizeOption.getAttribute('data-attribute-value-id');
-                    let variant = variantDetails.find(v => {
-                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr
-                                .value == selectedColor) &&
-                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
-                                sizeId);
-                    });
-
-                    if (variant && variant.stock > 0) {
-                        sizeOption.classList.remove('disabled');
-                    } else {
-                        sizeOption.classList.add('disabled');
-                    }
+        // Cập nhật trạng thái các lựa chọn size dựa trên màu đã chọn
+        function updateSizeOptions() {
+            document.querySelectorAll('.size-option').forEach(function (sizeOption) {
+                let sizeId = sizeOption.getAttribute('data-attribute-value-id');
+                let variant = variantDetails.find(v => {
+                    return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value == selectedColor) &&
+                        v.attributes.some(attr => attr.attributeName === 'Size' && attr.value == sizeId);
                 });
+
+                if (variant && variant.stock > 0) {
+                    sizeOption.classList.remove('disabled');
+                } else {
+                    sizeOption.classList.add('disabled');
+                }
+            });
+        }
+
+        // Cập nhật trạng thái các lựa chọn màu dựa trên size đã chọn
+        function updateColorOptions() {
+            document.querySelectorAll('.color-option').forEach(function (colorOption) {
+                let colorId = colorOption.getAttribute('data-attribute-value-id');
+                let variant = variantDetails.find(v => {
+                    return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value == colorId) &&
+                        v.attributes.some(attr => attr.attributeName === 'Size' && attr.value == selectedSize);
+                });
+
+                if (variant && variant.stock > 0) {
+                    colorOption.classList.remove('disabled');
+                } else {
+                    colorOption.classList.add('disabled');
+                }
+            });
+        }
+
+        // Cập nhật số lượng tồn kho dựa trên lựa chọn size và color
+        function updateStock() {
+            if (selectedColor && selectedSize) {
+                let variant = variantDetails.find(v => {
+                    return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value == selectedColor) &&
+                        v.attributes.some(attr => attr.attributeName === 'Size' && attr.value == selectedSize);
+                });
+
+                if (variant) {
+                    maxStock = variant.stock;
+                    document.querySelector('#quantityInput').setAttribute('data-max-stock', maxStock);
+                    document.querySelector('#quantityInput').value = 1; // Reset lại số lượng về 1
+                }
             }
 
-            // Cập nhật trạng thái các lựa chọn màu dựa trên size đã chọn
-            function updateColorOptions() {
-                document.querySelectorAll('.color-option').forEach(function(colorOption) {
-                    let colorId = colorOption.getAttribute('data-attribute-value-id');
-                    let variant = variantDetails.find(v => {
-                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr
-                                .value == colorId) &&
-                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
-                                selectedSize);
-                    });
+            enableButtons(); // Bật lại các nút
+        }
 
-                    if (variant && variant.stock > 0) {
-                        colorOption.classList.remove('disabled');
-                    } else {
-                        colorOption.classList.add('disabled');
-                    }
-                });
+        // Xử lý logic tăng/giảm số lượng
+        document.querySelector('.qtyBtn.plus').addEventListener('click', function () {
+            let quantityInput = document.querySelector('#quantityInput');
+            let currentQty = parseInt(quantityInput.value);
+
+            // Chỉ tăng nếu số lượng hiện tại nhỏ hơn maxStock và đã chọn màu và size
+            if (currentQty < maxStock && selectedColor && selectedSize) {
+                quantityInput.value = currentQty + 1 - 1;
+            } else if (!selectedColor || !selectedSize) {
+                showPopup('Vui lòng chọn màu và size trước.');
+            } else {
+                showPopup('Sản phẩm này trong kho chỉ còn ' + maxStock + ' sản phẩm.');
             }
+            enableButtons(); // Cập nhật trạng thái nút
+        });
+
+        document.querySelector('.qtyBtn.minus').addEventListener('click', function () {
+            let quantityInput = document.querySelector('#quantityInput');
+            let currentQty = parseInt(quantityInput.value);
+
+            // Chỉ giảm nếu số lượng hiện tại lớn hơn 1 và đã chọn màu và size
+            if (currentQty > 1 && selectedColor && selectedSize) {
+                quantityInput.value = currentQty - 1 + 1; // Giảm 1 đơn vị
+            } else if (!selectedColor || !selectedSize) {
+                showPopup('Vui lòng chọn màu và size trước.');
+            }
+            enableButtons(); // Cập nhật trạng thái nút
+        });
+
+        // Ngăn người dùng nhập ký tự vào ô số lượng và xử lý khi nhập số lượng trực tiếp
+        const quantityInput = document.getElementById('quantityInput');
+        quantityInput.addEventListener('input', function () {
+            // Chỉ cho phép nhập số
+            this.value = this.value.replace(/[^0-9]/g, '');
+
+            // Nếu đã chọn màu và size, kiểm tra số lượng
+            if (selectedColor && selectedSize) {
+                if (parseInt(this.value) > maxStock) {
+                    showPopup(`Sản phẩm này trong kho chỉ còn ${maxStock} sản phẩm.`);
+                    this.value = maxStock; // Giới hạn lại giá trị về tối đa
+                }
+            }
+
+            // Đảm bảo không giảm xuống dưới 1
+            if (parseInt(this.value) < 1) {
+                this.value = 1;
+            }
+
+            enableButtons(); // Cập nhật trạng thái nút
+        });
+
+        // Hàm vô hiệu hóa nút
+        function disableButtons() {
+            document.querySelector('.qtyBtn.plus').classList.add('disabled');
+            document.querySelector('.qtyBtn.plus').setAttribute('disabled', 'disabled');
+            document.querySelector('.qtyBtn.minus').classList.add('disabled');
+            document.querySelector('.qtyBtn.minus').setAttribute('disabled', 'disabled');
+        }
+
+        // Hàm bật nút
+        function enableButtons() {
+            const currentQty = parseInt(quantityInput.value);
+
+            // Vô hiệu hóa nút "+" nếu số lượng đã đạt tối đa hoặc chưa chọn màu và size
+            if ((selectedColor && selectedSize && currentQty >= maxStock) || !selectedColor || !selectedSize) {
+                document.querySelector('.qtyBtn.plus').classList.add('disabled');
+                document.querySelector('.qtyBtn.plus').setAttribute('disabled', 'disabled');
+            } else {
+                document.querySelector('.qtyBtn.plus').classList.remove('disabled');
+                document.querySelector('.qtyBtn.plus').removeAttribute('disabled');
+            }
+
+            // Vô hiệu hóa nút "-" nếu số lượng bằng 1 hoặc chưa chọn màu và size
+            if ((currentQty <= 1) || !selectedColor || !selectedSize) {
+                document.querySelector('.qtyBtn.minus').classList.add('disabled');
+                document.querySelector('.qtyBtn.minus').setAttribute('disabled', 'disabled');
+            } else {
+                document.querySelector('.qtyBtn.minus').classList.remove('disabled');
+                document.querySelector('.qtyBtn.minus').removeAttribute('disabled');
+            }
+        }
         });
     </script>
 
@@ -1579,5 +1624,33 @@
                 $('#editCommentModal').modal('show');
             });
         });
+    </script>
+
+    {{-- popup --}}
+    <script>
+        function showPopup(message) {
+            const modal = document.getElementById("quantityPopup");
+            const messageElement = document.getElementById("popupMessage");
+            messageElement.textContent = message;
+            modal.style.display = "flex"; // Hiển thị popup
+
+            // Đóng popup khi bấm vào dấu 'x'
+            document.querySelector(".close").onclick = function () {
+                modal.style.display = 'none';
+            };
+
+            // Đóng popup khi bấm nút OK
+            document.querySelector(".btn").onclick = function () {
+                modal.style.display = 'none';
+            };
+
+            // Đóng popup khi bấm ra ngoài
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        }
+
     </script>
 @endsection
