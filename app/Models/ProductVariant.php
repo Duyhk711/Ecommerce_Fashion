@@ -18,6 +18,7 @@ class ProductVariant extends Model
         'stock',
         'image',
     ];
+    protected $dates = ['deleted_at'];
 
     public function product()
     {
@@ -42,5 +43,16 @@ class ProductVariant extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id');
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'variant_attributes', 'product_variant_id', 'attribute_id')
+                    ->withPivot('attribute_value_id');
+    }
+    
+    public function attributeValues()
+    {
+        return $this->hasManyThrough(AttributeValue::class, VariantAttribute::class, 'product_variant_id', 'id', 'id', 'attribute_value_id');
     }
 }

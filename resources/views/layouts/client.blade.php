@@ -20,6 +20,8 @@
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{{ asset('client/css/style-min.css') }}">
     <link rel="stylesheet" href="{{ asset('client/css/responsive.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     @yield('css')
 </head>
 
@@ -90,7 +92,7 @@
          <!-- Main JS -->
          <!-- Plugins JS -->
          <script src="{{ asset('client/js/plugins.js') }}"></script>
-         
+
          <script src="{{ asset('client/js/main.js') }}"></script>
          @yield('js')
 

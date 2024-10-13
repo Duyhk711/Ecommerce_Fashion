@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory; // thiếu và đã bổ sung 9/9
+    use HasFactory,SoftDeletes; // thiếu và đã bổ sung 9/9
     protected $fillable = [
         'catalogue_id',
         'name',
@@ -26,6 +27,7 @@ class Product extends Model
         'is_new',
         'is_show_home',
     ];
+    protected $dates = ['deleted_at'];
 
     public function catalogue()
     {
@@ -37,6 +39,17 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class,'product_id');
     }
 
+    public function variantAttributes()
+    {
+        return $this->hasManyThrough(
+            Attribute::class, 
+            ProductVariant::class, 
+            'product_id', 
+            'id', 
+            'id', 
+            'attribute_id'
+        );
+    }
     
     public function images()
     {

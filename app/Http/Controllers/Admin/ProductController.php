@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Product;
 use App\Models\Attribute;
 use App\Models\Catalogue;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -24,62 +22,112 @@ class ProductController extends Controller
     {
         $query = Product::with(['catalogue', 'mainImage', 'variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue']);
 
-        // Tìm kiếm theo tên sản phẩm hoặc SKU
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('sku', 'like', '%' . $search . '%');
-        }
-    
-        // Phân trang sản phẩm
-        $products = $query->paginate(10);
-    
+        $products = $query->get();
+
         return view('admin.products.index', compact('products'));
     }
 
     public function create()
     {
-        $catalogues = Catalogue::all();
-        $attributes = Attribute::with('values')->get();
-        $sku = 'PRD-' . Str::upper(Str::random(8)); 
+        $data = $this->productService->getCreateData();
 
-        return view('admin.products.create', compact('catalogues', 'attributes', 'sku'));
+        return view('admin.products.create', $data);
     }
 
     public function store(Request $request)
     {
-        $productData = json_decode($request->input('productData'), true);
+        try {
+            $this->productService->storeProduct($request);
 
-        $response = $this->productService->storeProduct($productData, $request);
-
-        return response()->json(['message' => $response['message']], $response['status']);
+            return redirect()->route('admin.products.index')->with('success', 'Product and images saved successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to save product: ' . $e->getMessage());
+        }
     }
 
+    public function show(Product $product)
+    {
+        $product->load('variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue', 'images', 'catalogue');
 
+        return view('admin.products.show', compact('product'));
+    }
 
-    public function edit($id) {}
+    public function edit(Product $product)
+    {
+        $product->load(['images', 'variants.attributes.values', 'catalogue']);
+
+        $catalogues = Catalogue::all();
+
+        $attributes = Attribute::with('values')->get();
+
+        return view('admin.products.edit', compact('product', 'catalogues', 'attributes'));
+    }
 
     public function update(Request $request, $id) {}
 
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+
+        foreach ($product->variants as $variant) {
+            foreach ($variant->images as $image) {
+                $image->delete();
+            }
+            $variant->delete();
+        }
+
+        foreach ($product->images as $image) {
+            $image->delete();
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Sản phẩm và các biến thể đã được xóa mềm thành công.');
+    }
 
     public function getAttributes()
     {
-        // Chỉ lấy thuộc tính mà không lấy giá trị thuộc tính
         $attributes = Attribute::select('id', 'name')->get();
         return response()->json($attributes);
     }
 
-    // Lấy giá trị thuộc tính theo ID thuộc tính
     public function getAttributeValues($attributeId)
     {
-        // Lấy thuộc tính cùng với giá trị của nó
         $attribute = Attribute::with('values')->findOrFail($attributeId);
 
         return response()->json([
             'id' => $attribute->id,
             'name' => $attribute->name,
             'attribute_values' => $attribute->values
+        ]);
+    }
+
+    public function getProductAttributes($productId)
+    {
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        $attributes = Attribute::with('values')->get();
+
+        $selectedAttributes = Attribute::with(['values' => function ($query) use ($productId) {
+            $query->join('variant_attributes', 'attribute_values.id', '=', 'variant_attributes.attribute_value_id')
+                ->where('variant_attributes.product_variant_id', $productId);
+        }])->get();
+
+        return response()->json([
+            'attributes' => $attributes->map(function ($attribute) use ($selectedAttributes) {
+                $selectedAttribute = $selectedAttributes->firstWhere('id', $attribute->id);
+                return [
+                    'id' => $attribute->id,
+                    'name' => $attribute->name,
+                    'attribute_values' => $attribute->values, // Tất cả các giá trị có thể chọn
+                    'selected_values' => $selectedAttribute ? $selectedAttribute->values->pluck('id')->toArray() : [] // Giá trị đã được chọn
+                ];
+            })
         ]);
     }
 }
