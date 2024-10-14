@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\CommentController;
@@ -72,11 +73,22 @@ Route::middleware('auth')->group(function () {
 // address
 Route::get('/address', [UserController::class, 'address'])->name('address');
 Route::post('/address', [UserController::class, 'storeAddress'])->name('addresses.store');
-Route::delete('/address/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
+Route::delete('/addresses/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
 Route::post('/addresses/{id}/default', [UserController::class, 'setDefault'])->name('addresses.setDefault');
+// Cập nhật địa chỉ
+Route::put('/address/{id}', [UserController::class, 'updateAddress'])->name('addresses.update');
+// Lấy dữ liệu địa chỉ để chỉnh sửa
+Route::get('/address/{id}/edit', [UserController::class, 'editAddress'])->name('addresses.edit');
+
+
+
+
 
 //profile
 Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+
+//đổi mật khẩu
+Route::post('/my-account/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
 
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
@@ -87,3 +99,4 @@ Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orde
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
