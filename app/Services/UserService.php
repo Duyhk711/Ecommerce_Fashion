@@ -19,6 +19,13 @@ class UserService
         return Address::where('user_id', $userId)->get();
     }
 
+    //lấy địa chỉ theo id
+   public function getAddressById($id)
+    {
+        // Tìm địa chỉ theo ID
+        return Address::find($id); // Sử dụng Eloquent để tìm địa chỉ
+    }
+
     //them moi dia chi
     public function storeAddress(array $data)
     {
@@ -46,8 +53,8 @@ class UserService
     public function getDefaultAddress($userId)
     {
         return Address::where('user_id', $userId)
-                      ->where('is_default', true)
-                      ->first();
+            ->where('is_default', true)
+            ->first();
     }
 
     public function deleteAddress(int $id)
@@ -58,6 +65,27 @@ class UserService
         }
         return false;
     }
+
+    //sửa địa chỉ
+    public function updateAddress(int $addressId, array $data)
+    {
+        $address = Address::find($addressId);
+        if ($address && $address->user_id === auth()->id()) {
+            return $address->update([
+                'customer_name' => $data['customer_name'],
+                'customer_phone' => $data['customer_phone'],
+                'address_line1' => $data['address_line1'],
+                'address_line2' => $data['address_line2'] ?? $address->address_line2,
+                'ward' => $data['ward'],
+                'district' => $data['district'],
+                'city' => $data['city'],
+                'type' => $data['type'],
+            ]);
+        }
+
+        return false;
+    }
+
     public function getCurrentUser()
     {
         return Auth::user();
@@ -82,5 +110,4 @@ class UserService
         }
         return $user->update($data);
     }
-
 }
