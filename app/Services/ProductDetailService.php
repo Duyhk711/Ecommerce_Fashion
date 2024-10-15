@@ -26,13 +26,16 @@ class ProductDetailService
             return [
                 'id' => $variant->id,
                 'stock' => $variant->stock,
+                'price_regular' => $variant->price_regular,
+                'price_sale' => $variant->price_sale,
                 'attributes' => $variant->variantAttributes->map(function ($attribute) {
                     return [
                         'attributeName' => $attribute->attribute->name,
                         'value' => $attribute->attributeValue->value,
                         'colorCode' => $attribute->attributeValue->color_code ?? null
                     ];
-                })
+                }),
+                'attributeValues' => $variant->variantAttributes->pluck('attributeValue.value')
             ];
         });
     }
@@ -47,11 +50,12 @@ class ProductDetailService
     {
         // lấy biến thể
         return $product->variants->flatMap(function ($variant) {
-            return $variant->variantAttributes->map(function ($attribute) {
+            return $variant->variantAttributes->map(function ($attribute) use ($variant) {
                 return [
                     'attributeName' => $attribute->attribute->name,
                     'value' => $attribute->attributeValue->value,
-                    'colorCode' => $attribute->attributeValue->color_code ?? null
+                    'colorCode' => $attribute->attributeValue->color_code ?? null,
+                    'image' => $variant->image ?? null
                 ];
             });
         })->unique(function ($item) {
@@ -106,57 +110,22 @@ class ProductDetailService
         return $canComment;
     }
 
-    public function getCommentsData($product)
+    public function getCommentsData($product, $rating, $perPage = 4)
     {
-        // Lấy user đang đăng nhập
-        $currentUserId = auth()->id();
-
-        // Lấy tối đa 2 bình luận cho phần hiển thị chính
-        $comments = $product->comments()
-            ->orderBy('created_at', 'desc')
-            ->limit(2)
-            ->get()
-            ->map(function ($comment) use ($currentUserId) {
-                return [
-                    'id' => $comment->id,
-                    'user_name' => $comment->user->name,
-                    'user_image' => $comment->user->avatar,
-                    'title' => $comment->title,
-                    'body' => $comment->comment,
-                    'rating' => $comment->rating ?? 'Không đánh giá',
-                    'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
-                    'updated_at' => $comment->updated_at,
-                    'created_at' => $comment->created_at,
-                    'is_owner' => $comment->user_id == $currentUserId,
-                ];
-            });
-
-        // Lấy tất cả bình luận để hiển thị trong modal
-        $allComments = $product->comments()->get()->map(function ($comment) use ($currentUserId) {
-            return [
-                'id' => $comment->id,
-                'user_name' => $comment->user->name,
-                'user_image' => $comment->user->avatar,
-                'title' => $comment->title,
-                'body' => $comment->comment,
-                'rating' => $comment->rating ?? 'Không đánh giá',
-                'date' => $comment->updated_at ? $comment->updated_at->format('d-m-Y') : $comment->created_at->format('d-m-Y'),
-                'is_updated' => $comment->updated_at ? true : false,
-                'is_owner' => $comment->user_id == $currentUserId,
-            ];
-        });
-
-        return [
-            'comments' => $comments,
-            'total_comments' => $allComments->count(), // Tổng số bình luận
-            'all_comments' => $allComments, // Tất cả bình luận để hiển thị trong modal
-        ];
+        $query = $product->comments()->with('user')->orderBy('created_at', 'desc');
+    
+        if ($rating !== 'all') {
+            $query->where('rating', $rating);
+        }
+    
+        return $query->paginate($perPage);
     }
+    
 
 
 
 
-
+   
     public function calculateAverageRating($product)
     {
         // Tính tổng và số lượng rating hợp lệ
@@ -176,28 +145,19 @@ class ProductDetailService
     public function calculateRatingsPercentage($product)
     {
         // Số lượng đánh giá của từng sao
+        // Số lượng đánh giá của từng sao
         $ratingsCount = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
-        $validRatingsCount = 0; // Số lượng comment có rating hợp lệ (1-5)
 
         // Duyệt qua tất cả các comment
         foreach ($product->comments as $comment) {
             // Nếu comment có rating hợp lệ từ 1 đến 5
             if (!is_null($comment->rating) && $comment->rating >= 1 && $comment->rating <= 5) {
                 $ratingsCount[$comment->rating]++;
-                $validRatingsCount++; // Tăng số lượng rating hợp lệ
             }
         }
 
-        $totalRatings = $validRatingsCount; // Chỉ tính những rating hợp lệ
-        $ratingsPercentage = [];
 
-        // Tính phần trăm cho từng mức rating
-        foreach ($ratingsCount as $rating => $count) {
-            // Nếu tổng số rating hợp lệ lớn hơn 0, tính phần trăm, nếu không thì trả về 0
-            $ratingsPercentage[$rating] = $totalRatings > 0 ? ($count / $totalRatings) * 100 : 0;
-        }
-
-        return $ratingsPercentage;
+        return $ratingsCount;
     }
 
     public function isProductFavorite($productId)
