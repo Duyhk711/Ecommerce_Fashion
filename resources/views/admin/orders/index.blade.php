@@ -144,7 +144,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
+                <div class="pagination d-flex justify-content-end mt-3">
                   {{ $orders->appends(request()->query())->links() }}
                 </div>
                 <!-- END All Orders Table -->
