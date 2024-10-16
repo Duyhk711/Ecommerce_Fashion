@@ -177,6 +177,51 @@
         </div>
         <!-- END Quick Overview -->
 
+        <!-- Customer -->
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- Billing Address -->
+            <div class="block block-rounded" >
+              <div class="block-header block-header-default">
+                <h3 class="block-title ">Người đặt</h3>
+              </div>
+              <div class="block-content">
+                <div class="fs-4 mb-1">{{$user->name}}</div>
+                <address class="fs-sm">
+                  {{-- Sunset Str 598<br>
+                  Melbourne<br>
+                  Australia, 11-671<br><br> --}}
+                  <i class="fa fa-phone"></i> {{$user->phone}}<br>
+                  <i class="fa-regular fa-envelope"></i> <a href="javascript:void(0)">{{$user->email}}</a> <br><br> <br>
+                </address>
+              </div>
+            </div>
+            <!-- END Billing Address -->
+          </div>
+          <div class="col-sm-6">
+            <!-- Shipping Address -->
+            <div class="block block-rounded">
+              <div class="block-header block-header-default">
+                <h3 class="block-title">Địa chỉ nhận hàng</h3>
+              </div>
+              <div class="block-content">
+                <div class="fs-4 mb-1">{{$orderDetail->customer_name}}</div>
+                <address class="fs-sm">
+                  {{$orderDetail->address_line1}}
+                  {{$orderDetail->address_line2}} <br>
+                  {{$orderDetail->ward}}, 
+                  {{$orderDetail->district}},
+                  {{$orderDetail->city}}<br><br>
+                  <i class="fa fa-phone"></i> {{$orderDetail->customer_phone}}<br>
+                  {{-- <a href="javascript:void(0)">{{$orderDetail->customer_email}}</a> --}}
+                </address>
+              </div>
+            </div>
+            <!-- END Shipping Address -->
+          </div>
+        </div>
+        <!-- END Customer -->
+
         <!-- Products -->
         <div class="block block-rounded">
           <div class="block-header block-header-default">
@@ -199,7 +244,7 @@
                       <td>                      
                           <div class="d-flex">
                             <div>
-                              <img src="{{$item->productVariant->image}}" width="70px" alt="">
+                              <img src="{{asset('storage/' . $item->productVariant->image)}}" width="80px" alt="">
                             </div>
                             <div class="mx-2">
                               <a class="text-black fs-5"  href="{{route('productDetail',$item->productVariant->product->slug)}}"><strong>{{$item->product_name}}</strong></a><br>
@@ -250,51 +295,6 @@
           </div>
         </div>
         <!-- END Products -->
-
-        <!-- Customer -->
-        <div class="row">
-          <div class="col-sm-6">
-            <!-- Billing Address -->
-            <div class="block block-rounded" >
-              <div class="block-header block-header-default">
-                <h3 class="block-title ">Người đặt</h3>
-              </div>
-              <div class="block-content">
-                <div class="fs-4 mb-1">{{$user->name}}</div>
-                <address class="fs-sm">
-                  {{-- Sunset Str 598<br>
-                  Melbourne<br>
-                  Australia, 11-671<br><br> --}}
-                  <i class="fa fa-phone"></i> {{$user->phone}}<br>
-                  <i class="fa-regular fa-envelope"></i> <a href="javascript:void(0)">{{$user->email}}</a> <br><br> <br>
-                </address>
-              </div>
-            </div>
-            <!-- END Billing Address -->
-          </div>
-          <div class="col-sm-6">
-            <!-- Shipping Address -->
-            <div class="block block-rounded">
-              <div class="block-header block-header-default">
-                <h3 class="block-title">Địa chỉ nhận hàng</h3>
-              </div>
-              <div class="block-content">
-                <div class="fs-4 mb-1">{{$orderDetail->customer_name}}</div>
-                <address class="fs-sm">
-                  {{$orderDetail->address_line1}}
-                  {{$orderDetail->address_line2}} <br>
-                  {{$orderDetail->ward}}, 
-                  {{$orderDetail->district}},
-                  {{$orderDetail->city}}<br><br>
-                  <i class="fa fa-phone"></i> {{$orderDetail->customer_phone}}<br>
-                  {{-- <a href="javascript:void(0)">{{$orderDetail->customer_email}}</a> --}}
-                </address>
-              </div>
-            </div>
-            <!-- END Shipping Address -->
-          </div>
-        </div>
-        <!-- END Customer -->
 
         <!-- Log Messages -->
         <div class="block block-rounded">

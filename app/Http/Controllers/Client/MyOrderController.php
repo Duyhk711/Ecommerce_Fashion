@@ -54,7 +54,7 @@ class MyOrderController extends Controller
 
             $commentDetails = $currentComment ? $this->myOrderService->getCommentById($currentComment) : null;
 
-            // dd($commentDetails);
+            // dd($order);
             // dd($commentDataArray[$productId]['comment']['id']);
             return view('client.my-account.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment','commentDetails'));
     }

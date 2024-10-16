@@ -23,7 +23,8 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $status = $request->get('status');
-        $orders = $this->orderService->getOrder($status, 6);
+        $payment_status = $request->get('payment_status');
+        $orders = $this->orderService->getOrder($status, 6, $payment_status);
         // dd($orders);
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
