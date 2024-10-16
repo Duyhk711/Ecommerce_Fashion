@@ -36,7 +36,7 @@ class ProductController extends Controller
         $isFavorite = $this->productDetailService->isProductFavorite($id);
         $relatedRatings = $this->productDetailService->getRatingsForRelatedProducts($relatedProducts);
 
-        $ratingFilter = $request->input('rating', ''); // Lọc theo sao, mặc định là 'all'
+        $ratingFilter = $request->input('rating', 'all'); // Lọc theo sao, mặc định là 'all'
         $commentsData = $this->productDetailService->getCommentsData(
             $product,
             $ratingFilter,

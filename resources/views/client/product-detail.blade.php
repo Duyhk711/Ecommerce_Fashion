@@ -66,7 +66,7 @@
                             <div class="zoompro-wrap">
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
-                                    <img id="zoompro" class="zoompro" src="{{ asset('storage/' . $product->mainImage->image) }}"
+                                    <img id="zoompro" class="zoompro" src="{{ asset('storage/' . $product->img_thumbnail) }}"
                                         data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
                                         height="600" />
                                 </div>
@@ -324,7 +324,7 @@
                             </div>
                             <hr>
                             <div>
-                                <div class="mt-5">
+                                <div class="mt-5" id="ratings-comment">
                                     {{-- Đánh giá trung bình --}}
                                     <div class="d-flex">
                                         <div class="ratings-main">
@@ -362,8 +362,11 @@
                                     <div class="review-inner" id="comment-list">
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
-                                                <div class="spr-review-profile" style="width: 85px">
-                                                    <img src="{{ $comment->user->avatar ? asset('storage/' . $comment->user->avatar) : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}" alt="avatar" />
+                                                <div style="height: 65px;" class="me-2">
+                                                    <img src="{{ $comment->user->avatar 
+                                                    ? asset('storage/' . $comment->user->avatar) 
+                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}" 
+                                                    alt="avatar" style="width: 65px" height="65px" class="rounded-circle blur-up lazyloaded me-4"/>
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div class="title-review d-flex align-items-center justify-content-between">
@@ -482,7 +485,7 @@
                                         <div class="product-vendor">{{ $products->catalogue->name }}</div>
                                         <div class="product-name">
                                             <a
-                                                href="{{ route('productDetail', $products->slug) }}">{{ $product->name }}</a>
+                                                href="{{ route('productDetail', $products->slug) }}">{{ $products->name }}</a>
                                         </div>
                                         <div class="product-price">
                                             @if ($products->price_sale == 0)
@@ -1591,35 +1594,38 @@
     </script>   
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             // Hàm cuộn đến khung bình luận với độ trễ
             function scrollToComments() {
-                const commentBox = document.getElementById('comment-list');
+                const commentBox = document.getElementById('ratings-comment');
                 if (commentBox) {
-                    // Sử dụng setTimeout để thêm độ trễ trước khi cuộn
-                    setTimeout(() => {
-                        commentBox.scrollIntoView({ behavior: 'smooth' });
-                    }, 4000); // 500ms độ trễ, có thể thay đổi theo nhu cầu
+                    commentBox.scrollIntoView({ behavior: 'smooth', block:'end'});
                 }
             }
 
             // Xử lý sự kiện khi chọn filter
             const filters = document.querySelectorAll('.rating-choose');
             filters.forEach(filter => {
-                filter.addEventListener('click', function() {
-                    // Gọi hàm cuộn xuống
-                    scrollToComments();
+                filter.addEventListener('click', function () {
+                    // Lưu ý định cuộn vào sessionStorage
+                    sessionStorage.setItem('scrollToComments', 'true');
                 });
             });
 
-            // Nếu bạn có nút phân trang
+            // Xử lý sự kiện phân trang
             const paginationLinks = document.querySelectorAll('.pagination a');
             paginationLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    // Gọi hàm cuộn xuống
-                    scrollToComments();
+                link.addEventListener('click', function () {
+                    // Lưu ý định cuộn vào sessionStorage
+                    sessionStorage.setItem('scrollToComments', 'true');
                 });
             });
+
+            // Kiểm tra nếu cần cuộn sau khi trang được load lại
+            if (sessionStorage.getItem('scrollToComments') === 'true') {
+                sessionStorage.removeItem('scrollToComments'); // Xóa flag sau khi cuộn
+                setTimeout(scrollToComments, 300); // Cuộn với độ trễ sau khi trang tải
+            }
         });
     </script>
     

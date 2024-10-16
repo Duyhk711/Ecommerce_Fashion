@@ -65,10 +65,20 @@ class ProductDetailService
 
     public function getRelatedProducts($product, string $slug)
     {
-        // lấy sản phẩm cùng danh mục
-        return Product::where('catalogue_id', $product->catalogue_id)
-            ->where('id', '!=', $product->id)
-            ->get();
+        $relatedProducts = Product::where('catalogue_id', $product->catalogue_id)
+        ->where('id', '!=', $product->id);
+
+
+        $count = $relatedProducts->count();
+
+        if ($count > 4 && $count < 8) {
+            $limit = 4;
+        } elseif ($count >= 8) {
+            $limit = 8;
+        } else {
+            $limit = $count; 
+        }
+        return $relatedProducts->limit($limit)->get();
     }
 
     public function getUserCommentStatus($product, string $slug)
