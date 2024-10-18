@@ -87,7 +87,7 @@
                             </tr>
                           @else
                             @foreach ($orders as $order)
-                                <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}">
+                                <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}" data-order-id="{{$order->id}}">
                                     <td class="text-center fs-sm">
                                         <a class="fw-semibold" href="be_pages_ecom_order.html">
                                             <strong>{{ $order->sku }}</strong>
@@ -113,7 +113,7 @@
                                             ];
                                             $currentStatus = $order->status;
                                         @endphp
-                                        <span class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
+                                        <span id="orderStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
                                             {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                         </span>
                                     </td>
@@ -275,4 +275,7 @@
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  {{-- <script src="resoures/js/app.js'"></script> --}}
+
 @endsection
