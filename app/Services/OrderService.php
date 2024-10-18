@@ -52,6 +52,8 @@ class OrderService{
         } catch (\Exception $e) {
             throw $e;
         }
+        
+        return $order;
     }
 }
 
