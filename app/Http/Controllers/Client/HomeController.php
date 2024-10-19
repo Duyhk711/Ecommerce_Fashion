@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catalogue;
+use App\Models\Product;
 use App\Services\Client\HomeService;
 use Illuminate\Http\Request;
 
@@ -22,8 +23,12 @@ class HomeController extends Controller
         $products = $this->homeService->getHomeProducts();
         $banners  = $this->homeService->getBannerShowHome();
         $catalogues = $this->homeService->getAllCatalogues();
+        $newProducts = $this->homeService->getNewProducts();
+        $saleProduct = $this->homeService->getSaleProduct();
+        $bestsaleProducts = $this->homeService->getbestsaleProducts();
+        
         // dd($banners);
-        return view('client.home', compact('products', 'banners', 'catalogues'));
+        return view('client.home', compact('products', 'banners', 'catalogues', 'newProducts', 'saleProduct', 'bestsaleProducts'));
     }
 
     // Tìm kiếm sản phẩm theo tên
@@ -33,4 +38,5 @@ class HomeController extends Controller
         $products = $this->homeService->searchProducts($query);
         return view('client.search', compact('products', 'query'));
     }
+
 }

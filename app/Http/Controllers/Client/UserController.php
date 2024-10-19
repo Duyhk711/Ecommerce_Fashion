@@ -44,6 +44,7 @@ class UserController extends Controller
     {
         return view('client.my-account.oder-tracking');
     }
+    
 
     // favorite
     public function add($productId)

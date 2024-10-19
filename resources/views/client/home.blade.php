@@ -39,6 +39,94 @@
             display: flex;
             flex-direction: column;
         }
+        .voucher-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .voucher-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .voucher-code {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2f415d;
+            margin-top: 10px;
+            padding: 6px;
+            background-color: #A2D2DF;
+            border-radius: 8px;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .voucher-description {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .voucher-expiry {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        .voucher-button {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #ff5722;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .voucher-button:hover {
+            background-color: #e64a19;
+           
+        }
+        .voucher-copy {
+            background-color: #2f415d;
+            color: #ffffff;
+            border: none;
+            padding: 4px 8px;
+            height: 30px;
+            width: 80px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .voucher-copy:hover {
+            background-color: #2f415d;
+        }   
+        .xt{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            margin: 10px;
+            padding: 10px;
+        }
+        .xt a{
+            font-size: 20px;
+        }
+        .xt h3{
+            font-size: 30px;
+        }
     </style>
     <section class="slideshow slideshow-wrapper">
         <div class="home-slideshow slick-arrow-dots">
@@ -286,7 +374,57 @@
             </div>
         </section>
         <!--End Collection banner-->
+         <!-- VOUCHER -->
+        <section class="container mt-5">
+            <div class="xt">
+                <h3>Ưu đãi đặc biệt</h3>
+                <a href="{{route('vouchers')}}">Xem thêm >></a>
+            </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="voucher-card">
+                    <div class="voucher-header">Voucher 50K</div>
+                    <div class="voucher-code" id="voucher-code-1">GIAM50</div>
+                    <div class="voucher-description">Giảm 50k cho đơn hàng hàng từ 399k</div>
+                    <div class="d-flex justify-content-between align-items-center mt-2  ">
+                    <div class="voucher-expiry">HSD: 31/12/2024</div>
+                    <div>
+                        <!-- <button class="voucher-copy" onclick="saveVoucher('GIAM50')">Lưu</button> -->
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="voucher-card">
+                    <div class="voucher-header">Voucher 80K</div>
+                    <div class="voucher-code" id="voucher-code-2">GIAM80</div>
+                    <div class="voucher-description">Giảm 80k cho đơn hàng từ 599k</div>
+                    <div class="d-flex justify-content-between align-items-center mt-2  ">
+                    <div class="voucher-expiry">HSD: 31/12/2024</div>
+                    <div>
+                        <!-- <button class="voucher-copy" onclick="copyCode('voucher-code-2')">Lưu</button> -->
+                    </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-4 mb-4">
+                <div class="voucher-card">
+                    <div class="voucher-header">Voucher 80K</div>
+                    <div class="voucher-code" id="voucher-code-2">GIAM80</div>
+                    <div class="voucher-description">Giảm 80k cho đơn hàng từ 599k</div>
+                    <div class="d-flex justify-content-between align-items-center mt-2  ">
+                    <div class="voucher-expiry">HSD: 31/12/2024</div>
+                    <div>
+                        <!-- <button class="voucher-copy" onclick="copyCode('voucher-code-2')">Lưu</button> -->
+                    </div>
+                    </div>
+                </div>
+            </div>    
+            
+        </div>
+        </section>
+        <!-- ENDVOUCHER -->
         <!--Popular Categories-->
         {{-- <section class="section collection-slider pb-0">
             <div class="container">
@@ -409,30 +547,181 @@
 
                 <div class="tabs-listing">
                     <ul class="nav nav-tabs style1 justify-content-center" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                            <button class="nav-link head-font" id="newarrivals-tab" data-bs-toggle="tab"
+                                data-bs-target="#newarrivals" type="button" role="tab" aria-controls="newarrivals"
+                                aria-selected="false">
+                                 Hàng mới về
+                            </button>
+                        </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link head-font active" id="bestsellers-tab" data-bs-toggle="tab"
                                 data-bs-target="#bestsellers" type="button" role="tab" aria-controls="bestsellers"
                                 aria-selected="true">
-                                Bestseller
+                                Sản phẩm bán chạy
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font" id="newarrivals-tab" data-bs-toggle="tab"
-                                data-bs-target="#newarrivals" type="button" role="tab" aria-controls="newarrivals"
-                                aria-selected="false">
-                                {{-- New Arrivals --}}
-                            </button>
-                        </li>
+                       
                         <li class="nav-item" role="presentation">
                             <button class="nav-link head-font" id="toprated-tab" data-bs-toggle="tab"
                                 data-bs-target="#toprated" type="button" role="tab" aria-controls="toprated"
                                 aria-selected="false">
-                                {{-- Top Rated --}}
+                             Khuyến mãi giảm giá
                             </button>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="productTabsContent">
+                        <!-- newarrivals -->
+                        <div class="tab-pane " id="newarrivals" role="tabpanel"
+                            aria-labelledby="newarrivals-tab">
+                            <!--Product Grid-->
+                            <div class="grid-products grid-view-items">
+                                <div class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
+                                    @foreach ($newProducts as $product)
+                                    <div class="item col-item">
+                                        <div class="product-box">
+                                            <!-- Start Product Image -->
+                                            <div class="product-image">
+                                                <!-- Start Product Image -->
+                                                <a href="{{ route('productDetail', $product->id) }}" class="product-img rounded-0">
+                                                    <!-- Image -->
+                                                    <img class="primary rounded-0 blur-up lazyload"
+                                                        data-src="{{$product->img_thumbnail}}"
+                                                        src="{{asset('client/images/products/product5.jpg')}}" alt="Product" title="Product"
+                                                        width="625" height="808" />
+                                                    <!-- End Image -->
+                                                    <!-- Hover Image -->
+                                                    <img class="hover rounded-0 blur-up lazyload"
+                                                        data-src="{{asset('client/images/products/product5-1.jpg')}}"
+                                                        src="{{asset('client/images/products/product5-1.jpg')}}" alt="Product"
+                                                        title="Product" width="625" height="808" />
+                                                    <!-- End Hover Image -->
+                                                </a>
+                                                <!-- End Product Image -->
+                                                <!-- Product label -->
+                                                <div class="product-labels"><span class="lbl pr-label3">New</span></div>
+                                                <!-- End Product label -->
+                                                <!--Product Button-->
+                                                <div class="button-set style1">
+                                                    <!--Cart Button-->
+                                                    <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
+                                                        data-bs-toggle="modal" data-bs-target="#addtocart_modal">
+                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
+                                                                class="text">Add to Cart</span></span>
+                                                    </a>
+                                                    <!--End Cart Button-->
+                                                    <!--Quick View Button-->
+                                                    {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                                        data-bs-toggle="modal" data-bs-target="#quickview_modal">
+                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
+                                                                class="text">Quick View</span></span>
+                                                    </a> --}}
+                                                    <!--End Quick View Button-->
+                                                    <!--Wishlist Button-->
+                                                    {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
+                                                            class="text">Add To Wishlist</span></a> --}}
+                                                    <!--End Wishlist Button-->
+                                                    <!--Compare Button-->
+                                                    {{-- <a href="compare-style2.html" class="btn-icon compare"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="Add to Compare"><i class="icon anm anm-random-r"></i><span
+                                                            class="text">Add to Compare</span></a> --}}
+                                                    <!--End Compare Button-->
+                                                </div>
+                                                <!--End Product Button-->
+                                            </div>
+                                            <!-- End Product Image -->
+                                            <!-- Start Product Details -->
+                                            <div class="product-details text-center">
+                                                <!--Product Vendor-->
+                                                <div class="product-vendor">{{$product->catalogue->name}}</div>
+                                                <!--End Product Vendor-->
+                                                <!-- Product Name -->
+                                                <div class="product-name">
+                                                    <a href="product-layout1.html">{{$product->name}}</a>
+                                                </div>
+                                                <!-- End Product Name -->
+                                                <!-- Product Price -->
+                                                <div class="product-price">
+                                                    <span class="price">{{$product->price_sale}}đ</span>
+                                                </div>
+                                                <!-- End Product Price -->
+                                                <!-- Product Review -->
+                                                <div class="product-review">
+                                                    <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                                                        class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
+                                                        class="icon anm anm-star-o"></i>
+                                                    <span class="caption hidden ms-1">3 Reviews</span>
+                                                </div>
+                                                <!-- End Product Review -->
+                                                <!--Sort Description-->
+                                                <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
+                                                    available, but the majority have suffered alteration in some form, by injected
+                                                    humour, or randomised words which don't look even slightly believable. If you
+                                                    are going to use a passage...</p>
+                                                <!--End Sort Description-->
+                                                <!-- Variant -->
+                                                <ul class="variants-clr swatches">
+                                                    @if($product->variants->isNotEmpty())
+                                                        @php
+                                                            $colors = [];
+                                                        @endphp
+                                                        @foreach($product->variants as $variant)
+                                                            @foreach($variant->variantAttributes as $variantAttribute)
+                                                                @if($variantAttribute->attribute->slug === 'color')
+                                                                    @php
+                                                                        $colorCode = $variantAttribute->attributeValue->color_code;
+                                                                    @endphp
+                                                                    @if(!in_array($colorCode, $colors))
+                                                                        @php
+                                                                            $colors[] = $colorCode;
+                                                                        @endphp
+                                                                        <li class="swatch medium radius" style="background-color: {{ $colorCode }}">
+                                                                            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $variantAttribute->attributeValue->value }}"></span>
+                                                                        </li>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                                
+                                                <!-- End Variant -->
+                                                <!-- Product Button -->
+                                                <div class="button-action hidden">
+                                                    <div class="addtocart-btn">
+                                                        <form class="addtocart" action="#" method="post">
+                                                            <a href="#addtocart-modal" class="btn btn-md add-to-cart-modal"
+                                                                data-bs-toggle="modal" data-bs-target="#addtocart_modal">
+                                                                <i class="icon anm anm-cart-l me-2"></i><span class="text">Add
+                                                                    to Cart</span>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- End Product Button -->
+                                            </div>
+                                            <!-- End product details -->
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="view-collection text-center mt-4 mt-md-5">
+                                    <a href="{{route('shop')}}" class="btn btn-secondary btn-lg">View
+                                        Collection</a>
+                                </div>
+                            </div>
+                            <!--End Product Grid-->
+                        </div>
+                         <!-- bestsellers -->
                         <div class="tab-pane show active" id="bestsellers" role="tabpanel"
                             aria-labelledby="bestsellers-tab">
                             <!--Product Grid-->
@@ -460,7 +749,156 @@
                                                 </a>
                                                 <!-- End Product Image -->
                                                 <!-- Product label -->
-                                                <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
+                                                <div class="product-labels"><span class="lbl pr-label1">Best seller</span></div>
+                                                <!-- End Product label -->
+                                                <!--Product Button-->
+                                                <div class="button-set style1">
+                                                    <!--Cart Button-->
+                                                    <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
+                                                        data-bs-toggle="modal" data-bs-target="#addtocart_modal">
+                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
+                                                                class="text">Add to Cart</span></span>
+                                                    </a>
+                                                    <!--End Cart Button-->
+                                                    <!--Quick View Button-->
+                                                    {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                                        data-bs-toggle="modal" data-bs-target="#quickview_modal">
+                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
+                                                                class="text">Quick View</span></span>
+                                                    </a> --}}
+                                                    <!--End Quick View Button-->
+                                                    <!--Wishlist Button-->
+                                                    {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
+                                                            class="text">Add To Wishlist</span></a> --}}
+                                                    <!--End Wishlist Button-->
+                                                    <!--Compare Button-->
+                                                    {{-- <a href="compare-style2.html" class="btn-icon compare"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="Add to Compare"><i class="icon anm anm-random-r"></i><span
+                                                            class="text">Add to Compare</span></a> --}}
+                                                    <!--End Compare Button-->
+                                                </div>
+                                                <!--End Product Button-->
+                                            </div>
+                                            <!-- End Product Image -->
+                                            <!-- Start Product Details -->
+                                            <div class="product-details text-center">
+                                                <!--Product Vendor-->
+                                                <div class="product-vendor">{{$product->catalogue->name}}</div>
+                                                <!--End Product Vendor-->
+                                                <!-- Product Name -->
+                                                <div class="product-name">
+                                                    <a href="product-layout1.html">{{$product->name}}</a>
+                                                </div>
+                                                <!-- End Product Name -->
+                                                <!-- Product Price -->
+                                                <div class="product-price">
+                                                    <span class="price">{{$product->price_sale}}đ</span>
+                                                </div>
+                                                <!-- End Product Price -->
+                                                <!-- Product Review -->
+                                                <div class="product-review">
+                                                    <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                                                        class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
+                                                        class="icon anm anm-star-o"></i>
+                                                    <span class="caption hidden ms-1">3 Reviews</span>
+                                                </div>
+                                                <!-- End Product Review -->
+                                                <!--Sort Description-->
+                                                <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
+                                                    available, but the majority have suffered alteration in some form, by injected
+                                                    humour, or randomised words which don't look even slightly believable. If you
+                                                    are going to use a passage...</p>
+                                                <!--End Sort Description-->
+                                                <!-- Variant -->
+                                                <ul class="variants-clr swatches">
+                                                    @if($product->variants->isNotEmpty())
+                                                        @php
+                                                            $colors = [];
+                                                        @endphp
+                                                        @foreach($product->variants as $variant)
+                                                            @foreach($variant->variantAttributes as $variantAttribute)
+                                                                @if($variantAttribute->attribute->slug === 'color')
+                                                                    @php
+                                                                        $colorCode = $variantAttribute->attributeValue->color_code;
+                                                                    @endphp
+                                                                    @if(!in_array($colorCode, $colors))
+                                                                        @php
+                                                                            $colors[] = $colorCode;
+                                                                        @endphp
+                                                                        <li class="swatch medium radius" style="background-color: {{ $colorCode }}">
+                                                                            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $variantAttribute->attributeValue->value }}"></span>
+                                                                        </li>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                                
+                                                <!-- End Variant -->
+                                                <!-- Product Button -->
+                                                <div class="button-action hidden">
+                                                    <div class="addtocart-btn">
+                                                        <form class="addtocart" action="#" method="post">
+                                                            <a href="#addtocart-modal" class="btn btn-md add-to-cart-modal"
+                                                                data-bs-toggle="modal" data-bs-target="#addtocart_modal">
+                                                                <i class="icon anm anm-cart-l me-2"></i><span class="text">Add
+                                                                    to Cart</span>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- End Product Button -->
+                                            </div>
+                                            <!-- End product details -->
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="view-collection text-center mt-4 mt-md-5">
+                                    <a href="{{route('shop')}}" class="btn btn-secondary btn-lg">View
+                                        Collection</a>
+                                </div>
+                            </div>
+                            <!--End Product Grid-->
+                        </div>
+                        <!-- toprated -->
+                        <div class="tab-pane" id="toprated" role="tabpanel"
+                            aria-labelledby="toprated-tab">
+                            <!--Product Grid-->
+                            <div class="grid-products grid-view-items">
+                                <div class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
+                                    @foreach ($saleProduct as $product)
+                                    <div class="item col-item">
+                                        <div class="product-box">
+                                            <!-- Start Product Image -->
+                                            <div class="product-image">
+                                                <!-- Start Product Image -->
+                                                <a href="{{ route('productDetail', $product->id) }}" class="product-img rounded-0">
+                                                    <!-- Image -->
+                                                    <img class="primary rounded-0 blur-up lazyload"
+                                                        data-src="{{$product->img_thumbnail}}"
+                                                        src="{{asset('client/images/products/product5.jpg')}}" alt="Product" title="Product"
+                                                        width="625" height="808" />
+                                                    <!-- End Image -->
+                                                    <!-- Hover Image -->
+                                                    <img class="hover rounded-0 blur-up lazyload"
+                                                        data-src="{{asset('client/images/products/product5-1.jpg')}}"
+                                                        src="{{asset('client/images/products/product5-1.jpg')}}" alt="Product"
+                                                        title="Product" width="625" height="808" />
+                                                    <!-- End Hover Image -->
+                                                </a>
+                                                <!-- End Product Image -->
+                                                <!-- Product label -->
+                                                <div class="product-labels"><span class="lbl on-sale">50% Off</span></div>
                                                 <!-- End Product label -->
                                                 <!--Product Button-->
                                                 <div class="button-set style1">
@@ -1428,4 +1866,36 @@
 
     </script>
     <!--End Product Quickview Modal-->
+    <script>
+    function saveVoucher(voucherCode) {
+    fetch('/api/save-voucher', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ code: voucherCode })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('Voucher đã được lưu thành công!');
+        } else {
+            alert('Lỗi: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Có lỗi xảy ra:', error);
+        alert('Lỗi khi lưu voucher');
+    });
+}
+
+    </script>
+
+
 @endsection
