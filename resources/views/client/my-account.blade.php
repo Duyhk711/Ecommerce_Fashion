@@ -30,11 +30,16 @@
                                     <a href="{{ route('my.wishlist') }}" class="nav-link">Danh sách yêu thích</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="{{ route('voucher') }}" class="nav-link">Mã ưu đãi</a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ route('profile') }}" class="nav-link">Hồ sơ</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('logout') }}" class="nav-link">Đăng xuất</a>
                                 </li>
+                               
+                                
                             </ul>
                         </div>
 
