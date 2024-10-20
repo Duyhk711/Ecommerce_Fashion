@@ -69,6 +69,8 @@ Route::prefix('admin')
       Route::get('/variants/{id}/edit', [ProductVariantController::class, 'edit']);
       Route::put('/variants/{id}', [ProductVariantController::class, 'update']);
       Route::delete('/variants/{id}', [ProductVariantController::class, 'destroy'])->name('variants.destroy');
+      Route::post('/products/variant/update', [ProductController::class, 'updateVariant'])->name('products.variant.update'); //chinh sú hang loat
+
 
       // ORDER
       Route::resource('orders', OrderController::class);
