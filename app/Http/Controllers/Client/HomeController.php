@@ -23,8 +23,12 @@ class HomeController extends Controller
         $products = $this->homeService->getHomeProducts();
         $banners  = $this->homeService->getBannerShowHome();
         $catalogues = $this->homeService->getAllCatalogues();
+        $newProducts = $this->homeService->getNewProducts();
+        $saleProduct = $this->homeService->getSaleProduct();
+        $bestsaleProducts = $this->homeService->getbestsaleProducts();
+        
         // dd($banners);
-        return view('client.home', compact('products', 'banners', 'catalogues'));
+        return view('client.home', compact('products', 'banners', 'catalogues', 'newProducts', 'saleProduct', 'bestsaleProducts'));
     }
 
     // Tìm kiếm sản phẩm theo tên
@@ -34,6 +38,7 @@ class HomeController extends Controller
         $products = $this->homeService->searchProducts($query);
         return view('client.search', compact('products', 'query'));
     }
+
     
     public function showQuickView($id)
 {
@@ -57,5 +62,6 @@ class HomeController extends Controller
         'sizes' => $sizes,
     ]);
 }
+
 
 }
