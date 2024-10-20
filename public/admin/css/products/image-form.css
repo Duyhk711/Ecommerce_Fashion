@@ -1,0 +1,50 @@
+.image-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+.image-preview img {
+    max-width: 200px;
+    margin-bottom: 10px;
+}
+.sub-images {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.sub-image-container {
+    position: relative;
+    display: inline-block;
+}
+.sub-image-container img {
+    max-width: 100px;
+}
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 2px 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+/* Ẩn input file */
+.hidden-input {
+    display: none;
+}
+/* Nút tải lên */
+.upload-btn {
+    padding: 5px 10px;
+    background-color: #0565d0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.upload-btn:hover {
+    background-color: #0056b3;
+}

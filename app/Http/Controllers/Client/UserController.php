@@ -33,16 +33,14 @@ class UserController extends Controller
     }
     public function address()
     {
+        $currentUser = $this->userService->getCurrentUser();
         $addresses = $this->userService->getAllAddresses();
-        return view('client.my-account.address', compact('addresses'));
+        return view('client.my-account.address', compact('addresses','currentUser'));
     }
-    public function myOrder()
+       public function orderTracking()
     {
-        return view('client.my-account.my-order');
-    }
-    public function orderTracking()
-    {
-        return view('client.my-account.oder-tracking');
+        $currentUser = $this->userService->getCurrentUser();
+        return view('client.my-account.oder-tracking',compact('currentUser'));
     }
     
 
@@ -93,16 +91,18 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Sản phẩm đã được xóa khỏi danh sách yêu thích.']);
     }
-    
+
     // Phương thức hiển thị danh sách yêu thích
     public function myWishlist()
     {
+        $currentUser = $this->userService->getCurrentUser();
         $favorites = $this->favoriteService->getFavorites();
-        return view('client.my-account.my-wishlist', compact('favorites'));
+        return view('client.my-account.my-wishlist', compact('favorites','currentUser'));
     }
 
     public function profile()
     {
+
         $userId = auth()->id();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
         $currentUser = $this->userService->getCurrentUser();
@@ -159,6 +159,66 @@ class UserController extends Controller
             ], 404);
         }
     }
+    public function editAddress($id)
+    {
+        // Lấy địa chỉ theo ID từ UserService
+        $address = $this->userService->getAddressById($id);
+
+        if ($address) {
+            return response()->json([
+                'success' => true,
+                'address' => $address,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Địa chỉ không tồn tại.',
+            ], 404);
+        }
+    }
+
+
+
+    public function updateAddress($id)
+    {
+        // Xác thực dữ liệu đầu vào
+        Request::validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_phone' => 'required|string|max:15', // Bạn có thể thay đổi độ dài tối đa nếu cần
+            'address_line1' => 'required|string|max:255',
+            'address_line2' => 'nullable|string|max:255',
+            'ward' => 'required|string|max:100',
+            'district' => 'required|string|max:100',
+            'city' => 'required|string|max:100',
+            'type' => 'required|in:home,office' // Kiểm tra loại địa chỉ
+        ]);
+
+        // Lấy dữ liệu từ facade Request
+        $data = Request::only([
+            'customer_name',
+            'customer_phone',
+            'address_line1',
+            'address_line2',
+            'ward',
+            'district',
+            'city',
+            'type'
+        ]);
+
+        // Gọi hàm updateAddress từ UserService
+        $updated = $this->userService->updateAddress($id, $data);
+
+        // Kiểm tra kết quả cập nhật
+        if ($updated) {
+            // Chuyển hướng về trang danh sách địa chỉ với thông báo thành công
+            return redirect()->route('addresses.store')->with('success', 'Địa chỉ đã được cập nhật thành công.');
+        } else {
+            // Chuyển hướng về trang danh sách địa chỉ với thông báo lỗi
+            return redirect()->route('addresses.store')->with('error', 'Cập nhật địa chỉ thất bại hoặc địa chỉ không tồn tại.');
+        }
+    }
+
+
     public function updateProfile(AuthRequest $request, $id)
     {
         $user = User::findOrFail($id);
