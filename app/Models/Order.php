@@ -13,10 +13,9 @@ class Order extends Model
 
     const TRANG_THAI_DON_HANG = [
         '1' => 'Chờ xác nhận',
-        '2' => 'Đã xác nhận',
-        '3' => 'Đang chuẩn bị',
-        '4' => 'Đang vận chuyển',
-        '5' => 'Đã giao hàng',
+        '2' => 'Chờ vận chuyển',
+        '3' => 'Đang vận chuyển',
+        '4' => 'Hoàn thành',
         'huy_don_hang' => 'Đơn hàng đã hủy',
     ];
 
@@ -81,21 +80,27 @@ class Order extends Model
             throw new \InvalidArgumentException('Trạng thái không hợp lệ.');
         }
 
-        // Cập nhật trạng thái
-        
-        if($newStatus <= $this->status || $newStatus == "huy_don_hang"){
-            throw new \Exception("Trạng thái đã được cập nhật, vui lòng chọn trạng thái mới");
-        }else{
+        // Nếu trạng thái hiện tại là '1', cho phép chọn 'huy_don_hang'
+        if ($this->status === '1' && $newStatus === 'huy_don_hang') {
+            $this->status = $newStatus;
+        } 
+        // Kiểm tra nếu chọn trạng thái mới ngược lại hoặc trùng với trạng thái hiện tại
+        elseif ($newStatus <= $this->status || $newStatus === 'huy_don_hang') {
+            throw new \Exception("Trạng thái đã được cập nhật, vui lòng chọn trạng thái mới.");
+        } 
+        // Trạng thái hợp lệ và tiến trình hợp lý
+        else {
             $this->status = $newStatus;
         }
 
-        // Nếu trạng thái mới là "hoàn thành", cập nhật trạng thái thanh toán
-        if ($newStatus === '5') {
-            $this->payment_status = 'da_thanh_toan'; 
+        // Nếu trạng thái mới là '4', cập nhật trạng thái thanh toán
+        if ($newStatus === '4') {
+            $this->payment_status = 'da_thanh_toan';
         }
 
-        $this->save(); 
+        $this->save();
     }
+
 
     public function statusChanges()
     {
