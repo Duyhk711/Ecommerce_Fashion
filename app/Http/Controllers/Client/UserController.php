@@ -42,6 +42,7 @@ class UserController extends Controller
         $currentUser = $this->userService->getCurrentUser();
         return view('client.my-account.oder-tracking',compact('currentUser'));
     }
+    
 
     // favorite
     public function add($productId)
