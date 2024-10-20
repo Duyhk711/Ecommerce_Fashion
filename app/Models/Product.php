@@ -120,4 +120,5 @@ class Product extends Model
         }
         return $query; // Nếu không có màu, trả về query gốc
     }
+    
 }
