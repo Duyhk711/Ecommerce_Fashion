@@ -1,18 +1,20 @@
 <?php
 
+
 use App\Http\Controllers\Admin\VoucherController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\Client\FavoriteController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ShopController;
-use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\VouchersController;
-use App\Models\Voucher;
+use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\VNPayController;
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,12 +36,14 @@ Route::get('/filterproduct', [ShopController::class, 'filterShop'])->name('filte
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 // Trang chủ hiển thị 12 sản phẩm
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
+Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
 
 // order
-Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
+// Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
 Route::view('/wishlist', 'client.wishlist')->name('wishlist'); // Sửa chính tả từ 'whishlist' thành 'wishlist'
 Route::view('/empty-cart', 'client.empty')->name('emptyCart'); // Cụ thể hóa cho giỏ hàng rỗng
 
@@ -68,7 +72,6 @@ Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDe
 //Route hủy đơn hàng
 Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
 
-
 //sản phẩm yêu thích
 Route::middleware('auth')->group(function () {
     Route::get('/my-wishlist', [UserController::class, 'myWishlist'])->name('my.wishlist');
@@ -76,27 +79,35 @@ Route::middleware('auth')->group(function () {
     Route::delete('/wishlist/remove/{product_id}', [UserController::class, 'remove'])->name('wishlist.remove');
 });
 
-
 // address
 Route::get('/address', [UserController::class, 'address'])->name('address');
 Route::post('/address', [UserController::class, 'storeAddress'])->name('addresses.store');
-Route::delete('/address/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
+Route::delete('/addresses/{id}', [UserController::class, 'destroy'])->name('addresses.destroy');
 Route::post('/addresses/{id}/default', [UserController::class, 'setDefault'])->name('addresses.setDefault');
+// Cập nhật địa chỉ
+Route::put('/address/{id}', [UserController::class, 'updateAddress'])->name('addresses.update');
+// Lấy dữ liệu địa chỉ để chỉnh sửa
+Route::get('/address/{id}/edit', [UserController::class, 'editAddress'])->name('addresses.edit');
 
 //profile
 Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
+//đổi mật khẩu
+Route::post('/my-account/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
+
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
+Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
+Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 
 // them binh luan
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
 
 
 Route::post('/api/save-voucher', [VouchersController::class, 'saveVoucher']);
-
 
 
 
