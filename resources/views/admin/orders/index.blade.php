@@ -1,9 +1,9 @@
 @extends('layouts.backend')
 
-
 @section('css')
   <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
   <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         .btn {
             position: relative;
@@ -41,16 +41,26 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Đơn hàng</h3>
                 <div class="block-options">
-                  <form method="GET" action="{{ route('admin.orders.index') }}" class="mb-3">
-                    <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
-                        <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Đã xác nhận</option>
-                        <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đang chuẩn bị</option>
-                        <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đang vận chuyển</option>
-                        <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Đã giao hàng</option>
-                        <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
-                    </select>
+                  <form method="GET" action="{{ route('admin.orders.index') }}" class="mb-3 ">
+                    <div  class="d-flex">
+                        <div>
+                            <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
+                                <option value="">Trạng thái</option>
+                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
+                                <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
+                                <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
+                                <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành</option>
+                                <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
+                                <option value="">Thanh toán</option>
+                                <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
+                                <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
+                            </select>
+                        </div>
+                    </div>
                   </form>
                 </div>
             </div>
@@ -77,7 +87,7 @@
                             </tr>
                           @else
                             @foreach ($orders as $order)
-                                <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}">
+                                <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}" data-order-id="{{$order->id}}">
                                     <td class="text-center fs-sm">
                                         <a class="fw-semibold" href="be_pages_ecom_order.html">
                                             <strong>{{ $order->sku }}</strong>
@@ -89,23 +99,21 @@
                                         @php
                                             $statusMapping = [
                                                 '1' => 'Chờ xác nhận',
-                                                '2' => 'Đã xác nhận',
-                                                '3' => 'Đang chuẩn bị',
-                                                '4' => 'Đang vận chuyển',
-                                                '5' => 'Đã giao hàng',
+                                                '2' => 'Chờ vận chuyển',
+                                                '3' => 'Đang vận chuyển',
+                                                '4' => 'Hoàn thành',
                                                 'huy_don_hang' => 'Đơn hàng đã hủy',
                                             ];
                                             $badgeColor = [
                                                 '1' => 'bg-warning',
                                                 '2' => 'bg-info',
                                                 '3' => 'bg-primary',
-                                                '4' => 'bg-secondary',
-                                                '5' => 'bg-success',
+                                                '4' => 'bg-success',
                                                 'huy_don_hang' => 'bg-danger',
                                             ];
                                             $currentStatus = $order->status;
                                         @endphp
-                                        <span class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
+                                        <span id="orderStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
                                             {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                         </span>
                                     </td>
@@ -121,7 +129,7 @@
                                     <td class="text-center fs-base fs-sm">
                                         <div class="btn-group">
                                             <!-- Cập nhật trạng thái -->
-                                            @if ($order->status == '5' || $order->status == 'huy_don_hang')
+                                            @if ($order->status == '4' || $order->status == 'huy_don_hang')
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
                                                     style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
                                                     data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
@@ -147,7 +155,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
+                <div class="pagination d-flex justify-content-end mt-3">
                   {{ $orders->appends(request()->query())->links() }}
                 </div>
                 <!-- END All Orders Table -->
@@ -176,11 +184,10 @@
                             <label for="statusSelect" class="form-label">Chọn trạng thái mới</label>
                             <select id="statusSelect" class="form-select" name="status">
                                 <option value="1">Chờ xác nhận</option>
-                                <option value="2">Xác nhận</option>
-                                <option value="3">Đang chuẩn bị</option>
-                                <option value="4">Đang vận chuyển</option>
-                                <option value="5">Hoàn thành</option>
-                                <option value="huy_don_hang" disabled>Hủy bỏ</option>
+                                <option value="2">Chờ vận chuyển</option>
+                                <option value="3">Đang vận chuyển</option>
+                                <option value="4">Hoàn thành</option>
+                                <option value="huy_don_hang">Hủy bỏ</option>
                             </select>
                         </div>
                     </div>
@@ -225,19 +232,28 @@
               statusSelect.value = orderStatus;
 
               // Array of possible statuses, reflecting the order of progression
-              var statuses = ['1', '2', '3', '4', '5', 'huy_don_hang'];
+              var statuses = ['1', '2', '3', '4', 'huy_don_hang'];
               var currentStatusIndex = statuses.indexOf(orderStatus);
-
+                console.log(currentStatusIndex);
+                // if (statuses['1']) {
+                //     statusSelect.options[i].disabled = false;
+                // }else{
+                //     statusSelect.options[i].disabled = true;
+                // }
               // Loop through the options and disable those that are prior to the current status and 'huy_don_hang'
               for (var i = 0; i < statusSelect.options.length; i++) {
-                  var optionValue = statusSelect.options[i].value;
+                var optionValue = statusSelect.options[i].value;
 
-                  if (statuses.indexOf(optionValue) < currentStatusIndex || optionValue === 'huy_don_hang') {
-                      statusSelect.options[i].disabled = true;
-                  } else {
-                      statusSelect.options[i].disabled = false;
-                  }
-              }
+                // Nếu là 'huy_don_hang'
+                if (optionValue === 'huy_don_hang') {
+                    // Cho phép chọn nếu trạng thái hiện tại là 1, ngược lại disable
+                    statusSelect.options[i].disabled = !(currentStatusIndex === 0);
+                } else {
+                    // Các trạng thái khác: disable nếu thứ tự trước trạng thái hiện tại
+                    statusSelect.options[i].disabled = statuses.indexOf(optionValue) < currentStatusIndex;
+                }
+            }
+
               form.action = '/admin/orders/update/' + orderId;
 
               // Disable the "Cập Nhật" button if the status is already the current one
@@ -259,4 +275,7 @@
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  {{-- <script src="resoures/js/app.js'"></script> --}}
+
 @endsection
