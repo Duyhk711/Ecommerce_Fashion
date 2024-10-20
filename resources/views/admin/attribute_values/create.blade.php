@@ -176,7 +176,7 @@
         const selectedOption = attributeSelect.options[attributeSelect.selectedIndex];
         const type = selectedOption ? selectedOption.getAttribute('data-type') : '';
 
-        if (type === 'mau-sac') {
+        if (type === 'color') {
             colorPickerContainer.classList.remove('d-none');
         } else {
             colorPickerContainer.classList.add('d-none');

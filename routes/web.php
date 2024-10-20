@@ -32,6 +32,7 @@ Route::get('/filterproduct', [ShopController::class, 'filterShop'])->name('filte
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 // Trang chủ hiển thị 12 sản phẩm
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
