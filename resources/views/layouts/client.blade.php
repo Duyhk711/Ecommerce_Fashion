@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- CSS MENU --}}
-    <link rel="stylesheet" href="{{asset('client/css/menu.css')}}">
+    <link rel="stylesheet" href="{{ asset('client/css/menu.css') }}">
     <!-- Title Of Site -->
     <title>Hema - Multipurpose eCommerce Bootstrap 5 Html Template</title>
     <!-- Favicon -->
@@ -20,10 +20,7 @@
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{{ asset('client/css/style-min.css') }}">
     <link rel="stylesheet" href="{{ asset('client/css/responsive.css') }}">
-    {{-- CSS order-detail --}}
-    <link rel="stylesheet" href="{{ asset('client/css/order-detail.css') }}">
-    {{-- link icon  --}}
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     @yield('css')
 </head>
@@ -72,7 +69,7 @@
             <!-- Body Container -->
 
             {{-- main content --}}
-                @yield('content')
+            @yield('content')
             {{-- end main --}}
             <!-- End Body Container -->
         </div>
@@ -92,12 +89,30 @@
 
 
         <!-- Including Jquery/Javascript -->
-         <!-- Main JS -->
-         <!-- Plugins JS -->
-         <script src="{{ asset('client/js/plugins.js') }}"></script>
+        <!-- Main JS -->
+        <!-- Plugins JS -->
+        <script src="{{ asset('client/js/plugins.js') }}"></script>
 
-         <script src="{{ asset('client/js/main.js') }}"></script>
-         @yield('js')
+        <script src="{{ asset('client/js/main.js') }}"></script>
+        @yield('js')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function validateCheckout(event) {
+                const checkBox = document.getElementById('prTearm');
+
+                if (!checkBox.checked) {
+                    event.preventDefault(); // Prevent navigation
+                    // Hiển thị popup lỗi với SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Vui lòng đồng ý với các điều khoản và điều kiện trước khi tiến hành thanh toán.',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+            }
+        </script>
 
     </div>
     <!--End Page Wrapper-->

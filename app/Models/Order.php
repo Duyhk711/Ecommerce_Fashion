@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,11 +12,10 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     const TRANG_THAI_DON_HANG = [
-        'cho_xac_nhan' => 'Chờ xác nhận',
-        'da_xac_nhan' => 'Đã xác nhận',
-        'dang_chuan_bi' => 'Đang chuẩn bị',
-        'dang_van_chuyen' => 'Đang vận chuyển',
-        'hoan_thanh' => 'Đã giao hàng',
+        '1' => 'Chờ xác nhận',
+        '2' => 'Chờ vận chuyển',
+        '3' => 'Đang vận chuyển',
+        '4' => 'Hoàn thành',
         'huy_don_hang' => 'Đơn hàng đã hủy',
     ];
 
@@ -70,7 +70,7 @@ class Order extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'order_id', 'id'); // Điều chỉnh nếu cần thiết
+        return $this->hasMany(Comment::class, 'order_id', 'id');
     }
   
     public function changeStatus($newStatus)
@@ -80,17 +80,27 @@ class Order extends Model
             throw new \InvalidArgumentException('Trạng thái không hợp lệ.');
         }
 
-        // Cập nhật trạng thái
-        $this->status = $newStatus;
-
-        // Nếu trạng thái mới là "hoàn thành", cập nhật trạng thái thanh toán
-        if ($newStatus === 'hoan_thanh') {
-            $this->payment_status = 'da_thanh_toan'; // Hoặc bạn có thể sử dụng hằng số
+        // Nếu trạng thái hiện tại là '1', cho phép chọn 'huy_don_hang'
+        if ($this->status === '1' && $newStatus === 'huy_don_hang') {
+            $this->status = $newStatus;
+        } 
+        // Kiểm tra nếu chọn trạng thái mới ngược lại hoặc trùng với trạng thái hiện tại
+        elseif ($newStatus <= $this->status || $newStatus === 'huy_don_hang') {
+            throw new \Exception("Trạng thái đã được cập nhật, vui lòng chọn trạng thái mới.");
+        } 
+        // Trạng thái hợp lệ và tiến trình hợp lý
+        else {
+            $this->status = $newStatus;
         }
 
-        // Lưu lại thay đổi
-        $this->save(); 
+        // Nếu trạng thái mới là '4', cập nhật trạng thái thanh toán
+        if ($newStatus === '4') {
+            $this->payment_status = 'da_thanh_toan';
+        }
+
+        $this->save();
     }
+
 
     public function statusChanges()
     {
