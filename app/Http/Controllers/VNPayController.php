@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class VNPayController extends Controller
@@ -21,7 +22,7 @@ class VNPayController extends Controller
         $vnp_OrderInfo = "Thanh toán đơn hàng #" . $order->session_id;
         // dd($order);
         $vnp_OrderType = 'billpayment';
-        $vnp_Amount = intval($order->total_price) * 100 * 100; // Số tiền (đơn vị VND)
+        $vnp_Amount = intval($order->total_price) * 100 * 1000; // Số tiền (đơn vị VND)
         $vnp_Locale = 'vn';
         $vnp_IpAddr = request()->ip();
         $inputData = array(
@@ -93,10 +94,11 @@ class VNPayController extends Controller
             // Thanh toán thành công, cập nhật trạng thái đơn hàng
             $order = Order::where('session_id', $request->get('vnp_TxnRef'))->first();
             $order->payment_status = 'da_thanh_toan';
-            $order->status = 'da_xac_nhan';
+            $order->status = '1';
             $order->save();
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
 
-            return view('client.order-success')->with('success', 'Giao dịch thành công!');
+            return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Giao dịch thành công!');
         } else {
             // dd('ko ok');
             // Thanh toán thất bại

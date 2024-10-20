@@ -108,9 +108,9 @@
     <div class="order-detail-container ">
         <!-- Header đơn hàng -->
         <div class="order-header">
-            <a href="{{ route('my.order') }}" class="btn btn-sm mb-2"> Quay lại</a> 
-            <h2>
-                Mã vận đơn: {{ $order->sku }}
+            <a href="{{ route('my.order') }}" class="btn btn-sm mb-2 fw-normal text-capitalize" style="height: 30px"> Quay lại</a> 
+            <p>
+                Mã vận đơn: <strong>{{ $order->sku }}</strong>
                 @php
                     $statusText = [
                         '1' => 'Chờ xác nhận',
@@ -139,18 +139,18 @@
                         </form>
                     </div>
                 @endif
-            </h2>
-            <p style="margin-top: 10px;">Ngày đặt hàng: {{ $order->created_at->format('H:i d/m/Y') }}</p>
+            </p>
+            <p style="margin-top: 10px;">Ngày đặt hàng:  {{ $order->created_at->format('H:i d/m/Y') }}</p>
         </div>
         <hr>
 
         <!-- Thông tin người nhận và theo dõi đơn hàng -->
         <div class="order-info">
             <div class="customer-info">
-                <h3>Thông tin người nhận</h3>
-                <p><strong>Người nhận:</strong> {{ $order->customer_name }}</p>
-                <p><strong>Số điện thoại:</strong> {{ $order->customer_phone }}</p>
-                <p><strong>Địa chỉ:</strong>
+                <h3 class="block-title">Thông tin người nhận</h3>
+                <p><b class="fw-bolder">Người nhận:</b> {{ $order->customer_name }}</p>
+                <p><b class="fw-bolder">Số điện thoại:</b> {{ $order->customer_phone }}</p>
+                <p><b class="fw-bolder">Địa chỉ:</b>
                     {{ $order->ward }},
                     {{ $order->district }},
                     {{ $order->city }}
@@ -161,7 +161,7 @@
                         'da_thanh_toan' => 'Đã thanh toán'
                     ];
                 @endphp
-                <p><strong>Trạng thái thanh toán:</strong> {{ $paymentText[$order->payment_status] ?? $order->payment_status }}</p>
+                <p><b class="fw-bolder">Trạng thái thanh toán:</b> {{ $paymentText[$order->payment_status] ?? $order->payment_status }}</p>
             </div>
         </div> <br>
 
@@ -180,7 +180,7 @@
                     <td> 
                         <div class="product-item d-flex" style="width: 100%;">
                             <div class="product-image ">
-                                <img src="{{ $item->productVariant->image  }}" alt="{{ $item->product_name }}"
+                                <img src="{{ asset('storage/' . $item->productVariant->image) }}" alt="{{ $item->product_name }}"
                                     width="100">
                             </div>
 
@@ -200,7 +200,7 @@
                                             @php $color = $variantAttribute->attributeValue->value; @endphp
                                         @endif
                                     @endforeach
-                                    <strong>Loại:</strong> 
+                                    Loại:
                                     @if ($size || $color)
                                         {{ $size }} @if ($size && $color)
                                             |
@@ -239,10 +239,10 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        @if ($order->status == '5')
+                        @if ($order->status == '4')
                             @if ($commentDataArray[$item->productVariant->product->id]['status'] == "not_comment")
                                 <div class="review-button-container" style="text-align: right;">
-                                    <a href="#" class="btn btn-primary btn-sm rounded-2 w-30" 
+                                    <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"  
                                         data-bs-toggle="modal" 
                                         data-bs-target="#reviewModal"
                                         data-product-id="{{ $item->productVariant->product->id }}" 
@@ -254,7 +254,7 @@
                                 </div> 
                             @elseif($commentDataArray[$item->productVariant->product->id]['status'] == "commented")
                             <div class="review-button-container" style="text-align: right;">
-                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30" 
+                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#editModal"
                                     data-product-id="{{ $item->productVariant->product->id }}" 
@@ -270,7 +270,7 @@
                             </div> 
                             @elseif($commentDataArray[$item->productVariant->product->id]['status'] == "updated")
                             <div class="review-button-container" style="text-align: right;">
-                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30" 
+                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#getModal"
                                     data-product-id="{{ $item->productVariant->product->id }}" 

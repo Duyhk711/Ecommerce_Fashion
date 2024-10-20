@@ -6,12 +6,17 @@ use App\Models\Order;
 use App\Models\OrderStatusChange;
 
 class OrderService{
-    public function getOrder($status = null, $perPage = 6){
+    public function getOrder($status = null, $perPage = 6, $payment_status = null){
         $query = Order::with('items');
 
         if ($status) {
             $query->where('status', $status);
         }
+
+        if ($payment_status) {
+            $query->where('payment_status', $payment_status);
+        }
+
         return $query->paginate($perPage);
     }
 
@@ -47,6 +52,8 @@ class OrderService{
         } catch (\Exception $e) {
             throw $e;
         }
+        
+        return $order;
     }
 }
 

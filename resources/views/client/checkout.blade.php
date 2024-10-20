@@ -275,13 +275,15 @@
                                                                     </td>
                                                                     <td class="text-center">{{ $item['quantity'] }}</td>
                                                                     <td class="text-center">
-                                                                        {{ isset($item['price']) ? number_format($item['price'], 0, ',', '.') . ' VND' : 'Giá không xác định' }}
+
+                                                                        {{ isset($item['price']) ? number_format($item['price'], 3, '.', 0) . ' VND' : 'Giá không xác định' }}
                                                                     </td>
                                                                     @php
                                                                         $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
-                                                                        <strong>{{ $item['price'] * $item['quantity'] }}đ</strong>
+                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', 0) }}
+                                                                            VND</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -296,14 +298,11 @@
                                         <!--Order Comment-->
                                         <div class="block order-comments my-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Order Comment</h3>
+                                                <h3 class="title mb-3">Ghi chú</h3>
                                                 <fieldset>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                            <textarea class="resize-both form-control" rows="3" placeholder="Place your comment here"></textarea>
-                                                            <small class="mt-2 d-block">*Savings include promotions,
-                                                                coupons,
-                                                                rueBUCKS, and shipping (if applicable).</small>
+                                                            <textarea class="resize-both form-control" rows="3" placeholder="Viết ghi chú ở đáy"></textarea>
                                                         </div>
                                                     </div>
                                                 </fieldset>
@@ -337,7 +336,8 @@
                                                             cộng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ $total }} VND</span></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
@@ -347,18 +347,19 @@
                                                             class="money">-0 VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Shipping</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
+                                                            hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">Free shipping</span></span>
+                                                            class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
                                                     <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ $total }} VND</b></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</b></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -415,7 +416,8 @@
                                                             cộng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$226.00</span></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
@@ -425,18 +427,19 @@
                                                             class="money">-0 VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Shipping</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
+                                                            hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">Free shipping</span></span>
+                                                            class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ $total }} VND</b></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</b></span>
                                                 </div>
                                                 <input type="hidden" value="{{ $total }}" name="total_price">
 
@@ -444,6 +447,9 @@
                                                     class="btn btn-lg my-4 checkout w-100">Đặt hàng</button>
                                                 <script>
                                                     document.getElementById('cartCheckout').addEventListener('click', function(event) {
+                                                        // if (validateCheckout()) {
+                                                        // document.getElementById('checkout').submit();
+                                                        // }
                                                         document.getElementById('checkout').submit();
                                                     });
                                                 </script>
@@ -616,8 +622,10 @@
         }
 
         function updateDistricts(data) {
-            districts.innerHTML = ""; // Reset quận/huyện
-            wards.innerHTML = ""; // Reset phường/xã
+            districts.innerHTML = `<option value="" selected>
+                                                            Chọn quận huyện</option>`; // Reset quận/huyện
+            wards.innerHTML = `<option value="" selected>
+                                                            Chọn phường xã</option>`; // Reset phường/xã
 
             if (citis.value) {
                 const cityData = data.find(n => n.Name === citis.value);
@@ -640,13 +648,14 @@
         }
 
         function updateWards(data) {
-            wards.innerHTML = ""; // Reset phường/xã
+            wards.innerHTML = `<option value="" selected>
+                                                            Chọn phường xã</option>`; // Reset phường/xã
 
             const cityData = data.find(n => n.Name === citis.value);
-            console.log('City data for wards:', cityData); // Kiểm tra dữ liệu thành phố
+            // console.log('City data for wards:', cityData); // Kiểm tra dữ liệu thành phố
             if (districts.value && cityData) {
                 const districtData = cityData.Districts.find(d => d.Name === districts.value);
-                console.log('District data:', districtData); // Kiểm tra dữ liệu quận/huyện
+                // console.log('District data:', districtData); // Kiểm tra dữ liệu quận/huyện
                 if (districtData) {
                     districtData.Wards.forEach(ward => {
                         wards.options[wards.options.length] = new Option(ward.Name, ward.Name);
@@ -665,6 +674,192 @@
                 citis.value = selectedCity;
                 citis.onchange(); // Cập nhật quận/huyện
             }
+        }
+    </script>
+    <script>
+        // document.getElementById('checkout').addEventListener('submit', function(event) {
+
+        //     const customer_name = document.getElementById('customer_name');
+        //     const customer_phone = document.getElementById('customer_phone');
+        //     const email = document.getElementById('email');
+        //     const city = document.getElementById('city');
+        //     const district = document.getElementById('district');
+        //     const ward = document.getElementById('ward');
+        //     const address_line1 = document.getElementById('address_line1');
+
+        //     if (customer_name.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập họ và tên',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        //     if (customer_phone.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập số điện thoại',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        //     if (email.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập email',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        //     if (city.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng chọn Tỉnh/Thành phố',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+        //     if (district.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng chọn Quận/Huyện',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+        //     if (ward.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng chọn Phường/Xã',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+        //     if (address_line1.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập địa chỉ cụ thế',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        // });
+
+        function validateCheckout() {
+            let customer_name = document.getElementById('customer_name');
+            let customer_phone = document.getElementById('customer_phone');
+            let email = document.getElementById('email');
+            let city = document.getElementById('city');
+            let district = document.getElementById('district');
+            let ward = document.getElementById('ward');
+            let address_line1 = document.getElementById('address_line1');
+
+            if (customer_name.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập họ và tên',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            if (customer_phone.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập số điện thoại',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            if (email.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập email',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            if (city.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn Tỉnh/Thành phố',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            if (district.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn Quận/Huyện',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            if (ward.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn Phường/Xã',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            if (address_line1.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập địa chỉ cụ thế',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            return true;
         }
     </script>
 @endsection

@@ -17,8 +17,8 @@
                                      alt="user" style="width: 130px; height: 130px; object-fit: cover;" />
                             </div>
                             <div class="profile-detail">
-                                <h3 class="mb-1">{{$currentUser->name}}</h3>
-                                <p class="text-muted">{{$currentUser->email}}</p>
+                                <h3 class="mb-1">{{Auth::user()->name}}</h3>
+                                <p class="text-muted">{{Auth::user()->name}}</p>
                             </div>
                         </div>
                         <div class="dashboard-tab">
@@ -39,11 +39,16 @@
                                     <a href="{{ route('my.wishlist') }}" class="nav-link">Danh sách yêu thích</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="{{ route('voucher') }}" class="nav-link">Mã ưu đãi</a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ route('profile') }}" class="nav-link">Hồ sơ</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('logout') }}" class="nav-link">Đăng xuất</a>
                                 </li>
+                               
+                                
                             </ul>
                         </div>
 
