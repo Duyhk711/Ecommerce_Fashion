@@ -74,11 +74,15 @@ class CheckoutController extends Controller
 
     public function storeCheckout(Request $request)
     {
+
+        $products = json_decode($request->input('cartItem'));
+
         // dd($request->all());
         $order = new Order();
         $order->user_id = Auth::check() ? auth()->id() : null;
         $order->customer_name = $request->input('customer_name');
         $order->session_id = 'ORD' . time();
+        $order->sku = $order->session_id;
         $order->customer_email = $request->input('customer_email');
         $order->customer_phone = $request->input('customer_phone');
         $order->address_line1 = $request->input('address_line1');
@@ -93,7 +97,6 @@ class CheckoutController extends Controller
 
         // dd($request->input('cartItem'));
         // Lưu các sản phẩm vào bảng 'order_items'
-        $products = json_decode($request->input('cartItem'));
         // dd($products);
         if (is_array($products) || is_object($products)) {
             $cartItems = [];
@@ -110,6 +113,9 @@ class CheckoutController extends Controller
                 $orderItem->variant_sku = $prd->sku;
                 $orderItem->product_sku = $prd->product->sku;
                 $orderItem->save();
+
+                $prd->stock -= $product->quantity;
+                $prd->save();
                 if (Auth::check()) {
                     CartItem::where('id', $product->cart_item_id)->forceDelete();
                 } else {
@@ -120,6 +126,8 @@ class CheckoutController extends Controller
                 }
                 session()->put('cart', $cartItems);
             }
+
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
         } else {
             // Trường hợp biến không phải là mảng hoặc đối tượng, xử lý lỗi hoặc thông báo
             echo "Dữ liệu không hợp lệ";
@@ -127,9 +135,9 @@ class CheckoutController extends Controller
 
         // Kiểm tra phương thức thanh toán
         if ($request->payment_method == 'COD') {
-            return view('client.order-success', compact('products', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
+            return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
         } else {
-            return redirect()->route('vnpay.payment', ['order_id' => $order->id]);
+            return redirect()->route('vnpay.payment', ['order_id' => $order->id, 'products' => $products]);
         }
     }
 }
