@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         totalPrice += price * quantity;
       }
     });
-    totalPriceElement.textContent = totalPrice.toLocaleString("vi-VN") + " đ";
+    totalPriceElement.textContent = numberFormat(totalPrice * 1000, 0, '.', ',') + " đ";
   }
 
   // Chức năng chọn tất cả
@@ -294,4 +294,16 @@ function updateTotalPrice2() {
 
   document.getElementById("totalPrice").textContent =
     totalPrice.toLocaleString("vi-VN") + " đ";
+}
+
+function numberFormat(number, decimals, dec_point, thousands_sep) {
+  // Chuyển đổi số thành chuỗi với số thập phân
+  number = parseFloat(number).toFixed(decimals);
+  
+  // Phân tách phần nguyên và phần thập phân
+  let parts = number.split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep); // Thêm dấu phân cách hàng nghìn
+  
+  // Kết hợp lại
+  return parts.join(dec_point);
 }
