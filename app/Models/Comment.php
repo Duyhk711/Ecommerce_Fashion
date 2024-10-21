@@ -13,6 +13,7 @@ class Comment extends Model
     protected $fillable = [
         'user_id',
         'product_id',
+        'order_id',
         'title',
         'comment',
         'rating'
@@ -39,4 +40,8 @@ class Comment extends Model
         return $this->belongsTo(Product::class);   
     }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class);   
+    }
 }

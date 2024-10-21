@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services;
 
@@ -6,8 +6,18 @@ use App\Models\Order;
 use App\Models\OrderStatusChange;
 
 class OrderService{
-    public function getOrder(){
-        return Order::with('items')->get();
+    public function getOrder($status = null, $perPage = 6, $payment_status = null){
+        $query = Order::with('items');
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        if ($payment_status) {
+            $query->where('payment_status', $payment_status);
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function getOrderDetail($id){
@@ -30,14 +40,20 @@ class OrderService{
         $oldStatus = $order->status;
 
         // Thay đổi trạng thái
-        $order->changeStatus($newStatus);
 
-        OrderStatusChange::create([
-            'order_id' => $order->id,
-            'user_id' => $userId,
-            'old_status' => $oldStatus,
-            'new_status' => $newStatus,
-        ]);
+        try {
+            $order->changeStatus($newStatus);
+            OrderStatusChange::create([
+                'order_id' => $order->id,
+                'user_id' => $userId,
+                'old_status' => $oldStatus,
+                'new_status' => $newStatus,
+            ]);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        
+        return $order;
     }
 }
 
