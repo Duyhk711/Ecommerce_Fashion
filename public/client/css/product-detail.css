@@ -1,6 +1,7 @@
 .qtyBtn.disabled {
     pointer-events: none; /* Ngăn chặn mọi sự kiện chuột */
     opacity: 0.5; /* Giảm độ sáng */
+    cursor: pointer;
 }
 .swatch.disabled {
     position: relative;
@@ -16,13 +17,13 @@
     position: absolute;
     top: 50%;
     /* Căn giữa theo chiều dọc */
-    left: -20%;
-    right: -20%;
-    height: 2px;
+    left: -1%;
+    right: -1%;
+    height: 1px;
     /* Độ dày của gạch chéo */
     background-color: rgb(0, 0, 0);
     /* Màu gạch chéo */
-    transform: rotate(45deg);
+    transform: rotate(-45deg);
     /* Gạch chéo */
     transform-origin: center;
 }
@@ -109,3 +110,15 @@ h2 {
     color: #ffcc00;
     /* Màu vàng cho sao được chọn */
 }
+
+/* .spr-review-body {
+    overflow: hidden;
+    white-space: nowrap;  
+    text-overflow: ellipsis;
+    transition: all 0.3s ease-in-out;
+}
+
+.spr-review-body.expanded {
+    white-space: normal; 
+    overflow: visible;
+} */
