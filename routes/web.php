@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\CommentController;
@@ -109,5 +110,10 @@ Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('com
 
 Route::post('/api/save-voucher', [VouchersController::class, 'saveVoucher']);
 
+// User chat routes
+Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
+Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
+Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
+Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
 
 

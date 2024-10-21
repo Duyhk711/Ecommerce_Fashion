@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\OrderStatusChangeController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ChatsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -97,5 +98,13 @@ Route::prefix('admin')
       //COMMENT
       Route::resource('/comments', CommentController::class);
       Route::get('admin/comments/{id}', [CommentController::class, 'show']);
+
+      //MESSAGE
+      Route::get('/chats', [ChatsController::class, 'adminIndex'])->name('admin.chats');
+      Route::get('/fetch-messages', [ChatsController::class, 'fetchMessages'])->name('fetchMessages');
+      Route::post('/send-message', [ChatsController::class, 'sendMessage'])->name('sendMessage');
+      Route::post('/chat/mark-messages-as-read', [ChatsController::class, 'markMessagesAsRead'])->name('markMessagesAsRead');
+      Route::get('/fetch-sorted-users', [ChatsController::class, 'fetchSortedUsers'])->name('fetchSortedUsers');
+      Route::get('/users/sorted', [ChatsController::class, 'getUsersSorted']);
     });
   });
