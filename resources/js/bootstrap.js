@@ -31,6 +31,9 @@ window.Echo = new Echo({
     wsPort: 6001,
     disableStats: true,
 });
+window.Echo.connector.pusher.connection.bind('connected', () => {
+    console.log('Connected to Pusher');
+});
 
 // import Pusher from 'pusher-js';
 // window.Pusher = Pusher;
