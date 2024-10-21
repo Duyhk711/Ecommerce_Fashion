@@ -3,43 +3,121 @@
 @section('content')
     <!--Home Slideshow-->
     <style>
-        .chat-icon {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #007bff;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            font-size: 30px;
-        }
+            .chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
 
-        .chat-box {
-            position: fixed;
-            bottom: 90px;
-            left: 20px;
-            width: 300px;
-            border-radius: 10px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: none;
-            padding: 15px;
-        }
+    .chat-button {
+        background-color: #0084ff;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-size: 25px;
+    }
 
-        .chat-header {
-            font-weight: bold;
-        }
+    .chat-button i {
+        font-size: 30px;
+    }
 
-        .chat-footer {
-            display: flex;
-            flex-direction: column;
-        }
+    .chat-button:hover {
+        background-color: #006dbf;
+    }
+
+    .chat-box {
+        display: none;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-height: 400px;
+        overflow: hidden;
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 300px;
+    }
+
+    .chat-header {
+        background-color: #65c6f6;
+        color: white;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .chat-body {
+        padding: 10px;
+        height: 280px;
+        overflow-y: auto;
+        border-bottom: 1px solid #ddd;
+    }
+    .message {
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        max-width: 70%;
+    }
+    .sent {
+        margin-left:30%;
+        align-self: flex-end;
+        background-color: #4cdaed;
+        color: white;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: right;
+    }
+    .received {
+        align-self: flex-start;
+        background-color: #f1f1f1;
+        color: black;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: left;
+    }
+    .message-time {
+        font-size: 10px;
+        color: #888;
+        margin-top: 5px;
+    }
+    .chat-footer {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+    }
+    .chat-footer textarea {
+        flex: 1;
+        resize: none;
+        border-radius: 20px;
+        padding-left: 15px;
+    }
+    .chat-footer button {
+        margin-left: 10px;
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
 
         .voucher-card {
             background-color: #ffffff;
@@ -1877,96 +1955,128 @@
             </div>
         </div>
     </div> --}}
-    <div class="chat-icon" onclick="toggleChat()">
-        💬
+    <div class="chat-container">
+        <div class="chat-button" id="chatButton">
+            <i class="anm anm-chat"></i>
+        </div>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">
+                <span id="chatWithAdminName">Chat</span>
+                <button class="close-chat" id="closeChat">&times;</button>
+            </div>
+            <div class="chat-body">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message received">
+                        <div class="message-text"></div>
+                        <div class="message-time"></div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-text"></div>
+                        <div class="message-time"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-footer">
+                <textarea id="messageInput" class="form-control" rows="1" placeholder="Type a message..."></textarea>
+                <button id="sendMessage" class="btn btn-primary">Send</button>
+            </div>
+        </div>
     </div>
 
-    <div class="chat-box" id="chatBox">
-        <div class="chat-header">Liên hệ hỗ trợ</div>
-        <form id="contactForm" onsubmit="sendMessage(event)">
-            @csrf
-            <div class="form-group">
-                <label for="phone">Số điện thoại</label>
-                <input type="text" class="form-control" id="phone" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" required>
-            </div>
-            <div class="form-group">
-                <label for="title">Tiêu đề</label>
-                <input type="text" class="form-control" id="title" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Tin nhắn</label>
-                <textarea class="form-control" id="message" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Gửi</button>
-        </form>
-    </div>
+    <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
+    @vite(['resources/js/app.js'])
     <script>
-        function toggleChat() {
-            const chatBox = document.getElementById('chatBox');
-            chatBox.style.display = chatBox.style.display === 'none' || chatBox.style.display === '' ? 'block' : 'none';
-        }
+        $(document).ready(function() {
+       let adminId;
+       let userId = {{ Auth::id() }}; 
+       $('#chatButton').click(function() {
+           $('#chatBox').show();
+           $.get('/get-first-admin', function(response) {
+               if (response.admin_id) {
+                   adminId = response.admin_id;
+                   $('#chatWithAdminName').text('Chatting with ' + response.admin_name);
+                   $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
+                       $('#chatMessages').empty(); 
+                       messagesResponse.messages.forEach(function(message) {
+                           let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                           let messageHtml = `
+                               <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
+                                   <div class="message-text">${message.message}</div>
+                                   <div class="message-time">${messageTime}</div>
+                               </div>`;
+                           
+                           $('#chatMessages').append(messageHtml);
+                       });
+   
+                       scrollToBottom(); 
+                   });
+               }
+           });
+       });
+   
+       $('#closeChat').click(function() {
+           $('#chatBox').hide();
+       });
+   
+       $('#sendMessage').click(function() {
+           sendMessage();
+       });
+   
+       $('#messageInput').keypress(function(event) {
+           if (event.which == 13 && !event.shiftKey) {
+               event.preventDefault();
+               sendMessage();
+           }
+       });
+       function sendMessage() {
+           let message = $('#messageInput').val().trim();
+           if (message) {
+               $.post('/send-message', {
+                   _token: '{{ csrf_token() }}',
+                   message: message,
+                   receiver_id: adminId
+               }, function(response) {
+                   if (response.success) {
+                       let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                       let messageHtml = `
+                           <div class="message sent">
+                               <div class="message-text">${message}</div>
+                               <div class="message-time">${messageTime}</div>
+                           </div>`;
+                       
+                       $('#chatMessages').append(messageHtml);
+                       $('#messageInput').val(''); 
+                       scrollToBottom(); 
+                   }
+               });
+           }
+       }
+   
+       var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+           cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+           encrypted: true
+       });
+   
+   
+       var channel = pusher.subscribe('chat.' + userId);
+       channel.bind('admin-message', function(data) {
+           let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+           let messageHtml = `
+               <div class="message received">
+                   <div class="message-text">${data.user.name}: ${data.message}</div>
+                   <div class="message-time">${messageTime}</div>
+               </div>`;
+           
+           $('#chatMessages').append(messageHtml);
+           scrollToBottom(); 
+       });
+       function scrollToBottom() {
+           const chatBody = $('.chat-body'); 
+           chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
+       }
+   });
+       </script> 
 
-        function sendMessage(event) {
-            event.preventDefault(); // Ngăn chặn việc gửi form
-
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const title = document.getElementById('title').value;
-            const message = document.getElementById('message').value;
-
-            // Xử lý gửi tin nhắn ở đây, ví dụ như gửi tới server
-
-            console.log('Số điện thoại:', phone);
-            console.log('Email:', email);
-            console.log('Tiêu đề:', title);
-            console.log('Tin nhắn:', message);
-
-            // Reset form
-            document.getElementById('contactForm').reset();
-            toggleChat(); // Đóng chat box sau khi gửi
-        }
-
-        function sendMessage(event) {
-            event.preventDefault(); // Ngăn chặn việc gửi form
-
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const title = document.getElementById('title').value;
-            const message = document.getElementById('message').value;
-
-            // Gửi dữ liệu tới server
-            $.ajax({
-                url: '/messages', // Địa chỉ API để gửi tin nhắn
-                method: 'POST',
-                data: {
-                    phone: phone,
-                    email: email,
-                    title: title,
-                    message: message,
-                },
-                success: function(response) {
-                    console.log(response);
-                    alert('Tin nhắn đã được gửi thành công!');
-                    // Reset form
-                    document.getElementById('contactForm').reset();
-                    toggleChat(); // Đóng chat box sau khi gửi
-                },
-                error: function(xhr) {
-                    console.error(xhr);
-                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
-                }
-            });
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-        }
-    </script>
     <!--End Product Quickview Modal-->
     <script>
         function saveVoucher(voucherCode) {
