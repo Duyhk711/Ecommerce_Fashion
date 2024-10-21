@@ -12,7 +12,7 @@ use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\VouchersController;
-use App\Models\Voucher;
+
 
 /*
 |--------------------------------------------------------------------------
