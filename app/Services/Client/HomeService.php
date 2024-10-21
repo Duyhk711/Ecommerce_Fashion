@@ -12,7 +12,7 @@ class HomeService
     // Lấy 12 sản phẩm trang chủ
     public function getHomeProducts()
     {
-          // Lấy sản phẩm cùng với biến thể và các thông tin liên quan
+        // Lấy sản phẩm cùng với biến thể và các thông tin liên quan
         $products = Product::with([
             'variants.variantAttributes.attribute', // Load thuộc tính của biến thể
             'variants.variantAttributes.attributeValue', // Load giá trị của thuộc tính
@@ -20,17 +20,16 @@ class HomeService
             ->where('is_show_home', 1)  // Điều kiện để lấy sản phẩm hiển thị trên trang chủ
             ->where('is_active', 1)     // Điều kiện lấy sản phẩm đang hoạt động
             ->take(12)                  // Lấy 12 sản phẩm
-
             ->get();
-            
-            foreach ($products as $product) {
-                if ($product->variants->isNotEmpty()) {
-                    // Lấy ngẫu nhiên một biến thể, hoặc có thể thay đổi logic theo nhu cầu
-                    $product->selected_variant = $product->variants->first(); // Hoặc bất kỳ biến thể nào bạn muốn
-                    $product->selected_variant_id = $product->selected_variant->id; 
-                    $product->selected_variant_stock= $product->selected_variant->stock; 
-                }
+
+        foreach ($products as $product) {
+            if ($product->variants->isNotEmpty()) {
+                // Lấy ngẫu nhiên một biến thể, hoặc có thể thay đổi logic theo nhu cầu
+                $product->selected_variant = $product->variants->first(); // Hoặc bất kỳ biến thể nào bạn muốn
+                $product->selected_variant_id = $product->selected_variant->id;
+                $product->selected_variant_stock = $product->selected_variant->stock;
             }
+        }
         return $products;
     }
 
@@ -67,23 +66,24 @@ class HomeService
     //sản phẩm mới
     public function getNewProducts()
     {
-    $newProducts = Product::with(['variants.variantAttributes.attributeValue'])
-        ->where('is_new', 1) 
-        ->where('is_active', 1)
-        ->orderBy('created_at', 'desc')
-        ->take(8) 
-        ->get();
+        $newProducts = Product::with(['variants.variantAttributes.attributeValue'])
+            ->where('is_new', 1)
+            ->where('is_active', 1)
+            ->orderBy('created_at', 'desc')
+            ->take(8)
+            ->get();
 
-    return $newProducts;
+        return $newProducts;
     }
     // sản phẩm giảm giá
-    public function getSaleProduct(){
+    public function getSaleProduct()
+    {
         $saleProduct = Product::with(['variants.variantAttributes.attributeValue'])
-        ->where('price_regular', '>', 'price_sale') 
-        ->where('is_active', 1) 
-        ->orderBy('created_at', 'desc') 
-        ->take(8) 
-        ->get();
+            ->where('price_regular', '>', 'price_sale')
+            ->where('is_active', 1)
+            ->orderBy('created_at', 'desc')
+            ->take(8)
+            ->get();
         return $saleProduct;
     }
     // sản phẩm bán chạy
@@ -98,15 +98,14 @@ class HomeService
             'products.img_thumbnail',
             DB::raw('SUM(order_items.quantity) as total_quantity')
         )
-        ->join('order_items', 'products.sku', '=', 'order_items.product_sku')
-        ->groupBy('products.id', 'products.name', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
-        ->orderBy('total_quantity', 'desc')
-        ->where('products.is_active', 1)
-        ->take(12)
-        ->get();
-       
+            ->join('order_items', 'products.sku', '=', 'order_items.product_sku')
+            ->groupBy('products.id', 'products.name', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
+            ->orderBy('total_quantity', 'desc')
+            ->where('products.is_active', 1)
+            ->take(12)
+            ->get();
+
 
         return $bestsaleProducts;
     }
-
 }
