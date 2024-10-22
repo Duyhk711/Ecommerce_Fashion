@@ -281,6 +281,8 @@
                 selectedItems.push(checkbox.value); // Lưu lại ID của sản phẩm đã chọn
             });
 
+            const checkBox = document.getElementById('cart-tearm');
+
             if (selectedItems.length === 0) {
                 event.preventDefault();
 
@@ -289,6 +291,18 @@
                     icon: 'error',
                     title: 'Lỗi',
                     text: 'Vui lòng chọn ít nhất một sản phẩm.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            if (!checkBox.checked) {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng đồng ý với các điều khoản và điều kiện trước khi tiến hành thanh toán.',
                     confirmButtonText: 'OK'
                 });
                 return;

@@ -1,16 +1,21 @@
 <?php
 
+
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\VouchersController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +37,8 @@ Route::get('/filterproduct', [ShopController::class, 'filterShop'])->name('filte
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 // Trang chủ hiển thị 12 sản phẩm
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
+
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
@@ -52,12 +59,15 @@ Route::view('/contact', 'client.contact')->name('contact');
 Route::view('/support', 'client.support')->name('support');
 Route::view('/barter', 'client.barter')->name('barter');
 Route::view('/blog', 'client.blog')->name('blog');
+Route::view('/vouchers', 'client.vouchers')->name('vouchers');
 
 // account
 Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
 Route::get('/my-order', [MyOrderController::class, 'myOrders'])->name('my.order');
 Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+Route::get('/voucher', [VouchersController::class, 'voucher'])->name('voucher');
+
 // Route xem chi tiết đơn hàng
 Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
 //Route hủy đơn hàng
@@ -80,10 +90,6 @@ Route::put('/address/{id}', [UserController::class, 'updateAddress'])->name('add
 // Lấy dữ liệu địa chỉ để chỉnh sửa
 Route::get('/address/{id}/edit', [UserController::class, 'editAddress'])->name('addresses.edit');
 
-
-
-
-
 //profile
 Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
@@ -100,3 +106,14 @@ Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orde
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
 Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
+
+
+Route::post('/api/save-voucher', [VouchersController::class, 'saveVoucher']);
+
+// User chat routes
+Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
+Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
+Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
+Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
+
+

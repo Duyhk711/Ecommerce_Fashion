@@ -80,9 +80,8 @@
                                          @endif
                                      @endforeach
                                  </ul>
-                         <li class="lvl1 parent dropdown"><a href="{{ route('blog') }}">Blog </a>
-                         <li class="lvl1 parent dropdown"><a href="">Liên hệ </a>
-                         </li>
+                         <li class="lvl1 parent dropdown"><a href="{{route('blog')}}">Blog </a>
+                         <li class="lvl1 parent dropdown"><a href="{{route('contact')}}">Liên hệ </a></li>
                      </ul>
                  </nav>
              </div>

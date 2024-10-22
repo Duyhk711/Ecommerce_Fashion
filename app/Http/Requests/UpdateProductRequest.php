@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,16 +16,16 @@ class ProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'catalogue_id' => 'required|exists:catalogues,id',
-            'sku' => 'required|string|max:255|unique:products,sku',
+            // 'sku' => 'required|string|max:255|unique:products,sku',
             'price_regular' => 'required|numeric|min:0',
             'price_sale' => 'nullable|numeric|min:0|lt:price_regular',
-            'img_thumbnail' => 'required',
+            'img_thumbnail' => 'nullable|image',
             'images.*' => 'nullable|image',
             'variant_prices.*' => 'required|numeric|min:0',
             'variant_sale_prices.*' => 'nullable|numeric|min:0|lt:variant_prices.*',
             'variant_stocks.*' => 'required|integer|min:0',
             'variant_skus.*' => 'required|string|max:255',
-            'variant_images.*' => 'nullable',
+            'variant_images.*' => 'nullable|image',
             'description' => 'nullable|string|max:200',
             'content' => 'nullable|string',
             'material' => 'nullable|string|max:255',
@@ -41,7 +41,7 @@ class ProductRequest extends FormRequest
         return [
             'name.required' => 'Tên sản phẩm là bắt buộc.',
             'catalogue_id.required' => 'Vui lòng chọn danh mục sản phẩm.',
-            'sku.required' => 'Vui lòng nhập SKU.',
+            // 'sku.required' => 'Vui lòng nhập SKU.',
             'sku.unique' => 'SKU đã tồn tại, vui lòng chọn SKU khác.',
             'price_regular.required' => 'Giá gốc là bắt buộc.',
             'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá gốc.',
