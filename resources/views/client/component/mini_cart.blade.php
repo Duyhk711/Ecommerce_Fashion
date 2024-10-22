@@ -50,8 +50,8 @@
                         </div>
                         <a href="#" class="edit-i remove"><i class="icon anm anm-pencil-ar"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
-                        <a href="#" class="remove"><i class="icon anm anm-times-r"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Remove"></i></a>
+                        <a href="#" class="remove"><i class="icon anm anm-times-r" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Remove"></i></a>
                     </div>
                 </li>
                 <li class="item d-flex justify-content-center align-items-center">
@@ -78,8 +78,8 @@
                         </div>
                         <a href="#" class="edit-i remove"><i class="icon anm anm-pencil-ar"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
-                        <a href="#" class="remove"><i class="icon anm anm-times-r"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Remove"></i></a>
+                        <a href="#" class="remove"><i class="icon anm anm-times-r" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Remove"></i></a>
                     </div>
                 </li>
             </ul>
@@ -93,8 +93,8 @@
                 <div class="freeShipMsg"><i class="icon anm anm-truck-l fs-6 me-2 align-middle"></i>Only <span
                         class="money" data-currency-usd="$199.00" data-currency="USD">$199.00</span> away
                     from <b>Free Shipping</b></div>
-                <div class="freeShipMsg d-none"><i
-                        class="icon anm anm-truck-l fs-6 me-2 align-middle"></i>Congrats! You are eligible for
+                <div class="freeShipMsg d-none"><i class="icon anm anm-truck-l fs-6 me-2 align-middle"></i>Congrats!
+                    You are eligible for
                     <b>Free Shipping</b>
                 </div>
             </div>
@@ -103,19 +103,20 @@
                         class="item product-price">$10.00</span></div>
                 <div class="totalInfo clearfix mb-1 d-none"><span>Tax:</span><span
                         class="item product-price">$0.00</span></div>
-                <div class="totalInfo clearfix"><span>Total:</span><span
-                        class="item product-price">$163.00</span></div>
+                <div class="totalInfo clearfix"><span>Total:</span><span class="item product-price">$163.00</span>
+                </div>
 
             </div>
             <div class="agree-check customCheckbox">
                 <input id="prTearm" name="tearm" type="checkbox" value="tearm" required />
-                <label for="prTearm"> I agree with the </label><a href="#"
-                    class="ms-1 text-link">Terms &amp; conditions</a>
+                <label for="prTearm"> I agree with the </label><a href="#" class="ms-1 text-link">Terms &amp;
+                    conditions</a>
             </div>
             <div class="minicart-action d-flex mt-3">
-                <a href="{{route('checkout')}}" class="proceed-to-checkout btn btn-primary w-50 me-1">Check
+                <a href="{{ route('checkout') }}" class="proceed-to-checkout btn btn-primary w-50 me-1"
+                    onclick="validateCheckout(event)">Check
                     Out</a>
-                <a href="{{route('cart.show')}}" class="cart-btn btn btn-secondary w-50 ms-1">View Cart</a>
+                <a href="{{ route('cart.show') }}" class="cart-btn btn btn-secondary w-50 ms-1">View Cart</a>
             </div>
         </div>
     </div>

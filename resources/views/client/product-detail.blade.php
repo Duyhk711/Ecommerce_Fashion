@@ -2,6 +2,53 @@
 
 @section('css')
     <link rel="stylesheet" href="{{asset('client/css/product-detail.css')}}">
+    <style>
+        * {box-sizing: border-box;}
+
+        .img-zoom-container {
+        position: relative;
+        }
+
+        .img-zoom-lens {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        /*set the size of the lens:*/
+        width: 40px;
+        height: 40px;
+        }
+
+        .img-zoom-result {
+            display: none;
+            position: absolute;
+            border: none;
+            pointer-events: none; /* Đảm bảo result không cản chuột */
+            width: 150px;  /* Kích thước kính lúp */
+            height: 150px;
+            border-radius: 50%;  /* Hình tròn như kính lúp */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+    </style>
+    <style>
+        .rating-choose{
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border: rgb(255, 187, 0) 1px, solid;
+            text-align: center;
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        .rating-choose:hover{
+            background: rgb(255, 248, 230);
+            cursor: pointer;
+        }
+        .rating-choose.active {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -19,9 +66,9 @@
                             <div class="zoompro-wrap">
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
-                                    <img id="zoompro" class="zoompro" src="{{ $product->img_thumbnail }}"
+                                    <img id="zoompro" class="zoompro" src="{{ asset('storage/' . $product->img_thumbnail) }}"
                                         data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
-                                        height="808" />
+                                        height="600" />
                                 </div>
                                 <!-- End Product Image -->
                                 <!-- Product Label -->
@@ -44,10 +91,10 @@
                             <div class="product-thumb product-horizontal-thumb mt-3">
                                 <div id="gallery" class="product-thumb-horizontal">
                                     @foreach ($product->images as $item)
-                                        <a href="javascript:void(0);" data-image="{{ $item->image }}"
-                                            data-zoom-image="{{ $item->image }}" class="thumbnail">
-                                            <img class="blur-up lazyload" data-src="{{ $item->image }}"
-                                                src="{{ $item->image }}" alt="product" width="625" height="808" />
+                                        <a href="javascript:void(0);" data-image="{{ asset('storage/'. $item->image)  }}"
+                                            data-zoom-image="{{ asset('storage/'. $item->image)  }}" class="thumbnail">
+                                            <img class="blur-up lazyload" data-src="{{ asset('storage/'. $item->image)  }}"
+                                                src="{{ asset('storage/'. $item->image)  }}" alt="product" width="625" height="808" />
                                         </a>
                                     @endforeach
                                 </div>
@@ -100,9 +147,8 @@
 
                             <!-- Product Price -->
                             <div class="product-price d-flex-center my-3">
-                                <span
-                                    class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span><span
-                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                <span class="price old-price" id="regular-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                <span class="price" id="sale-price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                             </div>
                             <!-- End Product Price -->
                             <hr>
@@ -122,24 +168,25 @@
                             <div class="product-swatches-option">
                                 <!-- Swatches Color -->
                                 <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
-                                    <label class="label d-flex align-items-center">Color:<span
-                                            class="slVariant ms-1 fw-bold">Blue</span></label>
-                                    <ul class="variants-clr swatches d-flex-center pt-1 clearfix" id="color-options">
+                                    <label class="label d-flex align-items-center">Màu:<span class="slVariant ms-1 fw-bold"></span></label>
+                                    <ul class="variants-clr swatches d-flex pt-1 clearfix" id="color-options">
                                         @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
                                             <li class="swatch x-large available color-option"
-                                                style="background-color: {{ $color['colorCode'] }}"
+                                                style="background-color: {{ $color['colorCode'] }}; width: 40px; height: 40px; border-radius: 50%;"
                                                 data-color-code="{{ $color['colorCode'] }}"
-                                                data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
-                                                title="{{ $color['value'] }}">
+                                                data-product-image="{{ $color['image'] }}"
+                                                data-attribute-value-id="{{ $color['value'] }}"
+                                                data-bs-toggle="tooltip" title="{{ $color['value'] }}">
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
+                                
 
                                 <!-- Swatches Size -->
                                 <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
-                                    <label class="label d-flex align-items-center">Size:<span
-                                            class="slVariant ms-1 fw-bold">S</span></label>
+                                    <label class="label d-flex align-items-center">Kích cỡ:<span
+                                            class="slVariant ms-1 fw-bold"></span></label>
                                     <ul class="variants-size size-swatches d-flex-center pt-1 clearfix" id="size-options">
                                         @foreach ($uniqueAttributes->where('attributeName', 'Size') as $size)
                                             <li class="swatch x-large available size-option"
@@ -249,7 +296,6 @@
                 <ul class="product-tabs style2 list-unstyled d-flex-wrap d-flex-justify-center d-none d-md-flex">
                     <li rel="description" class="active"><a class="tablink">Mô tả</a></li>
                     <li rel="shipping-return"><a class="tablink">Giao hàng &amp; Trả hàng</a></li>
-                    <li rel="reviews"><a class="tablink">Đánh giá</a></li>
                 </ul>
 
                 <div class="tab-container">
@@ -258,8 +304,8 @@
                     <div id="description" class="tab-content">
                         <div class="product-description">
                             <div class="row">
-                                <div class="col-12 col-sm-12 col-md-8 col-lg-8">
-                                    {{ $product->content }}
+                                <div class="col-12 col-sm-12 ">
+                                    {!! $product->content !!}
                                     <p>There are many variations of passages of Lorem Ipsum available, but the majority have
                                         suffered alteration in some form, by injected humour, or randomised words which
                                         don't look even slightly believable.</p>
@@ -275,7 +321,79 @@
                                         Cicero are also reproduced in their exact original form, accompanied by English
                                         versions from the 1914 translation by H. Rackham.</p>
                                 </div>
-
+                            </div>
+                            <hr>
+                            <div>
+                                <div class="mt-5" id="ratings-comment">
+                                    {{-- Đánh giá trung bình --}}
+                                    <div class="d-flex">
+                                        <div class="ratings-main">
+                                            <div class="avg-rating d-flex-center mb-3">
+                                                <h3 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h3>
+                                                <div class="avg-content ms-3">
+                                                    <p class="text-rating">Đánh giá trung bình</p>
+                                                    <div class="ratings-full product-review">
+                                                        <a class="reviewLink d-flex-center" href="#reviews">
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                            @endfor
+                                                            <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                {{-- Lọc đánh giá --}}
+                                                <div class="d-flex mx-5 rating-filter">
+                                                    <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}" 
+                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
+                                                    @for ($i = 5; $i >= 1; $i--)
+                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}" 
+                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                        </a>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <br>
+                                    {{-- Danh sách bình luận --}}
+                                    <div class="review-inner" id="comment-list">
+                                        @forelse ($comments as $comment)
+                                            <div class="spr-review d-flex w-100">
+                                                <div style="height: 65px;" class="me-2">
+                                                    <img src="{{ $comment->user->avatar 
+                                                    ? asset('storage/' . $comment->user->avatar) 
+                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}" 
+                                                    alt="avatar" style="width: 65px" height="65px" class="rounded-circle blur-up lazyloaded me-4"/>
+                                                </div>
+                                                <div class="spr-review-content flex-grow-1">
+                                                    <div class="title-review d-flex align-items-center justify-content-between">
+                                                        <div>
+                                                            <h5>{{ $comment->user->name }}</h5>
+                                                            <span class="product-review spr-starratings">
+                                                                @for ($i = 0; $i < 5; $i++)
+                                                                    <i class="icon anm anm-star {{ $i < $comment->rating ? '' : 'anm-star-o' }}"></i>
+                                                                @endfor
+                                                            </span> | 
+                                                            {{ $comment->created_at->format('d-m-Y H:i') }}
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <p>{{ $comment->comment }}</p>
+                                                </div>
+                                            </div> <br> <hr>
+                                        @empty
+                                            <p>Chưa có bình luận nào.</p>
+                                        @endforelse
+                                    </div>
+                                
+                                    {{-- Phân trang --}}
+                                    <div id="pagination-container" class="pagination d-flex justify-content-end">
+                                        {{ $comments->withQueryString()->links() }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -304,181 +422,6 @@
                             believable. If you are going to use a passage.</p>
                     </div>
                     <!--End Shipping &amp; Return-->
-
-                    <!--Review-->
-                    <h3 class="tabs-ac-style d-md-none" rel="reviews">Đánh giá</h3>
-                    <div id="reviews" class="tab-content">
-                        <div class="row">
-
-                            {{-- đánh giá trung bình --}}
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
-                                <div class="ratings-main">
-                                    <div class="avg-rating d-flex-center mb-3">
-                                        <h3 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h3>
-                                        <div class="avg-content ms-3">
-                                            <p class="text-rating">Đánh giá sản phẩm</p>
-                                            <div class="ratings-full product-review">
-                                                <a class="reviewLink d-flex-center" href="#reviews">
-                                                    @for ($i = 0; $i < 5; $i++)
-                                                        <i
-                                                            class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
-                                                    @endfor
-                                                    <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ratings-list">
-                                        @foreach ($ratingsPercentage as $rating => $percentage)
-                                            <div class="ratings-container d-flex align-items-center mt-1">
-                                                <div class="ratings-full product-review m-0">
-                                                    <a class="reviewLink d-flex align-items-center" href="#reviews">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <i
-                                                                class="icon anm anm-star {{ $i < $rating ? '' : 'anm-star-o' }}"></i>
-                                                        @endfor
-                                                    </a>
-                                                </div>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        aria-valuenow="{{ $percentage }}" aria-valuemin="0"
-                                                        aria-valuemax="100" style="width:{{ $percentage }}%;"></div>
-                                                </div>
-                                                <div class="progress-value">{{ number_format($percentage, 1) }}%</div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- Danh sách bình luận --}}
-                            {{-- <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
-                                <div class="spr-reviews">
-                                    <h3 class="spr-form-title">Đánh giá sản phẩm</h3>
-                                    <div class="review-inner">
-                                        @foreach ($comments['comments'] as $comment)
-                                            <div class="spr-review d-flex w-100">
-                                                <div class="spr-review-profile " style="width: 50px">
-                                                    <img class=""
-                                                        data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                        src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                                        alt="" />
-                                                </div>
-                                                <div class="spr-review-content flex-grow-1">
-                                                    <div class="d-flex justify-content-between flex-column mb-2">
-                                                        <div
-                                                            class="title-review d-flex align-items-center justify-content-between">
-                                                            <div>
-                                                                <h5
-                                                                    class="spr-review-header-title text-transform-none mb-0 d-inline">
-                                                                    {{ $comment['user_name'] }}
-                                                                </h5> -
-                                                                {{ $comment['created_at'] ? $comment['updated_at']->format('d-m-Y') : $comment['created_at']->format('d-m-Y') }}
-                                                            </div>
-                                                            <div>
-                                                                <span class="product-review spr-starratings m-0">
-                                                                    @if ($comment['rating'] == 'Không đánh giá')
-                                                                        <span class="reviewLink">Không có đánh giá</span>
-                                                                    @else
-                                                                        <span class="reviewLink">
-                                                                            @for ($i = 0; $i < 5; $i++)
-                                                                                <i
-                                                                                    class="icon anm anm-star {{ $i < $comment['rating'] ? '' : 'anm-star-o' }}"></i>
-                                                                            @endfor
-                                                                        </span>
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <b class="head-font">{{ $comment['title'] }}</b>
-                                                    <p class="spr-review-body text-truncate"
-                                                        style="max-width: 350px; word-wrap: break-word;">
-                                                        {{ $comment['body'] }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        @endforeach
-
-                                        <!-- Hiển thị nút xem tất cả bình luận nếu có nhiều hơn 2 -->
-                                        @if ($comments['total_comments'] > 2)
-                                            <div class="d-flex justify-content-end">
-                                                <button type="button" class="btn btn-secondary " data-bs-toggle="modal"
-                                                    data-bs-target="#allCommentsModal">
-                                                    Xem tất cả({{ $comments['total_comments'] }})
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                            </div> --}}
-                            {{-- end list comment --}}
-
-                            {{-- Form gửi bình luận --}}
-                            <div>
-                                @if ($canComment === 'not_logged_in')
-                                    <span>Bạn cần <a href="{{ route('login') }}"><b>đăng nhập</b></a> để bình luận.</span>
-                                @elseif ($canComment === 'not_purchased')
-                                    <span>Bạn cần mua sản phẩm này để bình luận.</span>
-                                @elseif ($canComment === 'purchased' || $canComment === 'new_purchase')
-                                    <!-- Form bình luận -->
-                                    <form id="commentForm" method="POST" action="{{ route('comments.store') }}"
-                                        class="product-review-form new-review-form">
-                                        @csrf
-                                        <h3 class="spr-form-title">Viết bình luận</h3>
-                                        <fieldset class="row spr-form-contact">
-                                            <div class="col-sm-6 spr-form-review-title form-group">
-                                                <label class="spr-form-label" for="review">Tiêu đề</label>
-                                                <input class="spr-form-input spr-form-input-text" id="review"
-                                                    type="text" name="comment_title" />
-                                            </div>
-                                            <div class="col-sm-6 spr-form-review-rating form-group">
-                                                <label class="spr-form-label">Đánh giá</label>
-                                                <div class="product-review pt-1">
-                                                    <div class="review-rating">
-                                                        <input type="radio" id="star1" name="rating"
-                                                            value="1">
-                                                        <label for="star1"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star2" name="rating"
-                                                            value="2">
-                                                        <label for="star2"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star3" name="rating"
-                                                            value="3">
-                                                        <label for="star3"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star4" name="rating"
-                                                            value="4">
-                                                        <label for="star4"><i class="icon anm anm-star-o"></i></label>
-                                                        <input type="radio" id="star5" name="rating"
-                                                            value="5">
-                                                        <label for="star5"><i class="icon anm anm-star-o"></i></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 spr-form-review-body form-group">
-                                                <label class="spr-form-label" for="message">Nội dung<span
-                                                        class="spr-form-review-body-charactersremaining"> tối đa (500) kí
-                                                        tự</span></label>
-                                                <div class="spr-form-input">
-                                                    <textarea class="spr-form-input spr-form-input-textarea" required id="message" name="main_comment" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        </fieldset>
-                                        <div class="spr-form-actions clearfix">
-                                            <input type="submit" class="btn btn-primary spr-button spr-button-primary"
-                                                value="Gửi đánh giá" />
-                                        </div>
-                                    </form>
-                                @elseif ($canComment === 'commented')
-                                    <span>Bạn đã bình luận cho sản phẩm này. Mua hàng mới để bình luận thêm.</span>
-                                @endif
-                            </div>
-                            {{-- End form --}}
-
-                        </div>
-                    </div>
-                    <!--End Review-->
                 </div>
             </div>
             <!--End Product Tabs-->
@@ -489,29 +432,28 @@
         <section class="section product-slider pb-0">
             <div class="container">
                 <div class="section-header">
-                    <p class="mb-1 mt-0">Discover Similar</p>
-                    <h2>Related Products</h2>
+                    <p class="mb-1 mt-0">Khám Phá</p>
+                    <h2>Sản phẩm cùng loại</h2>
                 </div>
 
                 <!--Product Grid-->
-                <div class="grid-products grid-view-items">
-                    <div
-                        class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
-                        @foreach ($relatedProducts as $product)
+                <div class="grid-products grid-view-items gp10 arwOut5">
+                    <div class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
+                        @foreach ($relatedProducts as $products)
                             <div class="item col-item">
                                 <div class="product-box">
                                     <!-- Start Product Image -->
                                     <div class="product-image">
-                                        <a href="{{ route('productDetail', $product->slug) }}"
+                                        <a href="{{ route('productDetail', $products->slug) }}"
                                             class="product-img rounded-0">
                                             <img class="primary rounded-0 blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product5.jpg') }}"
                                                 src="{{ asset('client/images/products/product5.jpg') }}" alt="Product"
-                                                title="{{ $product->name }}" width="625" height="808" />
+                                                title="{{ $products->name }}" width="625" height="808" />
                                             <img class="hover rounded-0 blur-up lazyload"
                                                 data-src="{{ asset('client/images/products/product5-1.jpg') }}"
                                                 src="{{ asset('client/images/products/product5-1.jpg') }}" alt="Product"
-                                                title="{{ $product->name }}" width="625" height="808" />
+                                                title="{{ $products->name }}" width="625" height="808" />
                                         </a>
                                         <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
                                         <div class="button-set style1">
@@ -540,20 +482,20 @@
                                         </div>
                                     </div>
                                     <div class="product-details text-center">
-                                        <div class="product-vendor">{{ $product->catalogue->name }}</div>
+                                        <div class="product-vendor">{{ $products->catalogue->name }}</div>
                                         <div class="product-name">
                                             <a
-                                                href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
+                                                href="{{ route('productDetail', $products->slug) }}">{{ $products->name }}</a>
                                         </div>
                                         <div class="product-price">
-                                            @if ($product->price_sale == 0)
+                                            @if ($products->price_sale == 0)
                                                 <span class="price">
-                                                    {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                    {{ number_format($products->price_regular, 3, '.', 0) }}đ</span>
                                             @else
                                                 <span
-                                                    class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                    class="price old-price">{{ number_format($products->price_regular, 3, '.', 0) }}đ</span>
                                                 <span
-                                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                    class="price">{{ number_format($products->price_sale, 3, '.', 0) }}đ</span>
                                             @endif
                                         </div>
                                         <div class="product-review">
@@ -561,7 +503,7 @@
                                                 // Lấy đánh giá tương ứng cho sản phẩm hiện tại
                                                 $relatedRating = $relatedRatings->firstWhere(
                                                     'product_id',
-                                                    $product->id,
+                                                    $products->id,
                                                 );
                                                 // Nếu không có đánh giá thì thiết lập mặc định là 0
                                                 $averageRating = $relatedRating['average_rating'] ?? 0;
@@ -580,8 +522,8 @@
                                         <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
                                             available...</p>
                                         <ul class="variants-clr swatches">
-                                            @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
-                                                <li class="swatch x-small available color-option"
+                                            @foreach ($products->uniqueAttributes->where('attributeName', 'Color') as $color)
+                                                <li class="swatch x-small available"
                                                     style="background-color: {{ $color['colorCode'] }}"
                                                     data-color-code="{{ $color['colorCode'] }}"
                                                     data-attribute-value-id="{{ $color['value'] }}"
@@ -608,110 +550,6 @@
 @endsection
 
 @section('modal')
-
-    <!-- Display more comments -->
-    <div class="modal fade" id="allCommentsModal" tabindex="-1" aria-labelledby="allCommentsModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="allCommentsModalLabel">Tất cả bình luận</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @if (isset($comments['all_comments']) && !empty($comments['all_comments']))
-                        @foreach ($comments['all_comments'] as $comment)
-                            <div class="spr-review  w-100">
-                                <div class="row p-3">
-                                    <div class="col-lg-1 mt-1 ">
-                                        <img class="blur-up lazyload rounded-circle"
-                                            data-src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                            src="{{ asset($comment['user_image'] ? $comment['user_image'] : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg') }}"
-                                            alt="" width="80" height="80" />
-                                    </div>
-                                    <div class="col-lg-7">
-                                        <strong>{{ $comment['user_name'] }}</strong> - {{ $comment['date'] }} <br>
-                                        @if ($comment['title'] != null)
-                                            <b>Tiêu đề: </b> {{ $comment['title'] }}
-                                        @endif
-                                        <p class="spr-review-body"
-                                            style="overflow: hidden; max-width: 400px; word-wrap: break-word;">
-                                            {{ $comment['body'] }}
-                                        </p>
-                                    </div>
-                                    <div class="rating col-lg-4">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            @if ($i <= $comment['rating'])
-                                                <span class="anm anm-star text-warning"></span> <!-- Sao đầy -->
-                                            @else
-                                                <span class="anm anm-star-o text-warning"></span> <!-- Sao rỗng -->
-                                            @endif
-                                        @endfor
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <span>Hiện chưa có bình luận nào</span>
-                    @endif
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End display more comments -->
-
-    {{-- Edit comment modal --}}
-    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h5>Chỉnh sửa bình luận</h5>
-                    <form id="editCommentForm" method="POST"
-                        action="{{ isset($comment) ? route('comments.update', $comment['id']) : '#' }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="comment_id" id="comment_id" value="">
-                        <div class="form-group mb-3">
-                            <label for="edit_comment_title">Tiêu đề</label>
-                            <input type="text" class="form-control" id="edit_comment_title" name="comment_title"
-                                required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="edit_message">Nội dung</label>
-                            <textarea class="form-control" id="edit_message" name="main_comment" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label>Đánh giá</label>
-                            <div class="review-rating">
-                                <input type="radio" id="star1_edit" name="rating" value="1">
-                                <label for="star1_edit"><i class="icon anm anm-star-o"></i></label>
-                                <input type="radio" id="star2_edit" name="rating" value="2">
-                                <label for="star2_edit"><i class="icon anm anm-star-o"></i></label>
-                                <input type="radio" id="star3_edit" name="rating" value="3">
-                                <label for="star3_edit"><i class="icon anm anm-star-o"></i></label>
-                                <input type="radio" id="star4_edit" name="rating" value="4">
-                                <label for="star4_edit"><i class="icon anm anm-star-o"></i></label>
-                                <input type="radio" id="star5_edit" name="rating" value="5">
-                                <label for="star5_edit"><i class="icon anm anm-star-o"></i></label>
-                            </div>
-                        </div>
-                        <span>Lưu ý: bạn chỉ được sửa bình luận này 1 lần</span>
-                        <br>
-                        <div class="text-center mt-2">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Cập nhật bình luận</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End edit comment modal --}}
-
     <!-- Product Quickshop Modal-->
     <div class="quickshop-modal modal fade" id="quickshop_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1417,9 +1255,9 @@
                 });
 
                 if (variant && variant.stock > 0) {
-                    sizeOption.classList.remove('disabled');
+                    sizeOption.classList.remove('soldout');
                 } else {
-                    sizeOption.classList.add('disabled');
+                    sizeOption.classList.add('soldout');
                 }
             });
         }
@@ -1567,65 +1405,6 @@
         });
     </script>
 
-    {{-- Gửi bình luận --}}
-    <script>
-        $(document).ready(function() {
-            $('#commentForm').on('submit', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{ route('comments.store') }}", // Đường dẫn tới route lưu comment
-                    type: "POST",
-                    data: $(this).serialize(), // Lấy tất cả dữ liệu từ form
-                    success: function(response) {
-                        if (response.success) {
-                            // Hiển thị thông báo đã bình luận và disable form
-                            $('#commentForm').html(
-                                '<span>Bạn đã bình luận cho sản phẩm này.</span>');
-                        } else {
-                            alert('Đã có lỗi xảy ra!');
-                        }
-                    },
-                    console.log(response);
-
-                    error: function(response) {
-                        alert('Đã có lỗi xảy ra!');
-                    }
-                });
-            });
-        });
-    </script>
-
-    {{-- display edit modal --}}
-    <script>
-        document.querySelectorAll('.edit-comment').forEach(function(element) {
-            element.addEventListener('click', function(event) {
-                event.preventDefault();
-                const commentId = this.getAttribute('data-comment-id');
-                const commentTitle = this.getAttribute('data-comment-title');
-                const commentBody = this.getAttribute('data-comment-body');
-                const commentRating = this.getAttribute('data-comment-rating');
-
-                // Điền thông tin vào modal
-                document.getElementById('comment_id').value = commentId;
-                document.getElementById('edit_comment_title').value = commentTitle;
-                document.getElementById('edit_message').value = commentBody;
-
-                // Thiết lập giá trị đánh giá
-                const starRating = document.querySelectorAll('input[name="rating"]');
-                starRating.forEach(function(input) {
-                    input.checked = (input.value == commentRating);
-                });
-
-                // Cập nhật action cho form với comment ID
-                const form = document.getElementById('editCommentForm');
-                form.setAttribute('action', `/comments/${commentId}`);
-
-                // Hiển thị modal
-                $('#editCommentModal').modal('show');
-            });
-        });
-    </script>
-
     {{-- popup --}}
     <script>
         function showPopup(message) {
@@ -1653,4 +1432,201 @@
         }
 
     </script>
+
+    {{-- Select attribute --}}
+    <script>
+        // Khi tài liệu đã sẵn sàng
+        document.addEventListener('DOMContentLoaded', function () {
+            const colorOptions = document.querySelectorAll('.color-option');
+            const sizeOptions = document.querySelectorAll('.size-option');
+            const colorSpan = document.querySelector('.label .slVariant'); // Span hiển thị màu
+            const sizeSpan = document.querySelector('.swatches-size .slVariant'); // Span hiển thị size
+
+            // Xử lý chọn màu
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // Lấy mã màu từ data attribute
+                    const colorCode = this.getAttribute('data-color-code');
+                    
+                    // Cập nhật span hiển thị màu hoặc xóa nội dung nếu không chọn
+                    colorSpan.textContent = colorCode || '';
+                });
+            });
+
+            // Xử lý chọn kích cỡ
+            sizeOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // Lấy kích cỡ từ data attribute
+                    const sizeValue = this.querySelector('.swatchLbl').textContent.trim();
+                    
+                    // Cập nhật span hiển thị kích cỡ hoặc xóa nội dung nếu không chọn
+                    sizeSpan.textContent = sizeValue || '';
+                });
+            });
+        });
+
+    </script>
+
+    {{-- select image attribute color --}}
+    <script>
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const productImage = this.getAttribute('data-product-image');
+                const zoomImage = document.getElementById('zoompro');
+
+                // Cập nhật ảnh và data-zoom-image
+                zoomImage.src = `/storage/${productImage}`;
+                zoomImage.setAttribute('data-zoom-image', `/storage/${productImage}`);
+            });
+        });
+    </script>
+
+    {{-- select price --}}
+    <script>
+        const variants = @json($variantDetails);
+    
+        let selectedColor = null;
+        let selectedSize = null;
+    
+        // Lắng nghe sự kiện click trên màu
+        document.querySelectorAll('.color-option').forEach(item => {
+            item.addEventListener('click', function() {
+                selectedColor = this.getAttribute('data-attribute-value-id');
+                console.log(selectedColor);
+                updatePrice();
+            });
+        });
+    
+        // Lắng nghe sự kiện click trên kích thước
+        document.querySelectorAll('.size-option').forEach(item => {
+            item.addEventListener('click', function() {
+                selectedSize = this.getAttribute('data-attribute-value-id');
+                console.log(selectedSize);
+                updatePrice();
+            });
+        });
+
+        
+    
+        // Hàm cập nhật giá
+        function updatePrice() {
+            if (selectedColor && selectedSize) {
+                console.log("Variants: ", variants); // In ra mảng variants
+                console.log("Selected Color: ", selectedColor);
+                console.log("Selected Size: ", selectedSize);
+
+                const selectedVariant = variants.find(variant => {
+                    console.log("Checking Variant ID: ", variant.id); // In ra ID biến thể
+                    
+                    // Lấy danh sách thuộc tính
+                    const attributeValues = variant.attributeValues; 
+                    console.log("Attribute Values: ", attributeValues); // In ra các thuộc tính
+
+                    // Kiểm tra thuộc tính màu
+                    const hasColor = attributeValues.includes(selectedColor); // So sánh trực tiếp với giá trị màu
+                    console.log("Has Color: ", hasColor);
+
+                    // Kiểm tra thuộc tính kích thước
+                    const hasSize = attributeValues.includes(selectedSize); // So sánh trực tiếp với giá trị kích thước
+                    console.log("Has Size: ", hasSize);
+
+                    console.log(hasColor, hasSize);
+                    
+                    return hasColor && hasSize; 
+                });
+
+                // Cập nhật giá hiển thị
+                if (selectedVariant) {
+                    const regularPriceElement = document.getElementById('regular-price');
+                    const salePriceElement = document.getElementById('sale-price');
+                    // console.log(selectedVariant);
+                    
+                    // Cập nhật giá
+                    regularPriceElement.textContent = `${numberFormat(selectedVariant.price_regular, 3, '.', 0)}đ`;
+                    salePriceElement.textContent = `${numberFormat(selectedVariant.price_sale, 3, '.', 0)}đ`;
+
+                    // Kiểm tra giá để hiển thị
+                    if (selectedVariant.price_sale < selectedVariant.price_regular) {
+                        // Giá sale thấp hơn giá gốc
+                        salePriceElement.style.display = 'inline'; // Hiện giá sale
+                        regularPriceElement.style.textDecoration = 'line-through'; // Gạch giá gốc
+                        regularPriceElement.style.color = 'gray'; // Gạch giá gốc
+                        regularPriceElement.style.fontSize = '1.3em'; // Giảm kích thước chữ giá gốc
+                        salePriceElement.style.color = 'red'; // Màu đỏ cho giá sale
+                        salePriceElement.style.fontSize = '1.57em'; // Kích thước chữ cho giá sale
+                    } else if (selectedVariant.price_sale === selectedVariant.price_regular) {
+                        // Giá sale bằng giá gốc
+                        regularPriceElement.style.textDecoration = 'none'; // Không gạch giá gốc
+                        regularPriceElement.style.color = 'red'; // Màu đỏ cho giá gốc
+                        regularPriceElement.style.fontSize = '1.57em'; // Tăng kích thước chữ cho giá gốc
+                        salePriceElement.style.display = 'none'; // Ẩn giá sale
+                    } else {
+                        // Ẩn giá sale nếu không có giảm giá
+                        salePriceElement.style.display = 'none'; 
+                        regularPriceElement.style.textDecoration = 'none'; // Không gạch giá gốc
+                    }
+                } else {
+                    console.log("Không tìm thấy biến thể với màu và kích thước đã chọn.");
+                }
+            } else {
+                console.log("Vui lòng chọn màu và kích thước.");
+            }
+
+            function numberFormat(number, decimals, dec_point, thousands_sep) {
+                // Chuyển đổi số thành chuỗi với số thập phân
+                number = parseFloat(number).toFixed(decimals);
+                
+                // Phân tách phần nguyên và phần thập phân
+                let parts = number.split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep); // Thêm dấu phân cách hàng nghìn
+                
+                // Kết hợp lại
+                return parts.join(dec_point);
+            }
+        }
+    </script>
+
+    {{-- xuong dòng --}}
+    <script>
+        function toggleContent(element) {
+            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
+        }    
+    </script>   
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Hàm cuộn đến khung bình luận với độ trễ
+            function scrollToComments() {
+                const commentBox = document.getElementById('ratings-comment');
+                if (commentBox) {
+                    commentBox.scrollIntoView({ behavior: 'smooth', block:'end'});
+                }
+            }
+
+            // Xử lý sự kiện khi chọn filter
+            const filters = document.querySelectorAll('.rating-choose');
+            filters.forEach(filter => {
+                filter.addEventListener('click', function () {
+                    // Lưu ý định cuộn vào sessionStorage
+                    sessionStorage.setItem('scrollToComments', 'true');
+                });
+            });
+
+            // Xử lý sự kiện phân trang
+            const paginationLinks = document.querySelectorAll('.pagination a');
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    // Lưu ý định cuộn vào sessionStorage
+                    sessionStorage.setItem('scrollToComments', 'true');
+                });
+            });
+
+            // Kiểm tra nếu cần cuộn sau khi trang được load lại
+            if (sessionStorage.getItem('scrollToComments') === 'true') {
+                sessionStorage.removeItem('scrollToComments'); // Xóa flag sau khi cuộn
+                setTimeout(scrollToComments, 300); // Cuộn với độ trễ sau khi trang tải
+            }
+        });
+    </script>
+    
 @endsection
