@@ -35,7 +35,7 @@ class AuthService
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-        $user->query()->create($data);  
+        $user->query()->create($data);
         if ($user) {
             return true;
         }
@@ -98,10 +98,19 @@ class AuthService
             if ($user->role === 'admin') {
                 return true;
             } else {
-                Auth::logout(); 
-                return 'not_admin'; 
+                Auth::logout();
+                return 'not_admin';
             }
         }
-        return false; 
+        return false;
+    }
+    public function setPhoneToSession($phone)
+    {
+        Session::put('phone', $phone);
+    }
+
+    public function getPhoneFromSession()
+    {
+        return Session::get('phone');
     }
 }
