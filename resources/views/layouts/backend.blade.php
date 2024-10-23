@@ -19,7 +19,7 @@
   <!-- Modules -->
   
   @yield('css')
-  @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
+  @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js'])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/dashmix/themes/xwork.scss', 'resources/js/dashmix/app.js']) --}}
@@ -403,6 +403,23 @@
                 </li>
               </ul>
             </li>
+
+            {{-- MESSAGE --}}
+            <li class="nav-main-item{{ request()->is('admin/chats*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/chats*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý tin nhắn</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('/admin/chats*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('/admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
+                    <span class="nav-main-link-name">Tin nhắn</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            
 
           
             <li class="nav-main-heading">More</li>
