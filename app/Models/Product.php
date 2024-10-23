@@ -66,6 +66,20 @@ class Product extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function attributeValues()
+    {
+        return $this->hasManyThrough(
+            AttributeValue::class,
+            VariantAttribute::class,
+            'product_variant_id', // khóa ngoại trong bảng variant_attributes
+            'id', // khóa chính của bảng attribute_values
+            'id', // khóa chính của bảng products
+            'attribute_value_id' // khóa ngoại trong bảng variant_attributes
+        );
+    }
+
+    
+
     public function scopeFilterByCategory($query, $categories)
     {
         // dd($categories);
@@ -106,4 +120,5 @@ class Product extends Model
         }
         return $query; // Nếu không có màu, trả về query gốc
     }
+    
 }

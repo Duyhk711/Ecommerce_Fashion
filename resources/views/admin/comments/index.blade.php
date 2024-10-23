@@ -33,7 +33,7 @@
           <h3 class="block-title">Danh sách Bình luận</h3>
           <div class="block-options">
               <div class="block-options-item">
-                //Thêm 
+                
                   <a href="{{route('admin.comments.create')}}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
                       <i class="fa fa-plus"></i>
                   </a>
