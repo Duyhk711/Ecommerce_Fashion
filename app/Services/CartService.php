@@ -70,11 +70,6 @@ class CartService
         return true;
     }
 
-
-
-
-
-
     public function listCartItems()
     {
         if (Auth::check()) {
@@ -117,16 +112,14 @@ class CartService
                         }
                     }
 
-                 
-                        $item['product_image'] = $productVariant->product->image;
-                        $item['product_name'] = $productVariant->product->name;
+                    $item['product_image'] = $productVariant->product->image;
+                    $item['product_name'] = $productVariant->product->name;
                     // dd($item['product_name']);
                     // set lại thuộc tính
                     $item['color'] = $color;
                     $item['size'] = $size;
                 }
             }
-
 
             return $cartItems;
         }

@@ -81,8 +81,7 @@
                                      @endforeach
                                  </ul>
                          <li class="lvl1 parent dropdown"><a href="{{route('blog')}}">Blog </a>
-                         <li class="lvl1 parent dropdown"><a href="{{route('contact')}}">Liên hệ </a>
-                         </li>
+                         <li class="lvl1 parent dropdown"><a href="{{route('contact')}}">Liên hệ </a></li>
                      </ul>
                  </nav>
              </div>
@@ -158,18 +157,12 @@
                                      <li><a href="{{ route('register') }}"><i
                                                  class="icon anm anm-user-al"></i>Register</a></li>
                                  @endif
-                                 <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>My
-                                         Account</a></li>
-                                 <li>
-                                     @auth
-                                         <a href="{{ route('my.wishlist') }}">
-                                             <i class="icon anm anm-heart-l"></i>Wishlist
-                                         </a>
-                                     @endauth
-                                 </li>
+
                                  @if (Auth::check())
-                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Sign
-                                             out</a></li>
+                                     <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>My
+                                             Account</a></li>
+                                     <li><a href="{{ route('my.wishlist') }}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
                                  @endif
                              </ul>
                          </div>

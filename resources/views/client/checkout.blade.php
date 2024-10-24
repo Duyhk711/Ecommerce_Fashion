@@ -130,7 +130,7 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h3 class="title mb-3">Shipping Address</h3>
                                             @auth
-                                                @if (Auth::check())
+                                                @if (Auth::check() && !$dataAddress->isEmpty())
                                                     <a style="padding-bottom: 16px" data-bs-toggle="offcanvas"
                                                         href="#offcanvasRight" aria-controls="offcanvasRight">
                                                         Thay đổi
@@ -211,7 +211,7 @@
                                                         value="{{ $address == '' ? '' : $address->address_line2 }}">
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <div class="form-group col-md-12 col-lg-12 mb-0">
                                                     <div class="checkout-tearm customCheckbox">
                                                         <input id="checkout_tearm" name="tearm" type="checkbox"
@@ -219,7 +219,7 @@
                                                         <label for="checkout_tearm"> Save address to my account</label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </fieldset>
                                     </div>
                                 </div>
@@ -252,38 +252,38 @@
                                                                 $total = 0;
                                                             @endphp
                                                             <input type="hidden" name="cartItem"
-                                                                value="{{ $dataCart }}">
+                                                                value="{{ json_encode($dataCart) }}">
                                                             @foreach ($dataCart as $item)
                                                                 <tr>
                                                                     <td class="text-start"><a
-                                                                            href="{{ route('productDetail', $item->product_variant_id) }}"
+                                                                            href="{{ route('productDetail', $item['product_variant_id']) }}"
                                                                             class="thumb"><img
                                                                                 class="rounded-0 blur-up lazyload"
-                                                                                data-src="{{ $item->productVariant->image }}"
-                                                                                src="{{ $item->productVariant->image }}"
-                                                                                alt="product" title="product"
-                                                                                width="120" height="170" /></a></td>
+                                                                                data-src="{{ $item['image'] }}"
+                                                                                src="{{ $item['image'] }}" alt="product"
+                                                                                title="product" width="120"
+                                                                                height="170" /></a></td>
                                                                     <td class="text-start proName">
                                                                         <div class="list-view-item-title">
                                                                             <a href="product-layout1.html">
-                                                                                {{ $item->productVariant->product->name }}
+                                                                                {{ $item['product_name'] ?? 'Sản phẩm không xác định' }}
                                                                             </a>
                                                                         </div>
                                                                         <div class="cart-meta-text">
-                                                                            @foreach ($item->productVariant->variantAttributes as $attribute)
-                                                                                {{ $attribute->attributeValue->attribute->name }}:{{ $attribute->attributeValue->value }}<br>
-                                                                            @endforeach
+                                                                            {{ $item['variant_attributes'] ?? 'Không có thuộc tính' }}
                                                                         </div>
                                                                     </td>
-                                                                    <td class="text-center">{{ $item->quantity }}</td>
+                                                                    <td class="text-center">{{ $item['quantity'] }}</td>
                                                                     <td class="text-center">
-                                                                        {{ $item->price }}đ
+
+                                                                        {{ isset($item['price']) ? number_format($item['price'], 3, '.', 0) . ' VND' : 'Giá không xác định' }}
                                                                     </td>
                                                                     @php
-                                                                        $total += $item->price * $item->quantity;
+                                                                        $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
-                                                                        <strong>{{ $item->price * $item->quantity }}đ</strong>
+                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', 0) }}
+                                                                            VND</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -298,14 +298,11 @@
                                         <!--Order Comment-->
                                         <div class="block order-comments my-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Order Comment</h3>
+                                                <h3 class="title mb-3">Ghi chú</h3>
                                                 <fieldset>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                            <textarea class="resize-both form-control" rows="3" placeholder="Place your comment here"></textarea>
-                                                            <small class="mt-2 d-block">*Savings include promotions,
-                                                                coupons,
-                                                                rueBUCKS, and shipping (if applicable).</small>
+                                                            <textarea class="resize-both form-control" rows="3" placeholder="Viết ghi chú ở đáy"></textarea>
                                                         </div>
                                                     </div>
                                                 </fieldset>
@@ -317,16 +314,15 @@
                                         <!--Apply Promocode-->
                                         <div class="block mb-3 apply-code mb-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Apply Promocode</h3>
+                                                <h3 class="title mb-3">ÁP DỤNG MÃ KHUYẾN MẠI</h3>
                                                 <div id="coupon" class="coupon-dec">
-                                                    <p>Got a promo code? Then you're a few randomly combined numbers &
-                                                        letters
-                                                        away from fab savings!</p>
+                                                    <p>Bạn có mã khuyến mãi? Sau đó, bạn chỉ còn một vài số và chữ cái được
+                                                        kết hợp ngẫu nhiên để có được khoản tiết kiệm đáng kể!</p>
                                                     <div class="input-group mb-0 d-flex">
                                                         <input id="coupon-code" required="" type="text"
                                                             class="form-control" placeholder="Promotion/Discount Code">
-                                                        <button class="coupon-btn btn btn-primary"
-                                                            type="button">Apply</button>
+                                                        <button class="coupon-btn btn btn-primary" type="button">Áp
+                                                            dụng</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -336,39 +332,34 @@
                                         <div class="cart-info mb-4">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Subtotal</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
+                                                            cộng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$326.00</span></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Coupon
-                                                            Discount</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
+                                                            giá</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-$25.00</span></span>
+                                                            class="money">-0 VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Tax</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$10.00</span></span>
-                                                </div>
-                                                <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Shipping</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
+                                                            hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">Free shipping</span></span>
+                                                            class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
                                                     <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ $total }}đ</b></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</b></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -387,177 +378,28 @@
                                         <!--Payment Methods-->
                                         <div class="block mb-3 payment-methods mb-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Payment Methods</h3>
+                                                <h3 class="title mb-3">Phương thức thanh toán</h3>
                                                 <div class="payment-accordion-radio">
-                                                    <div class="accordion" id="accordionExample">
-                                                        <div class="accordion-item card mb-2">
-                                                            <div class="card-header" id="headingOne">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseOne" aria-expanded="true"
-                                                                    aria-controls="collapseOne">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio1" value="1"
-                                                                            name="payment" type="radio" class="radio"
-                                                                            checked="checked" />
-                                                                        <label for="paymentRadio1" class="mb-0">Pay with
-                                                                            credit card</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseOne" class="accordion-collapse collapse show"
-                                                                aria-labelledby="headingOne"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                                                <label for="input-cardname">Name on Card
-                                                                                    <span class="required">*</span></label>
-                                                                                <input name="cardname" value=""
-                                                                                    placeholder="" id="input-cardname"
-                                                                                    class="form-control" type="text"
-                                                                                    pattern="[0-9\-]*">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                                                <label>Credit Card Type <span
-                                                                                        class="required">*</span></label>
-                                                                                <select name="country_id"
-                                                                                    class="form-control">
-                                                                                    <option value="">Please Select
-                                                                                    </option>
-                                                                                    <option value="1">American Express
-                                                                                    </option>
-                                                                                    <option value="2">Visa Card
-                                                                                    </option>
-                                                                                    <option value="3">Master Card
-                                                                                    </option>
-                                                                                    <option value="4">Discover Card
-                                                                                    </option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4">
-                                                                                <label for="input-cardno">Credit Card
-                                                                                    Number
-                                                                                    <span class="required">*</span></label>
-                                                                                <input name="cardno" value=""
-                                                                                    placeholder="" id="input-cardno"
-                                                                                    class="form-control" type="text"
-                                                                                    pattern="[0-9\-]*">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4">
-                                                                                <label for="input-cvv">CVV Code <span
-                                                                                        class="required">*</span></label>
-                                                                                <input name="cvv" value=""
-                                                                                    placeholder="" id="input-cvv"
-                                                                                    class="form-control" type="text"
-                                                                                    pattern="[0-9\-]*">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4">
-                                                                                <label>Expiration Date <span
-                                                                                        class="required">*</span></label>
-                                                                                <input type="date" name="exdate"
-                                                                                    class="form-control">
-                                                                            </div>
-                                                                            <div
-                                                                                class="form-group col-12 col-sm-4 col-md-4 col-lg-4 mb-0">
-                                                                                <button class="btn btn-primary"
-                                                                                    type="submit">Submit</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </fieldset>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="accordion-item card mb-2">
-                                                            <div class="card-header" id="headingTwo">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseTwo" aria-expanded="false"
-                                                                    aria-controls="collapseTwo">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio2" value="2"
-                                                                            name="payment" type="radio"
-                                                                            class="radio" />
-                                                                        <label for="paymentRadio2" class="mb-0">Pay with
-                                                                            Paypal</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseTwo" class="accordion-collapse collapse"
-                                                                aria-labelledby="headingTwo"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <p>Pay via PayPal you can pay with your credit card if
-                                                                        you
-                                                                        don't have a PayPal account.</p>
-                                                                    <div class="input-group mb-0 d-flex">
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="paypal@example.com"
-                                                                            required="">
-                                                                        <button class="btn btn-primary" type="submit">Pay
-                                                                            99.00 USD</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="accordion-item card mb-2">
-                                                            <div class="card-header" id="headingThree">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseThree" aria-expanded="false"
-                                                                    aria-controls="collapseThree">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio3" value="3"
-                                                                            name="payment" type="radio"
-                                                                            class="radio" />
-                                                                        <label for="paymentRadio3" class="mb-0">Cheque
-                                                                            Payment</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseThree" class="accordion-collapse collapse"
-                                                                aria-labelledby="headingThree"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <p>Please send your cheque to Store Name, Store Street,
-                                                                        Store Town, Store State / County, Store Postcode.
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="accordion mb-3" id="accordionExample">
                                                         <div class="accordion-item card mb-0">
-                                                            <div class="card-header" id="headingFour">
-                                                                <button class="card-link" type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapseFour" aria-expanded="false"
-                                                                    aria-controls="collapseFour">
-                                                                    <span class="customRadio clearfix mb-0">
-                                                                        <input id="paymentRadio4" value="4"
-                                                                            name="payment" type="radio"
-                                                                            class="radio" />
-                                                                        <label for="paymentRadio4" class="mb-0">Cash On
-                                                                            Delivery</label>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                            <div id="collapseFour" class="accordion-collapse collapse"
-                                                                aria-labelledby="headingFour"
-                                                                data-bs-parent="#accordionExample">
-                                                                <div class="card-body px-0">
-                                                                    <p>Cash on delivery refers to an arrangement in which
-                                                                        payment for a purchase is made directly by the
-                                                                        purchaser
-                                                                        to the person who delivers the item.</p>
-                                                                </div>
-                                                            </div>
+                                                            <span class="customRadio clearfix mb-0">
+                                                                <input id="paymentRadio4" value="COD"
+                                                                    name="payment_method" type="radio" class="radio"
+                                                                    checked="checked" />
+                                                                <label for="paymentRadio4" class="mb-0">Thanh
+                                                                    toán khi nhận hàng</label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion" id="accordionExample">
+                                                        <div class="accordion-item card mb-0">
+                                                            <span class="customRadio clearfix mb-0">
+                                                                <input id="paymentRadio1" value="THANH_TOAN_ONLINE"
+                                                                    name="payment_method" type="radio"
+                                                                    class="radio" />
+                                                                <label for="paymentRadio1" class="mb-0">Thanh
+                                                                    toán VNPay</label>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -570,45 +412,44 @@
                                         <div class="cart-info">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Subtotal</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
+                                                            cộng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$226.00</span></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Coupon
-                                                            Discount</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
+                                                            giá</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-$25.00</span></span>
+                                                            class="money">-0 VND</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Tax</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">$10.00</span></span>
-                                                </div>
-                                                <div class="row g-0 border-bottom py-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title"><strong>Shipping</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
+                                                            hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">Free shipping</span></span>
+                                                            class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
                                                     <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Total</strong></span>
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">$311.00</b></span>
+                                                            class="money">{{ number_format($total, 3, '.', 0) }}
+                                                            VND</b></span>
                                                 </div>
+                                                <input type="hidden" value="{{ $total }}" name="total_price">
 
                                                 <button type="submit" id="cartCheckout"
                                                     class="btn btn-lg my-4 checkout w-100">Đặt hàng</button>
                                                 <script>
                                                     document.getElementById('cartCheckout').addEventListener('click', function(event) {
+                                                        // if (validateCheckout()) {
+                                                        // document.getElementById('checkout').submit();
+                                                        // }
                                                         document.getElementById('checkout').submit();
                                                     });
                                                 </script>
@@ -671,6 +512,23 @@
     </div>
 @endsection
 @section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function() {
+                    // Điều hướng về trang chủ sau khi thông báo thành công
+                    window.location.href = '/';
+                });
+            @endif
+
+        })
+    </script>
     <script>
         $(document).ready(function() {
             // Thêm lớp active cho tab hiện tại
@@ -764,8 +622,10 @@
         }
 
         function updateDistricts(data) {
-            districts.innerHTML = ""; // Reset quận/huyện
-            wards.innerHTML = ""; // Reset phường/xã
+            districts.innerHTML = `<option value="" selected>
+                                                            Chọn quận huyện</option>`; // Reset quận/huyện
+            wards.innerHTML = `<option value="" selected>
+                                                            Chọn phường xã</option>`; // Reset phường/xã
 
             if (citis.value) {
                 const cityData = data.find(n => n.Name === citis.value);
@@ -788,13 +648,14 @@
         }
 
         function updateWards(data) {
-            wards.innerHTML = ""; // Reset phường/xã
+            wards.innerHTML = `<option value="" selected>
+                                                            Chọn phường xã</option>`; // Reset phường/xã
 
             const cityData = data.find(n => n.Name === citis.value);
-            console.log('City data for wards:', cityData); // Kiểm tra dữ liệu thành phố
+            // console.log('City data for wards:', cityData); // Kiểm tra dữ liệu thành phố
             if (districts.value && cityData) {
                 const districtData = cityData.Districts.find(d => d.Name === districts.value);
-                console.log('District data:', districtData); // Kiểm tra dữ liệu quận/huyện
+                // console.log('District data:', districtData); // Kiểm tra dữ liệu quận/huyện
                 if (districtData) {
                     districtData.Wards.forEach(ward => {
                         wards.options[wards.options.length] = new Option(ward.Name, ward.Name);
@@ -813,6 +674,192 @@
                 citis.value = selectedCity;
                 citis.onchange(); // Cập nhật quận/huyện
             }
+        }
+    </script>
+    <script>
+        // document.getElementById('checkout').addEventListener('submit', function(event) {
+
+        //     const customer_name = document.getElementById('customer_name');
+        //     const customer_phone = document.getElementById('customer_phone');
+        //     const email = document.getElementById('email');
+        //     const city = document.getElementById('city');
+        //     const district = document.getElementById('district');
+        //     const ward = document.getElementById('ward');
+        //     const address_line1 = document.getElementById('address_line1');
+
+        //     if (customer_name.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập họ và tên',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        //     if (customer_phone.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập số điện thoại',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        //     if (email.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập email',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        //     if (city.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng chọn Tỉnh/Thành phố',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+        //     if (district.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng chọn Quận/Huyện',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+        //     if (ward.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng chọn Phường/Xã',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+        //     if (address_line1.value == '') {
+        //         event.preventDefault(); // Prevent navigation
+        //         // Hiển thị popup lỗi với SweetAlert2
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Lỗi',
+        //             text: 'Vui lòng nhập địa chỉ cụ thế',
+        //             confirmButtonText: 'OK'
+        //         });
+        //         return false;
+        //     }
+
+        // });
+
+        function validateCheckout() {
+            let customer_name = document.getElementById('customer_name');
+            let customer_phone = document.getElementById('customer_phone');
+            let email = document.getElementById('email');
+            let city = document.getElementById('city');
+            let district = document.getElementById('district');
+            let ward = document.getElementById('ward');
+            let address_line1 = document.getElementById('address_line1');
+
+            if (customer_name.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập họ và tên',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            if (customer_phone.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập số điện thoại',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            if (email.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập email',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            if (city.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn Tỉnh/Thành phố',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            if (district.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn Quận/Huyện',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            if (ward.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn Phường/Xã',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            if (address_line1.value == '') {
+                event.preventDefault(); // Prevent navigation
+                // Hiển thị popup lỗi với SweetAlert2
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng nhập địa chỉ cụ thế',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            return true;
         }
     </script>
 @endsection

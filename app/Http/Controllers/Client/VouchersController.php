@@ -3,43 +3,58 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\SavedVoucher;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Đảm bảo có dòng này
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class VouchersController extends Controller
-{ public function voucher()
+{
+    public function voucher()
     {
         // Bạn có thể thêm logic xử lý để lấy dữ liệu voucher từ database nếu cần
         return view('client.my-account.vouchers');
     }
 
-    public function saveVoucher(Request $request)
+    public function save(Request $request)
     {
-        // Kiểm tra và xác thực dữ liệu
+        // Kiểm tra và xác thực dữ liệu từ frontend
         $request->validate([
             'code' => 'required|string|max:255',
+            'discount_type' => 'required|in:percentage,fixed',
+            'discount_value' => 'required|numeric',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
         ]);
 
-        // Kiểm tra xem voucher có tồn tại không
-        $voucher = Voucher::where('code', $request->code)->first();
+        // Lưu voucher nếu chưa tồn tại
+        $voucher = Voucher::firstOrCreate(
+            ['code' => $request->input('code')],
+            [
+                'discount_type' => $request->input('discount_type'),
+                'discount_value' => $request->input('discount_value'),
+                'start_date' => $request->input('start_date'),
+                'end_date' => $request->input('end_date')
+            ]
+        );
 
-        if (!$voucher) {
-            return response()->json(['success' => false, 'message' => 'Voucher không tồn tại.']);
-        }
+        // Lưu quan hệ giữa người dùng và voucher vào bảng user_voucher
+        $user = Auth::user(); // Lấy người dùng hiện tại
 
-        try {
-            // Lưu voucher vào bảng user_voucher
-            UserVoucher::create([
-                'user_id' => Auth::id(), // Lưu ID người dùng
-                'voucher_id' => $voucher->id,
-            ]);
+        UserVoucher::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'voucher_id' => $voucher->id
+            ],
+            [
+                'saved_at' => now(),
+                'is_used' => false
+            ]
+        );
 
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Lỗi khi lưu voucher: ' . $e->getMessage()]);
-        }
+        // Trả về phản hồi JSON hoặc redirect
+        return redirect()->back()->with('success', 'Lưu thành công!');
     }
+
 }

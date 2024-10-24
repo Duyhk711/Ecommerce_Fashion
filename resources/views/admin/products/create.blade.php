@@ -1,18 +1,162 @@
 @extends('layouts.backend')
 
 @section('css')
-
     <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <!-- Nhúng Summernote CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
+    <!-- Nhúng jQuery (nếu chưa có) -->
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Select2 JS -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
-    {{-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> --}}
 
-    <link rel="stylesheet" href="{{ asset('admin/js/plugins/simplemde/simplemde.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('admin/js/plugins/simplemde/simplemde.min.css') }}"> --}}
+    <style>
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Bỏ nút tăng giảm cho Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* CSS cho mũi tên và hover cho nút chỉnh sửa hàng loạt */
+        .input-hover {
+            position: relative;
+            border: 1px solid #ced4da;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Hover vào nút thì viền chuyển sang màu primary */
+        .input-hover:hover {
+            border-color: #007bff;
+            /* Màu primary */
+            cursor: pointer;
+        }
+
+        /* Thêm mũi tên (icon) bên cạnh nút */
+
+
+        /* Khi dropdown được mở (khi nhấn vào nút) thì mũi tên sẽ xoay lên */
+
+        /* Style cho phần dropdown nội dung */
+        .dropdown-content {
+            display: none;
+            /* Ẩn mặc định */
+            width: 100%;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* Hiển thị khi nút được kích hoạt */
+        .dropdown-content.show {
+            display: block;
+        }
+
+        /* CSS để loại bỏ viền chỉ cho nút delete-variant */
+        button.delete-variant {
+            border: none;
+            /* Xóa viền */
+            background: none;
+            /* Loại bỏ nền nếu cần */
+            padding: 0;
+            /* Loại bỏ padding nếu cần */
+            cursor: pointer;
+            /* Thêm biểu tượng con trỏ nếu muốn */
+        }
+
+        button.delete-variant:focus {
+            outline: none;
+            /* Xóa viền khi focus vào nút */
+        }
+
+        button.button-css {
+            color: #007bff
+        }
+
+        button.button-css:hover {
+            background-color: #eef0f7;
+            color: #007bff
+        }
+
+        /* Làm đẹp input chọn ảnh */
+        .custom-file {
+            position: relative;
+            width: 100%;
+            height: 45px;
+            margin-bottom: 10px;
+        }
+
+        .custom-file input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .custom-file-label {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .custom-file-label::after {
+            content: "Chọn ảnh";
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: #6c757d;
+        }
+
+        .image-preview img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-preview .img-wrapper {
+            display: inline-block;
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-preview .delete-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 10px;
+        }
+    </style>
 @endsection
 @section('content')
     <!-- Hero -->
@@ -23,7 +167,7 @@
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.attributes.index') }}" style="color: inherit;">Quản lý sản phẩm</a>
+                            <a href="{{ route('admin.products.index') }}" style="color: inherit;">Quản lý sản phẩm</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Thêm mới sản phẩm</li>
                     </ol>
@@ -32,243 +176,782 @@
         </div>
     </div>
     <!-- END Hero -->
-    <div class="content">
-        <div class="block block-rounded">
-            <div class="block-content">
-                <div class="row">
-                    <div class="col-8">
-                        {{-- <form action="" method="post"> --}}
-
+    <div class="content fs-sm">
+        {{-- Form bắt đầu --}}
+        <form id="myForm" action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="block block-rounded">
+                <div class="block-content">
+                    <div class="row">
+                        <!-- Cột bên trái: Nhập thông tin sản phẩm -->
+                        <div class="col-8">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
-                                <label for="name" class="form-label">Tên sản phẩm</label>
-                                <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Nhập tên sản phẩm" required>
+                                <label for="name" class="form-label">Tên sản phẩm:</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                    name="name" id="name" value="{{ old('name') }}"
+                                    placeholder="Nhập tên sản phẩm">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
-                            <!-- sku -->
+                            <!-- SKU -->
                             <div class="mb-3">
-                                <label for="sku" class="form-label">Sku</label>
+                                <label for="sku" class="form-label">SKU</label>
                                 <input type="text" class="form-control" name="sku" id="sku"
                                     value="{{ $sku }}" readonly>
                             </div>
 
+                            <!-- Giá sản phẩm -->
                             <div class="row">
-                                <!-- price regular -->
+                                <!-- Giá gốc -->
                                 <div class="col-6 mb-3">
-                                    <label for="price_regular" class="form-label">Giá gốc</label>
-                                    <input type="text" class="form-control" name="price_regular" id="price_regular">
+                                    <label for="price_regular" class="form-label">Giá gốc:</label>
+                                    <input type="number" class="form-control @error('price_regular') is-invalid @enderror"
+                                        name="price_regular" id="price_regular" value="{{ old('price_regular') }}"
+                                        placeholder="Nhập giá sản phẩm">
+                                    @error('price_regular')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <!-- price sale -->
+
+                                <!-- Giá khuyến mãi -->
                                 <div class="col-6 mb-3">
-                                    <label for="price_sale" class="form-label">Giá khuyến mãi</label>
-                                    <input type="text" class="form-control" name="price_sale" id="price_sale">
+                                    <label for="price_sale" class="form-label">Giá khuyến mãi:</label>
+                                    <input type="number" class="form-control @error('price_sale') is-invalid @enderror"
+                                        name="price_sale" id="price_sale" value="{{ old('price_sale') }}"
+                                        placeholder="Nhập giá khuyến mãi">
+                                    @error('price_sale')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <label for="description" class="form-label">Mô tả ngắn</label>
+                            <!-- Mô tả ngắn -->
                             <div class="mb-4">
-                                <textarea class="form-control" id="description" name="description" rows="5" maxlength="200"
-                                    placeholder="Nhập tối đa 200 ký tự..."></textarea>
+                                <label for="description" class="form-label">Mô tả ngắn:</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                    rows="5" maxlength="200" placeholder="Nhập tối đa 200 ký tự...">{{ old('description') }}</textarea>
                                 <small id="char-count" class="form-text text-muted">Còn lại 200 ký tự</small>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
-                            {{-- mota --}}
-                            <label for="" class="form-label">Nội dung</label>
-                            <textarea name="content" id="editor"></textarea>
-                        {{-- </form> --}}
-
-
-                    </div>
-                    <!-- Select để chọn thuộc tính -->
-                    <div class="col-4">
-                        {{-- danh mục --}}
-                        <div class="mb-3">
-                            <label class="form-label" for="catalogue-select">Catalogues</label>
-                            <select class="form-select" id="catalogue-select" name="catalogue-select">
-                                <option selected="">Chọn danh mục</option>
-                                @foreach ($catalogues as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label class="form-label">Inline Switches</label>
-                            <div class="space-x-2">
-                                <div class="form-check form-switch form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="example-switch-inline1" name="is_active" checked>
-                                    <label class="form-check-label" for="example-switch-inline1">Is active</label>
-                                </div>
-                                <div class="form-check form-switch form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="example-switch-inline2" name="is_new" checked>
-                                    <label class="form-check-label" for="example-switch-inline2">is_new</label>
-                                </div>
-                            </div>
-                            <div class="space-x-2">
-                                <div class="form-check form-switch form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="example-switch-inline1" name="is_hot_deal">
-                                    <label class="form-check-label" for="example-switch-inline1">is_hot_deal</label>
-                                </div>
-                                <div class="form-check form-switch form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="example-switch-inline2" name="is_show_home">
-                                    <label class="form-check-label" for="example-switch-inline2">show home</label>
-                                </div>
+                            <!-- Nội dung chi tiết -->
+                            <div class="mb-3">
+                                <label for="editor" class="form-label">Nội dung:</label>
+                                <textarea name="content" id="editor" class="form-control @error('content') is-invalid @enderror">{{ old('content') }}</textarea>
+                                @error('content')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
-                        <!-- Chọn ảnh chính -->
-                        <div>
-                            <label for="main_image">Chọn ảnh chính:</label>
-                            <input type="file" id="main_image" name="main_image" accept="image/*">
-                            <div id="main-image-preview" style="margin-top: 10px;">
-                                <!-- Ảnh chính sẽ được hiện lên ở đây -->
+                        <!-- Cột bên phải: Thuộc tính sản phẩm và ảnh -->
+                        <div class="col-4">
+                            <!-- Input for Material -->
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="materialInput">Chất liệu:</label>
+                                <input type="text" class="form-control @error('material') is-invalid @enderror"
+                                    name="material" id="materialInput" value="{{ old('material') }}"
+                                    placeholder="Chất liệu sản phẩm">
+                                @error('material')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
 
-                        <!-- Chọn ảnh phụ -->
-                        <div style="margin-top: 20px;">
-                            <label for="gallery_images">Chọn ảnh phụ:</label>
-                            <input type="file" id="gallery_images" name="gallery_images[]" multiple accept="image/*">
-                            <div id="gallery-preview" style="margin-top: 10px;">
-                                <!-- Các ảnh phụ sẽ được hiện lên ở đây -->
+                            <!-- Danh mục -->
+                            <div class="row form-group mb-3">
+                                <label class="form-label" for="catalogue-select">Danh mục:</label>
+                                <select class="form-select @error('catalogue-select') is-invalid @enderror"
+                                    id="catalogue-select" name="catalogue_id">
+                                    <option value="">Chọn danh mục</option>
+                                    @foreach ($catalogues as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ old('catalogue_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('catalogue-select')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="block block-rounded">
-            <div class="block-content">
-                <div class="row">
-                    <div class="col-12">
-                        <!-- Vertical Block Tabs Default Style With Extra Info -->
-                        <div class="block block-rounded row g-0">
-                          <ul class="nav nav-tabs nav-tabs-block flex-md-column col-md-4 col-xxl-2" role="tablist">
-                            <li class="nav-item d-md-flex flex-md-column">
-                              <button class="nav-link text-md-start active" id="btabs-vertical-info-home-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-info-home" role="tab" aria-controls="btabs-vertical-info-home" aria-selected="true">
-                                <i class="fa fa-fw fa-home opacity-50 me-1 d-none d-sm-inline-block"></i>
-                                <span>Thuộc tính</span>
-                                {{-- <span class="d-none d-md-block fs-xs fw-medium opacity-75 mt-md-2">
-                                  Check out your main activity and any pending notifications
-                                </span> --}}
-                              </button>
-                            </li>
-                            <li class="nav-item d-md-flex flex-md-column">
-                              <button class="nav-link text-md-start" id="btabs-vertical-info-profile-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-info-profile" role="tab" aria-controls="btabs-vertical-info-profile" aria-selected="false">
-                                <i class="fa fa-fw fa-user-circle opacity-50 me-1 d-none d-sm-inline-block"></i>
-                                <span>Biến thể</span>
-                                {{-- <span class="d-none d-md-block fs-xs fw-medium opacity-75 mt-md-2">
-                                  Update your public information and promote your projects
-                                </span> --}}
-                              </button>
-                            </li>
-                          </ul>
-                          {{-- PRODUCT VARIANT --}}
-                          <div class="tab-content col-md-8 col-xxl-10">
-                            {{-- thuoctinh --}}
-                            <div class="block-content tab-pane active" id="btabs-vertical-info-home" role="tabpanel" aria-labelledby="btabs-vertical-info-home-tab" tabindex="0">
-                                <h4 class="fw-semibold">Thuộc tính</h4>
-                                <div class="actions">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="mb-4 col-6">
-                                                <label class="form-label" for="val-select2">Chọn thuộc tính <span class="text-danger">*</span></label>
-                                                <select class="js-select2 form-select" id="val-select2" name="attribute_id" style="width: 100%;" data-placeholder="Choose one..">
-                                                    <option></option>
-                                                    <!-- Các thuộc tính được load từ cơ sở dữ liệu -->
-                                                </select>
-                                            </div>
+
+                            <!-- Các thuộc tính sản phẩm -->
+                            <div class="mb-4">
+                                <label class="form-label">Thuộc tính sản phẩm</label>
+                                <div class="row">
+                                    <!-- Dòng 1 -->
+                                    <div class="d-flex justify-content-between">
+                                        <!-- Is active -->
+                                        <div class="form-check form-switch form-check-inline col-md">
+                                            <input class="form-check-input" type="checkbox" id="is_active"
+                                                name="is_active" {{ old('is_active', true) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_active">Active</label>
                                         </div>
-                                        <div id="attributes-container">
-                                            <!-- Các thuộc tính sẽ được thêm vào đây khi chọn từ dropdown -->
+
+                                        <!-- Is new -->
+                                        <div class="form-check form-switch form-check-inline col-md">
+                                            <input class="form-check-input" type="checkbox" id="is_new"
+                                                name="is_new" {{ old('is_new', true) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_new">New</label>
                                         </div>
-                                        <div class="btn">
-                                            <button id="save-attributes" class="btn btn-outline-primary">Lưu thuộc tính</button>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <!-- Dòng 2 -->
+                                    <div class="d-flex justify-content-between">
+                                        <!-- Is hot deal -->
+                                        <div class="form-check form-switch form-check-inline col-md">
+                                            <input class="form-check-input" type="checkbox" id="is_hot_deal"
+                                                name="is_hot_deal" {{ old('is_hot_deal') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_hot_deal">Hot deal</label>
+                                        </div>
+
+                                        <!-- Show home -->
+                                        <div class="form-check form-switch form-check-inline col-md">
+                                            <input class="form-check-input" type="checkbox" id="is_show_home"
+                                                name="is_show_home" {{ old('is_show_home') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_show_home">Show home</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                        
-                            <div class="block-content tab-pane" id="btabs-vertical-info-profile" role="tabpanel" aria-labelledby="btabs-vertical-info-profile-tab" tabindex="0">
-                                <h4 class="fw-semibold">Tạo biến thể</h4>
-                                <button id="generate-variants" class="btn btn-outline-primary mb-5">Tạo ra các biến thể</button>
-                                <div id="variant-list" class="product-varian mb-2">
-                                    <!-- Biến thể sẽ được tạo và hiển thị ở đây -->
+
+                            <!-- Nút tải ảnh chính -->
+                            <div class="form-group image-preview" id="main-image-preview">
+                                <label class="form-label">Tải lên ảnh chính:</label>
+                                <div class="custom-file">
+                                    <input type="file" name="img_thumbnail" class="form-control-file"
+                                        id="main-image-input">
+                                    <label class="custom-file-label" for="main-image-input"></label>
                                 </div>
-                                <div class="btn">
-                                    <button class="btn btn-outline-primary" id="save-variants">Lưu biến thể</button>
+                                <div id="main-image-container"></div> <!-- Hiển thị ảnh chính -->
+                            </div>
+
+                            <!-- Tải lên ảnh phụ -->
+                            <div class="form-group image-preview" id="sub-images-preview">
+                                <label class="form-label">Tải lên ảnh phụ:</label>
+                                <div class="custom-file">
+                                    <input type="file" name="images[]" class="form-control-file"
+                                        id="sub-images-input" multiple>
+                                    <label class="custom-file-label" for="sub-images-input"></label>
+                                </div>
+                                <div id="sub-images-container"></div> <!-- Hiển thị các ảnh phụ -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="block block-rounded">
+                <div class="block-content">
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Thuộc tính sản phẩm</h5>
+                            <div id="attributes-section" class="mb-3"></div>
+
+                            <button type="button" id="add-attribute-btn" class="btn btn-sm btn-alt button-css mb-3"><i
+                                    class="fa fa-plus"></i>Thêm thuộc tính</button>
+
+                            <!-- Biến thể -->
+
+
+                            {{-- <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="d-inline">Danh sách biến thể</h3>
+                                <div></div> <!-- Tạo khoảng trống để căn chỉnh -->
+
+                            </div> --}}
+                            <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                                <h5 class="d-inline">Danh sách biến thể</h5>
+                                <div></div> <!-- Tạo khoảng trống để căn chỉnh -->
+
+                                <div class=" fake-dropdown">
+                                    <button class="btn btn-sm btn-alt-secondary toggle-dropdown p-2" type="button">
+                                        Chỉnh sửa hàng loạt<i class="fas fa-chevron-down"></i>
+                                    </button>
                                 </div>
                             </div>
-                            
-                        </div>
-                        
-                        </div>
-                        <!-- END Vertical Block Tabs Default Style With Extra Info -->
-                      </div>
-                </div>
-                <div class="btn">
-                    <button class="btn btn-outline-primary" id="save-product">Tạo sản phẩm</button>
-                </div>
+                            <!-- Nội dung sổ xuống, sẽ được hiển thị khi nhấn vào nút -->
+                            <div class=" dropdown-content" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        {{-- <label for="apply_to">Áp dụng cho</label> --}}
+                                        <select id="apply_to" class="form-select">
+                                            <option value="all">Tất cả</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" id="bulk_price" class="form-control input-hover"
+                                            placeholder="Giá bán lẻ">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" id="bulk_price_sale" class="form-control input-hover"
+                                            placeholder="Giá khuyến mãi">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" id="bulk_stock" class="form-control input-hover"
+                                            placeholder="Số lượng">
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" id="apply-bulk-edit"
+                                            class="btn btn-sm btn-alt-secondary w-100 p-2">Áp dụng</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 mb-3">
+                                <button type="button" id="generate-variants-btn" class="btn btn-sm btn-alt button-css">
+                                    <i class="fa fa-plus"></i>Tạo biến thể</button>
+                            </div>
+
+                            <!-- Danh sách biến thể dưới dạng bảng -->
+                            <table class="table table-hover variant-table">
+                                <thead>
+                                    <tr>
+                                        <th>Kích cỡ</th>
+                                        <th>Màu sắc</th>
+                                        <th>Giá gốc<span class="text-danger">*</span></th>
+                                        <th>Giá sale<span class="text-danger">*</span></th>
+                                        <th>Số lượng<span class="text-danger">*</span></th>
+                                        <th>SKU</th>
+                                        <th>Ảnh<span class="text-danger">*</span></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="variant-container">
+                                    <!-- Biến thể sẽ được thêm vào đây -->
+                                </tbody>
+                            </table>
 
 
+
+                            {{-- <button type="submit" class="btn btn-success">Lưu sản phẩm</button> --}}
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="btn">
+                <button type="submit" class="btn btn-outline-primary">Tạo sản phẩm</button>
+            </div>
 
+        </form>
     </div>
 @endsection
 @section('js')
-<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-
-    {{-- <script src="{{ asset('admin/js/plugins/ckeditor/ckeditor.js') }}"></script> --}}
+    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script src="{{asset('admin/js/plugins/dropzone/min/dropzone.min.js')}}"></script> --}}
+    <!-- Nhúng Summernote JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    {{-- <script>
-        CKEDITOR.replace('editor');
-        // 
-    </script> --}}
-   
-   {{-- SELECT2 --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script> <!-- Thêm dòng này -->
+    {{-- <script src="{{asset('admin/js/ui/product-ui/preview-image.js')}}"></script> --}}
+
+    {{-- SELECT2 --}}
     <script>
         $(document).ready(function() {
             $('.attributes-select').select2({
                 placeholder: "Select attributes",
                 allowClear: true,
-                tags: true 
+                tags: true
             });
         });
+
         $(document).ready(function() {
             // Khởi tạo Select2 cho danh mục
             $('#catalogue-select').select2({
-                placeholder: "Chọn danh mục", 
-                allowClear: true 
+                placeholder: "Chọn danh mục",
+                allowClear: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            const maxLength = 200;
+
+            // Lắng nghe sự kiện khi người dùng nhập vào textarea
+            $('#description').on('input', function() {
+                const length = $(this).val().length;
+                const remaining = maxLength - length;
+
+                // Cập nhật số ký tự còn lại
+                $('#char-count').text('Còn lại ' + remaining + ' ký tự');
+            });
+        });
+    </script>
+
+    {{-- <script>
+        const csrfToken = "{{ csrf_token() }}";
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+            const attributes = @json($attributes); // Danh sách thuộc tính từ server
+
+            // Khởi tạo Select2 cho các thuộc tính
+            function initSelect2() {
+                $('.select2-tags').select2({
+                    tags: true,
+                    placeholder: 'Chọn hoặc nhập giá trị',
+                    allowClear: true,
+                    tokenSeparators: [',', ' ']
+                });
+            }
+
+            let selectedAttributes = new Set();
+
+            // Thêm thuộc tính động
+            let clickCount = 0;
+            $('#add-attribute-btn').on('click', function() {
+                const attributeSection = $('#attributes-section');
+                const attributeCount = $('.attribute-select').length;
+
+                if (attributeCount >= 50) {
+                    alert('Bạn không thể tạo quá 50 biến thể.');
+                    return;
+                }
+
+                const attributeOptions = attributes; // Danh sách thuộc tính từ server
+
+                let attributeSelect = `
+                <div class="row form-group attribute-group position-relative mt-3 p-3" style="background-color: #f5f5f5">
+                    <!-- Label và Select cho Thuộc tính -->
+                    <div class="col-12">
+                        <label for="attributes_${attributeCount}">Thuộc tính</label>
+                        <select class="form-control attribute-select" name="attribute_ids[]" data-index="${attributeCount}" required>
+                            <option value="">Chọn thuộc tính</option>
+                            ${attributeOptions.map(attr => {
+                                return selectedAttributes.has(attr.id) ? '' : `<option value="${attr.id}">${attr.name}</option>`;
+                            }).join('')}
+                        </select>
+                    </div>
+
+                    <!-- Label và Select cho Giá trị -->
+                    <div class="col-12 form-group mt-2 value-section">
+                        <label for="values_${attributeCount}">Giá trị</label>
+                        <select name="values[${attributeCount}][]" class="form-control select2-tags" multiple="multiple"></select>
+                    </div>
+
+                    <!-- Nút xóa được đặt lên góc phải -->
+                    <span class="remove-attribute-btn position-absolute" style="top: 0; right: 0 !important; cursor: pointer; font-size: 20px; color: red;">&times;</span>
+                </div>
+            `;
+
+                attributeSection.append(attributeSelect);
+                initSelect2(); // Khởi tạo lại Select2 cho các ô mới
+                clickCount++;
+
+                // Nếu click lần thứ 2 thì ẩn nút
+                if (clickCount >= 2) {
+                    $(this).hide();
+                }
+            });
+
+            // Khi chọn thuộc tính, hiển thị các giá trị thuộc tính
+            $(document).on('change', '.attribute-select', function() {
+                const attributeId = $(this).val();
+                const index = $(this).data('index');
+                const valueSection = $(this).closest('.attribute-group').find('.value-section select');
+
+                if (!attributeId) {
+                    return;
+                }
+
+                const attribute = attributes.find(attr => attr.id == attributeId);
+                const valueOptions = attribute.values.map(val =>
+                    `<option value="${val.id}">${val.value}</option>`).join('');
+                valueSection.html(valueOptions);
+
+                // Thêm thuộc tính đã chọn vào tập hợp để không thể chọn lại
+                selectedAttributes.add(parseInt(attributeId));
+
+                // Disable attribute select after selection
+                $(this).prop('disabled', true);
+            });
+
+            // Xóa thuộc tính
+            $(document).on('click', '.remove-attribute-btn', function() {
+                const attributeGroup = $(this).closest('.attribute-group');
+                const attributeId = attributeGroup.find('.attribute-select').val();
+
+                // Loại bỏ thuộc tính khỏi danh sách các thuộc tính đã chọn
+                selectedAttributes.delete(parseInt(attributeId));
+
+                // Xóa nhóm thuộc tính
+                attributeGroup.remove();
+                clickCount--;
+
+                // Hiển thị lại nút thêm nếu số lần click nhỏ hơn 2
+                if (clickCount < 2) {
+                    $('#add-attribute-btn').show();
+                }
+            });
+
+            // Tạo tổ hợp biến thể
+            $('#generate-variants-btn').on('click', function() {
+                const variantsContainer = $('#variant-container');
+                variantsContainer.html(''); // Xóa các biến thể cũ
+
+                let attributesData = [];
+
+                $('.attribute-group').each(function() {
+                    const attributeId = $(this).find('.attribute-select').val();
+                    const values = $(this).find('.select2-tags').val();
+                    if (values.length > 0) {
+                        attributesData.push({
+                            attributeId,
+                            values
+                        });
+                    }
+                });
+
+                if (attributesData.length === 0) {
+                    alert('Vui lòng chọn ít nhất một thuộc tính và giá trị.');
+                    return;
+                }
+
+                let combinations = generateCombinations(attributesData.map(attr => attr.values));
+
+                // Tạo biến thể từ tổ hợp giá trị
+                combinations.forEach((combination, index) => {
+                    if (index >= 50) {
+                        return; // Giới hạn 50 biến thể
+                    }
+
+                    // const sku = 'SKU-prdas' + combination.join('-');
+                    const sku = `PRD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+
+                    // Lấy tên của giá trị thuộc tính thay vì ID
+                    let attributeNames = combination.map((valueId, i) => {
+                        const attributeId = attributesData[i].attributeId;
+                        return {
+                            attribute_id: attributeId,
+                            attribute_value_id: valueId
+                        }; // Tạo object attribute_id và attribute_value_id
+                    });
+
+                    // Hiển thị các giá trị thuộc tính đã được chọn (kích cỡ và màu sắc)
+                    let variantHtml = `
+                    <tr class="variant">
+                        <td>${getAttributeValueName(attributeNames[0].attribute_id, attributeNames[0].attribute_value_id)}</td>
+                        <td>${getAttributeValueName(attributeNames[1].attribute_id, attributeNames[1].attribute_value_id)}</td>
+                        <td><input type="number" name="variant_prices[]" class="form-control variant-input" required></td>
+                        <td><input type="number" name="variant_sale_prices[]" class="form-control variant-input"></td>
+                        <td><input type="number" name="variant_stocks[]" class="form-control variant-input" required></td>
+                        <td><input type="text" name="variant_skus[]" class="form-control variant-input" value="${sku}" readonly></td>
+                        <td>
+                            <div class="custom-file">
+                                <input type="file" name="variant_images[]" class="form-control-file variant-image-input" id="variant-image-input">
+                                <label class="custom-file-label" for="variant-image-input"></label>
+                            </div>
+                            <div id="variant-image-container">
+                                <img src="" class="img-preview" alt="" style="width: 50px; height: 50px; object-fit: cover;">
+                            </div>
+                        </td>
+                        <td class="variant-actions">
+                            <button type="button" class="delete-variant"> <i class="fa fa-fw fa-times text-danger"></i></button>
+                        </td>
+                    </tr>
+                `;
+
+                    variantsContainer.append(variantHtml);
+
+                    // Lưu thông tin thuộc tính của từng biến thể
+                    attributeNames.forEach((attrName, attrIndex) => {
+                        $(`<input type="hidden" name="values[${index}][${attrIndex}][attribute_id]" value="${attrName.attribute_id}">`)
+                            .appendTo(variantsContainer);
+                        $(`<input type="hidden" name="values[${index}][${attrIndex}][attribute_value_id]" value="${attrName.attribute_value_id}">`)
+                            .appendTo(variantsContainer);
+                    });
+                });
+            });
+
+            // Hiển thị preview ảnh khi người dùng chọn ảnh
+            $(document).on('change', 'input[name="variant_images[]"]', function(e) {
+                const reader = new FileReader();
+                const imgPreview = $(this).closest('td').find('.img-preview');
+
+                reader.onload = function(e) {
+                    imgPreview.attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(this.files[0]);
+            });
+
+
+            // Xóa biến thể
+            $(document).on('click', '.delete-variant', function() {
+                $(this).closest('tr').remove();
+            });
+
+            // Sự kiện khi nhấn vào nút để mở dropdown
+            $('.toggle-dropdown').on('click', function() {
+                // Hiển thị hoặc ẩn nội dung bên dưới
+                $('.dropdown-content').slideToggle();
+            });
+
+            // Chỉnh sửa hàng loạt giá và số lượng
+            $('#apply-bulk-edit').on('click', function() {
+                const bulkPrice = $('#bulk_price').val();
+                const bulkPriceSale = $('#bulk_price_sale').val();
+                const bulkStock = $('#bulk_stock').val();
+                // const bulkSku = $('#bulk_sku').val();
+                const applyTo = $('#apply_to').val(); // Lấy giá trị của tùy chọn áp dụng
+
+                if (applyTo === 'all') {
+                    // Áp dụng cho tất cả các biến thể
+                    $('.variant').each(function() {
+                        if (bulkPrice) {
+                            $(this).find('input[name="variant_prices[]"]').val(bulkPrice);
+                        }
+                        if (bulkPriceSale) {
+                            $(this).find('input[name="variant_sale_prices[]"]').val(bulkPriceSale);
+                        }
+
+                        if (bulkStock) {
+                            $(this).find('input[name="variant_stocks[]"]').val(bulkStock);
+                        }
+
+                    });
+                }
+            });
+
+            // Tạo tổ hợp các giá trị thuộc tính
+            function generateCombinations(valuesArray, prefix = []) {
+                if (!valuesArray.length) {
+                    return [prefix];
+                }
+
+                let combinations = [];
+                let firstArray = valuesArray[0];
+                let restArrays = valuesArray.slice(1);
+
+                firstArray.forEach(value => {
+                    combinations = combinations.concat(generateCombinations(restArrays, [...prefix,
+                        value
+                    ]));
+                });
+
+                return combinations;
+            }
+
+            // Lấy tên giá trị thuộc tính
+            function getAttributeValueName(attributeId, valueId) {
+                const attribute = attributes.find(attr => attr.id == attributeId);
+                if (attribute) {
+                    const value = attribute.values.find(val => val.id == valueId);
+                    return value ? value.value : '';
+                }
+                return '';
+            }
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lắng nghe sự kiện submit trên form
+            const form = document.getElementById('myForm'); // Thay 'myForm' bằng id của form của bạn
+            form.addEventListener('submit', function(event) {
+                if (!validateForm()) {
+                    event.preventDefault(); // Ngăn chặn submit nếu có lỗi
+                }
+            });
+
+            // Lắng nghe sự kiện nhập (input) trên từng trường
+            document.getElementById('name').addEventListener('input', function() {
+                validateName();
+            });
+
+            document.getElementById('price_regular').addEventListener('input', function() {
+                validatePriceRegular();
+                validatePriceSale(); // Kiểm tra lại giá sale nếu có thay đổi giá gốc
+            });
+
+            document.getElementById('price_sale').addEventListener('input', function() {
+                validatePriceSale();
+            });
+
+            document.getElementById('description').addEventListener('input', function() {
+                validateDescription();
+            });
+
+            document.getElementById('catalogue-select').addEventListener('change', function() {
+                validateCatalogue();
+            });
+
+            // Hàm kiểm tra toàn bộ form
+            function validateForm() {
+                let isValid = true;
+
+                if (!validateName()) isValid = false;
+                if (!validatePriceRegular()) isValid = false;
+                if (!validatePriceSale()) isValid = false;
+                if (!validateDescription()) isValid = false;
+                if (!validateCatalogue()) isValid = false;
+
+                return isValid;
+            }
+
+            // Các hàm kiểm tra từng trường
+
+            function validateName() {
+                const name = document.getElementById('name');
+                clearError(name);
+                if (!name.value.trim()) {
+                    showError(name, 'Tên sản phẩm không được để trống');
+                    return false;
+                }
+                return true;
+            }
+
+            function validatePriceRegular() {
+                const priceRegular = document.getElementById('price_regular');
+                clearError(priceRegular);
+                if (!priceRegular.value.trim() || isNaN(priceRegular.value) || Number(priceRegular.value) <= 0) {
+                    showError(priceRegular, 'Giá gốc phải là số và lớn hơn 0');
+                    return false;
+                }
+                return true;
+            }
+
+            function validatePriceSale() {
+                const priceRegular = document.getElementById('price_regular');
+                const priceSale = document.getElementById('price_sale');
+                clearError(priceSale);
+                if (priceSale.value.trim()) {
+                    if (isNaN(priceSale.value) || Number(priceSale.value) >= Number(priceRegular.value)) {
+                        showError(priceSale, 'Giá khuyến mãi phải nhỏ hơn giá gốc');
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function validateDescription() {
+                const description = document.getElementById('description');
+                clearError(description);
+                if (!description.value.trim()) {
+                    showError(description, 'Mô tả không được để trống');
+                    return false;
+                }
+                return true;
+            }
+
+            function validateCatalogue() {
+                const catalogueSelect = document.getElementById('catalogue-select');
+                clearError(catalogueSelect);
+                if (catalogueSelect.value === 'Chọn danh mục') {
+                    showError(catalogueSelect, 'Vui lòng chọn danh mục');
+                    return false;
+                }
+                return true;
+            }
+
+            // Hàm hiển thị lỗi
+            function showError(input, message) {
+                const error = document.createElement('div');
+                error.className = 'invalid-feedback';
+                error.style.color = 'red';
+                error.textContent = message;
+                input.classList.add('is-invalid');
+                input.parentElement.appendChild(error);
+            }
+
+            // Hàm xóa lỗi cũ
+            function clearError(input) {
+                const error = input.parentElement.querySelector('.invalid-feedback');
+                if (error) {
+                    error.remove();
+                }
+                input.classList.remove('is-invalid');
+            }
+        });
+    </script>
+    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script> --}}
+    <script>
+        $(document).ready(function() {
+            $('#editor').summernote({
+                height: 300 // Chiều cao của trình soạn thảo
             });
         });
     </script>
     <script>
-        $(document).ready(function() {
-    const maxLength = 200;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Xử lý khi tải ảnh chính
+            const mainImageInput = document.getElementById('main-image-input');
+            const mainImageContainer = document.getElementById('main-image-container');
 
-    // Lắng nghe sự kiện khi người dùng nhập vào textarea
-    $('#description').on('input', function() {
-        const length = $(this).val().length;
-        const remaining = maxLength - length;
+            mainImageInput.addEventListener('change', function() {
+                displayImage(this, mainImageContainer);
+            });
 
-        // Cập nhật số ký tự còn lại
-        $('#char-count').text('Còn lại ' + remaining + ' ký tự');
-    });
-});
+            // Xử lý khi tải ảnh phụ
+            const subImagesInput = document.getElementById('sub-images-input');
+            const subImagesContainer = document.getElementById('sub-images-container');
+            const subImageList = []; // Danh sách lưu các ảnh phụ đã chọn
+
+            subImagesInput.addEventListener('change', function() {
+                displayMultipleImages(this, subImagesContainer, subImageList);
+            });
+
+            // Hiển thị ảnh chính
+            function displayImage(input, container) {
+                container.innerHTML = ''; // Xóa nội dung cũ nếu có
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.maxWidth = '200px'; // Kích thước ảnh
+                        container.appendChild(imgElement);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // Hiển thị nhiều ảnh phụ mà không làm mất ảnh trước đó
+            function displayMultipleImages(input, container, imageList) {
+                Array.from(input.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Tạo một phần tử bao quanh ảnh và nút xóa
+                        const imgWrapper = document.createElement('div');
+                        imgWrapper.classList.add('img-wrapper');
+
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+
+                        // Nút xóa
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.textContent = 'X';
+                        deleteBtn.addEventListener('click', function() {
+                            imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
+                        });
+
+                        imgWrapper.appendChild(imgElement);
+                        imgWrapper.appendChild(deleteBtn);
+                        container.appendChild(imgWrapper);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
     </script>
-
-    {{-- UP IMAGE --}}
-    <script>
-         const csrfToken = "{{ csrf_token() }}";
-    </script>
-    <script src="{{asset('admin/js/Api/product.js')}}"></script>
 @endsection
