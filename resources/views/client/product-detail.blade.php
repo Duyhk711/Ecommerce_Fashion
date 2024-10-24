@@ -1,36 +1,41 @@
 @extends('layouts.client')
 
 @section('css')
-    <link rel="stylesheet" href="{{asset('client/css/product-detail.css')}}">
+    <link rel="stylesheet" href="{{ asset('client/css/product-detail.css') }}">
     <style>
-        * {box-sizing: border-box;}
+        * {
+            box-sizing: border-box;
+        }
 
         .img-zoom-container {
-        position: relative;
+            position: relative;
         }
 
         .img-zoom-lens {
-        position: absolute;
-        border: 1px solid #d4d4d4;
-        /*set the size of the lens:*/
-        width: 40px;
-        height: 40px;
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            /*set the size of the lens:*/
+            width: 40px;
+            height: 40px;
         }
 
         .img-zoom-result {
             display: none;
             position: absolute;
             border: none;
-            pointer-events: none; /* Đảm bảo result không cản chuột */
-            width: 150px;  /* Kích thước kính lúp */
+            pointer-events: none;
+            /* Đảm bảo result không cản chuột */
+            width: 150px;
+            /* Kích thước kính lúp */
             height: 150px;
-            border-radius: 50%;  /* Hình tròn như kính lúp */
+            border-radius: 50%;
+            /* Hình tròn như kính lúp */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
     </style>
     <style>
-        .rating-choose{
+        .rating-choose {
             padding-left: 20px;
             padding-right: 20px;
             padding-top: 5px;
@@ -40,10 +45,12 @@
             margin-bottom: 10px;
             margin-right: 10px;
         }
-        .rating-choose:hover{
+
+        .rating-choose:hover {
             background: rgb(255, 248, 230);
             cursor: pointer;
         }
+
         .rating-choose.active {
             font-weight: bold;
             text-decoration: underline;
@@ -66,9 +73,10 @@
                             <div class="zoompro-wrap">
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
-                                    <img id="zoompro" class="zoompro" src="{{ asset('storage/' . $product->img_thumbnail) }}"
-                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
-                                        height="600" />
+                                    <img id="zoompro" class="zoompro"
+                                        src="{{ $product->img_thumbnail }}"
+                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product"
+                                        width="625" height="600" />
                                 </div>
                                 <!-- End Product Image -->
                                 <!-- Product Label -->
@@ -91,10 +99,11 @@
                             <div class="product-thumb product-horizontal-thumb mt-3">
                                 <div id="gallery" class="product-thumb-horizontal">
                                     @foreach ($product->images as $item)
-                                        <a href="javascript:void(0);" data-image="{{ asset('storage/'. $item->image)  }}"
-                                            data-zoom-image="{{ asset('storage/'. $item->image)  }}" class="thumbnail">
-                                            <img class="blur-up lazyload" data-src="{{ asset('storage/'. $item->image)  }}"
-                                                src="{{ asset('storage/'. $item->image)  }}" alt="product" width="625" height="808" />
+                                        <a href="javascript:void(0);" data-image="{{ asset('storage/' . $item->image) }}"
+                                            data-zoom-image="{{ asset('storage/' . $item->image) }}" class="thumbnail">
+                                            <img class="blur-up lazyload" data-src="{{ asset('storage/' . $item->image) }}"
+                                                src="{{ asset('storage/' . $item->image) }}" alt="product" width="625"
+                                                height="808" />
                                         </a>
                                     @endforeach
                                 </div>
@@ -147,8 +156,10 @@
 
                             <!-- Product Price -->
                             <div class="product-price d-flex-center my-3">
-                                <span class="price old-price" id="regular-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
-                                <span class="price" id="sale-price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                <span class="price old-price"
+                                    id="regular-price">{{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                <span class="price"
+                                    id="sale-price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                             </div>
                             <!-- End Product Price -->
                             <hr>
@@ -168,20 +179,21 @@
                             <div class="product-swatches-option">
                                 <!-- Swatches Color -->
                                 <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
-                                    <label class="label d-flex align-items-center">Màu:<span class="slVariant ms-1 fw-bold"></span></label>
+                                    <label class="label d-flex align-items-center">Màu:<span
+                                            class="slVariant ms-1 fw-bold"></span></label>
                                     <ul class="variants-clr swatches d-flex pt-1 clearfix" id="color-options">
                                         @foreach ($uniqueAttributes->where('attributeName', 'Color') as $color)
                                             <li class="swatch x-large available color-option"
                                                 style="background-color: {{ $color['colorCode'] }}; width: 40px; height: 40px; border-radius: 50%;"
                                                 data-color-code="{{ $color['colorCode'] }}"
                                                 data-product-image="{{ $color['image'] }}"
-                                                data-attribute-value-id="{{ $color['value'] }}"
-                                                data-bs-toggle="tooltip" title="{{ $color['value'] }}">
+                                                data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
+                                                title="{{ $color['value'] }}">
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
-                                
+
 
                                 <!-- Swatches Size -->
                                 <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
@@ -213,7 +225,7 @@
                                     <div class="qtyField">
                                         <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
                                         <input type="text" name="quantity" value="1"
-                                            class="product-form-input qty" id="quantityInput" data-max-stock="0"/>
+                                            class="product-form-input qty" id="quantityInput" data-max-stock="0" />
                                         <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                     </div>
                                 </div>
@@ -335,7 +347,8 @@
                                                     <div class="ratings-full product-review">
                                                         <a class="reviewLink d-flex-center" href="#reviews">
                                                             @for ($i = 0; $i < 5; $i++)
-                                                                <i class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                                <i
+                                                                    class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
                                                             @endfor
                                                             <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
                                                         </a>
@@ -343,52 +356,59 @@
                                                 </div>
                                                 {{-- Lọc đánh giá --}}
                                                 <div class="d-flex mx-5 rating-filter">
-                                                    <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}" 
-                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
+                                                    <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
+                                                        class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất
+                                                        cả</a>
                                                     @for ($i = 5; $i >= 1; $i--)
-                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}" 
-                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
-                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
+                                                            class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                            {{ $i }} <i
+                                                                class="icon anm anm-star text-warning"></i>
+                                                            ({{ $ratingsPercentage[$i] ?? 0 }})
                                                         </a>
                                                     @endfor
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                     <br>
                                     {{-- Danh sách bình luận --}}
                                     <div class="review-inner" id="comment-list">
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div style="height: 65px;" class="me-2">
-                                                    <img src="{{ $comment->user->avatar 
-                                                    ? asset('storage/' . $comment->user->avatar) 
-                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}" 
-                                                    alt="avatar" style="width: 65px" height="65px" class="rounded-circle blur-up lazyloaded me-4"/>
+                                                    <img src="{{ $comment->user->avatar
+                                                        ? asset('storage/' . $comment->user->avatar)
+                                                        : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
+                                                        alt="avatar" style="width: 65px" height="65px"
+                                                        class="rounded-circle blur-up lazyloaded me-4" />
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
-                                                    <div class="title-review d-flex align-items-center justify-content-between">
+                                                    <div
+                                                        class="title-review d-flex align-items-center justify-content-between">
                                                         <div>
                                                             <h5>{{ $comment->user->name }}</h5>
                                                             <span class="product-review spr-starratings">
                                                                 @for ($i = 0; $i < 5; $i++)
-                                                                    <i class="icon anm anm-star {{ $i < $comment->rating ? '' : 'anm-star-o' }}"></i>
+                                                                    <i
+                                                                        class="icon anm anm-star {{ $i < $comment->rating ? '' : 'anm-star-o' }}"></i>
                                                                 @endfor
-                                                            </span> | 
+                                                            </span> |
                                                             {{ $comment->created_at->format('d-m-Y H:i') }}
                                                         </div>
-                                                        
+
                                                     </div>
                                                     <p>{{ $comment->comment }}</p>
                                                 </div>
-                                            </div> <br> <hr>
+                                            </div> <br>
+                                            <hr>
                                         @empty
                                             <p>Chưa có bình luận nào.</p>
                                         @endforelse
                                     </div>
-                                
+
                                     {{-- Phân trang --}}
                                     <div id="pagination-container" class="pagination d-flex justify-content-end">
                                         {{ $comments->withQueryString()->links() }}
@@ -438,7 +458,8 @@
 
                 <!--Product Grid-->
                 <div class="grid-products grid-view-items gp10 arwOut5">
-                    <div class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
+                    <div
+                        class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
                         @foreach ($relatedProducts as $products)
                             <div class="item col-item">
                                 <div class="product-box">
@@ -575,7 +596,7 @@
                                     </div>
                                     <div class="qtyField">
                                         <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                        <input type="text" name="quantity" value="1" class="qty"/>
+                                        <input type="text" name="quantity" value="1" class="qty" />
                                         <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                     </div>
                                 </div>
@@ -1013,7 +1034,7 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let selectedColorId = null;
@@ -1220,164 +1241,170 @@
 
     {{-- check số lượng từng biến thể --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        let variantDetails = @json($variantDetails);
+        document.addEventListener('DOMContentLoaded', function() {
+            let variantDetails = @json($variantDetails);
 
-        let selectedColor = null;
-        let selectedSize = null;
-        let maxStock = 0;
+            let selectedColor = null;
+            let selectedSize = null;
+            let maxStock = 0;
 
-        // Xử lý khi người dùng chọn màu
-        document.querySelectorAll('.color-option').forEach(function (colorOption) {
-            colorOption.addEventListener('click', function () {
-                selectedColor = this.getAttribute('data-attribute-value-id');
-                updateSizeOptions();
-                updateStock();
-            });
-        });
-
-        // Xử lý khi người dùng chọn size
-        document.querySelectorAll('.size-option').forEach(function (sizeOption) {
-            sizeOption.addEventListener('click', function () {
-                selectedSize = this.getAttribute('data-attribute-value-id');
-                updateColorOptions();
-                updateStock();
-            });
-        });
-
-        // Cập nhật trạng thái các lựa chọn size dựa trên màu đã chọn
-        function updateSizeOptions() {
-            document.querySelectorAll('.size-option').forEach(function (sizeOption) {
-                let sizeId = sizeOption.getAttribute('data-attribute-value-id');
-                let variant = variantDetails.find(v => {
-                    return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value == selectedColor) &&
-                        v.attributes.some(attr => attr.attributeName === 'Size' && attr.value == sizeId);
+            // Xử lý khi người dùng chọn màu
+            document.querySelectorAll('.color-option').forEach(function(colorOption) {
+                colorOption.addEventListener('click', function() {
+                    selectedColor = this.getAttribute('data-attribute-value-id');
+                    updateSizeOptions();
+                    updateStock();
                 });
+            });
 
-                if (variant && variant.stock > 0) {
-                    sizeOption.classList.remove('soldout');
+            // Xử lý khi người dùng chọn size
+            document.querySelectorAll('.size-option').forEach(function(sizeOption) {
+                sizeOption.addEventListener('click', function() {
+                    selectedSize = this.getAttribute('data-attribute-value-id');
+                    updateColorOptions();
+                    updateStock();
+                });
+            });
+
+            // Cập nhật trạng thái các lựa chọn size dựa trên màu đã chọn
+            function updateSizeOptions() {
+                document.querySelectorAll('.size-option').forEach(function(sizeOption) {
+                    let sizeId = sizeOption.getAttribute('data-attribute-value-id');
+                    let variant = variantDetails.find(v => {
+                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr
+                                .value == selectedColor) &&
+                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
+                                sizeId);
+                    });
+
+                    if (variant && variant.stock > 0) {
+                        sizeOption.classList.remove('soldout');
+                    } else {
+                        sizeOption.classList.add('soldout');
+                    }
+                });
+            }
+
+            // Cập nhật trạng thái các lựa chọn màu dựa trên size đã chọn
+            function updateColorOptions() {
+                document.querySelectorAll('.color-option').forEach(function(colorOption) {
+                    let colorId = colorOption.getAttribute('data-attribute-value-id');
+                    let variant = variantDetails.find(v => {
+                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr
+                                .value == colorId) &&
+                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
+                                selectedSize);
+                    });
+
+                    if (variant && variant.stock > 0) {
+                        colorOption.classList.remove('disabled');
+                    } else {
+                        colorOption.classList.add('disabled');
+                    }
+                });
+            }
+
+            // Cập nhật số lượng tồn kho dựa trên lựa chọn size và color
+            function updateStock() {
+                if (selectedColor && selectedSize) {
+                    let variant = variantDetails.find(v => {
+                        return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value ==
+                                selectedColor) &&
+                            v.attributes.some(attr => attr.attributeName === 'Size' && attr.value ==
+                                selectedSize);
+                    });
+
+                    if (variant) {
+                        maxStock = variant.stock;
+                        document.querySelector('#quantityInput').setAttribute('data-max-stock', maxStock);
+                        document.querySelector('#quantityInput').value = 1; // Reset lại số lượng về 1
+                    }
+                }
+
+                enableButtons(); // Bật lại các nút
+            }
+
+            // Xử lý logic tăng/giảm số lượng
+            document.querySelector('.qtyBtn.plus').addEventListener('click', function() {
+                let quantityInput = document.querySelector('#quantityInput');
+                let currentQty = parseInt(quantityInput.value);
+
+                // Chỉ tăng nếu số lượng hiện tại nhỏ hơn maxStock và đã chọn màu và size
+                if (currentQty < maxStock && selectedColor && selectedSize) {
+                    quantityInput.value = currentQty + 1 - 1;
+                } else if (!selectedColor || !selectedSize) {
+                    showPopup('Vui lòng chọn màu và size trước.');
                 } else {
-                    sizeOption.classList.add('soldout');
+                    showPopup('Sản phẩm này trong kho chỉ còn ' + maxStock + ' sản phẩm.');
                 }
+                enableButtons(); // Cập nhật trạng thái nút
             });
-        }
 
-        // Cập nhật trạng thái các lựa chọn màu dựa trên size đã chọn
-        function updateColorOptions() {
-            document.querySelectorAll('.color-option').forEach(function (colorOption) {
-                let colorId = colorOption.getAttribute('data-attribute-value-id');
-                let variant = variantDetails.find(v => {
-                    return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value == colorId) &&
-                        v.attributes.some(attr => attr.attributeName === 'Size' && attr.value == selectedSize);
-                });
+            document.querySelector('.qtyBtn.minus').addEventListener('click', function() {
+                let quantityInput = document.querySelector('#quantityInput');
+                let currentQty = parseInt(quantityInput.value);
 
-                if (variant && variant.stock > 0) {
-                    colorOption.classList.remove('disabled');
-                } else {
-                    colorOption.classList.add('disabled');
+                // Chỉ giảm nếu số lượng hiện tại lớn hơn 1 và đã chọn màu và size
+                if (currentQty > 1 && selectedColor && selectedSize) {
+                    quantityInput.value = currentQty - 1 + 1; // Giảm 1 đơn vị
+                } else if (!selectedColor || !selectedSize) {
+                    showPopup('Vui lòng chọn màu và size trước.');
                 }
+                enableButtons(); // Cập nhật trạng thái nút
             });
-        }
 
-        // Cập nhật số lượng tồn kho dựa trên lựa chọn size và color
-        function updateStock() {
-            if (selectedColor && selectedSize) {
-                let variant = variantDetails.find(v => {
-                    return v.attributes.some(attr => attr.attributeName === 'Color' && attr.value == selectedColor) &&
-                        v.attributes.some(attr => attr.attributeName === 'Size' && attr.value == selectedSize);
-                });
+            // Ngăn người dùng nhập ký tự vào ô số lượng và xử lý khi nhập số lượng trực tiếp
+            const quantityInput = document.getElementById('quantityInput');
+            quantityInput.addEventListener('input', function() {
+                // Chỉ cho phép nhập số
+                this.value = this.value.replace(/[^0-9]/g, '');
 
-                if (variant) {
-                    maxStock = variant.stock;
-                    document.querySelector('#quantityInput').setAttribute('data-max-stock', maxStock);
-                    document.querySelector('#quantityInput').value = 1; // Reset lại số lượng về 1
+                // Nếu đã chọn màu và size, kiểm tra số lượng
+                if (selectedColor && selectedSize) {
+                    if (parseInt(this.value) > maxStock) {
+                        showPopup(`Sản phẩm này trong kho chỉ còn ${maxStock} sản phẩm.`);
+                        this.value = maxStock; // Giới hạn lại giá trị về tối đa
+                    }
                 }
-            }
 
-            enableButtons(); // Bật lại các nút
-        }
-
-        // Xử lý logic tăng/giảm số lượng
-        document.querySelector('.qtyBtn.plus').addEventListener('click', function () {
-            let quantityInput = document.querySelector('#quantityInput');
-            let currentQty = parseInt(quantityInput.value);
-
-            // Chỉ tăng nếu số lượng hiện tại nhỏ hơn maxStock và đã chọn màu và size
-            if (currentQty < maxStock && selectedColor && selectedSize) {
-                quantityInput.value = currentQty + 1 - 1;
-            } else if (!selectedColor || !selectedSize) {
-                showPopup('Vui lòng chọn màu và size trước.');
-            } else {
-                showPopup('Sản phẩm này trong kho chỉ còn ' + maxStock + ' sản phẩm.');
-            }
-            enableButtons(); // Cập nhật trạng thái nút
-        });
-
-        document.querySelector('.qtyBtn.minus').addEventListener('click', function () {
-            let quantityInput = document.querySelector('#quantityInput');
-            let currentQty = parseInt(quantityInput.value);
-
-            // Chỉ giảm nếu số lượng hiện tại lớn hơn 1 và đã chọn màu và size
-            if (currentQty > 1 && selectedColor && selectedSize) {
-                quantityInput.value = currentQty - 1 + 1; // Giảm 1 đơn vị
-            } else if (!selectedColor || !selectedSize) {
-                showPopup('Vui lòng chọn màu và size trước.');
-            }
-            enableButtons(); // Cập nhật trạng thái nút
-        });
-
-        // Ngăn người dùng nhập ký tự vào ô số lượng và xử lý khi nhập số lượng trực tiếp
-        const quantityInput = document.getElementById('quantityInput');
-        quantityInput.addEventListener('input', function () {
-            // Chỉ cho phép nhập số
-            this.value = this.value.replace(/[^0-9]/g, '');
-
-            // Nếu đã chọn màu và size, kiểm tra số lượng
-            if (selectedColor && selectedSize) {
-                if (parseInt(this.value) > maxStock) {
-                    showPopup(`Sản phẩm này trong kho chỉ còn ${maxStock} sản phẩm.`);
-                    this.value = maxStock; // Giới hạn lại giá trị về tối đa
+                // Đảm bảo không giảm xuống dưới 1
+                if (parseInt(this.value) < 1) {
+                    this.value = 1;
                 }
-            }
 
-            // Đảm bảo không giảm xuống dưới 1
-            if (parseInt(this.value) < 1) {
-                this.value = 1;
-            }
+                enableButtons(); // Cập nhật trạng thái nút
+            });
 
-            enableButtons(); // Cập nhật trạng thái nút
-        });
-
-        // Hàm vô hiệu hóa nút
-        function disableButtons() {
-            document.querySelector('.qtyBtn.plus').classList.add('disabled');
-            document.querySelector('.qtyBtn.plus').setAttribute('disabled', 'disabled');
-            document.querySelector('.qtyBtn.minus').classList.add('disabled');
-            document.querySelector('.qtyBtn.minus').setAttribute('disabled', 'disabled');
-        }
-
-        // Hàm bật nút
-        function enableButtons() {
-            const currentQty = parseInt(quantityInput.value);
-
-            // Vô hiệu hóa nút "+" nếu số lượng đã đạt tối đa hoặc chưa chọn màu và size
-            if ((selectedColor && selectedSize && currentQty >= maxStock) || !selectedColor || !selectedSize) {
+            // Hàm vô hiệu hóa nút
+            function disableButtons() {
                 document.querySelector('.qtyBtn.plus').classList.add('disabled');
                 document.querySelector('.qtyBtn.plus').setAttribute('disabled', 'disabled');
-            } else {
-                document.querySelector('.qtyBtn.plus').classList.remove('disabled');
-                document.querySelector('.qtyBtn.plus').removeAttribute('disabled');
-            }
-
-            // Vô hiệu hóa nút "-" nếu số lượng bằng 1 hoặc chưa chọn màu và size
-            if ((currentQty <= 1) || !selectedColor || !selectedSize) {
                 document.querySelector('.qtyBtn.minus').classList.add('disabled');
                 document.querySelector('.qtyBtn.minus').setAttribute('disabled', 'disabled');
-            } else {
-                document.querySelector('.qtyBtn.minus').classList.remove('disabled');
-                document.querySelector('.qtyBtn.minus').removeAttribute('disabled');
             }
-        }
+
+            // Hàm bật nút
+            function enableButtons() {
+                const currentQty = parseInt(quantityInput.value);
+
+                // Vô hiệu hóa nút "+" nếu số lượng đã đạt tối đa hoặc chưa chọn màu và size
+                if ((selectedColor && selectedSize && currentQty >= maxStock) || !selectedColor || !selectedSize) {
+                    document.querySelector('.qtyBtn.plus').classList.add('disabled');
+                    document.querySelector('.qtyBtn.plus').setAttribute('disabled', 'disabled');
+                } else {
+                    document.querySelector('.qtyBtn.plus').classList.remove('disabled');
+                    document.querySelector('.qtyBtn.plus').removeAttribute('disabled');
+                }
+
+                // Vô hiệu hóa nút "-" nếu số lượng bằng 1 hoặc chưa chọn màu và size
+                if ((currentQty <= 1) || !selectedColor || !selectedSize) {
+                    document.querySelector('.qtyBtn.minus').classList.add('disabled');
+                    document.querySelector('.qtyBtn.minus').setAttribute('disabled', 'disabled');
+                } else {
+                    document.querySelector('.qtyBtn.minus').classList.remove('disabled');
+                    document.querySelector('.qtyBtn.minus').removeAttribute('disabled');
+                }
+            }
         });
     </script>
 
@@ -1414,29 +1441,28 @@
             modal.style.display = "flex"; // Hiển thị popup
 
             // Đóng popup khi bấm vào dấu 'x'
-            document.querySelector(".close").onclick = function () {
+            document.querySelector(".close").onclick = function() {
                 modal.style.display = 'none';
             };
 
             // Đóng popup khi bấm nút OK
-            document.querySelector(".btn").onclick = function () {
+            document.querySelector(".btn").onclick = function() {
                 modal.style.display = 'none';
             };
 
             // Đóng popup khi bấm ra ngoài
-            window.onclick = function (event) {
+            window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = 'none';
                 }
             };
         }
-
     </script>
 
     {{-- Select attribute --}}
     <script>
         // Khi tài liệu đã sẵn sàng
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const colorOptions = document.querySelectorAll('.color-option');
             const sizeOptions = document.querySelectorAll('.size-option');
             const colorSpan = document.querySelector('.label .slVariant'); // Span hiển thị màu
@@ -1444,10 +1470,10 @@
 
             // Xử lý chọn màu
             colorOptions.forEach(option => {
-                option.addEventListener('click', function () {
+                option.addEventListener('click', function() {
                     // Lấy mã màu từ data attribute
                     const colorCode = this.getAttribute('data-color-code');
-                    
+
                     // Cập nhật span hiển thị màu hoặc xóa nội dung nếu không chọn
                     colorSpan.textContent = colorCode || '';
                 });
@@ -1455,22 +1481,21 @@
 
             // Xử lý chọn kích cỡ
             sizeOptions.forEach(option => {
-                option.addEventListener('click', function () {
+                option.addEventListener('click', function() {
                     // Lấy kích cỡ từ data attribute
                     const sizeValue = this.querySelector('.swatchLbl').textContent.trim();
-                    
+
                     // Cập nhật span hiển thị kích cỡ hoặc xóa nội dung nếu không chọn
                     sizeSpan.textContent = sizeValue || '';
                 });
             });
         });
-
     </script>
 
     {{-- select image attribute color --}}
     <script>
         document.querySelectorAll('.color-option').forEach(option => {
-            option.addEventListener('click', function () {
+            option.addEventListener('click', function() {
                 const productImage = this.getAttribute('data-product-image');
                 const zoomImage = document.getElementById('zoompro');
 
@@ -1484,10 +1509,10 @@
     {{-- select price --}}
     <script>
         const variants = @json($variantDetails);
-    
+
         let selectedColor = null;
         let selectedSize = null;
-    
+
         // Lắng nghe sự kiện click trên màu
         document.querySelectorAll('.color-option').forEach(item => {
             item.addEventListener('click', function() {
@@ -1496,7 +1521,7 @@
                 updatePrice();
             });
         });
-    
+
         // Lắng nghe sự kiện click trên kích thước
         document.querySelectorAll('.size-option').forEach(item => {
             item.addEventListener('click', function() {
@@ -1506,8 +1531,8 @@
             });
         });
 
-        
-    
+
+
         // Hàm cập nhật giá
         function updatePrice() {
             if (selectedColor && selectedSize) {
@@ -1517,9 +1542,9 @@
 
                 const selectedVariant = variants.find(variant => {
                     console.log("Checking Variant ID: ", variant.id); // In ra ID biến thể
-                    
+
                     // Lấy danh sách thuộc tính
-                    const attributeValues = variant.attributeValues; 
+                    const attributeValues = variant.attributeValues;
                     console.log("Attribute Values: ", attributeValues); // In ra các thuộc tính
 
                     // Kiểm tra thuộc tính màu
@@ -1527,12 +1552,13 @@
                     console.log("Has Color: ", hasColor);
 
                     // Kiểm tra thuộc tính kích thước
-                    const hasSize = attributeValues.includes(selectedSize); // So sánh trực tiếp với giá trị kích thước
+                    const hasSize = attributeValues.includes(
+                    selectedSize); // So sánh trực tiếp với giá trị kích thước
                     console.log("Has Size: ", hasSize);
 
                     console.log(hasColor, hasSize);
-                    
-                    return hasColor && hasSize; 
+
+                    return hasColor && hasSize;
                 });
 
                 // Cập nhật giá hiển thị
@@ -1540,7 +1566,7 @@
                     const regularPriceElement = document.getElementById('regular-price');
                     const salePriceElement = document.getElementById('sale-price');
                     // console.log(selectedVariant);
-                    
+
                     // Cập nhật giá
                     regularPriceElement.textContent = `${numberFormat(selectedVariant.price_regular, 3, '.', 0)}đ`;
                     salePriceElement.textContent = `${numberFormat(selectedVariant.price_sale, 3, '.', 0)}đ`;
@@ -1562,7 +1588,7 @@
                         salePriceElement.style.display = 'none'; // Ẩn giá sale
                     } else {
                         // Ẩn giá sale nếu không có giảm giá
-                        salePriceElement.style.display = 'none'; 
+                        salePriceElement.style.display = 'none';
                         regularPriceElement.style.textDecoration = 'none'; // Không gạch giá gốc
                     }
                 } else {
@@ -1575,11 +1601,11 @@
             function numberFormat(number, decimals, dec_point, thousands_sep) {
                 // Chuyển đổi số thành chuỗi với số thập phân
                 number = parseFloat(number).toFixed(decimals);
-                
+
                 // Phân tách phần nguyên và phần thập phân
                 let parts = number.split('.');
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep); // Thêm dấu phân cách hàng nghìn
-                
+
                 // Kết hợp lại
                 return parts.join(dec_point);
             }
@@ -1589,24 +1615,27 @@
     {{-- xuong dòng --}}
     <script>
         function toggleContent(element) {
-            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
-        }    
-    </script>   
+            element.classList.toggle('expanded'); // Thêm/xóa class 'expanded' khi bấm
+        }
+    </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             // Hàm cuộn đến khung bình luận với độ trễ
             function scrollToComments() {
                 const commentBox = document.getElementById('ratings-comment');
                 if (commentBox) {
-                    commentBox.scrollIntoView({ behavior: 'smooth', block:'end'});
+                    commentBox.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'end'
+                    });
                 }
             }
 
             // Xử lý sự kiện khi chọn filter
             const filters = document.querySelectorAll('.rating-choose');
             filters.forEach(filter => {
-                filter.addEventListener('click', function () {
+                filter.addEventListener('click', function() {
                     // Lưu ý định cuộn vào sessionStorage
                     sessionStorage.setItem('scrollToComments', 'true');
                 });
@@ -1615,7 +1644,7 @@
             // Xử lý sự kiện phân trang
             const paginationLinks = document.querySelectorAll('.pagination a');
             paginationLinks.forEach(link => {
-                link.addEventListener('click', function () {
+                link.addEventListener('click', function() {
                     // Lưu ý định cuộn vào sessionStorage
                     sessionStorage.setItem('scrollToComments', 'true');
                 });
@@ -1628,5 +1657,4 @@
             }
         });
     </script>
-    
 @endsection
