@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Services\OrderService;
+use App\Events\OrderUpdated;
 use Illuminate\Http\Request;
+use App\Services\OrderService;
+use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
@@ -20,9 +21,11 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orders = $this->orderService->getOrder();
+        $status = $request->get('status');
+        $payment_status = $request->get('payment_status');
+        $orders = $this->orderService->getOrder($status, 6, $payment_status);
         // dd($orders);
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
@@ -76,7 +79,15 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+       try {
+        $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+       
+        broadcast(new OrderUpdated($order))->toOthers();
+        
+        return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
+       } catch (\Exception $e) {
+        return redirect()->back()->with('error', $e->getMessage());
+       }
 
         return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
