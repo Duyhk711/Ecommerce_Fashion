@@ -135,7 +135,7 @@
                         <h6 class="mb-0 body-font fw-500">Email address</h6>
                     </div>
                     <div class="right">
-                        <p>info@example.com</p>
+                        <p>{{ $currentUser->email }}</p>
                     </div>
                 </div>
                 <div class="details d-flex align-items-center mb-2">
@@ -143,17 +143,10 @@
                         <h6 class="mb-0 body-font fw-500">Phone number</h6>
                     </div>
                     <div class="right">
-                        <p>(+40) 123 456 7890</p>
+                        <p>{{ $currentUser->phone }}</p>
                     </div>
                 </div>
-                <div class="details d-flex align-items-center mb-2">
-                    <div class="left">
-                        <h6 class="mb-0 body-font fw-500">Password</h6>
-                    </div>
-                    <div class="right">
-                        <p>xxxxxxx</p>
-                    </div>
-                </div>
+              
             </div>
 
             <!-- Edit Login details Modal -->
