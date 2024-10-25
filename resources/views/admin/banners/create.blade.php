@@ -1,5 +1,9 @@
 @extends('layouts.backend')
 
+@section('title')
+Thêm mới banner
+@endsection
+
 @section('content')
 <!-- Hero -->
 <div class="bg-body-light">
