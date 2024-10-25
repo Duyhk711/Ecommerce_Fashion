@@ -669,9 +669,9 @@
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
-                                                            data-src="{{ asset('storage/products/' . $product->img_thumbnail) }}"
-                                                            src="{{ asset('storage/products/' . $product->img_thumbnail) }}"
-                                                            alt="Product" title="Product" width="625"
+                                                            src="{{ $product->img_thumbnail }}"
+                                                            data-zoom-image="{{ $product->img_thumbnail }}"
+                                                            alt="product" alt="Product" title="Product" width="625"
                                                             height="808" />
 
                                                         <!-- End Image -->
