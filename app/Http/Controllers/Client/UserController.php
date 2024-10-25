@@ -42,55 +42,55 @@ class UserController extends Controller
         $currentUser = $this->userService->getCurrentUser();
         return view('client.my-account.oder-tracking',compact('currentUser'));
     }
-    
+
 
     // favorite
     public function add($productId)
-    {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (!Auth::check()) {
-            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
-        }
-
-        $userId = Auth::id();
-
-        $favorite = Favorite::where('user_id', $userId)
-            ->where('product_id', $productId)
-            ->first();
-
-        if ($favorite) {
-            return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
-        }
-
-        Favorite::create([
-            'user_id' => $userId,
-            'product_id' => $productId,
-        ]);
-
-        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
+{
+    if (!Auth::check()) {
+        return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
     }
+
+    $userId = Auth::id();
+
+    $favorite = Favorite::where('user_id', $userId)
+        ->where('product_id', $productId)
+        ->first();
+
+    if ($favorite) {
+        return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
+    }
+
+    Favorite::create([
+        'user_id' => $userId,
+        'product_id' => $productId,
+    ]);
+
+    return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
+}
 
     // Phương thức xóa sản phẩm khỏi danh sách yêu thích
     public function remove($productId)
     {
         if (!Auth::check()) {
-            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để xóa sản phẩm khỏi danh sách yêu thích.'], 403);
+            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để xoá sản phẩm khỏi danh sách yêu thích.'], 403);
         }
-
+    
         $userId = Auth::id();
-
+    
         $favorite = Favorite::where('user_id', $userId)
             ->where('product_id', $productId)
             ->first();
-
+    
         if (!$favorite) {
             return response()->json(['success' => false, 'message' => 'Sản phẩm này không có trong danh sách yêu thích.']);
         }
-
+    
         $favorite->delete();
-
-        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được xóa khỏi danh sách yêu thích.']);
+    
+        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được xoá khỏi danh sách yêu thích.']);
     }
+    
 
     // Phương thức hiển thị danh sách yêu thích
     public function myWishlist()
@@ -221,6 +221,7 @@ class UserController extends Controller
 
     public function updateProfile(AuthRequest $request, $id)
     {
+
         $user = User::findOrFail($id);
         $data = $request->all();
         $this->userService->updateProfile($data, $user);

@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\OtpController;
-use App\Http\Controllers\SocialAuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\AuthenticationController;
 
 Route::get('/login', [AuthenticationController::class, 'login'])->name('login');
 Route::post('/login', [AuthenticationController::class, 'postLogin'])->name('postLogin');
@@ -28,3 +29,9 @@ Route::post('/verify-otp-email', [OtpController::class, 'verifyOtp'])->name('ver
 
 Route::post('/login-otp-phone', [OtpController::class, 'verifyOtpPhone'])->name('verify-otp-phone');
 
+Route::post('/send-otp-phone', [OtpController::class, 'sendOtpPhone'])->name('send.otp.phone');
+Route::post('/resend-otp-phone', [OtpController::class, 'resendOtpPhone'])->name('resend.otp.phone');
+Route::post('/verify-otp-phone', [OtpController::class, 'verifyOtpPhone'])->name('verifyOtpPhone');
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
