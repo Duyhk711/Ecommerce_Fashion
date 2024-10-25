@@ -105,6 +105,6 @@ Route::prefix('admin')
       Route::post('/send-message', [ChatsController::class, 'sendMessage'])->name('sendMessage');
       Route::post('/chat/mark-messages-as-read', [ChatsController::class, 'markMessagesAsRead'])->name('markMessagesAsRead');
       Route::get('/fetch-sorted-users', [ChatsController::class, 'fetchSortedUsers'])->name('fetchSortedUsers');
-      Route::get('/users/sorted', [ChatsController::class, 'getUsersSorted']);
+      Route::get('/get-sorted-users', [ChatsController::class, 'getSortedUsers'])->name('getSortedUsers');
     });
   });
