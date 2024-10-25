@@ -125,6 +125,7 @@ class CheckoutService
 
         $cartItem = [];
         $cartItem[$productVariantId] = [
+            'cart_item_id' => $productVariantId ?? null,
             'product_variant_id' => $productVariantId,
             'product_name' => $variant->product->name,
             'variant_attributes' => $attributes,
@@ -132,6 +133,7 @@ class CheckoutService
             'quantity' => $quantity,
             'stock' => $variant->stock,
             'price' => $price,
+            'created_at' => now(),
         ];
 
         return $cartItem;
