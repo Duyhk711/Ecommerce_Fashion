@@ -1,5 +1,9 @@
 @extends('layouts.backend')
 
+@section('title')
+Danh sách banner
+@endsection
+
 @section('css')
   <!-- Page JS Plugins CSS -->
   <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
