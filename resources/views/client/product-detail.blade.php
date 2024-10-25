@@ -271,7 +271,7 @@
                                     <i class="icon anm anm-paper-l-plane me-2"></i>
                                     <span>Delivery & Returns</span>
                                 </a>
-                                
+
                                 <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
                                     data-bs-target="#productInquiry_modal">
                                     <i class="icon anm anm-question-cil me-2"></i>
