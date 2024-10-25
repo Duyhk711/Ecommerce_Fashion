@@ -67,7 +67,7 @@
                 </div>
                 <div class="mb-4">
                   <label class="form-label" for="dm-profile-edit-email">Email Address</label>
-                  <input type="email" class="form-control" id="dm-profile-edit-email" name="email" placeholder="Enter your email.." value="{{ Auth::user()->email }}" disabled>
+                  <input type="email" class="form-control" id="dm-profile-edit-email" name="email" placeholder="Enter your email.." value="{{ Auth::user()->email }}">
                   @error('email')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
