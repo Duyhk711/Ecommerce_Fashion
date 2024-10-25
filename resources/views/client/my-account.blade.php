@@ -47,8 +47,6 @@
                                 <li class="nav-item">
                                     <a href="{{ route('logout') }}" class="nav-link">Đăng xuất</a>
                                 </li>
-                               
-                                
                             </ul>
                         </div>
 

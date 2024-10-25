@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
-use App\Services\StringeeService;
-use Illuminate\Support\Facades\Session;
-
 class OtpController extends Controller
 {
     protected $authService;
@@ -65,7 +62,7 @@ class OtpController extends Controller
             return redirect()->route('home')->with('success', 'Đăng nhập thành công!');
         } else {
             return redirect()->back()->with('error', 'Mã OTP không chính xác. Vui lòng thử lại.');
-        }   
+        }
     }
      // Hiển thị form đăng nhập OTP qua email
      public function loginOtpEmail()
