@@ -101,11 +101,12 @@
                             <p class="text-center fs-6 text-muted mb-3">Đăng nhập bằng:</p>
                             <div class="login-social d-flex justify-content-center">
                                 <a class="social-link otp-email rounded-5 d-flex justify-content-center" href="{{ route('login-otp-email') }}">
-                                    <i class="icon anm anm-envelope me-2"></i> OTP qua Email
+                                    <i class="icon anm anm-envelope me-2 mt-1"></i> OTP Email
                                 </a>
-                                <a class="social-link otp-phone rounded-5 d-flex justify-content-center" href=" ">
+                                {{-- <a class="social-link otp-phone rounded-5 d-flex justify-content-center" href=" {{route('login-otp-phone')}} ">
                                     <i class="icon anm anm-phone me-2"></i> OTP qua Điện thoại
-                                </a>
+                                </a> --}}
+                                <a class="social-link google rounded-5 d-flex justify-content-center" href="{{route('google.login')}} "><i class="icon anm anm-google-plus-g me-2 mt-1"></i> Google</a>
                             </div>
 
                             <div class="login-signup-text mt-4 mb-2 fs-6 text-center text-muted">Bạn chưa có tài khoản?

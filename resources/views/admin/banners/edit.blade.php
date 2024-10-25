@@ -1,4 +1,7 @@
 @extends('layouts.backend')
+@section('title')
+Cập nhật banner
+@endsection
 
 @section('content')
 <!-- Hero -->
@@ -11,7 +14,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ route('admin.banners.index') }}" style="color: inherit;">Banners</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Cập nhật banners</li>
+                    <li class="breadcrumb-item active" aria-current="page">Cập nhật banner</li>
                 </ol>
             </nav>
         </div>
