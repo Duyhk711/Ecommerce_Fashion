@@ -174,6 +174,7 @@
                                             <li class="swatch x-large available color-option"
                                                 style="background-color: {{ $color['colorCode'] }}; width: 40px; height: 40px; border-radius: 50%;"
                                                 data-color-code="{{ $color['colorCode'] }}"
+                                                data-color-name="{{ $color['value'] }}"
                                                 data-product-image="{{ $color['image'] }}"
                                                 data-attribute-value-id="{{ $color['value'] }}"
                                                 data-bs-toggle="tooltip" title="{{ $color['value'] }}">
@@ -181,7 +182,7 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                                
+
 
                                 <!-- Swatches Size -->
                                 <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
@@ -343,10 +344,10 @@
                                                 </div>
                                                 {{-- Lọc đánh giá --}}
                                                 <div class="d-flex mx-5 rating-filter">
-                                                    <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}" 
+                                                    <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
                                                     class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
                                                     @for ($i = 5; $i >= 1; $i--)
-                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}" 
+                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
                                                         class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
                                                             {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
                                                         </a>
@@ -355,18 +356,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                     <br>
                                     {{-- Danh sách bình luận --}}
                                     <div class="review-inner" id="comment-list">
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div style="height: 65px;" class="me-2">
-                                                    <img src="{{ $comment->user->avatar 
-                                                    ? asset('storage/' . $comment->user->avatar) 
-                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}" 
-                                                    alt="avatar" style="width: 65px" height="65px" class="rounded-circle blur-up lazyloaded me-4"/>
+                                                    <img src="{{ $comment->user->avatar
+                                                    ? asset('storage/' . $comment->user->avatar)
+                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
+                                                    alt="avatar" style="width: 65px; height:65px; object-fit: cover;"  class="rounded-circle blur-up lazyloaded me-4"/>
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div class="title-review d-flex align-items-center justify-content-between">
@@ -376,10 +377,10 @@
                                                                 @for ($i = 0; $i < 5; $i++)
                                                                     <i class="icon anm anm-star {{ $i < $comment->rating ? '' : 'anm-star-o' }}"></i>
                                                                 @endfor
-                                                            </span> | 
+                                                            </span> |
                                                             {{ $comment->created_at->format('d-m-Y H:i') }}
                                                         </div>
-                                                        
+
                                                     </div>
                                                     <p>{{ $comment->comment }}</p>
                                                 </div>
@@ -388,7 +389,7 @@
                                             <p>Chưa có bình luận nào.</p>
                                         @endforelse
                                     </div>
-                                
+
                                     {{-- Phân trang --}}
                                     <div id="pagination-container" class="pagination d-flex justify-content-end">
                                         {{ $comments->withQueryString()->links() }}
@@ -1013,7 +1014,7 @@
 @section('js')
     {{-- check người dùng đã chọn size hay màu chưa, và validate số lượng
      // chưa check số lượng của biến thể trong kho có đủ không --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let selectedColorId = null;
@@ -1381,29 +1382,6 @@
         });
     </script>
 
-    {{-- select sao --}}
-    <script>
-        // Bắt tất cả các label và radio inputs
-        const stars = document.querySelectorAll('.review-rating label');
-        const inputs = document.querySelectorAll('.review-rating input[type="radio"]');
-
-        // Lặp qua tất cả các label (sao)
-        stars.forEach((star, index) => {
-            // Thêm sự kiện click vào mỗi label (sao)
-            star.addEventListener('click', function() {
-                // Lấy giá trị của input tương ứng (lấy giá trị đánh giá)
-                inputs[index].checked = true;
-
-                // Reset lại tất cả các sao thành class `anm-star-o` (trắng)
-                stars.forEach(s => s.querySelector('i').className = 'icon anm anm-star-o');
-
-                // Tô vàng tất cả các sao từ vị trí hiện tại trở về trước (bao gồm sao vừa click)
-                for (let i = 0; i <= index; i++) {
-                    stars[i].querySelector('i').className = 'icon anm anm-star';
-                }
-            });
-        });
-    </script>
 
     {{-- popup --}}
     <script>
@@ -1446,10 +1424,10 @@
             colorOptions.forEach(option => {
                 option.addEventListener('click', function () {
                     // Lấy mã màu từ data attribute
-                    const colorCode = this.getAttribute('data-color-code');
-                    
+                    const colorName = this.getAttribute('data-color-name');
+
                     // Cập nhật span hiển thị màu hoặc xóa nội dung nếu không chọn
-                    colorSpan.textContent = colorCode || '';
+                    colorSpan.textContent = colorName || '';
                 });
             });
 
@@ -1458,7 +1436,7 @@
                 option.addEventListener('click', function () {
                     // Lấy kích cỡ từ data attribute
                     const sizeValue = this.querySelector('.swatchLbl').textContent.trim();
-                    
+
                     // Cập nhật span hiển thị kích cỡ hoặc xóa nội dung nếu không chọn
                     sizeSpan.textContent = sizeValue || '';
                 });
@@ -1484,10 +1462,10 @@
     {{-- select price --}}
     <script>
         const variants = @json($variantDetails);
-    
+
         let selectedColor = null;
         let selectedSize = null;
-    
+
         // Lắng nghe sự kiện click trên màu
         document.querySelectorAll('.color-option').forEach(item => {
             item.addEventListener('click', function() {
@@ -1496,7 +1474,7 @@
                 updatePrice();
             });
         });
-    
+
         // Lắng nghe sự kiện click trên kích thước
         document.querySelectorAll('.size-option').forEach(item => {
             item.addEventListener('click', function() {
@@ -1506,8 +1484,8 @@
             });
         });
 
-        
-    
+
+
         // Hàm cập nhật giá
         function updatePrice() {
             if (selectedColor && selectedSize) {
@@ -1517,9 +1495,9 @@
 
                 const selectedVariant = variants.find(variant => {
                     console.log("Checking Variant ID: ", variant.id); // In ra ID biến thể
-                    
+
                     // Lấy danh sách thuộc tính
-                    const attributeValues = variant.attributeValues; 
+                    const attributeValues = variant.attributeValues;
                     console.log("Attribute Values: ", attributeValues); // In ra các thuộc tính
 
                     // Kiểm tra thuộc tính màu
@@ -1531,8 +1509,8 @@
                     console.log("Has Size: ", hasSize);
 
                     console.log(hasColor, hasSize);
-                    
-                    return hasColor && hasSize; 
+
+                    return hasColor && hasSize;
                 });
 
                 // Cập nhật giá hiển thị
@@ -1540,7 +1518,7 @@
                     const regularPriceElement = document.getElementById('regular-price');
                     const salePriceElement = document.getElementById('sale-price');
                     // console.log(selectedVariant);
-                    
+
                     // Cập nhật giá
                     regularPriceElement.textContent = `${numberFormat(selectedVariant.price_regular, 3, '.', 0)}đ`;
                     salePriceElement.textContent = `${numberFormat(selectedVariant.price_sale, 3, '.', 0)}đ`;
@@ -1562,7 +1540,7 @@
                         salePriceElement.style.display = 'none'; // Ẩn giá sale
                     } else {
                         // Ẩn giá sale nếu không có giảm giá
-                        salePriceElement.style.display = 'none'; 
+                        salePriceElement.style.display = 'none';
                         regularPriceElement.style.textDecoration = 'none'; // Không gạch giá gốc
                     }
                 } else {
@@ -1575,11 +1553,11 @@
             function numberFormat(number, decimals, dec_point, thousands_sep) {
                 // Chuyển đổi số thành chuỗi với số thập phân
                 number = parseFloat(number).toFixed(decimals);
-                
+
                 // Phân tách phần nguyên và phần thập phân
                 let parts = number.split('.');
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep); // Thêm dấu phân cách hàng nghìn
-                
+
                 // Kết hợp lại
                 return parts.join(dec_point);
             }
@@ -1590,8 +1568,8 @@
     <script>
         function toggleContent(element) {
             element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
-        }    
-    </script>   
+        }
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -1628,5 +1606,5 @@
             }
         });
     </script>
-    
+
 @endsection

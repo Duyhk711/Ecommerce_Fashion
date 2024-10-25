@@ -2,17 +2,27 @@
 
 namespace App\Services;
 
-use App\Mail\OtpMail;
 use App\Models\User;
+use App\Mail\OtpMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class AuthService
 {
+    private $sidKey;
+    private $secretKey;
+
+    public function __construct()
+    {
+        $this->sidKey = env('STRINGEE_SID_KEY');
+        $this->secretKey = env('STRINGEE_SECRET_KEY');
+    }
+
     public function postLogin(Request $request)
     {
         $data = $request->only('email', 'password');
@@ -112,5 +122,19 @@ class AuthService
     public function getPhoneFromSession()
     {
         return Session::get('phone');
+    }
+
+    public function sendOtpPhone(string $phone, string $otp)
+    {
+        $url = 'https://api.stringee.com/v1/sms';
+
+        $response = Http::withBasicAuth($this->sidKey, $this->secretKey)
+            ->post($url, [
+                'from' => 'OTP phone', 
+                'to' => $phone,
+                'text' => "Mã OTP của bạn là: $otp",
+            ]);
+
+        return $response->successful();
     }
 }
