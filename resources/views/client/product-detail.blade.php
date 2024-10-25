@@ -190,6 +190,7 @@
                                             <li class="swatch x-large available color-option"
                                                 style="background-color: {{ $color['colorCode'] }}; width: 40px; height: 40px; border-radius: 50%;"
                                                 data-color-code="{{ $color['colorCode'] }}"
+                                                data-color-name="{{ $color['value'] }}"
                                                 data-product-image="{{ $color['image'] }}"
                                                 data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
                                                 title="{{ $color['value'] }}">
@@ -366,14 +367,11 @@
                                                 {{-- Lọc đánh giá --}}
                                                 <div class="d-flex mx-5 rating-filter">
                                                     <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
-                                                        class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất
-                                                        cả</a>
+                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
                                                     @for ($i = 5; $i >= 1; $i--)
                                                         <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                                            class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
-                                                            {{ $i }} <i
-                                                                class="icon anm anm-star text-warning"></i>
-                                                            ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
                                                         </a>
                                                     @endfor
                                                 </div>
@@ -388,11 +386,10 @@
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div style="height: 65px;" class="me-2">
-                                                    <img src="{{ $comment->user->avatar
-                                                        ? asset('storage/' . $comment->user->avatar)
-                                                        : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
-                                                        alt="avatar" style="width: 65px" height="65px"
-                                                        class="rounded-circle blur-up lazyloaded me-4" />
+                                                   <img src="{{ $comment->user->avatar
+                                                    ? asset('storage/' . $comment->user->avatar)
+                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
+                                                    alt="avatar" style="width: 65px; height:65px; object-fit: cover;"  class="rounded-circle blur-up lazyloaded me-4"/>
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div
@@ -1436,29 +1433,6 @@
         });
     </script>
 
-    {{-- select sao --}}
-    <script>
-        // Bắt tất cả các label và radio inputs
-        const stars = document.querySelectorAll('.review-rating label');
-        const inputs = document.querySelectorAll('.review-rating input[type="radio"]');
-
-        // Lặp qua tất cả các label (sao)
-        stars.forEach((star, index) => {
-            // Thêm sự kiện click vào mỗi label (sao)
-            star.addEventListener('click', function() {
-                // Lấy giá trị của input tương ứng (lấy giá trị đánh giá)
-                inputs[index].checked = true;
-
-                // Reset lại tất cả các sao thành class `anm-star-o` (trắng)
-                stars.forEach(s => s.querySelector('i').className = 'icon anm anm-star-o');
-
-                // Tô vàng tất cả các sao từ vị trí hiện tại trở về trước (bao gồm sao vừa click)
-                for (let i = 0; i <= index; i++) {
-                    stars[i].querySelector('i').className = 'icon anm anm-star';
-                }
-            });
-        });
-    </script>
 
     {{-- popup --}}
     <script>
@@ -1500,10 +1474,10 @@
             colorOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     // Lấy mã màu từ data attribute
+                    const colorName = this.getAttribute('data-color-name');
                     const colorCode = this.getAttribute('data-color-code');
-
                     // Cập nhật span hiển thị màu hoặc xóa nội dung nếu không chọn
-                    colorSpan.textContent = colorCode || '';
+                    colorSpan.textContent = colorName || '';
                 });
             });
 
@@ -1643,7 +1617,7 @@
     {{-- xuong dòng --}}
     <script>
         function toggleContent(element) {
-            element.classList.toggle('expanded'); // Thêm/xóa class 'expanded' khi bấm
+            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
         }
     </script>
 
