@@ -7,6 +7,8 @@ use App\Http\Requests\AttributeValueRequest;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Services\AttributeValueService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AttributeValueController extends Controller
 {
@@ -28,15 +30,25 @@ class AttributeValueController extends Controller
     public function create()
     {
         $attributes = Attribute::all();
+        // return view('admin.attribute_values.creat2', compact('attributes'));
         return view(self::PATH_VIEW . __FUNCTION__, compact('attributes'));
     }
 
-    public function store(AttributeValueRequest $request)
+    public function store(Request $request)
     {
-        $this->attributeValueService->createAttributeValues($request->validated());
-        // dd($request);
+        // Lấy dữ liệu từ request
+        $attributeIds = $request->input('attribute_id');
+        $values = $request->input('value');
+        $colorCodes = $request->input('color_code');
+
+        // Gọi service để lưu các giá trị thuộc tính
+        $this->attributeValueService->storeAttributeValues($attributeIds, $values, $colorCodes);
+
+        // Phản hồi lại nếu thành công
         return redirect()->route('admin.attribute_values.index')->with('success', 'Các giá trị thuộc tính đã được tạo thành công.');
     }
+
+
 
     public function edit(AttributeValue $attributeValue)
     {
@@ -52,7 +64,17 @@ class AttributeValueController extends Controller
 
     public function destroy(AttributeValue $attributeValue)
     {
-        $this->attributeValueService->deleteAttributeValue($attributeValue);
-        return redirect()->route('admin.attribute_values.index')->with('success', 'Xóa giá trị thuộc tính thành công.');
+        // Gọi hàm service để xoá
+        $deleted = $this->attributeValueService->deleteAttributeValue($attributeValue);
+
+        // Kiểm tra kết quả từ service
+        if (!$deleted) {
+            return redirect()->route('admin.attribute_values.index')
+                ->with('error', 'Không thể xóa vì đã có sản phẩm sử dụng giá trị và thuộc tính này.');
+        }
+
+        // Nếu xoá thành công
+        return redirect()->route('admin.attribute_values.index')
+            ->with('success', 'Xóa giá trị thuộc tính thành công.');
     }
 }

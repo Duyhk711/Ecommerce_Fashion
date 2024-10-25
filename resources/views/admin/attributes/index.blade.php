@@ -1,6 +1,8 @@
 <!-- resources/views/attributes/index.blade.php -->
 @extends('layouts.backend')
-
+@section('title')
+Danh sách thuộc tính
+@endsection
 @section('content')
 <!--  Hero -->
 <div class="bg-body-light">
