@@ -1,161 +1,18 @@
 @extends('layouts.backend')
-
+@section('title')
+Cập nhật sản phẩm
+@endsection
 @section('css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
-    <!-- Nhúng jQuery (nếu chưa có) -->
-    <style>
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        /* Bỏ nút tăng giảm cho Firefox */
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-
-        /* CSS cho mũi tên và hover cho nút chỉnh sửa hàng loạt */
-        .input-hover {
-            position: relative;
-            border: 1px solid #ced4da;
-            transition: border-color 0.3s ease;
-        }
-
-        /* Hover vào nút thì viền chuyển sang màu primary */
-        .input-hover:hover {
-            border-color: #007bff;
-            /* Màu primary */
-            cursor: pointer;
-        }
-
-        /* Thêm mũi tên (icon) bên cạnh nút */
-
-
-        /* Khi dropdown được mở (khi nhấn vào nút) thì mũi tên sẽ xoay lên */
-
-        /* Style cho phần dropdown nội dung */
-        .dropdown-content {
-            display: none;
-            /* Ẩn mặc định */
-            width: 100%;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        /* Hiển thị khi nút được kích hoạt */
-        .dropdown-content.show {
-            display: block;
-        }
-
-        /* CSS để loại bỏ viền chỉ cho nút delete-variant */
-        button.delete-variant {
-            border: none;
-            /* Xóa viền */
-            background: none;
-            /* Loại bỏ nền nếu cần */
-            padding: 0;
-            /* Loại bỏ padding nếu cần */
-            cursor: pointer;
-            /* Thêm biểu tượng con trỏ nếu muốn */
-        }
-
-        button.delete-variant:focus {
-            outline: none;
-            /* Xóa viền khi focus vào nút */
-        }
-
-        button.button-css {
-            color: #007bff
-        }
-
-        button.button-css:hover {
-            background-color: #eef0f7;
-            color: #007bff
-        }
-        .custom-file {
-    position: relative;
-    width: 100%;
-    height: 45px;
-    margin-bottom: 10px;
-}
-
-.custom-file input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.custom-file-label {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.custom-file-label::after {
-    content: "Chọn ảnh";
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    color: #6c757d;
-}
-
-.image-preview img {
-    max-width: 100px;
-    max-height: 100px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
-.image-preview .img-wrapper {
-    display: inline-block;
-    position: relative;
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
-.image-preview .delete-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 10px;
-}
-    </style>
     <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- image css -->
-    <link rel="stylesheet" href="{{ asset('admin/css/products/image-form.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('admin/css/products/image-form.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('admin/css/products/form-edit.css') }}">
 
-    {{-- <link rel="stylesheet" href="{{ asset('admin/js/plugins/simplemde/simplemde.min.css') }}"> --}}
+
 @endsection
 @section('content')
     <!-- Hero -->
@@ -177,22 +34,14 @@
     <!-- END Hero -->
     <div class="content fs-sm">
         {{-- Form bắt đầu --}}
-        <form action="{{ route('admin.products.update', $product->id) }}" method="post" enctype="multipart/form-data">
+        <form id="myForm" action="{{ route('admin.products.update', $product->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            {{-- @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif --}}
             <div class="block block-rounded">
                 <div class="block-content">
+                    <h2 class="content-heading pt-0">Cập nhật sản phẩm</h2>
                     <div class="row">
-                        <!-- Cột bên trái: Nhập thông tin sản phẩm -->
+                        <!-- Cột bên trái -->
                         <div class="col-8">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
@@ -351,15 +200,11 @@
                             <div class="form-group image-preview" id="sub-images-preview">
                                 <label class="form-label">Tải lên ảnh phụ:</label>
                                 <div class="custom-file">
-                                    <input type="file" name="images[]" class="form-control-file" id="sub-images-input" multiple>
+                                    <input type="file" name="images[]" class="form-control-file" id="sub-images-input" >
                                     <label class="custom-file-label" for="sub-images-input"></label>
+                                    <input type="hidden" id="deleted-images" name="deleted_images" value="[]">
                                 </div>
                                 <div id="sub-images-container">
-                                    {{-- {{Storage::url($product->img_thumbnail)}}    
-                                    {{Storage::url($product->image)}}     --}}
-                                    {{-- @foreach ($product->images as $item)
-                                    <img src="{{ Storage::url($item->image) }}" alt="">
-                                @endforeach --}}
 
                                 </div> <!-- Hiển thị các ảnh phụ -->
                             </div>
@@ -405,14 +250,17 @@
                                     <div class="col-md-2">
                                         <input type="number" id="bulk_price" class="form-control input-hover"
                                             placeholder="Giá bán lẻ">
+                                        <span class="error-message text-danger" id="error-bulk-price"></span>
                                     </div>
                                     <div class="col-md-2">
                                         <input type="number" id="bulk_price_sale" class="form-control input-hover"
                                             placeholder="Giá khuyến mãi">
+                                        <span class="error-message text-danger" id="error-bulk-price-sale"></span>
                                     </div>
                                     <div class="col-md-2">
                                         <input type="number" id="bulk_stock" class="form-control input-hover"
                                             placeholder="Số lượng">
+                                        <span class="error-message text-danger" id="error-bulk-stock"></span>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end">
                                         <button type="button" id="apply-bulk-edit"
@@ -420,6 +268,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="mt-3 mb-3">
                                 <button type="button" id="generate-variants-btn"
                                     class="btn btn-sm btn-alt button-css mb-3"><i class="fa fa-plus"></i>Tạo biến
@@ -448,12 +297,22 @@
                                             <input type="hidden" name="variant_ids[]" value="{{ $variant->id }}">
                                             <td>{{ $variant->size }}</td>
                                             <td>{{ $variant->color }}</td>
-                                            <td><input type="number" name="variant_prices[]" class="form-control"
-                                                    value="{{ $variant->price_regular }}" required></td>
-                                            <td><input type="number" name="variant_sale_prices[]" class="form-control"
-                                                    value="{{ $variant->price_sale }}"></td>
-                                            <td><input type="number" name="variant_stocks[]" class="form-control"
-                                                    value="{{ $variant->stock }}" required></td>
+                                            <td>
+                                                <input type="number" name="variant_prices[]" class="form-control"
+                                                    value="{{ $variant->price_regular }}" required>
+                                                <span class="error-message text-danger" id="error-variant-price-{{ $variant->id }}"></span>
+                                            </td>
+                                                
+                                            <td>
+                                                <input type="number" name="variant_sale_prices[]" class="form-control"
+                                                    value="{{ $variant->price_sale }}">
+                                                <span class="error-message text-danger" id="error-variant-sale-price-{{ $variant->id }}"></span>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="variant_stocks[]" class="form-control"
+                                                    value="{{ $variant->stock }}" required>
+                                                <span class="error-message text-danger" id="error-variant-stock-{{ $variant->id }}"></span>
+                                            </td>
                                             <td><input type="text" name="variant_skus[]" class="form-control"
                                                     value="{{ $variant->sku }}" readonly></td>
                                             <td>
@@ -487,13 +346,11 @@
     </div>
 @endsection
 @section('js')
-    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Nhúng Summernote JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script> <!-- Thêm dòng này -->
-    {{-- <script src="{{ asset('admin/js/ui/product-ui/preview-image.js') }}"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script> 
 
     {{-- SELECT2 --}}
     <script>
@@ -514,6 +371,7 @@
         });
     </script>
 
+    {{-- DESCRIPTIONS EDITOR --}}
     <script>
         $(document).ready(function() {
             const maxLength = 200;
@@ -529,10 +387,7 @@
         });
     </script>
 
-    {{-- <script>
-        const csrfToken = "{{ csrf_token() }}";
-    </script> --}}
-
+    {{-- SELECT2 ATTRIBUTE --}}
     <script>
         $(document).ready(function() {
             // Biến chứa danh sách các thuộc tính đã được sử dụng và các giá trị của chúng
@@ -719,6 +574,17 @@
                         return;
                     }
 
+                    // Tính toán tổng số tổ hợp
+                    let totalCombinations = attributesData.reduce((total, attr) => total * attr.values.length, 1);
+
+                    // Kiểm tra giới hạn 50 biến thể
+                    if (totalCombinations > 50) {
+                        const confirmContinue = confirm('Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?');
+                        if (!confirmContinue) {
+                            return; // Hủy tạo biến thể nếu người dùng không đồng ý
+                        }
+                    }
+                    
                     let combinations = generateCombinations(attributesData.map(attr => attr
                     .values));
 
@@ -755,9 +621,9 @@
                 <tr class="variant variant-new" data-size="${size}" data-color="${color}">
                    <td>${size}</td>
                     <td>${color}</td>
-                    <td><input type="number" name="new_variant_prices[]" class="form-control variant-input" required></td>
-                    <td><input type="number" name="new_variant_sale_prices[]" class="form-control variant-input"></td>
-                    <td><input type="number" name="new_variant_stocks[]" class="form-control variant-input" required></td>
+                    <td><input type="number" name="new_variant_prices[]" class="form-control variant-input" required>  <span class="error-message text-danger"></span></td>
+                    <td><input type="number" name="new_variant_sale_prices[]" class="form-control variant-input">  <span class="error-message text-danger"></span></td>
+                    <td><input type="number" name="new_variant_stocks[]" class="form-control variant-input" required>  <span class="error-message text-danger"></span></td>
                     <td><input type="text" name="new_variant_skus[]" class="form-control variant-input" value="${sku}" readonly></td>
                     <td>
                         <div class="custom-file">
@@ -841,51 +707,6 @@
                 $('.dropdown-content').slideToggle();
             });
 
-            // Chỉnh sửa hàng loạt giá và số lượng
-            $('#apply-bulk-edit').on('click', function() {
-                const bulkPrice = $('#bulk_price').val();
-                const bulkPriceSale = $('#bulk_price_sale').val();
-                const bulkStock = $('#bulk_stock').val();
-                const applyTo = $('#apply_to').val(); // Lấy giá trị của tùy chọn áp dụng
-
-                if (applyTo === 'all') {
-                    // Áp dụng cho tất cả các biến thể
-                    $('.variant').each(function() {
-                        if (bulkPrice) {
-                            $(this).find(
-                                'input[name="variant_prices[]"], input[name="new_variant_prices[]"]'
-                                ).val(bulkPrice);
-                        }
-                        if (bulkPriceSale) {
-                            $(this).find(
-                                'input[name="variant_sale_prices[]"], input[name="new_variant_sale_prices[]"]'
-                                ).val(bulkPriceSale);
-                        }
-                        if (bulkStock) {
-                            $(this).find(
-                                'input[name="variant_stocks[]"], input[name="new_variant_stocks[]"]'
-                                ).val(bulkStock);
-                        }
-                    });
-                } else if (applyTo === 'new') {
-                    // Áp dụng cho chỉ biến thể mới
-                    $('.variant-new').each(function() {
-                        if (bulkPrice) {
-                            $(this).find('input[name="new_variant_prices[]"]').val(bulkPrice);
-                        }
-                        if (bulkPriceSale) {
-                            $(this).find('input[name="new_variant_sale_prices[]"]').val(
-                                bulkPriceSale);
-                        }
-                        if (bulkStock) {
-                            $(this).find('input[name="new_variant_stocks[]"]').val(bulkStock);
-                        }
-                    });
-                }
-            });
-
-
-
 
             // Xóa biến thể
             $(document).ready(function() {
@@ -913,223 +734,138 @@
         });
     </script>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Lắng nghe sự kiện nhập (input) trên từng trường
-            document.getElementById('name').addEventListener('input', function() {
-                validateName();
-            });
-
-            document.getElementById('price_regular').addEventListener('input', function() {
-                validatePriceRegular();
-                validatePriceSale(); // Kiểm tra lại giá sale nếu có thay đổi giá gốc
-            });
-
-            document.getElementById('price_sale').addEventListener('input', function() {
-                validatePriceSale();
-            });
-
-            document.getElementById('description').addEventListener('input', function() {
-                validateDescription();
-            });
-
-            document.getElementById('catalogue-select').addEventListener('change', function() {
-                validateCatalogue();
-            });
-
-            // Các hàm kiểm tra từng trường
-
-            function validateName() {
-                const name = document.getElementById('name');
-                clearError(name);
-                if (!name.value.trim()) {
-                    showError(name, 'Tên sản phẩm không được để trống');
-                }
-            }
-
-            function validatePriceRegular() {
-                const priceRegular = document.getElementById('price_regular');
-                clearError(priceRegular);
-                if (!priceRegular.value.trim() || isNaN(priceRegular.value) || Number(priceRegular.value) <= 0) {
-                    showError(priceRegular, 'Giá gốc phải là số và lớn hơn 0');
-                }
-            }
-
-            function validatePriceSale() {
-                const priceRegular = document.getElementById('price_regular');
-                const priceSale = document.getElementById('price_sale');
-                clearError(priceSale);
-                if (priceSale.value.trim()) {
-                    if (isNaN(priceSale.value) || Number(priceSale.value) >= Number(priceRegular.value)) {
-                        showError(priceSale, 'Giá khuyến mãi phải nhỏ hơn giá gốc');
-                    }
-                }
-            }
-
-            function validateDescription() {
-                const description = document.getElementById('description');
-                clearError(description);
-                if (!description.value.trim()) {
-                    showError(description, 'Mô tả không được để trống');
-                }
-            }
-
-            function validateCatalogue() {
-                const catalogueSelect = document.getElementById('catalogue-select');
-                clearError(catalogueSelect);
-                if (catalogueSelect.value === 'Chọn danh mục') {
-                    showError(catalogueSelect, 'Vui lòng chọn danh mục');
-                }
-            }
-
-            // Hàm hiển thị lỗi
-            function showError(input, message) {
-                const error = document.createElement('div');
-                error.className = 'invalid-feedback';
-                error.style.color = 'red';
-                error.textContent = message;
-                input.classList.add('is-invalid');
-                input.parentElement.appendChild(error);
-            }
-
-            // Hàm xóa lỗi cũ
-            function clearError(input) {
-                const error = input.parentElement.querySelector('.invalid-feedback');
-                if (error) {
-                    error.remove();
-                }
-                input.classList.remove('is-invalid');
-            }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#editor').summernote({
-                height: 300 // Chiều cao của trình soạn thảo
-            });
-        });
-    </script>
-    
+    {{-- TEXT EDITOR --}}
     <script>
             $(document).ready(function() {
             $('#editor').summernote({
-                height: 300 // Chiều cao của trình soạn thảo
+                height: 300 
             });
         });
     </script>
+
+    {{-- PREVIEW IMAGE --}}
     @php
-    
-    // Lấy các URL của ảnh phụ từ $product->images và kiểm tra nếu không có ảnh thì trả về mảng rỗng
-    $subImages = $product->images->map(function($item) {
-        return Storage::url($item->image);
-    })->toArray();
-@endphp
-  <script>
-    
-    // URL của ảnh chính
-    const mainImageURL = "{{ Storage::url($product->img_thumbnail) }}";
-    
-    // URL của ảnh phụ, giả sử $product->image là một mảng JSON chứa các đường dẫn
-    const subImagesURLs = @json($subImages);
+        $subImages = $product->images->map(function($item) {
+            return [
+                'id' => $item->id,
+                'url' => Storage::url($item->image),
+            ];
+        })->toArray();
+    @endphp
 
-
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-    const mainImageContainer = document.getElementById('main-image-container');
-    const subImagesContainer = document.getElementById('sub-images-container');
+        // URL của ảnh chính
+        const mainImageURL = "{{ Storage::url($product->img_thumbnail) }}";
+        // Mảng chứa các URL và ID của ảnh phụ
+        const subImagesURLs = @json($subImages);
 
-    // Hàm hiển thị ảnh chính từ DB
-    function loadMainImageFromDB(url, container) {
-        if (url) {
-            const imgElement = document.createElement('img');
-            imgElement.src = url;
-            imgElement.style.maxWidth = '200px';
-            container.appendChild(imgElement);
-        }
-    }
-
-    // Hàm hiển thị nhiều ảnh phụ từ DB
-    function loadSubImagesFromDB(urls, container) {
-        urls.forEach(url => {
-            const imgWrapper = document.createElement('div');
-            imgWrapper.classList.add('img-wrapper');
-
-            const imgElement = document.createElement('img');
-            imgElement.src = url;
-            imgElement.style.maxWidth = '100px'; // Kích thước ảnh phụ
-
-            // Nút xóa
-            const deleteBtn = document.createElement('button');
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.textContent = 'x';
-            deleteBtn.addEventListener('click', function() {
-                imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
-            });
-
-            imgWrapper.appendChild(imgElement);
-            imgWrapper.appendChild(deleteBtn);
-            container.appendChild(imgWrapper);
-        });
-    }
-
-    // Gọi các hàm hiển thị ảnh từ DB khi trang load
-    loadMainImageFromDB(mainImageURL, mainImageContainer);
-    loadSubImagesFromDB(subImagesURLs, subImagesContainer);
-
-    // Xử lý khi tải ảnh chính từ input
-    const mainImageInput = document.getElementById('main-image-input');
-    mainImageInput.addEventListener('change', function() {
-        displayImage(this, mainImageContainer);
-    });
-
-    // Xử lý khi tải ảnh phụ từ input
-    const subImagesInput = document.getElementById('sub-images-input');
-    const subImageList = []; // Danh sách lưu các ảnh phụ đã chọn
-    subImagesInput.addEventListener('change', function() {
-        displayMultipleImages(this, subImagesContainer, subImageList);
-    });
-
-    // Hàm hiển thị ảnh chính khi chọn từ input
-    function displayImage(input, container) {
-        container.innerHTML = ''; // Xóa nội dung cũ nếu có
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
+        // Các container để hiển thị ảnh
+        const mainImageContainer = document.getElementById('main-image-container');
+        const subImagesContainer = document.getElementById('sub-images-container');
+        
+        const deletedImages = [];  // Mảng lưu các ID của ảnh phụ bị xóa
+        const deletedImagesInput = document.getElementById('deleted-images');
+        // Hàm hiển thị ảnh chính từ DB
+        function loadMainImageFromDB(url, container) {
+            if (url) {
+                container.innerHTML = ''; // Xóa nội dung cũ nếu có
                 const imgElement = document.createElement('img');
-                imgElement.src = e.target.result;
-                imgElement.style.maxWidth = '200px'; // Kích thước ảnh
+                imgElement.src = url;
+                imgElement.style.maxWidth = '200px'; // Kích thước ảnh chính
                 container.appendChild(imgElement);
-            };
-            reader.readAsDataURL(input.files[0]);
+            }
         }
-    }
 
-    // Hiển thị nhiều ảnh phụ mà không làm mất ảnh trước đó
-    function displayMultipleImages(input, container, imageList) {
-        Array.from(input.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
+        // Hàm hiển thị nhiều ảnh phụ từ DB
+        function loadSubImagesFromDB(images, container) {
+            container.innerHTML = ''; // Xóa ảnh cũ trong container nếu có
+            images.forEach(image => {
                 const imgWrapper = document.createElement('div');
                 imgWrapper.classList.add('img-wrapper');
 
                 const imgElement = document.createElement('img');
-                imgElement.src = e.target.result;
+                imgElement.src = image.url;  // URL của ảnh
+                imgElement.style.maxWidth = '100px'; // Kích thước ảnh phụ
 
                 // Nút xóa
                 const deleteBtn = document.createElement('button');
                 deleteBtn.classList.add('delete-btn');
                 deleteBtn.textContent = 'x';
                 deleteBtn.addEventListener('click', function() {
-                    imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
+                    imgWrapper.remove(); // Xóa ảnh khỏi giao diện
+                    deletedImages.push(image.id); // Thêm ID của ảnh vào mảng deletedImages
+                    deletedImagesInput.value = JSON.stringify(deletedImages);
                 });
 
                 imgWrapper.appendChild(imgElement);
                 imgWrapper.appendChild(deleteBtn);
                 container.appendChild(imgWrapper);
-            };
-            reader.readAsDataURL(file);
+            });
+        }
+
+        // Hiển thị ảnh từ DB khi trang load
+        loadMainImageFromDB(mainImageURL, mainImageContainer);
+        loadSubImagesFromDB(subImagesURLs, subImagesContainer);
+
+        // Xử lý khi tải ảnh chính từ input
+        const mainImageInput = document.getElementById('main-image-input');
+        mainImageInput.addEventListener('change', function() {
+            displayImage(this, mainImageContainer);
         });
-    }
-});
+
+        // Hàm hiển thị ảnh chính khi chọn từ input
+        function displayImage(input, container) {
+            container.innerHTML = ''; // Xóa nội dung cũ nếu có
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.style.maxWidth = '200px'; // Kích thước ảnh chính
+                    container.appendChild(imgElement);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Hiển thị nhiều ảnh phụ mà không làm mất ảnh trước đó
+        const subImagesInput = document.getElementById('sub-images-input');
+        const subImageList = []; // Danh sách lưu các ảnh phụ đã chọn
+        subImagesInput.addEventListener('change', function() {
+            displayMultipleImages(this, subImagesContainer, subImageList);
+        });
+
+        // Hàm hiển thị nhiều ảnh phụ khi chọn từ input
+        function displayMultipleImages(input, container, imageList) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgWrapper = document.createElement('div');
+                    imgWrapper.classList.add('img-wrapper');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.style.maxWidth = '100px'; // Kích thước ảnh phụ
+
+                    // Nút xóa
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.classList.add('delete-btn');
+                    deleteBtn.textContent = 'x';
+                    deleteBtn.addEventListener('click', function() {
+                        imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
+                    });
+
+                    imgWrapper.appendChild(imgElement);
+                    imgWrapper.appendChild(deleteBtn);
+                    container.appendChild(imgWrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    });
 </script>
+
+{{-- validate variant --}}
+<script src="{{asset('admin/js/ui/validations/product-edit.js')}}"></script>
 @endsection

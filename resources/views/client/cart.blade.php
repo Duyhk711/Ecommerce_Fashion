@@ -142,7 +142,7 @@
                                             </td>
                                             <td class="cart-price cart-flex-item text-center small-hide">
                                                 <span class="money"
-                                                    data-price="0.00">{{ isset($item['price']) * 1000 ? number_format($item['price'] * 1000, 0, ',', '.') . 'đ' : 'Giá không xác định' }}</span>
+                                                    data-price="0.00">{{ isset($item['price']) * 1000 ? number_format($item['price'] * 1000, 0, ',', '.') . '₫' : 'Giá không xác định' }}</span>
                                             </td>
                                             <td class="cart-update-wrapper cart-flex-item text-end text-md-center">
                                                 <div class="cart-qty d-flex justify-content-end justify-content-md-center">
@@ -231,7 +231,7 @@
                                     <span
                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
                                             class="money" id="totalPrice"
-                                            style="color: red; font-weight: 500">0đ</b></span>
+                                            style="color: red; font-weight: 500">0₫</b></span>
                                 </div>
 
                                 <p class="cart-shipping mt-3"></p>

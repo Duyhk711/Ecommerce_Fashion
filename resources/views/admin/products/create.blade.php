@@ -1,5 +1,9 @@
 @extends('layouts.backend')
 
+@section('title')
+Thêm mới sản phẩm
+@endsection
+
 @section('css')
     <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -180,7 +184,7 @@
         {{-- Form bắt đầu --}}
         <form id="myForm" action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
             @csrf
-            @if ($errors->any())
+            {{-- @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
                         @foreach ($errors->all() as $error)
@@ -188,9 +192,10 @@
                         @endforeach
                     </ul>
                 </div>
-            @endif
+            @endif --}}
             <div class="block block-rounded">
                 <div class="block-content">
+                    <h2 class="content-heading pt-0">Thêm mới sản phẩm</h2>
                     <div class="row">
                         <!-- Cột bên trái: Nhập thông tin sản phẩm -->
                         <div class="col-8">
@@ -624,6 +629,16 @@
                     alert('Vui lòng chọn ít nhất một thuộc tính và giá trị.');
                     return;
                 }
+                // Tính toán tổng số tổ hợp
+                    let totalCombinations = attributesData.reduce((total, attr) => total * attr.values.length, 1);
+
+                // Kiểm tra giới hạn 50 biến thể
+                if (totalCombinations > 50) {
+                    const confirmContinue = confirm('Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?');
+                    if (!confirmContinue) {
+                        return; // Hủy tạo biến thể nếu người dùng không đồng ý
+                    }
+                }
 
                 let combinations = generateCombinations(attributesData.map(attr => attr.values));
 
@@ -646,6 +661,7 @@
                     });
 
                     // Hiển thị các giá trị thuộc tính đã được chọn (kích cỡ và màu sắc)
+                    // <td>${index + 1}</td> 
                     let variantHtml = `
                     <tr class="variant">
                         <td>${getAttributeValueName(attributeNames[0].attribute_id, attributeNames[0].attribute_value_id)}</td>
