@@ -16,6 +16,11 @@ class VouchersController extends Controller
         // Bạn có thể thêm logic xử lý để lấy dữ liệu voucher từ database nếu cần
         return view('client.my-account.vouchers');
     }
+    public function index()
+    {
+        $vouchers = Voucher::all(); // Lấy tất cả các voucher từ database
+        return view('client.vouchers', compact('vouchers')); // Trả về view với biến vouchers
+    }
 
     public function save(Request $request)
     {

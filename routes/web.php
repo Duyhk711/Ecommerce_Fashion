@@ -62,7 +62,7 @@ Route::view('/contact', 'client.contact')->name('contact');
 Route::view('/support', 'client.support')->name('support');
 Route::view('/barter', 'client.barter')->name('barter');
 Route::view('/blog', 'client.blog')->name('blog');
-Route::view('/vouchers', 'client.vouchers')->name('vouchers');
+Route::get('/vouchers', [VouchersController::class, 'index'])->name('vouchers.index');
 
 // account
 Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');

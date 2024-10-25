@@ -94,21 +94,23 @@ class HomeService
         $bestsaleProducts = Product::select(
             'products.id',
             'products.name',
+            'products.slug',
             'products.price_regular',
             'products.price_sale',
             'products.img_thumbnail',
             DB::raw('SUM(order_items.quantity) as total_quantity')
         )
-            ->join('order_items', 'products.sku', '=', 'order_items.product_sku')
-            ->groupBy('products.id', 'products.name', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
-            ->orderBy('total_quantity', 'desc')
-            ->where('products.is_active', 1)
-            ->take(12)
-            ->get();
-
-
+        ->leftJoin('order_items', 'products.sku', '=', 'order_items.product_sku') // Sử dụng LEFT JOIN
+        ->groupBy('products.id', 'products.name', 'products.slug', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
+        ->orderBy('total_quantity', 'desc')
+        ->where('products.is_active', 1)
+        ->take(8)
+        ->with(['catalogue', 'variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue']) // Eager load quan hệ liên quan
+        ->get();
+    
         return $bestsaleProducts;
     }
+    
  // voucher
     public function getAllVouchers()
 {

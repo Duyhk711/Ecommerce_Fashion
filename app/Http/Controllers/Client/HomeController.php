@@ -31,6 +31,7 @@ class HomeController extends Controller
         // dd($banners);
         return view('client.home', compact('products', 'banners', 'catalogues', 'newProducts', 'saleProduct', 'bestsaleProducts', 'vouchers'));
     }
+    
 
     // Tìm kiếm sản phẩm theo tên
     public function search(Request $request)
