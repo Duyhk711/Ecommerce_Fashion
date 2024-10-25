@@ -322,14 +322,14 @@
                                                 class="product-img rounded-0">
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
-                                                    data-src="{{ $product->img_thumbnail }}"
-                                                    src="{{ $product->img_thumbnail }}" alt="Product" title="Product"
+                                                    data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product" title="Product"
                                                     width="625" height="808" />
                                                 <!-- End Image -->
                                                 <!-- Hover Image -->
                                                 <img class="hover rounded-0 blur-up lazyload"
-                                                    data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                    src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                    data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                    src="{{ Storage::url($product->img_thumbnail) }}"
                                                     alt="Product" title="Product" width="625" height="808" />
                                                 <!-- End Hover Image -->
                                             </a>
@@ -338,7 +338,7 @@
                                             <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
                                             <!-- End Product label -->
                                             <!--Product Button-->
-                                            <div class="button-set style1">
+                                            {{-- <div class="button-set style1">
                                                 <!--Cart Button-->
                                                 <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
                                                     data-bs-toggle="modal" data-bs-target="#addtocart_modal">
@@ -363,7 +363,7 @@
                                                     title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
                                                         class="text">Add To Wishlist</span></a>
                                                 <!--End Wishlist Button-->
-                                            </div>
+                                            </div> --}}
                                             <!--End Product Button-->
                                         </div>
                                         <!-- End Product Image -->
