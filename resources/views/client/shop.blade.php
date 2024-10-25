@@ -318,7 +318,8 @@
                                         <!-- Start Product Image -->
                                         <div class="product-image">
                                             <!-- Start Product Image -->
-                                            <a href="product-layout1.html" class="product-img rounded-0">
+                                            <a href="{{ route('productDetail', $product->slug) }}"
+                                                class="product-img rounded-0">
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
                                                     data-src="{{ $product->img_thumbnail }}"
@@ -373,12 +374,13 @@
                                             <!--End Product Vendor-->
                                             <!-- Product Name -->
                                             <div class="product-name">
-                                                <a href="product-layout1.html">{{ $product->name }}</a>
+                                                <a
+                                                    href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
                                             </div>
                                             <!-- End Product Name -->
                                             <!-- Product Price -->
                                             <div class="product-price">
-                                                <span class="price">{{ $product->price_regular }}đ</span>
+                                                <span class="price">{{ $product->price_sale }}đ</span>
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
@@ -986,7 +988,7 @@
                 selectedCategories.push(item.getAttribute('data-id'));
             });
 
-            let priceRange = document.getElementById('priceRange').value;
+            let priceRange = document.getElementById('amount').value;
 
             let selectedColors = [];
             document.querySelectorAll('.filter-color .swatch.selected').forEach(color => {
