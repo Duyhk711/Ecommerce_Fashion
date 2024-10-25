@@ -4,7 +4,7 @@
     <!-- Page Content -->
     <div class="content">
         <!-- Quick Actions -->
-        <div class="row items-push">
+        {{-- <div class="row items-push">
             <div class="col-6">
                 <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
                     <div class="block-content py-5">
@@ -29,7 +29,7 @@
                     </div>
                 </a>
             </div>
-        </div>
+        </div> --}}
         <!-- END Quick Actions -->
 
         <!-- User Info -->
@@ -37,35 +37,37 @@
             <div class="block-content text-center">
                 <div class="py-4">
                     <div class="mb-3">
-                        <img class="img-avatar img-avatar96" src="assets/media/avatars/avatar15.jpg" alt="">
+                        <img class="img-avatar img-avatar96"
+                            src="{{ $user->avatar != '' ? asset('storage/' . $user->avatar) : asset('admin/media/avatars/avatar3.jpg') }}"
+                            alt="">
                     </div>
                     <h1 class="fs-lg mb-0">
-                        John Parker
+                        {{ $user->name }}
                     </h1>
                     <p class="text-muted">
-                        <i class="fa fa-award text-warning me-1"></i>
-                        Premium Customer
+                        {{ $user->email }}
                     </p>
                 </div>
             </div>
             <div class="block-content bg-body-light text-center">
                 <div class="row items-push text-uppercase">
-                    <div class="col-6 col-md-3">
-                        <div class="fw-semibold text-dark mb-1">Orders</div>
-                        <a class="link-fx fs-3" href="javascript:void(0)">5</a>
+                    {{-- <div class="col-6 col-md-3">
+                      <div class="fw-semibold text-dark mb-1">Giỏ hàng</div>
+                      <a class="link-fx fs-3" href="javascript:void(0)">4</a>
+                  </div> --}}
+                    <div class="col-6 col-md-6">
+                        <div class="fw-semibold text-dark mb-1">Tổng đơn đặt hàng</div>
+                        <a class="link-fx fs-3" href="javascript:void(0)">{{ $totalOrders }}</a>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <div class="fw-semibold text-dark mb-1">Orders Value</div>
-                        <a class="link-fx fs-3" href="javascript:void(0)">$5.680,00</a>
+                    <div class="col-6 col-md-6">
+                        <div class="fw-semibold text-dark mb-1">Tổng giá trị các đơn hàng</div>
+                        <a class="link-fx fs-3" href="javascript:void(0)">{{ number_format($totalOrderValue, 3, '.', 0) }}
+                            VND</a>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <div class="fw-semibold text-dark mb-1">Cart</div>
-                        <a class="link-fx fs-3" href="javascript:void(0)">4</a>
-                    </div>
-                    <div class="col-6 col-md-3">
+                    {{-- <div class="col-6 col-md-3">
                         <div class="fw-semibold text-dark mb-1">Referred</div>
                         <a class="link-fx fs-3" href="javascript:void(0)">3</a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -246,142 +248,76 @@
         <!-- Past Orders -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Past Orders (5)</h3>
+                <h3 class="block-title">Các đơn hàng ({{ $totalOrders }})</h3>
             </div>
             <div class="block-content">
                 <div class="table-responsive">
-                    <table class="table table-borderless table-striped table-vcenter">
+                    <table class="table table-hover align-middle table-striped  js-dataTable-full">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 100px;">ID</th>
-                                <th class="d-none d-sm-table-cell text-center">Submitted</th>
-                                <th class="d-none d-md-table-cell text-center">Products</th>
-                                <th>Status</th>
-                                <th class="d-none d-sm-table-cell text-end">Value</th>
+                                <th class="text-center " style="width: 100px;">Mã đơn</th>
+                                <th class="d-none d-sm-table-cell text-center">Ngày đặt</th>
+                                <th class="d-sm-table-cell">Trạng thái</th>
+                                <th class="d-none d-xl-table-cell text-center">Số lượng</th>
+                                <th class="d-none d-sm-table-cell text-end">Tổng</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-center fs-sm">
-                                    <a class="fw-semibold" href="be_pages_ecom_order.html">
-                                        ORD.0625 </a>
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center fs-sm">14/06/2019</td>
-                                <td class="d-none d-md-table-cell text-center fs-sm">
-                                    <a class="fw-semibold" href="javascript:void(0)">9</a>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Delivered</span>
-                                </td>
-                                <td class="text-end d-none d-sm-table-cell fs-sm">
-                                    <strong>$204,00</strong>
-                                </td>
-                                <td class="text-center fs-sm">
-                                    <a class="btn btn-sm btn-alt-secondary" href="be_pages_ecom_product_edit.html">
-                                        <i class="fa fa-fw fa-eye"></i>
-                                    </a>
-                                    <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
-                                        <i class="fa fa-fw fa-times text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center fs-sm">
-                                    <a class="fw-semibold" href="be_pages_ecom_order.html">
-                                        ORD.0624 </a>
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center fs-sm">12/12/2019</td>
-                                <td class="d-none d-md-table-cell text-center fs-sm">
-                                    <a class="fw-semibold" href="javascript:void(0)">4</a>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Delivered</span>
-                                </td>
-                                <td class="text-end d-none d-sm-table-cell fs-sm">
-                                    <strong>$298,00</strong>
-                                </td>
-                                <td class="text-center fs-sm">
-                                    <a class="btn btn-sm btn-alt-secondary" href="be_pages_ecom_product_edit.html">
-                                        <i class="fa fa-fw fa-eye"></i>
-                                    </a>
-                                    <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
-                                        <i class="fa fa-fw fa-times text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center fs-sm">
-                                    <a class="fw-semibold" href="be_pages_ecom_order.html">
-                                        ORD.0623 </a>
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center fs-sm">01/12/2019</td>
-                                <td class="d-none d-md-table-cell text-center fs-sm">
-                                    <a class="fw-semibold" href="javascript:void(0)">7</a>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Delivered</span>
-                                </td>
-                                <td class="text-end d-none d-sm-table-cell fs-sm">
-                                    <strong>$209,00</strong>
-                                </td>
-                                <td class="text-center fs-sm">
-                                    <a class="btn btn-sm btn-alt-secondary" href="be_pages_ecom_product_edit.html">
-                                        <i class="fa fa-fw fa-eye"></i>
-                                    </a>
-                                    <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
-                                        <i class="fa fa-fw fa-times text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center fs-sm">
-                                    <a class="fw-semibold" href="be_pages_ecom_order.html">
-                                        ORD.0622 </a>
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center fs-sm">03/11/2019</td>
-                                <td class="d-none d-md-table-cell text-center fs-sm">
-                                    <a class="fw-semibold" href="javascript:void(0)">1</a>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Delivered</span>
-                                </td>
-                                <td class="text-end d-none d-sm-table-cell fs-sm">
-                                    <strong>$260,00</strong>
-                                </td>
-                                <td class="text-center fs-sm">
-                                    <a class="btn btn-sm btn-alt-secondary" href="be_pages_ecom_product_edit.html">
-                                        <i class="fa fa-fw fa-eye"></i>
-                                    </a>
-                                    <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
-                                        <i class="fa fa-fw fa-times text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center fs-sm">
-                                    <a class="fw-semibold" href="be_pages_ecom_order.html">
-                                        ORD.0621 </a>
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center fs-sm">05/06/2019</td>
-                                <td class="d-none d-md-table-cell text-center fs-sm">
-                                    <a class="fw-semibold" href="javascript:void(0)">3</a>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Delivered</span>
-                                </td>
-                                <td class="text-end d-none d-sm-table-cell fs-sm">
-                                    <strong>$85,00</strong>
-                                </td>
-                                <td class="text-center fs-sm">
-                                    <a class="btn btn-sm btn-alt-secondary" href="be_pages_ecom_product_edit.html">
-                                        <i class="fa fa-fw fa-eye"></i>
-                                    </a>
-                                    <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
-                                        <i class="fa fa-fw fa-times text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            @if ($orders->isEmpty())
+                                <tr>
+                                    <td colspan="7" class="text-center fs-sm">Không có đơn hàng nào</td>
+                                </tr>
+                            @else
+                                @foreach ($orders as $order)
+                                    <tr>
+                                        <td class="text-center">
+                                            <a class="fw-semibold" href="be_pages_ecom_order.html">
+                                                {{ $order->session_id }} </a>
+                                        </td>
+                                        <td class="d-none d-sm-table-cell text-center fs-sm">
+                                            {{ $order->created_at->format('d-m-Y H:i') }}</td>
+                                        <td class="fs-base d-sm-table-cell">
+                                            @php
+                                                $statusMapping = [
+                                                    '1' => 'Chờ xác nhận',
+                                                    '2' => 'Chờ vận chuyển',
+                                                    '3' => 'Đang vận chuyển',
+                                                    '4' => 'Hoàn thành',
+                                                    'huy_don_hang' => 'Đơn hàng đã hủy',
+                                                ];
+                                                $badgeColor = [
+                                                    '1' => 'bg-warning',
+                                                    '2' => 'bg-info',
+                                                    '3' => 'bg-primary',
+                                                    '4' => 'bg-success',
+                                                    'huy_don_hang' => 'bg-danger',
+                                                ];
+                                                $currentStatus = $order->status;
+                                            @endphp
+                                            <span id="orderStatus-{{ $order->id }}"
+                                                class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
+                                                {{ $statusMapping[$currentStatus] ?? $currentStatus }}
+                                            </span>
+                                        </td>
+                                        <td class="d-none d-xl-table-cell text-center fs-sm">
+                                            <a class="fw-semibold">{{ $order->items->count() }}</a>
+                                        </td>
+                                        <td class="text-end d-none d-sm-table-cell fs-sm">
+                                            <strong>{{ number_format($order->total_price, 3, '.', 0) }} đ</strong>
+                                        </td>
+                                        <td class="text-center fs-sm">
+                                            <a class="btn btn-sm btn-alt-secondary"
+                                                href="{{ route('admin.order.show', $order->id) }}">
+                                                <i class="fa fa-fw fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+
+
+
                         </tbody>
                     </table>
                 </div>
@@ -393,4 +329,19 @@
 
     </div>
     <!-- END Page Content -->
+@endsection
+@section('js')
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+
+    <!-- Page JS Code -->
+    @vite(['resources/js/pages/datatables.js'])
 @endsection
