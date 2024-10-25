@@ -1,5 +1,9 @@
 @extends('layouts.backend')
 
+@section('title')
+Cập nhật giá trị
+@endsection
+
 @section('content')
 <!-- Hero -->
 <div class="bg-body-light">
@@ -11,7 +15,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ route('admin.attributes.index') }}" style="color: inherit;">Giá trị thuộc tính</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Thêm giá trị</li>
+                    <li class="breadcrumb-item active" aria-current="page">Cập nhật giá trị</li>
                 </ol>
             </nav>
         </div>
@@ -24,7 +28,7 @@
             <form action="{{ route('admin.attribute_values.update', $attributeValue) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <h2 class="content-heading pt-0">Cập nhật thuộc tính</h2>
+                <h2 class="content-heading pt-0">Cập nhật giá trị</h2>
 
                 <div class="row">
                     <div class="col-lg-12 col-xl-8 offset-xl-2">

@@ -15,9 +15,8 @@ use Illuminate\Support\Str;
 class ProductService
 {
 
-    public function listProducts($searchTerm)
+    public function listProducts($searchTerm, $catalogueId = null, $minPrice = null, $maxPrice = null, $stockStatus = null)
     {
-        // Tạo query lấy sản phẩm
         $query = Product::with([
             'catalogue',
             'mainImage',
@@ -26,13 +25,39 @@ class ProductService
             'images'
         ]);
 
-        // Nếu có từ khóa tìm kiếm thì áp dụng điều kiện tìm kiếm
         if ($searchTerm) {
             $query->where('name', 'like', '%' . $searchTerm . '%')
                 ->orWhere('sku', 'like', '%' . $searchTerm . '%')
                 ->orWhereHas('catalogue', function ($q) use ($searchTerm) {
                     $q->where('name', 'like', '%' . $searchTerm . '%');
                 });
+        }
+
+        if ($catalogueId) {
+            $query->where('catalogue_id', $catalogueId);
+        }
+
+        if ($minPrice !== null && $maxPrice !== null) {
+            $query->whereBetween('price_regular', [$minPrice, $maxPrice]);
+        } elseif ($minPrice !== null) {
+            $query->where('price_regular', '>=', $minPrice);
+        } elseif ($maxPrice !== null) {
+            $query->where('price_regular', '<=', $maxPrice);
+        }
+
+        if ($stockStatus) {
+            $query->whereHas('variants', function ($query) use ($stockStatus) {
+                $query->select(DB::raw('sum(stock) as total_stock'))
+                    ->groupBy('product_id');
+
+                if ($stockStatus == 'low') {
+                    $query->havingRaw('sum(stock) < 10');
+                } elseif ($stockStatus == 'in_stock') {
+                    $query->havingRaw('sum(stock) >= 10');
+                } elseif ($stockStatus == 'out_of_stock') {
+                    $query->havingRaw('sum(stock) = 0');
+                }
+            });
         }
 
         // Sắp xếp và phân trang
@@ -78,7 +103,6 @@ class ProductService
                 'img_thumbnail' => $this->uploadImage($request->file('img_thumbnail')),
             ]);
 
-            // Lưu các ảnh phụ
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     ProductImage::create([
@@ -89,7 +113,6 @@ class ProductService
                 }
             }
 
-            // Xử lý và lưu các biến thể
             $this->storeVariants($product, $validatedData, $request);
 
             DB::commit();
@@ -147,20 +170,16 @@ class ProductService
     }
 
     // EDIT
-    // Lấy thông tin chi tiết sản phẩm để hiển thị trong trang edit
     public function getProductForEdit($id)
     {
-        // Lấy sản phẩm cùng với các biến thể và giá trị thuộc tính của chúng
         $product = Product::with('variants.attributeValues.attribute')->findOrFail($id);
 
-        // Lấy tất cả danh mục và thuộc tính
         $catalogues = Catalogue::all();
         $attributes = Attribute::with('values')->get();
 
         // Xử lý các thuộc tính đã sử dụng
         $usedAttributes = $this->processUsedAttributes($product);
 
-        // Xử lý các biến thể để tạo dữ liệu chuẩn cho view
         $this->processVariants($product);
 
         return compact('product', 'catalogues', 'attributes', 'usedAttributes');
@@ -193,15 +212,12 @@ class ProductService
     private function processVariants($product)
     {
         foreach ($product->variants as $variant) {
-            // Lấy giá trị của thuộc tính 'Size' và 'Color'
             $size = $variant->attributeValues->firstWhere('attribute.name', 'Size');
             $color = $variant->attributeValues->firstWhere('attribute.name', 'Color');
 
-            // Gán giá trị kích cỡ và màu sắc vào biến thể
             $variant->size = $size ? $size->value : 'N/A';
             $variant->color = $color ? $color->value : 'N/A';
 
-            // Tạo mảng chuẩn cho các thuộc tính của biến thể
             $variantAttributes = [];
             foreach ($variant->attributeValues as $attributeValue) {
                 $variantAttributes[] = [
@@ -210,7 +226,6 @@ class ProductService
                 ];
             }
 
-            // Gán thuộc tính đã được xử lý vào biến thể để sử dụng trong view
             $variant->variantAttributes = $variantAttributes;
         }
     }
@@ -219,7 +234,6 @@ class ProductService
     public function updateProduct($id, $validatedData, $request)
     {
         // dd($request->all());
-        // Cập nhật các trường boolean
         $request->merge([
             'is_active' => $request->has('is_active') ? 1 : 0,
             'is_new' => $request->has('is_new') ? 1 : 0,
@@ -230,14 +244,11 @@ class ProductService
         DB::beginTransaction();
 
         try {
-            // Lấy sản phẩm hiện tại
             $product = Product::findOrFail($id);
 
-            // Kiểm tra và giữ ảnh cũ nếu không upload ảnh mới
             if ($request->hasFile('img_thumbnail')) {
-                // Nếu có ảnh mới thì upload và xóa ảnh cũ nếu cần
                 if ($product->img_thumbnail) {
-                    Storage::delete($product->img_thumbnail);  // Xóa ảnh cũ nếu cần
+                    Storage::delete($product->img_thumbnail);
                 }
                 $product->img_thumbnail = $this->uploadImage($request->file('img_thumbnail'));
             }
@@ -256,29 +267,25 @@ class ProductService
                 'is_new' => $validatedData['is_new'],
                 'is_hot_deal' => $validatedData['is_hot_deal'],
                 'is_show_home' => $validatedData['is_show_home'],
-                // Không cần cập nhật img_thumbnail nếu không có file mới
             ]);
-            //      // Xử lý ảnh phụ bị xóa
-            // if ($request->has('deleted_images')) {
-            //     $deletedImages = json_decode($request->input('deleted_images'), true);
-            //     foreach ($deletedImages as $imageId) {
-            //         $imageRecord = ProductImage::find($imageId);
-            //         if ($imageRecord) {
-            //             // Xóa ảnh khỏi hệ thống lưu trữ
-            //             Storage::delete($imageRecord->image);
-            //             // Xóa bản ghi trong database
-            //             $imageRecord->delete();
-            //         }
-            //     }
-            // }
-            // Thêm các ảnh phụ (gallery) mới
+
+            $deletedImages = json_decode($request->input('deleted_images', '[]'));
+            if (!empty($deletedImages)) {
+                $productImages = ProductImage::whereIn('id', $deletedImages)->get();
+
+                foreach ($productImages as $productImage) {
+                    Storage::delete($productImage->image);
+
+                    $productImage->delete();
+                }
+            }
+
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
-                    // Lưu từng ảnh phụ vào cơ sở dữ liệu
                     ProductImage::create([
-                        'product_id' => $product->id,           // Liên kết ảnh với sản phẩm
-                        'image' => $this->uploadImage($image),  // Upload và lấy đường dẫn ảnh
-                        'is_main' => 0,                         // Đánh dấu đây là ảnh phụ, không phải ảnh chính
+                        'product_id' => $product->id,
+                        'image' => $this->uploadImage($image),
+                        'is_main' => 0,
                     ]);
                 }
             }
@@ -286,15 +293,14 @@ class ProductService
             // Xóa các biến thể bị xóa
             $deletedVariantIds = $request->input('deleted_variant_ids', []);
             if (!empty($deletedVariantIds)) {
-                // Xóa các thuộc tính của biến thể và biến thể
                 VariantAttribute::whereIn('product_variant_id', $deletedVariantIds)->delete();
                 ProductVariant::whereIn('id', $deletedVariantIds)->delete();
             }
 
-            // Cập nhật các biến thể hiện có
+            // Cập nhật các biến thểhiện có
             $this->updateExistingVariants($request, $product);
 
-            // Thêm các biến thể mới
+            // Thêm các biến th mới
             $this->addNewVariants($request, $product);
 
             DB::commit();
@@ -330,6 +336,7 @@ class ProductService
         }
     }
 
+    // ADD NEW VALUES
     private function addNewVariants($request, $product)
     {
         $newVariantPrices = $request->input('new_variant_prices', []);
@@ -337,10 +344,9 @@ class ProductService
         $newVariantStocks = $request->input('new_variant_stocks', []);
         $newVariantSkus = $request->input('new_variant_skus', []);
         $newVariantImages = $request->file('new_variant_images', []);
-        $newValues = $request->input('new_values', []); // Thuộc tính cho biến thể mới
+        $newValues = $request->input('new_values', []);
 
         foreach ($newVariantPrices as $index => $price) {
-            // Tạo biến thể mới
             $newVariant = ProductVariant::create([
                 'product_id' => $product->id,
                 'price_regular' => $price,
@@ -350,7 +356,6 @@ class ProductService
                 'image' => isset($newVariantImages[$index]) ? $this->uploadImage($newVariantImages[$index]) : null,
             ]);
 
-            // Lưu các giá trị thuộc tính của biến thể mới
             if (isset($newValues[$index])) {
                 foreach ($newValues[$index] as $value) {
                     VariantAttribute::create([
@@ -361,5 +366,53 @@ class ProductService
                 }
             }
         }
+    }
+
+    // DELETE
+    public function softDeleteProduct($id)
+    {
+        $product = Product::findOrFail($id);
+
+        foreach ($product->variants as $variant) {
+            foreach ($variant->images as $image) {
+                $image->delete();
+            }
+            $variant->delete();
+        }
+
+        foreach ($product->images as $image) {
+            $image->delete();
+        }
+
+        $product->is_active = 0;
+        $product->save();
+
+        $product->delete();
+
+        return true;
+    }
+
+    // RESTORE
+    public function restoreProduct($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $product->restore();
+
+        foreach ($product->variants()->withTrashed()->get() as $variant) {
+            foreach ($variant->images()->withTrashed()->get() as $image) {
+                $image->restore();
+            }
+            $variant->restore();
+        }
+
+        foreach ($product->images()->withTrashed()->get() as $image) {
+            $image->restore();
+        }
+
+        $product->is_active = 1;
+        $product->save();
+
+        return true;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services\Client;
 use App\Models\Banner;
 use App\Models\Catalogue;
 use App\Models\Product;
+use App\Models\Voucher;
 use Illuminate\Support\Facades\DB;
 
 class HomeService
@@ -93,19 +94,29 @@ class HomeService
         $bestsaleProducts = Product::select(
             'products.id',
             'products.name',
+            'products.slug',
             'products.price_regular',
             'products.price_sale',
             'products.img_thumbnail',
             DB::raw('SUM(order_items.quantity) as total_quantity')
         )
-            ->join('order_items', 'products.sku', '=', 'order_items.product_sku')
-            ->groupBy('products.id', 'products.name', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
-            ->orderBy('total_quantity', 'desc')
-            ->where('products.is_active', 1)
-            ->take(12)
-            ->get();
-
-
+        ->leftJoin('order_items', 'products.sku', '=', 'order_items.product_sku') // Sử dụng LEFT JOIN
+        ->groupBy('products.id', 'products.name', 'products.slug', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
+        ->orderBy('total_quantity', 'desc')
+        ->where('products.is_active', 1)
+        ->take(8)
+        ->with(['catalogue', 'variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue']) // Eager load quan hệ liên quan
+        ->get();
+    
         return $bestsaleProducts;
     }
+    
+ // voucher
+    public function getAllVouchers()
+{
+    // Lấy tối đa 3 mã voucher mới nhất từ database, sắp xếp theo thời gian tạo gần nhất
+    return Voucher::orderBy('created_at', 'desc')
+    ->limit(3)
+    ->get();
+}
 }
