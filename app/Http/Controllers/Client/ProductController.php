@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\ProductDetailService;
@@ -33,7 +34,9 @@ class ProductController extends Controller
         $canComment = $this->productDetailService->getUserCommentStatus($product, $id);
         $averageRating = $this->productDetailService->calculateAverageRating($product);
         $ratingsPercentage = $this->productDetailService->calculateRatingsPercentage($product);
-        $isFavorite = $this->productDetailService->isProductFavorite($id);
+        // $isFavorite = $this->productDetailService->isProductFavorite($id);
+        $user = auth()->user();
+        $isFavorite = $user ? Favorite::where('user_id', $user->id)->where('product_id', $product->id)->exists() : false;
         $relatedRatings = $this->productDetailService->getRatingsForRelatedProducts($relatedProducts);
 
         $ratingFilter = $request->input('rating', 'all'); // Lọc theo sao, mặc định là 'all'

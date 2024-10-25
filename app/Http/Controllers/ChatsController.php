@@ -8,24 +8,43 @@ use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ChatsController extends Controller
 {
 
     public function adminIndex()
-    {
-        $pusherKey = env('PUSHER_APP_KEY');
-        $pusherCluster = env('PUSHER_APP_CLUSTER');
-        $users = User::where('role', 'user')->get();
-        foreach ($users as $user) {
-            $user->unread_count = Chat::where('receiver_id', Auth::id())
-                ->where('sender_id', $user->id)
-                ->where('seen', 0)
-                ->count();
-        }
+{
+    $pusherKey = env('PUSHER_APP_KEY');
+    $pusherCluster = env('PUSHER_APP_CLUSTER');
 
-        return view('admin.chat.chat', compact('users', 'pusherKey', 'pusherCluster'));
+    // Simply return the view without passing the users
+    return view('admin.chat.chat', compact('pusherKey', 'pusherCluster'));
+}
+public function getSortedUsers()
+{
+    $users = User::where('role', 'user')
+    ->leftJoin('chats', function($join) {
+        $join->on('users.id', '=', 'chats.sender_id')
+            ->orOn('users.id', '=', 'chats.receiver_id');
+    })
+    ->select('users.id', 'users.name', 'users.email','users.avatar', DB::raw('MAX(chats.created_at) as last_message_time'))
+    ->groupBy('users.id', 'users.name', 'users.email','users.avatar')
+    ->orderByDesc('last_message_time')
+    ->get();
+
+
+    foreach ($users as $user) {
+        $user->unread_count = Chat::where('receiver_id', Auth::id())
+            ->where('sender_id', $user->id)
+            ->where('seen', 0)
+            ->count();
+        $user->avatar_url = $user->avatar ? Storage::url($user->avatar) : asset('images/default-avatar.png');
     }
+
+    return response()->json(['users' => $users]);
+}
     
     public function markMessagesAsRead(Request $request)
     {

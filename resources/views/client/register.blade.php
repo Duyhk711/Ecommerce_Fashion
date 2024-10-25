@@ -52,13 +52,13 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group col-12">
+                                {{-- <div class="form-group col-12">
                                     <label for="profile_picture">Ảnh đại diện</label>
                                     <input type="file" name="avatar" id="ProfilePicture" accept="image/*" class="form-control-file" />
                                     <div id="imagePreview" class="image-preview" style="margin-top: 10px; display: flex; justify-content: center; border-radius: 50%;  padding: 5px;">
                                         <!-- Hình ảnh xem trước sẽ được hiển thị ở đây -->
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group col-12">
                                     <div class="login-remember-forgot d-flex justify-content-between align-items-center">
                                         {{-- <div class="remember-check customCheckbox">
@@ -77,9 +77,9 @@
 
                             <p class="text-center fs-6 text-muted mb-3">Đăng nhập bằng tài khoản mạng xã hội</p>
                             <div class="login-social d-flex justify-content-center">
-                                <a class="social-link facebook rounded-5 d-flex justify-content-center" href="#"><i class="icon anm anm-facebook-f me-2"></i> Facebook</a>
-                                <a class="social-link google rounded-5 d-flex justify-content-center" href="#"><i class="icon anm anm-google-plus-g me-2"></i> Google</a>
-                                <a class="social-link twitter rounded-5 d-flex justify-content-center" href="#"><i class="icon anm anm-twitter me-2"></i> Twitter</a>
+                                <a class="social-link facebook rounded-5 d-flex justify-content-center" href="#"><i class="icon anm anm-facebook-f me-2 mt-1"></i> Facebook</a>
+                                <a class="social-link google rounded-5 d-flex justify-content-center" href="{{route('google.login')}} "><i class="icon anm anm-google-plus-g me-2 mt-1"></i> Google</a>
+                                <a class="social-link twitter rounded-5 d-flex justify-content-center" href="#"><i class="icon anm anm-twitter me-2 mt-1"></i> Twitter</a>
                             </div>
 
                             <div class="login-signup-text mt-4 mb-2 fs-6 text-center text-muted">Bạn đã có tài khoản?
