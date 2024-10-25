@@ -212,7 +212,7 @@
     }
 
     .xt a {
-        font-size: 20px;
+        font-size: 15px;
     }
 
     .xt h3 {
@@ -460,7 +460,7 @@
     <section class="container mt-5">
         <div class="xt">
             <h3>Ưu đãi đặc biệt</h3>
-            <a href="{{ route('vouchers') }}">Xem thêm >></a>
+            <a href="{{ route('vouchers.index') }}">Xem thêm >></a>
         </div>
         <div class="row">
             @if (session('success'))
@@ -479,7 +479,10 @@
                 <div class="voucher-card">
                     <div class="voucher-header"> Voucher {{ $voucher->discount_value }}K</div>
                     <div class="voucher-code" id="voucher-code-1">{{ $voucher->code }}</div>
-                    <div class="voucher-description"> Giảm 50K cho đơn hàng từ 399k</div>
+                    <div class="voucher-description">
+                        Giảm {{ $voucher->discount_value }}K
+                        cho đơn hàng từ {{ $voucher->minimum_order_value ?? 0 }}K
+                    </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <div class="voucher-expiry"> HSD: {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</div>
                         <div>
@@ -823,7 +826,7 @@
                     <div class="grid-products grid-view-items">
                         <div
                             class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
-                            @foreach ($products as $product)
+                            @foreach ($bestsaleProducts as $product)
                             <div class="item col-item">
                                 <div class="product-box">
                                     <!-- Start Product Image -->
@@ -892,7 +895,7 @@
                                     <!-- Start Product Details -->
                                     <div class="product-details text-center">
                                         <!--Product Vendor-->
-                                        <div class="product-vendor">{{ $product->catalogue->name }}</div>
+                                        <div class="product-vendor">{{ optional($product->catalogue)->name }}</div>
                                         <!--End Product Vendor-->
                                         <!-- Product Name -->
                                         <div class="product-name">
@@ -2102,41 +2105,7 @@ title="Product" width="625" height="808" />
 <!--End Product Quickview Modal-->
 
 
-<script>
-    function copyAndSaveVoucher() {
-        const voucherCode = document.getElementById('voucher-code-1').innerText;
-        const voucherDescription = document.querySelector('.voucher-description').innerText;
-        const voucherExpiry = document.querySelector('.voucher-expiry').innerText;
-        const formattedExpiry = voucherExpiry.replace('HSD: ', '').split('/').reverse().join('-');
 
-        fetch('/save-voucher', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    code: voucherCode,
-                    discount_type: 'fixed', // Hoặc 'percentage' tùy theo logic của bạn
-                    discount_value: 80, // Giá trị giảm giá
-                    start_date: '2024-01-01', // Ngày bắt đầu
-                    end_date: formattedExpiry // Ngày hết hạn từ giao diện
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Lưu thành công!');
-                } else {
-                    alert('Có lỗi xảy ra!');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra!');
-            });
-    }
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
