@@ -61,7 +61,7 @@
                                      @foreach ($catalogues as $category)
                                          @if (!$category->parent_id && $category->is_active)
                                              <li class="lvl-1 col-md-3 col-lg-3 w-22">
-                                                 <a href="#;"
+                                                 <a href="{{ url('/filterproduct?categories=' . $category->id) }}"
                                                      class="site-nav lvl-1 menu-title">{{ $category->name }}</a>
 
                                                  @if ($category->children->isNotEmpty())
@@ -69,7 +69,7 @@
                                                          @foreach ($category->children as $child)
                                                              @if ($child->is_active)
                                                                  <li class="lvl-2">
-                                                                     <a href="your-link/{{ $child->slug }}"
+                                                                     <a href="{{ url('/filterproduct?categories=' . $child->id) }}"
                                                                          class="site-nav lvl-2">{{ $child->name }}</a>
                                                                  </li>
                                                              @endif
@@ -80,8 +80,8 @@
                                          @endif
                                      @endforeach
                                  </ul>
-                         <li class="lvl1 parent dropdown"><a href="{{route('blog')}}">Blog </a>
-                         <li class="lvl1 parent dropdown"><a href="{{route('contact')}}">Liên hệ </a></li>
+                         <li class="lvl1 parent dropdown"><a href="{{ route('blog') }}">Blog </a>
+                         <li class="lvl1 parent dropdown"><a href="{{ route('contact') }}">Liên hệ </a></li>
                      </ul>
                  </nav>
              </div>
@@ -161,8 +161,10 @@
                                  @if (Auth::check())
                                      <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>My
                                              Account</a></li>
-                                     <li><a href="{{ route('my.wishlist') }}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
+                                     <li><a href="{{ route('my.wishlist') }}"><i
+                                                 class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Sign
+                                             out</a></li>
                                  @endif
                              </ul>
                          </div>
@@ -173,13 +175,13 @@
                  <div class="wishlist-link iconset" title="Wishlist">
                      <a href="{{ route('my.wishlist') }}">
                          <i class="hdr-icon icon anm anm-heart-l"></i>
-                         <span class="wishlist-count">
-                             @auth
-                                 {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
-                             @else
-                                 0
-                             @endauth
-                         </span>
+                         <span class="wishlist-count" id="wishlist-count">
+                            @auth
+                                {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
+                            @else
+                                0
+                            @endauth
+                        </span>
                      </a>
                  </div>
                  <!--End Wishlist-->

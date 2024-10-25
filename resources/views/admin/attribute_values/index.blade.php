@@ -1,9 +1,13 @@
 @extends('layouts.backend')
 
+@section('title')
+    Danh sách giá trị
+@endsection
+
 @section('css')
   <!-- Page JS Plugins CSS -->
-  <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
 @endsection
 
 @section('content')
@@ -39,7 +43,7 @@
         </div>
         <div class="block-content block-content-full">
             <!-- DataTables init on table by adding .js-dataTable-full class -->
-            <table class="table table-hover align-middle table-striped  js-dataTable-full">
+            <table id="example" class="table table-hover align-middle table-striped  js-dataTable-full">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 80px;">#</th>
@@ -57,7 +61,7 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     <!-- EDIT -->
-                                    <a href="{{ route('admin.attribute_values.edit', $attributeValue) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Edit">
+                                    <a href="{{ route('admin.attribute_values.edit', $attributeValue) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Sửa">
                                         <i class="fa fa-pencil-alt"></i>
                                     </a>
 
@@ -65,7 +69,7 @@
                                     <form action="{{ route('admin.attribute_values.destroy', $attributeValue) }}" method="POST" style="display:inline;" class="form-delete">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Delete" >
+                                        <button type="submit" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Xóa" >
                                             <i class="fa fa-fw fa-times text-danger"></i>
                                         </button>
                                     </form>
@@ -86,18 +90,13 @@
 @section('js')
 
   <!-- Page JS Plugins -->
-  <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
-
-  <!-- Page JS Code -->
-  @vite(['resources/js/pages/datatables.js'])
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+<script>$(document).ready(function() {
+    $('#example').DataTable(); 
+});</script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

@@ -55,6 +55,10 @@
             font-weight: bold;
             text-decoration: underline;
         }
+
+        .d-none {
+            display: none !important;
+        }
     </style>
 @endsection
 
@@ -74,9 +78,9 @@
                                 <!-- Product Image -->
                                 <div class="zoompro-span">
                                     <img id="zoompro" class="zoompro"
-                                        src="{{ $product->img_thumbnail }}"
-                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product"
-                                        width="625" height="600" />
+                                        src="{{ asset('storage/' . $product->img_thumbnail) }}"
+                                        data-zoom-image="{{ $product->img_thumbnail }}" alt="product" width="625"
+                                        height="600" />
                                 </div>
                                 <!-- End Product Image -->
                                 <!-- Product Label -->
@@ -186,6 +190,7 @@
                                             <li class="swatch x-large available color-option"
                                                 style="background-color: {{ $color['colorCode'] }}; width: 40px; height: 40px; border-radius: 50%;"
                                                 data-color-code="{{ $color['colorCode'] }}"
+                                                data-color-name="{{ $color['value'] }}"
                                                 data-product-image="{{ $color['image'] }}"
                                                 data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
                                                 title="{{ $color['value'] }}">
@@ -254,14 +259,19 @@
                                 <!-- Kiểm tra trạng thái yêu thích của sản phẩm -->
                                 <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
                                     data-product-id="{{ $product->id }}">
-                                    <i class="icon anm anm-heart-l me-2"></i>
-                                    <span>{{ $isFavorite ? 'Xoá khỏi sản phẩm yêu thích' : 'Thêm vào sản phẩm yêu thích' }}</span>
+                                    <!-- Biểu tượng trái tim viền -->
+                                    <i style="font-size:15px" class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
+
+                                    <!-- Biểu tượng trái tim đổ đầy -->
+                                    <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
                                 </a>
+
                                 <a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal"
                                     data-bs-target="#shippingInfo_modal">
                                     <i class="icon anm anm-paper-l-plane me-2"></i>
                                     <span>Delivery & Returns</span>
                                 </a>
+                                
                                 <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
                                     data-bs-target="#productInquiry_modal">
                                     <i class="icon anm anm-question-cil me-2"></i>
@@ -357,14 +367,11 @@
                                                 {{-- Lọc đánh giá --}}
                                                 <div class="d-flex mx-5 rating-filter">
                                                     <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
-                                                        class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất
-                                                        cả</a>
+                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
                                                     @for ($i = 5; $i >= 1; $i--)
                                                         <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                                            class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
-                                                            {{ $i }} <i
-                                                                class="icon anm anm-star text-warning"></i>
-                                                            ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
                                                         </a>
                                                     @endfor
                                                 </div>
@@ -379,11 +386,10 @@
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div style="height: 65px;" class="me-2">
-                                                    <img src="{{ $comment->user->avatar
-                                                        ? asset('storage/' . $comment->user->avatar)
-                                                        : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
-                                                        alt="avatar" style="width: 65px" height="65px"
-                                                        class="rounded-circle blur-up lazyloaded me-4" />
+                                                   <img src="{{ $comment->user->avatar
+                                                    ? asset('storage/' . $comment->user->avatar)
+                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
+                                                    alt="avatar" style="width: 65px; height:65px; object-fit: cover;"  class="rounded-circle blur-up lazyloaded me-4"/>
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div
@@ -1176,45 +1182,64 @@
 
         // add favorite
         document.addEventListener('DOMContentLoaded', function() {
-            const wishlistLink = document.querySelector('.wishlist');
+            const wishlistLinks = document.querySelectorAll('.wishlist');
+            const wishlistCountElement = document.getElementById('wishlist-count');
 
-            wishlistLink.addEventListener('click', function(event) {
-                event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+            wishlistLinks.forEach(wishlistLink => {
+                const productId = wishlistLink.getAttribute('data-product-id');
+                let isFavorite = wishlistLink.classList.contains('active');
 
-                const productId = this.getAttribute('data-product-id');
-                const isFavorite = this.classList.contains('active');
+                // Thêm sự kiện click vào wishlist link
+                wishlistLink.addEventListener('click', function(event) {
+                    event.preventDefault();
 
-                // Gửi yêu cầu POST hoặc DELETE để thêm/xóa yêu thích
-                const url = isFavorite ? `/wishlist/remove/${productId}` : `/wishlist/add/${productId}`;
-                const method = isFavorite ? 'DELETE' : 'POST';
+                    const url = isFavorite ? `/wishlist/remove/${productId}` :
+                        `/wishlist/add/${productId}`;
+                    const method = isFavorite ? 'DELETE' : 'POST';
 
-                fetch(url, {
-                        method: method,
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content'),
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Thay đổi trạng thái của biểu tượng trái tim
-                            if (isFavorite) {
-                                this.classList.remove('active');
-                                this.querySelector('span').textContent = 'Thêm vào sản phẩm yêu thích';
-                            } else {
-                                this.classList.add('active');
-                                this.querySelector('span').textContent = 'Xoá khỏi sản phẩm yêu thích';
+                    fetch(url, {
+                            method: method,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content'),
                             }
-                        } else {
-                            alert('Lỗi: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Lỗi:', error);
-                    });
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                isFavorite = !isFavorite; // Đổi trạng thái yêu thích
+
+                                // Toggle giữa biểu tượng viền và đổ đầy
+                                const heartOutline = wishlistLink.querySelector('.anm-heart-l');
+                                const heartFill = wishlistLink.querySelector('.bi-heart-fill');
+
+                                if (isFavorite) {
+                                    wishlistLink.classList.add('active');
+                                    heartOutline.classList.add('d-none');
+                                    heartFill.classList.remove('d-none');
+                                    updateWishlistCount(1);
+                                } else {
+                                    wishlistLink.classList.remove('active');
+                                    heartOutline.classList.remove('d-none');
+                                    heartFill.classList.add('d-none');
+                                    updateWishlistCount(-1);
+                                }
+                            } else {
+                                alert('Lỗi: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Lỗi:', error);
+                        });
+                });
             });
+
+            function updateWishlistCount(change) {
+                let currentCount = parseInt(wishlistCountElement.textContent) || 0;
+                currentCount += change;
+                wishlistCountElement.textContent = currentCount;
+            }
         });
     </script>
 
@@ -1408,29 +1433,6 @@
         });
     </script>
 
-    {{-- select sao --}}
-    <script>
-        // Bắt tất cả các label và radio inputs
-        const stars = document.querySelectorAll('.review-rating label');
-        const inputs = document.querySelectorAll('.review-rating input[type="radio"]');
-
-        // Lặp qua tất cả các label (sao)
-        stars.forEach((star, index) => {
-            // Thêm sự kiện click vào mỗi label (sao)
-            star.addEventListener('click', function() {
-                // Lấy giá trị của input tương ứng (lấy giá trị đánh giá)
-                inputs[index].checked = true;
-
-                // Reset lại tất cả các sao thành class `anm-star-o` (trắng)
-                stars.forEach(s => s.querySelector('i').className = 'icon anm anm-star-o');
-
-                // Tô vàng tất cả các sao từ vị trí hiện tại trở về trước (bao gồm sao vừa click)
-                for (let i = 0; i <= index; i++) {
-                    stars[i].querySelector('i').className = 'icon anm anm-star';
-                }
-            });
-        });
-    </script>
 
     {{-- popup --}}
     <script>
@@ -1472,10 +1474,10 @@
             colorOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     // Lấy mã màu từ data attribute
+                    const colorName = this.getAttribute('data-color-name');
                     const colorCode = this.getAttribute('data-color-code');
-
                     // Cập nhật span hiển thị màu hoặc xóa nội dung nếu không chọn
-                    colorSpan.textContent = colorCode || '';
+                    colorSpan.textContent = colorName || '';
                 });
             });
 
@@ -1553,7 +1555,7 @@
 
                     // Kiểm tra thuộc tính kích thước
                     const hasSize = attributeValues.includes(
-                    selectedSize); // So sánh trực tiếp với giá trị kích thước
+                        selectedSize); // So sánh trực tiếp với giá trị kích thước
                     console.log("Has Size: ", hasSize);
 
                     console.log(hasColor, hasSize);
@@ -1615,7 +1617,7 @@
     {{-- xuong dòng --}}
     <script>
         function toggleContent(element) {
-            element.classList.toggle('expanded'); // Thêm/xóa class 'expanded' khi bấm
+            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
         }
     </script>
 

@@ -4,18 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
+use App\Models\Order;
 use App\Models\User;
 use App\Services\Admin\UserService;
+use App\Services\OrderService;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $orderService;
 
     const PATH_VIEW = 'admin.users.';
 
-    public function __construct(UserService $userService, )
+    public function __construct(UserService $userService, OrderService $orderService)
     {
         $this->userService = $userService;
+        $this->orderService = $orderService;
     }
 
     public function index()
@@ -40,7 +44,12 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return view(Self::PATH_VIEW . __FUNCTION__, compact('user'));
+        // dd($user);
+        $totalOrders = Order::where('user_id', $user->id)->count();
+        $totalOrderValue = Order::where('user_id', $user->id)->sum('total_price');
+        $orders = Order::where('user_id', $user->id)->get();
+        // dd($orders);
+        return view(Self::PATH_VIEW . __FUNCTION__, compact('user', 'totalOrders', 'totalOrderValue', 'orders'));
     }
 
     public function edit(User $user)
