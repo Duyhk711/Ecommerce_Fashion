@@ -71,6 +71,7 @@ Route::prefix('admin')
       Route::put('/variants/{id}', [ProductVariantController::class, 'update']);
       Route::delete('/variants/{id}', [ProductVariantController::class, 'destroy'])->name('variants.destroy');
       Route::post('/products/variant/update', [ProductController::class, 'updateVariant'])->name('products.variant.update'); //chinh sú hang loat
+      Route::patch('/products/{id}/restore', [ProductController::class, 'restore'])->name('products.restore');
 
 
       // ORDER
@@ -105,6 +106,6 @@ Route::prefix('admin')
       Route::post('/send-message', [ChatsController::class, 'sendMessage'])->name('sendMessage');
       Route::post('/chat/mark-messages-as-read', [ChatsController::class, 'markMessagesAsRead'])->name('markMessagesAsRead');
       Route::get('/fetch-sorted-users', [ChatsController::class, 'fetchSortedUsers'])->name('fetchSortedUsers');
-      Route::get('/users/sorted', [ChatsController::class, 'getUsersSorted']);
+      Route::get('/get-sorted-users', [ChatsController::class, 'getSortedUsers'])->name('getSortedUsers');
     });
   });
