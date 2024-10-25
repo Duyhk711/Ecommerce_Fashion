@@ -1,0 +1,143 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.img-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Lớp phủ hiển thị khi hover */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+
+/* Biểu tượng con mắt */
+.eye-icon {
+    color: white;
+    font-size: 15px;
+}
+
+/* CSS cho popup */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.popup-content {
+    display: block;
+    margin: 10% auto;
+    max-width: 90%;
+    max-height: 80%;
+}
+
+/* Nút đóng popup */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    margin-left: 0px;
+}
+
+.copy-btn i {
+    font-size: 16px;
+}
+
+.copy-btn:hover i {
+    color: #0056b3;
+}
+
+.content-row {
+    transition: height 0.3s ease;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Đảm bảo rằng bảng không bị thay đổi kích thước khi mở rộng */
+.table td,
+.table th {
+    vertical-align: middle;
+    white-space: nowrap;
+    /* Giữ cho các nội dung không bị dãn ra theo chiều ngang */
+}
+
+
+/* Giữ chiều rộng của các cột, không cho phép co dãn */
+.table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table-fixed td,
+.table-fixed th {
+    word-wrap: break-word;
+    /* Đảm bảo từ ngắt nếu quá dài */
+    overflow: hidden;
+    /* Giữ cho nội dung không làm dãn hàng */
+}
+
+.is-invalid {
+    border: 1px solid red;
+
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* Định dạng cho tab được chọn (active) */
+.nav-tabs .nav-link.active {
+    color: #0d6efd !important;              /* Màu chữ khi tab được chọn */
+        /* Màu đường viền khi tab được chọn */
+}
+
+/* Định dạng cho các tab không được chọn */
+.nav-tabs .nav-link {
+    color: black;              /* Màu chữ mặc định cho tab không được chọn */
+    background-color: #f8f9fa; /* Màu nền mặc định cho tab không được chọn */
+    border-color: #ddd;        /* Màu đường viền cho tab không được chọn */
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: #e2e6ea; /* Màu nền khi tab không được chọn và di chuột qua */
+    color: black;              /* Màu chữ khi di chuột qua tab không được chọn */
+}
+
