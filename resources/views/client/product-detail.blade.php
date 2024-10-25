@@ -90,11 +90,11 @@
                                 </div>
                                 <!-- End Product Label -->
                                 <!-- Product Buttons -->
-                                <div class="product-buttons">
+                                {{-- <div class="product-buttons">
                                     <a href="#;" class="btn btn-primary prlightbox" data-bs-toggle="tooltip"
                                         data-bs-placement="top" title="Zoom Image"><i
                                             class="icon anm anm-expand-l-arrows"></i></a>
-                                </div>
+                                </div> --}}
                                 <!-- End Product Buttons -->
                             </div>
                             <!-- End Product Main -->
@@ -474,16 +474,16 @@
                                         <a href="{{ route('productDetail', $products->slug) }}"
                                             class="product-img rounded-0">
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product5.jpg') }}"
-                                                src="{{ asset('client/images/products/product5.jpg') }}" alt="Product"
+                                                data-src="{{ Storage::url($products->img_thumbnail) }}"
+                                                src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
                                                 title="{{ $products->name }}" width="625" height="808" />
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                src="{{ asset('client/images/products/product5-1.jpg') }}" alt="Product"
+                                                data-src="{{ Storage::url($products->img_thumbnail) }}"
+                                                src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
                                                 title="{{ $products->name }}" width="625" height="808" />
                                         </a>
                                         <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
-                                        <div class="button-set style1">
+                                        {{-- <div class="button-set style1">
                                             <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
                                                 data-bs-toggle="modal" data-bs-target="#addtocart_modal">
                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -506,7 +506,7 @@
                                                 data-bs-toggle="tooltip" data-bs-placement="left"
                                                 title="Add to Compare"><i class="icon anm anm-random-r"></i><span
                                                     class="text">Add to Compare</span></a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="product-details text-center">
                                         <div class="product-vendor">{{ $products->catalogue->name }}</div>

@@ -22,7 +22,9 @@ class OtpController extends Controller
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
+
         // $this->twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
+
 
     }
     // protected $stringeeService;
