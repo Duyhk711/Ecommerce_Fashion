@@ -42,7 +42,7 @@ class UserController extends Controller
         $currentUser = $this->userService->getCurrentUser();
         return view('client.my-account.oder-tracking',compact('currentUser'));
     }
-    
+
 
     // favorite
     public function add($productId)
@@ -221,6 +221,7 @@ class UserController extends Controller
 
     public function updateProfile(AuthRequest $request, $id)
     {
+
         $user = User::findOrFail($id);
         $data = $request->all();
         $this->userService->updateProfile($data, $user);
