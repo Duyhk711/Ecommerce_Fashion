@@ -98,6 +98,21 @@ class UserService
         $userId = Auth::id();
         return Order::where('user_id', $userId)->count();
     }
+    public function getTotalOrdersPending()
+    {
+        $userId = Auth::id();
+        return Order::where('user_id', $userId)
+            ->whereIn('status', [1, 2, 3])
+            ->count();
+    }
+    public function getTotalOrdersSucess()
+    {
+        $userId = Auth::id();
+        return Order::where('user_id', $userId)
+            ->where('status', 4)
+            ->count();
+    }
+
 
     public function updateProfile(array $data, User $user)
     {
