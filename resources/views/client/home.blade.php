@@ -2069,57 +2069,41 @@ title="Product" width="625" height="808" />
     <script>
         $(document).ready(function() {
             let adminId;
-            let userId = {
-                {
-                    Auth::id()
-                }
-            };
+            let userId = {{ Auth::id() }};
             $('#chatButton').click(function() {
-                $('#chatBox').show();
+                $('#chatBox').slideToggle(300);
                 $.get('/get-first-admin', function(response) {
                     if (response.admin_id) {
                         adminId = response.admin_id;
-                        $('#chatWithAdminName').text('Chatting with ' + response.admin_name);
-                        $.get('/fetch-messages', {
-                            receiver_id: adminId
-                        }, function(messagesResponse) {
+                        $('#chatWithAdminName').text('   ' + response.admin_name);
+                        $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
                             $('#chatMessages').empty();
                             messagesResponse.messages.forEach(function(message) {
-                                let messageTime = new Date(message.created_at)
-                                    .toLocaleTimeString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    });
+                                let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                                 let messageHtml = `
-                               <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
-                                   <div class="message-text">${message.message}</div>
-                                   <div class="message-time">${messageTime}</div>
-                               </div>`;
-
+                                    <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
+                                        <div class="message-text">${message.message}</div>
+                                        <div class="message-time">${messageTime}</div>
+                                    </div>`;
                                 $('#chatMessages').append(messageHtml);
                             });
-
                             scrollToBottom();
                         });
                     }
                 });
             });
-
             $('#closeChat').click(function() {
-                $('#chatBox').hide();
+                $('#chatBox').slideUp(300);
             });
-
             $('#sendMessage').click(function() {
                 sendMessage();
             });
-
             $('#messageInput').keypress(function(event) {
                 if (event.which == 13 && !event.shiftKey) {
                     event.preventDefault();
                     sendMessage();
                 }
             });
-
             function sendMessage() {
                 let message = $('#messageInput').val().trim();
                 if (message) {
@@ -2129,16 +2113,12 @@ title="Product" width="625" height="808" />
                         receiver_id: adminId
                     }, function(response) {
                         if (response.success) {
-                            let messageTime = new Date().toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            });
+                            let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                             let messageHtml = `
-                           <div class="message sent">
-                               <div class="message-text">${message}</div>
-                               <div class="message-time">${messageTime}</div>
-                           </div>`;
-
+                                <div class="message sent">
+                                    <div class="message-text">${message}</div>
+                                    <div class="message-time">${messageTime}</div>
+                                </div>`;
                             $('#chatMessages').append(messageHtml);
                             $('#messageInput').val('');
                             scrollToBottom();
@@ -2146,45 +2126,29 @@ title="Product" width="625" height="808" />
                     });
                 }
             }
-
-            var pusher = new Pusher('{{ env('
-                                                PUSHER_APP_KEY ') }}', {
-                cluster: '{{ env('
-                                                                PUSHER_APP_CLUSTER ') }}',
+            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
                 encrypted: true
             });
-
-
             var channel = pusher.subscribe('chat.' + userId);
             channel.bind('admin-message', function(data) {
-                let messageTime = new Date(data.created_at).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
+                let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 let messageHtml = `
-               <div class="message received">
-                   <div class="message-text">${data.user.name}: ${data.message}</div>
-                   <div class="message-time">${messageTime}</div>
-               </div>`;
-
+                    <div class="message received">
+                        <div class="message-text">${data.user.name}: ${data.message}</div>
+                        <div class="message-time">${messageTime}</div>
+                    </div>`;
+                
                 $('#chatMessages').append(messageHtml);
                 scrollToBottom();
             });
-
             function scrollToBottom() {
                 const chatBody = $('.chat-body');
-                chatBody.animate({
-                    scrollTop: chatBody[0].scrollHeight
-                }, 300);
+                chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
             }
         });
-    </script>
-
+        </script>
     <!--End Product Quickview Modal-->
-
-
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lắng nghe sự kiện khi modal được hiển thị
