@@ -27,9 +27,11 @@ class UserController extends Controller
         $userId = auth()->id();
         $currentUser = $this->userService->getCurrentUser();
         $totalOrder = $this->userService->getTotalOrders();
+        $getTotalOrdersPending = $this->userService->getTotalOrdersPending();
+        $getTotalOrdersSucess = $this->userService->getTotalOrdersSucess();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
 
-        return view('client.my-account.account-info', compact('currentUser', 'totalOrder', 'defaultAddress'));
+        return view('client.my-account.account-info', compact('currentUser', 'totalOrder', 'defaultAddress', 'getTotalOrdersPending', 'getTotalOrdersSucess'));
     }
     public function address()
     {
@@ -75,22 +77,22 @@ class UserController extends Controller
         if (!Auth::check()) {
             return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để xoá sản phẩm khỏi danh sách yêu thích.'], 403);
         }
-    
+
         $userId = Auth::id();
-    
+
         $favorite = Favorite::where('user_id', $userId)
             ->where('product_id', $productId)
             ->first();
-    
+
         if (!$favorite) {
             return response()->json(['success' => false, 'message' => 'Sản phẩm này không có trong danh sách yêu thích.']);
         }
-    
+
         $favorite->delete();
-    
+
         return response()->json(['success' => true, 'message' => 'Sản phẩm đã được xoá khỏi danh sách yêu thích.']);
     }
-    
+
 
     // Phương thức hiển thị danh sách yêu thích
     public function myWishlist()
