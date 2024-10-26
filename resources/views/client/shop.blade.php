@@ -1,5 +1,16 @@
 @extends('layouts.client')
-
+@section('css')
+<style>
+    .product-name a {
+    display: inline-block;
+    width: 100%; /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
+    white-space: nowrap; /* Không cho phép xuống dòng */
+    overflow: hidden; /* Ẩn văn bản thừa */
+    text-overflow: ellipsis; /* Thêm dấu "..." vào phần cuối nếu vượt quá */
+    max-width: 20ch; /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
+}
+</style>
+@endsection
 @section('content')
     @include('client.component.page_header')
     <div class="container" style="max-width: 80%;">
@@ -380,7 +391,7 @@
                                             <!-- End Product Name -->
                                             <!-- Product Price -->
                                             <div class="product-price">
-                                                <span class="price">{{ $product->price_sale }}đ</span>
+                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
