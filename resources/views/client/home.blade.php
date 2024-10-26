@@ -279,6 +279,14 @@
         .xt h3 {
             font-size: 30px;
         }
+        .product-name a {
+            display: inline-block;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 20ch;
+        }
     </style>
     <section class="slideshow slideshow-wrapper">
 
@@ -441,7 +449,7 @@
                             @if ($selectedImage)
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 collection-banner-item">
                                     <div class="collection-item sp-col">
-                                        <a href="shop-left-sidebar.html" class="zoom-scal">
+                                        <a href="{{ route('shop') }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -468,7 +476,7 @@
                                 @endphp
                                 @if ($selectedImage)
                                     <div class="collection-item sp-col">
-                                        <a href="shop-left-sidebar.html" class="zoom-scal">
+                                        <a href="{{ route('shop') }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -493,7 +501,7 @@
                                 @endphp
                                 @if ($selectedImage)
                                     <div class="collection-item sp-col">
-                                        <a href="shop-left-sidebar.html" class="zoom-scal">
+                                        <a href="{{ route('shop') }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -2140,9 +2148,9 @@ title="Product" width="625" height="808" />
             }
 
             var pusher = new Pusher('{{ env('
-                                    PUSHER_APP_KEY ') }}', {
+                                                PUSHER_APP_KEY ') }}', {
                 cluster: '{{ env('
-                                                PUSHER_APP_CLUSTER ') }}',
+                                                                PUSHER_APP_CLUSTER ') }}',
                 encrypted: true
             });
 
