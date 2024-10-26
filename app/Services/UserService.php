@@ -102,27 +102,14 @@ class UserService
     public function updateProfile(array $data, User $user)
     {
         $old_avatar = $user->avatar;
-        if ($data['avatar']  && $data['avatar'] instanceof UploadedFile && $data['avatar']->isValid()) {
-            // dd($old_avatar);
-            $new_avatar = $data['avatar']->store('avatars', 'public');
-            if (!empty($new_avatar)) {
-                $data['avatar'] = $new_avatar;
-
-                // Xóa avatar cũ nếu tồn tại
-                if ($old_avatar && Storage::disk('public')->exists($old_avatar)) {
-                    Storage::disk('public')->delete($old_avatar);
-                }
-            } else {
-                // Nếu đường dẫn rỗng, giữ avatar cũ
-                $data['avatar'] = $old_avatar;
+        if (isset($data['avatar'])) {
+            $data['avatar'] = $data['avatar']->store('avatars', 'public');
+            if ($old_avatar && Storage::disk('public')->exists($old_avatar)) {
+                Storage::disk('public')->delete($old_avatar);
             }
         } else {
-            // Nếu không có avatar mới, giữ avatar cũ
             $data['avatar'] = $old_avatar;
         }
-
-        // Cập nhật thông tin người dùng
         return $user->update($data);
-
     }
 }
