@@ -102,7 +102,7 @@ class VNPayController extends Controller
         } else {
             // dd('ko ok');
             // Thanh toán thất bại
-            return view('client.order-success')->with('error', 'Giao dịch không thành công!');
+            return view('client.order-success', compact('orderItems', 'order'))->with('error', 'Giao dịch không thành công!');
         }
 
     }
