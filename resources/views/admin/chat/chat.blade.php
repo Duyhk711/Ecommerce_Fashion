@@ -184,7 +184,7 @@
 @endsection
 
 @section('js')
-@vite(['resources/js/app.js']) 
+@vite(['resources/js/chat.js']) 
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 
 <script>
@@ -195,6 +195,7 @@
         });
 
         var userId = {{ Auth::id() }}; 
+        
         var currentChatUserId = null; 
 
         var channel = pusher.subscribe('chat.' + userId); 

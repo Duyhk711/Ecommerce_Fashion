@@ -11,10 +11,13 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\VouchersController;
+
+
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -59,7 +62,7 @@ Route::view('/contact', 'client.contact')->name('contact');
 Route::view('/support', 'client.support')->name('support');
 Route::view('/barter', 'client.barter')->name('barter');
 Route::view('/blog', 'client.blog')->name('blog');
-Route::view('/vouchers', 'client.vouchers')->name('vouchers');
+Route::get('/vouchers', [VouchersController::class, 'index'])->name('vouchers.index');
 
 // account
 Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
@@ -108,12 +111,15 @@ Route::put('/comments/{id}', [CommentController::class, 'update'])->name('commen
 Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
 
 
-Route::post('/api/save-voucher', [VouchersController::class, 'saveVoucher']);
+Route::post('/save-voucher', [VouchersController::class, 'save'])->name('save-voucher'); 
+
 
 // User chat routes
-Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
-Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
-Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
-Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
+Route::middleware('auth')->group(function () {
+    Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
+    Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
+    Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
+    Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
+});
 
 

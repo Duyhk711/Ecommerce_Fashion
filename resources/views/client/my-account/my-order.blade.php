@@ -122,7 +122,7 @@
                 <nav class="nav nav-fill">
                     <a class="nav-link {{ !$status ? 'active' : '' }}" href="{{ route('my.order') }}">Tất cả</a>
                     <a class="nav-link {{ $status == 'cho_thanh_toan' ? 'active' : '' }}"
-                    href="{{ route('my.order', ['status' => 'cho_thanh_toan']) }}">Chờ thanh toán</a>
+                        href="{{ route('my.order', ['status' => 'cho_thanh_toan']) }}">Chờ thanh toán</a>
                     <a class="nav-link {{ $status == '1' ? 'active' : '' }}"
                         href="{{ route('my.order', ['status' => '1']) }}">Chờ xác nhận</a>
                     <a class="nav-link {{ $status == '2' ? 'active' : '' }}"
@@ -145,7 +145,7 @@
                                 <span
                                     class="status-label
                                 @if ($item->status == '1') text-secondary
-                                @elseif($item->status == '2') text-secondary
+                                @elseif($item->status == '2') text-info
                                 @elseif($item->status == '3') text-warning
                                 @elseif($item->status == '4') text-primary
                                 @elseif($item->status == 'huy_don_hang') text-danger @endif">
@@ -179,23 +179,29 @@
                                 <div class="me-3">
                                     @foreach ($item->items as $orderItem)
                                         <div class="product-item d-flex mb-2">
-                                            <img src="{{ $orderItem->variant_image }}" alt="Hình ảnh sản phẩm"
-                                                class="product-image" />
+                                            <img src="{{ Storage::url($orderItem->variant_image) }}"
+                                                alt="Hình ảnh sản phẩm" class="product-image" />
                                             <div class="product-info ms-2">
                                                 <p class="m-0">{{ $orderItem->product_name }}</p>
                                                 <p class="m-0">Số lượng: {{ $orderItem->quantity }}</p>
                                                 <p class="m-0">Giá:
-                                                    {{ number_format($orderItem->variant_price_regular, 0, ',', '.') }}đ
+                                                    {{ number_format($orderItem->variant_price_sale, 3, '.', 0) }}đ
                                                 </p>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
-                            <p class="total-price">Tổng giá: {{ number_format($item->total_price, 0, ',', '.') }}đ</p>
+                            <p class="total-price">Tổng giá: {{ number_format($item->total_price, 3, '.') }}đ</p>
                             <hr class="my-3">
                             <div class="bottom d-flex justify-content-start gap-2">
 
+                                @if ($item->payment_status == 'cho_thanh_toan' && $item->payment_method == 'THANH_TOAN_ONLINE')
+                                    <a href="{{ route('orderDetail', ['id' => $item->id]) }}"
+                                        class="order-link btn btn-success btn-sm">
+                                        Thanh toán
+                                    </a>
+                                @endif
                                 @if ($item->status != 'huy_don_hang')
                                     <a href="{{ route('orderDetail', ['id' => $item->id]) }}"
                                         class="order-link btn btn-gray btn-sm">

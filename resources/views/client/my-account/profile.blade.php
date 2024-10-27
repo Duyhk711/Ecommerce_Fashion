@@ -32,41 +32,44 @@
                         <p>{{ $currentUser->phone }}</p>
                     </div>
                 </div>
-                <div class="details d-flex align-items-center mb-2">
-                    <div class="left">
-                        <h6 class="mb-0 body-font fw-500">Thành Phố</h6>
+                @if ($defaultAddress)
+                    <div class="details d-flex align-items-center mb-2">
+                        <div class="left">
+                            <h6 class="mb-0 body-font fw-500">Thành Phố</h6>
+                        </div>
+                        <div class="right">
+                            <p>{{ $defaultAddress->city }}</p>
+                        </div>
                     </div>
-                    <div class="right">
-                        <p>{{ $defaultAddress->city }}</p>
+                    <div class="details d-flex align-items-center mb-2">
+                        <div class="left">
+                            <h6 class="mb-0 body-font fw-500">Quận/Huyện</h6>
+                        </div>
+                        <div class="right">
+                            <p>{{ $defaultAddress->district }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="details d-flex align-items-center mb-2">
-                    <div class="left">
-                        <h6 class="mb-0 body-font fw-500">Quận/Huyện</h6>
+                    <div class="details d-flex align-items-center mb-2">
+                        <div class="left">
+                            <h6 class="mb-0 body-font fw-500">Phường/Xã</h6>
+                        </div>
+                        <div class="right">
+                            <p>{{ $defaultAddress->ward }}</p>
+                        </div>
                     </div>
-                    <div class="right">
-                        <p>{{ $defaultAddress->district }}</p>
+                    @endif
+                    <div class="details d-flex align-items-center mb-2">
+                        <div class="left">
+                            <h6 class="mb-0 body-font fw-500">Ngày tạo tài khoản</h6>
+                        </div>
+                        <div class="right">
+                            <p>{{ $currentUser->created_at }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="details d-flex align-items-center mb-2">
-                    <div class="left">
-                        <h6 class="mb-0 body-font fw-500">Phường/Xã</h6>
-                    </div>
-                    <div class="right">
-                        <p>{{ $defaultAddress->ward }}</p>
-                    </div>
-                </div>
-                <div class="details d-flex align-items-center mb-2">
-                    <div class="left">
-                        <h6 class="mb-0 body-font fw-500">Ngày tạo tài khoản</h6>
-                    </div>
-                    <div class="right">
-                        <p>{{ $currentUser->created_at }}</p>
-                    </div>
-                </div>
             </div>
             <!-- Edit Profile Modal -->
-            <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -74,28 +77,39 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                         </div>
                         <div class="modal-body">
-                            <form class="edit-profile-form" method="post" action="{{route('profile.update',$currentUser->id)}}" enctype="multipart/form-data">
+                            <form class="edit-profile-form" method="post"
+                                action="{{ route('profile.update', $currentUser->id) }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-row">
                                     <div class="form-group col-12 mb-4 text-center">
-                                        <div class="profileImg img-thumbnail shadow bg-white rounded-circle position-relative mx-auto">
-                                            <img id="avatarPreview" src="{{ !empty($currentUser->avatar) ? asset('storage/' . $currentUser->avatar) : asset('client/images/users/default-avatar.jpg') }}" class="rounded-circle" alt="profile" style="width: 130px; height: 130px; object-fit: cover;" />
+                                        <div
+                                            class="profileImg img-thumbnail shadow bg-white rounded-circle position-relative mx-auto">
+                                            <img id="avatarPreview"
+                                                src="{{ !empty($currentUser->avatar) ? asset('storage/' . $currentUser->avatar) : asset('client/images/users/default-avatar.jpg') }}"
+                                                class="rounded-circle" alt="profile"
+                                                style="width: 130px; height: 130px; object-fit: cover;" />
                                             <div class="thumb-edit">
-                                                <label for="profileUpload" class="d-flex justify-content-center position-absolute top-0 start-100 translate-middle p-2 rounded-circle shadow btn btn-secondary mt-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa">
+                                                <label for="profileUpload"
+                                                    class="d-flex justify-content-center position-absolute top-0 start-100 translate-middle p-2 rounded-circle shadow btn btn-secondary mt-3"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa">
                                                     <i class="icon anm anm-pencil-ar an-1x"></i>
                                                 </label>
-                                                <input name="avatar" type="file" id="profileUpload" class="image-upload d-none" accept="image/*" />
+                                                <input name="avatar" type="file" id="profileUpload"
+                                                    class="image-upload d-none" accept="image/*" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group col-12 mb-3">
-                                        <input name="name" placeholder="Họ và Tên" value="{{ $currentUser->name }}" id="editProfile-Name" type="text" class="form-control" required />
+                                        <input name="name" placeholder="Họ và Tên" value="{{ $currentUser->name }}"
+                                            id="editProfile-Name" type="text" class="form-control" required />
                                     </div>
                                     <div class="form-group col-12 mb-3">
-                                        <input name="email" placeholder="Địa chỉ Email" value="{{ $currentUser->email }}" id="editProfile-Emailaddress" type="email" class="form-control" required />
+                                        <input name="email" placeholder="Địa chỉ Email" value="{{ $currentUser->email }}"
+                                            id="editProfile-Emailaddress" type="email" class="form-control" required />
                                     </div>
                                     <div class="form-group col-12 mb-3">
-                                        <input name="phone" placeholder="Số điện thoại" value="{{ $currentUser->phone }}" id="editProfile-Phonenumber" type="text" class="form-control" required />
+                                        <input name="phone" placeholder="Số điện thoại" value="{{ $currentUser->phone }}"
+                                            id="editProfile-Phonenumber" type="text" class="form-control" required />
                                     </div>
                                 </div>
                                 <div class="modal-footer justify-content-center">
@@ -121,7 +135,7 @@
                         <h6 class="mb-0 body-font fw-500">Email address</h6>
                     </div>
                     <div class="right">
-                        <p>info@example.com</p>
+                        <p>{{ $currentUser->email }}</p>
                     </div>
                 </div>
                 <div class="details d-flex align-items-center mb-2">
@@ -129,17 +143,10 @@
                         <h6 class="mb-0 body-font fw-500">Phone number</h6>
                     </div>
                     <div class="right">
-                        <p>(+40) 123 456 7890</p>
+                        <p>{{ $currentUser->phone }}</p>
                     </div>
                 </div>
-                <div class="details d-flex align-items-center mb-2">
-                    <div class="left">
-                        <h6 class="mb-0 body-font fw-500">Password</h6>
-                    </div>
-                    <div class="right">
-                        <p>xxxxxxx</p>
-                    </div>
-                </div>
+              
             </div>
 
             <!-- Edit Login details Modal -->
@@ -214,5 +221,4 @@
             }
         });
     </script>
-
 @endsection

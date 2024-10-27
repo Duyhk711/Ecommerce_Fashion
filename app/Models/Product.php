@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory,SoftDeletes; // thiếu và đã bổ sung 9/9
+    use HasFactory, SoftDeletes; // thiếu và đã bổ sung 9/9
     protected $fillable = [
         'catalogue_id',
         'name',
@@ -36,21 +36,21 @@ class Product extends Model
 
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class,'product_id');
+        return $this->hasMany(ProductVariant::class, 'product_id');
     }
 
     public function variantAttributes()
     {
         return $this->hasManyThrough(
-            Attribute::class, 
-            ProductVariant::class, 
-            'product_id', 
-            'id', 
-            'id', 
+            Attribute::class,
+            ProductVariant::class,
+            'product_id',
+            'id',
+            'id',
             'attribute_id'
         );
     }
-    
+
     public function images()
     {
         return $this->hasMany(ProductImage::class);
@@ -60,7 +60,7 @@ class Product extends Model
     {
         return $this->hasOne(ProductImage::class)->where('is_main', 1);
     }
-    
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -77,8 +77,6 @@ class Product extends Model
             'attribute_value_id' // khóa ngoại trong bảng variant_attributes
         );
     }
-
-    
 
     public function scopeFilterByCategory($query, $categories)
     {
@@ -99,11 +97,11 @@ class Product extends Model
             // Loại bỏ ký tự "đ" và khoảng trắng, sau đó phân tách giá trị
             $priceRange = str_replace(['đ', ' ', ','], '', $priceRange);
             $range = explode('-', $priceRange);
-
+            // dd($range);
             // Đảm bảo có đủ 2 giá trị (min và max)
             if (count($range) == 2) {
-                $min = (float) $range[0];
-                $max = (float) $range[1];
+                $min = ((float) $range[0]) / 1000;
+                $max = ((float) $range[1]) / 1000;
 
                 // Trả về query có điều kiện lọc theo khoảng giá
                 return $query->whereBetween('price_sale', [$min, $max]);
@@ -120,5 +118,5 @@ class Product extends Model
         }
         return $query; // Nếu không có màu, trả về query gốc
     }
-    
+
 }
