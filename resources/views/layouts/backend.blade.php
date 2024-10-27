@@ -5,122 +5,66 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-  <title>Dashmix - Bootstrap 5 Admin Template &amp; UI Framework</title>
+  <title>@yield('title')</title>
 
   <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
   <meta name="author" content="pixelcave">
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Icons -->
-  <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
+  <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
    
   <!-- Modules -->
   
   @yield('css')
-  @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js'])
+  {{-- @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js']) --}}
+  @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/dashmix/themes/xwork.scss', 'resources/js/dashmix/app.js']) --}}
 
 </head>
-
 <body>
-  <!-- Page Container -->
-  <!--
-    Available classes for #page-container:
+  {{-- @if (session('success'))
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          $.notify({
+              message: '{{ session('success') }}'
+          },{
+              type: 'success',
+              icon: 'fa fa-check me-1',
+              delay: 3000
+          });
+      });
+  </script>
+@endif
 
-    SIDEBAR & SIDE OVERLAY
+@if (session('error'))
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          $.notify({
+              message: '{{ session('error') }}'
+          },{
+              type: 'danger',
+              icon: 'fa fa-times me-1',
+              delay: 3000
+          });
+      });
+  </script>
+@endif --}}
 
-      'sidebar-r'                                 Right Sidebar and left Side Overlay (default is left Sidebar and right Side Overlay)
-      'sidebar-mini'                              Mini hoverable Sidebar (screen width > 991px)
-      'sidebar-o'                                 Visible Sidebar by default (screen width > 991px)
-      'sidebar-o-xs'                              Visible Sidebar by default (screen width < 992px)
-      'sidebar-dark'                              Dark themed sidebar
-
-      'side-overlay-hover'                        Hoverable Side Overlay (screen width > 991px)
-      'side-overlay-o'                            Visible Side Overlay by default
-
-      'enable-page-overlay'                       Enables a visible clickable Page Overlay (closes Side Overlay on click) when Side Overlay opens
-
-      'side-scroll'                               Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (screen width > 991px)
-
-    HEADER
-
-      ''                                          Static Header if no class is added
-      'page-header-fixed'                         Fixed Header
-
-
-    FOOTER
-
-      ''                                          Static Footer if no class is added
-      'page-footer-fixed'                         Fixed Footer (please have in mind that the footer has a specific height when is fixed)
-
-    HEADER STYLE
-
-      ''                                          Classic Header style if no class is added
-      'page-header-dark'                          Dark themed Header
-      'page-header-glass'                         Light themed Header with transparency by default
-                                                  (absolute position, perfect for light images underneath - solid light background on scroll if the Header is also set as fixed)
-      'page-header-glass page-header-dark'         Dark themed Header with transparency by default
-                                                  (absolute position, perfect for dark images underneath - solid dark background on scroll if the Header is also set as fixed)
-
-    MAIN CONTENT LAYOUT
-
-      ''                                          Full width Main Content if no class is added
-      'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
-      'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
-        
-    DARK MODE
-
-      'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
-  -->
-  @if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Dashmix.helpers('jq-notify', {
-                type: 'success',
-                icon: 'fa fa-check me-1',
-                message: '{{ session('success') }}'
-            });
-        });
-    </script>
-  @endif
-
-  @if (session('error'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Dashmix.helpers('jq-notify', {
-                type: 'danger',
-                icon: 'fa fa-times me-1',
-                message: '{{ session('error') }}'
-            });
-        });
-    </script>
-  @elseif(session('errors'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            @foreach ($errors->all() as $error)
-                Dashmix.helpers('jq-notify', {
-                    type: 'danger',
-                    icon: 'fa fa-times me-1',
-                    message: '{{ $error }}'
-                });
-            @endforeach
-        });
-    </script>
-  @endif
-  <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow">
+  <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow fs-sm">
     <!-- Side Overlay-->
     <aside id="side-overlay">
       <!-- Side Header -->
-      <div class="bg-image" style="background-image: url('{{ asset('media/various/bg_side_overlay_header.jpg') }}');">
+      <div class="bg-image" style="background-image: url('{{ asset('admin/media/various/bg_side_overlay_header.jpg') }}');">
         <div class="bg-primary-op">
           <div class="content-header">
             <!-- User Avatar -->
             <a class="img-link me-1" href="javascript:void(0)">
-              <img class="img-avatar img-avatar48" src="{{ asset('media/avatars/avatar10.jpg') }}" alt="">
+              <img class="img-avatar img-avatar48" src="{{ asset('admin/media/avatars/avatar10.jpg') }}" alt="">
             </a>
             <!-- END User Avatar -->
 
@@ -276,7 +220,7 @@
       <!-- END Side Header -->
 
       <!-- Sidebar Scrolling -->
-      <div class="js-sidebar-scroll">
+      <div class="js-sidebar-scroll  ">
         <!-- Side Navigation -->
         <div class="content-side content-side-full">
           <ul class="nav-main">
@@ -392,7 +336,7 @@
             {{--COMMENT--}}
             <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/comments*') ? 'true' : 'false' }}" href="#">
-                <i class="nav-main-link-icon fa fa-image"></i>
+                <i class="nav-main-link-icon fa fa-comments"></i>
                 <span class="nav-main-link-name">Quản lý Bình luận</span>
               </a>
               <ul class="nav-main-submenu{{ request()->is('admin/comments*') ? ' show' : '' }}">
@@ -407,7 +351,7 @@
             {{-- MESSAGE --}}
             <li class="nav-main-item{{ request()->is('admin/chats*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/chats*') ? 'true' : 'false' }}" href="#">
-                <i class="nav-main-link-icon fa fa-image"></i>
+                <i class="nav-main-link-icon fa fa-envelope"></i>
                 <span class="nav-main-link-name">Quản lý tin nhắn</span>
               </a>
               <ul class="nav-main-submenu{{ request()->is('/admin/chats*') ? ' show' : '' }}">
@@ -419,14 +363,11 @@
               </ul>
             </li>
 
-            
-
-          
             <li class="nav-main-heading">More</li>
             <li class="nav-main-item">
               <a class="nav-main-link" href="/">
                 <i class="nav-main-link-icon fa fa-globe"></i>
-                <span class="nav-main-link-name">Landing</span>
+                <span class="nav-main-link-name">Website</span>
               </a>
             </li>
           </ul>
@@ -650,8 +591,34 @@
   </div>
   @yield('modal')
   <!-- END Page Container -->
-  <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- toastr CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+  <!-- toastr JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          @if (session('success'))
+              toastr.success('{{ session('success') }}', 'Thành công', {
+                  positionClass: 'toast-top-right',
+                  timeOut: 3000
+              });
+          @endif
+
+          @if (session('error'))
+              toastr.error('{{ session('error') }}', 'Lỗi', {
+                  positionClass: 'toast-top-right',
+                  timeOut: 3000
+              });
+          @endif
+      });
+  </script>
+  
 </body>
 @yield('js')
 

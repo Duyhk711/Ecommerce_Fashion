@@ -24,7 +24,7 @@
                         src="{{ asset('client/images/icons/homework.png') }}" alt="icon" width="64"
                         height="64" />
                     <div class="content">
-                        <h3 class="fs-5 mb-1 text-primary">12</h3>
+                        <h3 class="fs-5 mb-1 text-primary">{{$getTotalOrdersPending}}</h3>
                         <p>Đơn hàng đang xử lí</p>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                         src="{{ asset('client/images/icons/order.png') }}" alt="icon" width="64"
                         height="64" />
                     <div class="content">
-                        <h3 class="fs-5 mb-1 text-primary">10</h3>
+                        <h3 class="fs-5 mb-1 text-primary">{{$getTotalOrdersSucess}}</h3>
                         <p>Đơn hàng đã nhận</p>
                     </div>
                 </div>

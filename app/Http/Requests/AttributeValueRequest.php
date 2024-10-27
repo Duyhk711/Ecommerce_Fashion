@@ -9,12 +9,12 @@ class AttributeValueRequest extends FormRequest
     public function rules()
     {
         return [
-            'attribute_id' => 'required|',
+            'attribute_id' => 'required|array',  // Đảm bảo nó là mảng
             'attribute_id.*' => 'exists:attributes,id',
-            'value' => 'required|',
-            // 'value.*' => 'string|max:255',
-            // 'additional_value' => 'array',
-            // 'additional_value.*.*' => 'nullable|string|max:255',
+            'value' => 'required|array', // Đảm bảo value cũng là mảng
+            'value.*' => 'string|max:255', // Kiểm tra từng phần tử trong value
+            'color_code' => 'nullable|array', // Trường color_code là tùy chọn, có thể là mảng
+            'color_code.*' => 'nullable|string|max:7', // Kiểm tra từng phần tử trong color_code
         ];
     }
 
@@ -22,16 +22,16 @@ class AttributeValueRequest extends FormRequest
     {
         return [
             'attribute_id.required' => 'Trường thuộc tính không được để trống.',
-            // 'attribute_id.array' => 'Trường thuộc tính phải là một mảng.',
+            'attribute_id.array' => 'Trường thuộc tính phải là một mảng.',
             'attribute_id.*.exists' => 'Thuộc tính không tồn tại.',
             'value.required' => 'Trường giá trị không được để trống.',
-            // 'value.array' => 'Trường giá trị phải là một mảng.',
+            'value.array' => 'Trường giá trị phải là một mảng.',
             'value.*.string' => 'Giá trị phải là một chuỗi.',
-            // 'value.*.max' => 'Giá trị không được vượt quá 255 ký tự.',
-            // 'additional_value.array' => 'Trường giá trị bổ sung phải là một mảng.',
-            // 'additional_value.*.*.nullable' => 'Giá trị bổ sung có thể để trống.',
-            // 'additional_value.*.*.string' => 'Giá trị bổ sung phải là một chuỗi.',
-            // 'additional_value.*.*.max' => 'Giá trị bổ sung không được vượt quá 255 ký tự.',
+            'value.*.max' => 'Giá trị không được vượt quá 255 ký tự.',
+            'color_code.array' => 'Mã màu phải là một mảng.',
+            'color_code.*.nullable' => 'Mã màu có thể để trống.',
+            'color_code.*.string' => 'Mã màu phải là một chuỗi.',
+            'color_code.*.max' => 'Mã màu không được vượt quá 7 ký tự.',
         ];
     }
 
@@ -40,3 +40,4 @@ class AttributeValueRequest extends FormRequest
         return true;
     }
 }
+

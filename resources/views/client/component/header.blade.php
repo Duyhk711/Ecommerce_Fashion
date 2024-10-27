@@ -175,13 +175,13 @@
                  <div class="wishlist-link iconset" title="Wishlist">
                      <a href="{{ route('my.wishlist') }}">
                          <i class="hdr-icon icon anm anm-heart-l"></i>
-                         <span class="wishlist-count">
-                             @auth
-                                 {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
-                             @else
-                                 0
-                             @endauth
-                         </span>
+                         <span class="wishlist-count" id="wishlist-count">
+                            @auth
+                                {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
+                            @else
+                                0
+                            @endauth
+                        </span>
                      </a>
                  </div>
                  <!--End Wishlist-->
