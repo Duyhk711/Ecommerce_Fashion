@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +23,7 @@ class User extends Authenticatable
         'avatar',
         'phone',
         'email',
+        'google_id',
         'password',
     ];
 
@@ -46,23 +47,30 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-     public function cart()
-     {
-         return $this->hasOne(Cart::class);
-     }
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
 
-     public function addresses()
-     {
-         return $this->hasMany(Address::class);
-     }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 
-     public function orders()
-     {
-         return $this->hasMany(Order::class);
-     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 
-     public function comments()
-     {
-         return $this->hasMany(Comment::class);
-     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class, 'user_voucher')
+                    ->withPivot('saved_at', 'is_used');
+    }
 }

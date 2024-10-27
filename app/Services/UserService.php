@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Requests\AuthRequest;
-use App\Models\Address;
-use App\Models\Order;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +18,13 @@ class UserService
         // Giả sử bạn muốn lấy danh sách địa chỉ của người dùng đang đăng nhập
         $userId = Auth::id();
         return Address::where('user_id', $userId)->get();
+    }
+
+    //lấy địa chỉ theo id
+   public function getAddressById($id)
+    {
+        // Tìm địa chỉ theo ID
+        return Address::find($id); // Sử dụng Eloquent để tìm địa chỉ
     }
 
     //them moi dia chi
@@ -45,9 +53,10 @@ class UserService
     //lấy địa chỉ mặc định
     public function getDefaultAddress($userId)
     {
-        return Address::where('user_id', $userId)
-                      ->where('is_default', true)
-                      ->first();
+        $address = Address::where('user_id', $userId)
+        ->where('is_default', true)
+        ->first();
+        return $address ?? new Address();
     }
 
     public function deleteAddress(int $id)
@@ -58,6 +67,27 @@ class UserService
         }
         return false;
     }
+
+    //sửa địa chỉ
+    public function updateAddress(int $addressId, array $data)
+    {
+        $address = Address::find($addressId);
+        if ($address && $address->user_id === auth()->id()) {
+            return $address->update([
+                'customer_name' => $data['customer_name'],
+                'customer_phone' => $data['customer_phone'],
+                'address_line1' => $data['address_line1'],
+                'address_line2' => $data['address_line2'] ?? $address->address_line2,
+                'ward' => $data['ward'],
+                'district' => $data['district'],
+                'city' => $data['city'],
+                'type' => $data['type'],
+            ]);
+        }
+
+        return false;
+    }
+
     public function getCurrentUser()
     {
         return Auth::user();
@@ -68,6 +98,21 @@ class UserService
         $userId = Auth::id();
         return Order::where('user_id', $userId)->count();
     }
+    public function getTotalOrdersPending()
+    {
+        $userId = Auth::id();
+        return Order::where('user_id', $userId)
+            ->whereIn('status', [1, 2, 3])
+            ->count();
+    }
+    public function getTotalOrdersSucess()
+    {
+        $userId = Auth::id();
+        return Order::where('user_id', $userId)
+            ->where('status', 4)
+            ->count();
+    }
+
 
     public function updateProfile(array $data, User $user)
     {
@@ -82,5 +127,4 @@ class UserService
         }
         return $user->update($data);
     }
-
 }
