@@ -16,6 +16,8 @@ class VariantAttribute extends Model
         'attribute_value_id',
     ];
 
+    protected $dates = ['deleted_at'];
+    
     public function productVariant()
     {
         return $this->belongsTo(ProductVariant::class);

@@ -31,8 +31,9 @@ class MyOrderController extends Controller
 
     public function show($id)
     {
+        $currentUser = $this->userService->getCurrentUser();
         $order = $this->myOrderService->getOrderDetail($id);
-        $commentDataArray = []; 
+        $commentDataArray = [];
             foreach ($order->items as $item) {
                 $commentData = $this->myOrderService->getCommentForProduct($id, $item->productVariant->product->id);
                 $commentDataArray[$item->productVariant->product->id] = [
@@ -50,15 +51,15 @@ class MyOrderController extends Controller
             } else {
                 $currentComment = null;
             }
-            
+
 
             $commentDetails = $currentComment ? $this->myOrderService->getCommentById($currentComment) : null;
 
             // dd($order);
             // dd($commentDataArray[$productId]['comment']['id']);
-            return view('client.my-account.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment','commentDetails'));
+            return view('client.my-account.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment','commentDetails','currentUser'));
     }
-    
+
 
 
     public function cancelOrder(Request $request, $order_id)

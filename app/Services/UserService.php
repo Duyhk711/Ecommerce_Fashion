@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Requests\AuthRequest;
-use App\Models\Address;
-use App\Models\Order;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -52,9 +53,10 @@ class UserService
     //lấy địa chỉ mặc định
     public function getDefaultAddress($userId)
     {
-        return Address::where('user_id', $userId)
-            ->where('is_default', true)
-            ->first();
+        $address = Address::where('user_id', $userId)
+        ->where('is_default', true)
+        ->first();
+        return $address ?? new Address();
     }
 
     public function deleteAddress(int $id)
@@ -96,6 +98,21 @@ class UserService
         $userId = Auth::id();
         return Order::where('user_id', $userId)->count();
     }
+    public function getTotalOrdersPending()
+    {
+        $userId = Auth::id();
+        return Order::where('user_id', $userId)
+            ->whereIn('status', [1, 2, 3])
+            ->count();
+    }
+    public function getTotalOrdersSucess()
+    {
+        $userId = Auth::id();
+        return Order::where('user_id', $userId)
+            ->where('status', 4)
+            ->count();
+    }
+
 
     public function updateProfile(array $data, User $user)
     {

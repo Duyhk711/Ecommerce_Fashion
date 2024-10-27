@@ -10,14 +10,16 @@ return new class extends Migration
     {
         Schema::create('user_voucher', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Khóa ngoại tới bảng users
-            $table->foreignId('voucher_id')->constrained()->onDelete('cascade'); // Khóa ngoại tới bảng vouchers
-            $table->timestamps(); // Thời gian tạo và cập nhật
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
+            $table->foreignId('voucher_id')->constrained()->onDelete('cascade'); 
+            $table->timestamp('saved_at')->nullable(); 
+            $table->boolean('is_used')->default(false); 
+            $table->timestamps(); 
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('user_vouchers');
+        Schema::dropIfExists('user_voucher');
     }
 };

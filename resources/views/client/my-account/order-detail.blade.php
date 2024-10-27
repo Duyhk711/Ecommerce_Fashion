@@ -101,6 +101,16 @@
             font-weight: 600;
             color: #333;
         }
+         .btn-outline-danger {
+            color: #dc3545;
+            background-color: #fff;
+            border-color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: white;
+        }
     </style>
 @endsection
 
@@ -108,7 +118,6 @@
     <div class="order-detail-container ">
         <!-- Header đơn hàng -->
         <div class="order-header">
-            <a href="{{ route('my.order') }}" class="btn btn-sm mb-2 fw-normal text-capitalize" style="height: 30px"> Quay lại</a> 
             <p>
                 Mã vận đơn: <strong>{{ $order->sku }}</strong>
                 @php
@@ -122,7 +131,7 @@
                 @endphp
                 <span class="badge text-bg
                     @if ($order->status == '1') bg-secondary
-                    @elseif($order->status == '2') bg-secondary
+                    @elseif($order->status == '2') bg-info
                     @elseif($order->status == '3') bg-primary text-dark
                     @elseif($order->status == '4') bg-success
                     @elseif($order->status == 'huy_don_hang') bg-danger
@@ -134,7 +143,7 @@
                         <form action="{{ route('order.cancel', ['order_id' => $order->id]) }}" method="POST"
                             id="cancelOrderForm-{{ $order->id }}">
                             @csrf
-                            <button type="button" class="btn btn-danger btn-sm soft-btn"
+                            <button type="button" class="btn btn-outline-danger btn-sm"
                                 onclick="confirmCancelOrder({{ $order->id }})">Hủy đơn hàng</button>
                         </form>
                     </div>
@@ -177,7 +186,7 @@
 
                 @foreach ($order->items as $item)
                 <tr>
-                    <td> 
+                    <td>
                         <div class="product-item d-flex" style="width: 100%;">
                             <div class="product-image ">
                                 <img src="{{ asset('storage/' . $item->productVariant->image) }}" alt="{{ $item->product_name }}"
@@ -192,7 +201,7 @@
                                         $size = '';
                                         $color = '';
                                     @endphp
-                
+
                                     @foreach ($item->productVariant->variantAttributes as $variantAttribute)
                                         @if ($variantAttribute->attribute->name == 'Size')
                                             @php $size = $variantAttribute->attributeValue->value; @endphp
@@ -234,7 +243,7 @@
                         @else
                             <strong style="">{{ number_format(($price_sale * $item->quantity * 1000), 0, '.', ',') }} đ</strong>
                         @endif
-                        
+
                     </td>
                 </tr>
                 <tr>
@@ -242,23 +251,23 @@
                         @if ($order->status == '4')
                             @if ($commentDataArray[$item->productVariant->product->id]['status'] == "not_comment")
                                 <div class="review-button-container" style="text-align: right;">
-                                    <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"  
-                                        data-bs-toggle="modal" 
+                                    <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"
+                                        data-bs-toggle="modal"
                                         data-bs-target="#reviewModal"
-                                        data-product-id="{{ $item->productVariant->product->id }}" 
-                                        data-order-id="{{ $order->id }}" 
+                                        data-product-id="{{ $item->productVariant->product->id }}"
+                                        data-order-id="{{ $order->id }}"
                                         data-user-id="{{ Auth::id() }}"
                                         data-status="{{ $commentDataArray[$item->productVariant->product->id]['status'] }}">
                                         <i class="fas fa-star mb-1 me-1"></i>Cần đánh giá
                                     </a>
-                                </div> 
+                                </div>
                             @elseif($commentDataArray[$item->productVariant->product->id]['status'] == "commented")
                             <div class="review-button-container" style="text-align: right;">
-                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize" 
-                                    data-bs-toggle="modal" 
+                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#editModal"
-                                    data-product-id="{{ $item->productVariant->product->id }}" 
-                                    data-order-id="{{ $order->id }}" 
+                                    data-product-id="{{ $item->productVariant->product->id }}"
+                                    data-order-id="{{ $order->id }}"
                                     data-user-id="{{ Auth::id() }}"
                                     data-comment="{{ $commentDataArray[$item->productVariant->product->id]['comment']['id'] ?? '' }}"
                                     data-title="{{ $commentDataArray[$item->productVariant->product->id]['comment']['title'] ?? '' }}"
@@ -267,22 +276,22 @@
                                     data-status="{{ $commentDataArray[$item->productVariant->product->id]['status'] }}">
                                     <i class="fas fa-star mb-1 me-1"></i>Sửa đánh giá
                                 </a>
-                            </div> 
+                            </div>
                             @elseif($commentDataArray[$item->productVariant->product->id]['status'] == "updated")
                             <div class="review-button-container" style="text-align: right;">
-                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize" 
-                                    data-bs-toggle="modal" 
+                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#getModal"
-                                    data-product-id="{{ $item->productVariant->product->id }}" 
-                                    data-order-id="{{ $order->id }}" 
+                                    data-product-id="{{ $item->productVariant->product->id }}"
+                                    data-order-id="{{ $order->id }}"
                                     data-user-id="{{ Auth::id() }}"
                                     {{-- data-comment="39" --}}
                                     data-comment="{{$commentDataArray[$item->productVariant->product->id]['comment']['id'] ?? '' }}"
                                     data-status="{{ $commentDataArray[$item->productVariant->product->id]['status'] }}">
                                     <i class="fas fa-star mb-1 me-1"></i>Xem đánh giá
                                 </a>
-                            </div> 
-                            @endif  
+                            </div>
+                            @endif
                         @endif
                     </td>
                 </tr>
@@ -310,13 +319,13 @@
                     <td class="text-end" style="width: 75%" colspan="2"><strong>Tổng đã trả:</strong></td>
                     <td class="text-end">
                         <strong class="total-amount" style="font-weight: normal;">
-                            
+
                             <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }} đ</strong>
                         </strong>
                     </td>
                 </tr>
-            
             </table>
+             <a href="{{ route('my.order') }}" class="btn btn-sm mb-2 fw-normal text-capitalize" style="height: 30px"> Quay lại</a>
         </div>
     </div>
 @endsection
@@ -337,7 +346,7 @@
                             <input type="hidden" name="order_id" id="modal-order-id">
                             <input type="hidden" name="user_id" id="modal-user-id">
                             <input type="hidden" name="product_id" id="modal-product-id">
-                            
+
                             <div id="newCommentContainer">
                                 <input type="text" name="title" class="form-control mb-2" placeholder="Tiêu đề">
                                 <textarea name="comment" class="form-control" rows="5" cols="30" placeholder="Bình luận"></textarea>
@@ -382,10 +391,10 @@
                             <input type="hidden" name="order_id" id="edit-order-id">
                             <input type="hidden" name="comment_id" id="edit-comment-id">
                             <input type="hidden" name="user_id" id="edit-user-id">
-                            
+
                             <input type="text" name="title" class="form-control mb-2" id="edit-title" placeholder="Tiêu đề">
                             <textarea name="comment" class="form-control" rows="5" id="edit-comment" placeholder="Bình luận"></textarea>
-                            
+
                             <label class="spr-form-label">Đánh giá</label>
                             <div class="review-rating">
                                 @for ($i = 1; $i <= 5; $i++)
@@ -423,7 +432,7 @@
                                         <h5 class="spr-review-header-title text-transform-none mb-0 d-inline"></h5>
                                         <div>
                                             <span id="reviewLink" class="product-review spr-starratings m-0">
-                                                
+
                                             </span>
                                         </div>
                                     </div>
@@ -437,7 +446,7 @@
             </div>
         </div>
     </div>
-       
+
 @endsection
 
 @section('js')
@@ -487,7 +496,7 @@
                 var ratingData = triggerElement.getAttribute('data-rating');
 
                 // console.log(commentId);
-                
+
                 document.getElementById('edit-product-id').value = productId;
                 document.getElementById('edit-order-id').value = orderId;
                 document.getElementById('edit-comment-id').value = commentId;
@@ -498,7 +507,7 @@
 
                 // Cập nhật giá trị rating
                 var ratingStars = document.getElementsByName('rating');
-                    
+
                 ratingStars.forEach(star => {
                     var starIcon = star.nextElementSibling.querySelector('i'); // Lấy icon sao kế bên input
                     if (parseInt(star.value) <= parseInt(ratingData)) {
@@ -550,10 +559,10 @@
                                 reviewLinkElement.innerHTML = 'Không có đánh giá';
                             } else {
                                 // Hiển thị sao từ rating
-                                reviewLinkElement.innerHTML = renderStars(data.rating); 
+                                reviewLinkElement.innerHTML = renderStars(data.rating);
                             }
                             console.log(reviewLinkElement.innerHTML); // Kiểm tra nội dung đã được cập nhật
-                        } 
+                        }
 
                             // Cập nhật avatar và thời gian cập nhật
                             document.getElementById('user-image').src = data.avatar; // Cập nhật avatar
@@ -608,7 +617,7 @@
                 confirmButtonText: 'OK'
             });
         @endif
-    
+
         @if(session('success'))
             Swal.fire({
                 icon: 'success',

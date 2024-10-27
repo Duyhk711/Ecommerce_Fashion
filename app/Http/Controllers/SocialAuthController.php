@@ -28,9 +28,9 @@ class SocialAuthController extends Controller
             $newUser = User::create([
                 'name' => $user->getName(),
                 'email' => $user->getEmail(),
-                'facebook_id' => $user->getId(), // Thêm cột này vào bảng users
+                'facebook_id' => $user->getId(),
                 'avatar' => $user->getAvatar(),
-                'password' => bcrypt('password'), // Tạo một mật khẩu giả, nếu không có mật khẩu
+                'password' => bcrypt('password'),
             ]);
 
             Auth::login($newUser);

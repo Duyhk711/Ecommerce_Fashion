@@ -90,50 +90,48 @@
     }
 
     .unread-count {
-    background-color: #ff0000;
-    color: #fff;
-    border-radius: 50%;
-    min-width: 24px; 
-    min-height: 24px; 
-    padding: 3px; 
-    margin-left: 10px;
-    font-size: 0.8em;
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center; 
-    line-height: 1;
-}
-.profile_info {
-    display: flex;
-    justify-content: space-between;
-    width: 100%; 
-}
-.chat-list::-webkit-scrollbar {
-    width: 10px; 
-}
+        background-color: #ff0000;
+        color: #fff;
+        border-radius: 50%;
+        min-width: 24px; 
+        min-height: 24px; 
+        padding: 3px; 
+        margin-left: 10px;
+        font-size: 0.8em;
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center; 
+        line-height: 1;
+    }
+    .profile_info {
+        display: flex;
+        justify-content: space-between;
+        width: 100%; 
+    }
+    .chat-list::-webkit-scrollbar {
+        width: 10px; 
+    }
 
-.chat-list::-webkit-scrollbar-thumb {
-    background-color: #7c848d;
-    border-radius: 10px;
-}
-.chat-list::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
+    .chat-list::-webkit-scrollbar-thumb {
+        background-color: #7c848d;
+        border-radius: 10px;
+    }
+    .chat-list::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
 
+    .chat-window::-webkit-scrollbar {
+        width: 10px; 
+    }
 
-.chat-window::-webkit-scrollbar {
-    width: 10px; 
-}
+    .chat-window::-webkit-scrollbar-thumb {
+        background-color: #7c848d; 
+        border-radius: 10px; 
+    }
 
-.chat-window::-webkit-scrollbar-thumb {
-    background-color: #7c848d; 
-    border-radius: 10px; 
-}
-
-.chat-window::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
-
+    .chat-window::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
 </style>
 
 <div class="row">
@@ -147,18 +145,7 @@
                     </div>
                     <div class="list-group chat-list" id="chatList">
                         <ul class="list-group list-group-flush">
-                            @foreach ($users as $user)
-                                <li class="list-group-item d-flex align-items-center chat-item">
-                                    <img src="{{ Storage::url($user->avatar) }}" class="profile_img rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
-                                    <div class="profile_info d-flex justify-content-between w-100"> 
-                                        <span class="profile_name font-weight-bold">{{ $user->name }}</span>
-                                        @if ($user->unread_count > 0)
-                                            <span class="unread-count">{{ $user->unread_count }}</span>
-                                        @endif
-                                        <span class="id" style="display: none;">{{ $user->id }}</span>
-                                    </div>
-                                </li>
-                            @endforeach
+                            
                         </ul>
                         
                     </div>
@@ -198,163 +185,193 @@
 
 @section('js')
 @vite(['resources/js/app.js']) 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 
 <script>
     $(document).ready(function() {
-    var pusher = new Pusher('{{ $pusherKey }}', {
-        cluster: '{{ $pusherCluster }}',
-        encrypted: true
-    });
+        var pusher = new Pusher('{{ $pusherKey }}', {
+            cluster: '{{ $pusherCluster }}',
+            encrypted: true
+        });
 
-    var userId = {{ Auth::id() }}; 
-    var currentChatUserId = null; 
+        var userId = {{ Auth::id() }}; 
+        var currentChatUserId = null; 
 
-    var channel = pusher.subscribe('chat.' + userId); 
+        var channel = pusher.subscribe('chat.' + userId); 
+        loadUsers(); 
+        channel.bind('user-message', function(data) {
+    if (data && data.message) {
+        let senderId = data.sender_id; 
+        let receiverId = data.receiver_id; 
+        let messageText = data.message;
+        let senderName = data.user.name; 
+        let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (receiverId == userId && senderId == currentChatUserId) {
+            let messageHtml = `
+                <div class="chat-message receiver">
+                    <div class="message-content">
+                        <p><strong>${senderName}:</strong> ${messageText}</p>
+                        <div class="timestamp">${messageTime}</div>
+                    </div>
+                </div>`;
 
-    channel.bind('user-message', function(data) {
-        console.log('Tin nhắn đã nhận:', data);
+            $('#chatMessageContainer').append(messageHtml);
 
-        if (data && data.message) {
-            let senderId = data.sender_id; 
-            let receiverId = data.receiver_id; 
-            let messageText = data.message;
-            let senderName = data.user.name; 
-            let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            if (receiverId == userId && senderId == currentChatUserId) {
-                let messageHtml = `
-                    <div class="chat-message receiver">
-                        <div class="message-content">
-                            <p><strong>${senderName}:</strong> ${messageText}</p>
-                            <div class="timestamp">${messageTime}</div>
-                        </div>
-                    </div>`;
-
-                $('#chatMessageContainer').append(messageHtml);
-
-                scrollToBottom();
-            } else if (receiverId == userId) {
-
-                let $chatItem = $('.chat-item').filter(function() {
-                    return $(this).find('.id').text() == senderId; 
-                });
-
-                if ($chatItem.length > 0) {
-                    let $unreadCount = $chatItem.find('.unread-count');
-                    if ($unreadCount.length > 0) {
-                        $unreadCount.text(parseInt($unreadCount.text()) + 1); 
-                    } else {
-                        $chatItem.append('<span class="unread-count">1</span>'); 
-                    }
-                }
-            }
-        } else {
-            console.error('Dữ liệu tin nhắn không hợp lệ.');
-        }
-    });
-
-$('.chat-item').on('click', function() {
-    let profileName = $(this).find('.profile_name').text();
-    let profileImage = $(this).find('img').attr('src'); 
-    currentChatUserId = $(this).find('.id').text(); 
-    $('#receiver_id').val(currentChatUserId);
-
-    $('#chat_name').html(`<img src="${profileImage}" class="avatar" alt="${profileName}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${profileName}`);
-
-    $(this).find('.unread-count').remove();
-
-    $.ajax({
-        url: '{{ route('admin.markMessagesAsRead') }}',
-        method: 'POST',
-        data: {
-            receiver_id: currentChatUserId,
-            _token: '{{ csrf_token() }}' 
-        },
-        success: function(response) {
-            console.log('Tin nhắn đã được đánh dấu là đã đọc');
-        },
-        error: function(xhr) {
-            console.error('Lỗi khi đánh dấu tin nhắn là đã đọc:', xhr.responseText);
-        }
-    });
-
-    // Fetch messages
-    $.ajax({
-        url: '{{ route('admin.fetchMessages') }}',
-        method: 'GET',
-        data: {
-            receiver_id: currentChatUserId 
-        },
-        success: function(response) {
-            $('#chatMessageContainer').empty(); 
-
-            response.messages.forEach(function(message) {
-                let isSender = message.sender_id == userId; 
-                let userName = isSender ? '{{ Auth::user()->name }}' : profileName; 
-
-                let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                let messageHtml = `
-                    <div class="chat-message ${isSender ? 'sender' : 'receiver'}">
-                        <div class="message-content">
-                            <p><strong>${userName}:</strong> ${message.message}</p>
-                            <div class="timestamp">${messageTime}</div>
-                        </div>
-                    </div>`;
-                $('#chatMessageContainer').append(messageHtml);
-            });
-
-            scrollToBottom();
-        },
-        error: function(xhr) {
-            console.error('Lỗi khi lấy tin nhắn:', xhr.responseText);
-        }
-    });
-});
-
-
-
-    $('#messageForm').on('submit', function(e) {
-        e.preventDefault(); 
-
-        let message = $('#messageInput').val();
-
-        if (currentChatUserId && message) {
             $.ajax({
-                url: '{{ route('admin.sendMessage') }}',
+                url: '{{ route('admin.markMessagesAsRead') }}',
                 method: 'POST',
                 data: {
                     receiver_id: currentChatUserId,
-                    message: message,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    $('#messageInput').val('');
-
-                    let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    let messageHtml = `
-                        <div class="chat-message sender">
-                            <div class="message-content">
-                                <p><strong>{{ Auth::user()->name }}:</strong> ${message}</p>
-                                <div class="timestamp">${messageTime}</div>
-                            </div>
-                        </div>`;
-
-                    $('#chatMessageContainer').append(messageHtml);
-                    scrollToBottom(); 
+                    console.log('Tin nhắn đã được đánh dấu là đã đọc');
                 },
                 error: function(xhr) {
-                    console.error('Lỗi khi gửi tin nhắn:', xhr.responseText);
+                    console.error('Lỗi khi đánh dấu tin nhắn là đã đọc:', xhr.responseText);
+                }
+            });
+
+        } else if (receiverId == userId) {
+            let $chatItem = $('.chat-item').filter(function() {
+                return $(this).data('user-id') == senderId; 
+            });
+            if ($chatItem.length > 0) {
+                let $unreadCount = $chatItem.find('.unread-count');
+                if ($unreadCount.length > 0) {
+                    $unreadCount.text(parseInt($unreadCount.text()) + 1); 
+                } else {
+                    $chatItem.append('<span class="unread-count">1</span>'); 
+                }
+            }
+        }
+        scrollToBottom();
+        loadUsers(); 
+    } else {
+        console.error('Dữ liệu tin nhắn không hợp lệ.');
+    }
+});
+
+        $(document).on('click', '.chat-item', function() {
+            let profileName = $(this).find('.profile_name').text();
+            let profileImage = $(this).find('img').attr('src'); 
+            currentChatUserId = $(this).data('user-id');
+            $('#receiver_id').val(currentChatUserId);
+
+            $('#chat_name').html(`<img src="${profileImage}" class="avatar" alt="${profileName}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${profileName}`);
+
+            $(this).find('.unread-count').remove();
+
+            $.ajax({
+                url: '{{ route('admin.markMessagesAsRead') }}',
+                method: 'POST',
+                data: {
+                    receiver_id: currentChatUserId,
+                    _token: '{{ csrf_token() }}' 
+                },
+                success: function(response) {
+                    console.log('Tin nhắn đã được đánh dấu là đã đọc');
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi đánh dấu tin nhắn là đã đọc:', xhr.responseText);
+                }
+            });
+
+            $.ajax({
+                url: '{{ route('admin.fetchMessages') }}',
+                method: 'GET',
+                data: {
+                    receiver_id: currentChatUserId 
+                },
+                success: function(response) {
+                    $('#chatMessageContainer').empty(); 
+
+                    response.messages.forEach(function(message) {
+                        let isSender = message.sender_id == userId; 
+                        let userName = isSender ? '{{ Auth::user()->name }}' : profileName; 
+
+                        let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                        let messageHtml = `
+                            <div class="chat-message ${isSender ? 'sender' : 'receiver'}">
+                                <div class="message-content">
+                                    <p><strong>${userName}:</strong> ${message.message}</p>
+                                    <div class="timestamp">${messageTime}</div>
+                                </div>
+                            </div>`;
+                        $('#chatMessageContainer').append(messageHtml);
+                    });
+                    scrollToBottom();
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi lấy tin nhắn:', xhr.responseText);
+                }
+            });
+        });
+
+        $('#messageForm').submit(function(e) {
+            e.preventDefault();
+
+            let message = $('#messageInput').val().trim();
+            let receiverId = $('#receiver_id').val();
+
+            if (message !== '' && receiverId) {
+                $.ajax({
+                    url: '{{ route('admin.sendMessage') }}',
+                    method: 'POST',
+                    data: {
+                        message: message,
+                        receiver_id: receiverId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        let messageHtml = `
+                            <div class="chat-message sender">
+                                <div class="message-content">
+                                    <p><strong>{{ Auth::user()->name }}:</strong> ${message}</p>
+                                    <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                                </div>
+                            </div>`;
+                        $('#chatMessageContainer').append(messageHtml);
+                        $('#messageInput').val('');
+                        scrollToBottom();
+                    },
+                    error: function(xhr) {
+                        console.error('Lỗi khi gửi tin nhắn:', xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        function scrollToBottom() {
+        $('.card-body.chat-window').animate({ scrollTop: $('.card-body.chat-window')[0].scrollHeight }, 300);
+    }
+        function loadUsers() {
+            $.ajax({
+                url: '{{ route('admin.getSortedUsers') }}',
+                method: 'GET',
+                success: function(response) {
+                    let chatList = $('#chatList ul');
+                    chatList.empty(); 
+
+                    response.users.forEach(function(user) {
+                        let unreadCountHtml = user.unread_count > 0 ? `<span class="unread-count">${user.unread_count}</span>` : '';
+                        let userHtml = `
+                            <li class="list-group-item d-flex align-items-center chat-item" data-user-id="${user.id}">
+                                <img src="${user.avatar_url}" class="profile_img rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
+                                <div class="profile_info d-flex justify-content-between w-100"> 
+                                    <span class="profile_name font-weight-bold">${user.name}</span>
+                                    ${unreadCountHtml}
+                                </div>
+                            </li>`;
+                        chatList.append(userHtml);
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi tải danh sách user:', xhr.responseText);
                 }
             });
         }
     });
-
-    function scrollToBottom() {
-        $('.card-body.chat-window').animate({ scrollTop: $('.card-body.chat-window')[0].scrollHeight }, 300);
-    }
-});
-
-
 </script>
 @endsection
