@@ -1191,8 +1191,8 @@
   function price_slider() {
     $("#slider-range").slider({
       range: true,
-      min: 0,
-      max: 5000000,
+      min: 10000,
+      max: 3000000,
       values: [0, 3000000],
       slide: function (event, ui) {
         $("#amount").val(ui.values[0] + "đ-" + ui.values[1]) + "đ";

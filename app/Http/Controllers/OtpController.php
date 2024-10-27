@@ -19,12 +19,12 @@ use Twilio\Rest\Client;
 class OtpController extends Controller
 {
     protected $authService;
-    protected $twilio;
-
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
-        $this->twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
+
+        // $this->twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
+
 
     }
     // protected $stringeeService;
@@ -166,25 +166,25 @@ class OtpController extends Controller
         return null;
     }
 
-    private function sendSms($phone, $message)
-    {
-        try {
-            // Đảm bảo $phone là chuỗi, không phải mảng
-            $response = $this->twilio->messages->create(
-                $phone, // $phone là chuỗi số điện thoại
-                [
-                    'from' => env('TWILIO_PHONE_NUMBER'), // Số điện thoại gửi
-                    'body' => $message // Nội dung tin nhắn
-                ]
-            );
+    // private function sendSms($phone, $message)
+    // {
+    //     try {
+    //         // Đảm bảo $phone là chuỗi, không phải mảng
+    //         $response = $this->twilio->messages->create(
+    //             $phone, // $phone là chuỗi số điện thoại
+    //             [
+    //                 'from' => env('TWILIO_PHONE_NUMBER'), // Số điện thoại gửi
+    //                 'body' => $message // Nội dung tin nhắn
+    //             ]
+    //         );
 
-            Log::info('Phản hồi từ Twilio: ' . $response->sid);
-            return $response;
-        } catch (\Exception $e) {
-            Log::error('Lỗi khi gửi OTP qua Twilio: ' . $e->getMessage());
-            return false;
-        }
-    }
+    //         Log::info('Phản hồi từ Twilio: ' . $response->sid);
+    //         return $response;
+    //     } catch (\Exception $e) {
+    //         Log::error('Lỗi khi gửi OTP qua Twilio: ' . $e->getMessage());
+    //         return false;
+    //     }
+    // }
 
 
     public function resendOtpPhone(Request $request)

@@ -17,7 +17,7 @@ return new class extends Migration
                 '2',
                 '3',
                 '4',
-                'huy_don_hang'
+                'huy_don_hang',
             ])->default('1')->change();
         });
     }

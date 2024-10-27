@@ -87,7 +87,7 @@
                                             href="{{ route('admin.users.show', $user) }}">
                                             <i class="fa fa-fw fa-eye"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Show"
+                                        {{-- <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Show"
                                             href="{{ route('admin.users.edit', $user) }}">
                                             <i class="fa fa-pencil-alt"></i>
                                         </a>
@@ -99,7 +99,7 @@
                                                 data-bs-toggle="tooltip" title="Delete">
                                                 <i class="fa fa-fw fa-times text-danger"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                     </div>
                                 </td>

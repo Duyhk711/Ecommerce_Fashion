@@ -1,5 +1,16 @@
 @extends('layouts.client')
-
+@section('css')
+<style>
+    .product-name a {
+    display: inline-block;
+    width: 100%; /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
+    white-space: nowrap; /* Không cho phép xuống dòng */
+    overflow: hidden; /* Ẩn văn bản thừa */
+    text-overflow: ellipsis; /* Thêm dấu "..." vào phần cuối nếu vượt quá */
+    max-width: 20ch; /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
+}
+</style>
+@endsection
 @section('content')
     @include('client.component.page_header')
     <div class="container" style="max-width: 80%;">
@@ -318,17 +329,18 @@
                                         <!-- Start Product Image -->
                                         <div class="product-image">
                                             <!-- Start Product Image -->
-                                            <a href="product-layout1.html" class="product-img rounded-0">
+                                            <a href="{{ route('productDetail', $product->slug) }}"
+                                                class="product-img rounded-0">
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
-                                                    data-src="{{ $product->img_thumbnail }}"
-                                                    src="{{ $product->img_thumbnail }}" alt="Product" title="Product"
+                                                    data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product" title="Product"
                                                     width="625" height="808" />
                                                 <!-- End Image -->
                                                 <!-- Hover Image -->
                                                 <img class="hover rounded-0 blur-up lazyload"
-                                                    data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                    src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                    data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                    src="{{ Storage::url($product->img_thumbnail) }}"
                                                     alt="Product" title="Product" width="625" height="808" />
                                                 <!-- End Hover Image -->
                                             </a>
@@ -337,7 +349,7 @@
                                             <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
                                             <!-- End Product label -->
                                             <!--Product Button-->
-                                            <div class="button-set style1">
+                                            {{-- <div class="button-set style1">
                                                 <!--Cart Button-->
                                                 <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
                                                     data-bs-toggle="modal" data-bs-target="#addtocart_modal">
@@ -362,7 +374,7 @@
                                                     title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
                                                         class="text">Add To Wishlist</span></a>
                                                 <!--End Wishlist Button-->
-                                            </div>
+                                            </div> --}}
                                             <!--End Product Button-->
                                         </div>
                                         <!-- End Product Image -->
@@ -373,12 +385,13 @@
                                             <!--End Product Vendor-->
                                             <!-- Product Name -->
                                             <div class="product-name">
-                                                <a href="product-layout1.html">{{ $product->name }}</a>
+                                                <a
+                                                    href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
                                             </div>
                                             <!-- End Product Name -->
                                             <!-- Product Price -->
                                             <div class="product-price">
-                                                <span class="price">{{ $product->price_regular }}đ</span>
+                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
@@ -986,7 +999,7 @@
                 selectedCategories.push(item.getAttribute('data-id'));
             });
 
-            let priceRange = document.getElementById('priceRange').value;
+            let priceRange = document.getElementById('amount').value;
 
             let selectedColors = [];
             document.querySelectorAll('.filter-color .swatch.selected').forEach(color => {

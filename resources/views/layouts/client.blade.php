@@ -73,6 +73,7 @@
             {{-- end main --}}
             <!-- End Body Container -->
         </div>
+
         @include('client.component.footer')
 
 
@@ -97,6 +98,22 @@
         @yield('js')
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
+            function filterCate() {
+                let selectedCategories = [];
+
+                // Lấy các danh mục đã chọn
+                document.querySelectorAll('.category-filter.selected').forEach(item => {
+                    selectedCategories.push(item.getAttribute('data-id'));
+                });
+                let params = new URLSearchParams();
+                if (selectedCategories.length) {
+                    params.append('categories', selectedCategories);
+                }
+
+                // Điều hướng đến URL mới với các tham số
+                window.location.href = '/filterproduct?' + params.toString();
+            }
+
             function validateCheckout(event) {
                 const checkBox = document.getElementById('prTearm');
 
