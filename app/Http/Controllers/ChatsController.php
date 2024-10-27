@@ -93,7 +93,7 @@ public function getSortedUsers()
         $chat->seen = 0;
         $chat->save();
 
-        event(new SendAdminMessage($chat));
+        broadcast(new SendAdminMessage($chat))->toOthers();
 
         return response()->json(['success' => true, 'message' => 'Tin nhắn đã được gửi']);
     }
@@ -125,7 +125,7 @@ public function getSortedUsers()
         $chat->seen = 0;
         $chat->save();
 
-        event(new SendUserMessage($chat));
+        broadcast(new SendUserMessage($chat))->toOthers();
 
         return response()->json(['success' => true, 'message' => 'Tin nhắn đã được gửi']);
     }

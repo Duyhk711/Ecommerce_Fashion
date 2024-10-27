@@ -73,6 +73,7 @@
             {{-- end main --}}
             <!-- End Body Container -->
         </div>
+
         @include('client.component.footer')
 
 
