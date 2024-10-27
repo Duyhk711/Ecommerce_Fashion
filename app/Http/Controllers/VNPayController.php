@@ -102,6 +102,8 @@ class VNPayController extends Controller
         } else {
             // dd('ko ok');
             // Thanh toán thất bại
+            $order = Order::where('session_id', $request->get('vnp_TxnRef'))->first();
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
             return view('client.order-success', compact('orderItems', 'order'))->with('error', 'Giao dịch không thành công!');
         }
 
