@@ -90,11 +90,11 @@
                                 </div>
                                 <!-- End Product Label -->
                                 <!-- Product Buttons -->
-                                <div class="product-buttons">
+                                {{-- <div class="product-buttons">
                                     <a href="#;" class="btn btn-primary prlightbox" data-bs-toggle="tooltip"
                                         data-bs-placement="top" title="Zoom Image"><i
                                             class="icon anm anm-expand-l-arrows"></i></a>
-                                </div>
+                                </div> --}}
                                 <!-- End Product Buttons -->
                             </div>
                             <!-- End Product Main -->
@@ -190,6 +190,7 @@
                                             <li class="swatch x-large available color-option"
                                                 style="background-color: {{ $color['colorCode'] }}; width: 40px; height: 40px; border-radius: 50%;"
                                                 data-color-code="{{ $color['colorCode'] }}"
+                                                data-color-name="{{ $color['value'] }}"
                                                 data-product-image="{{ $color['image'] }}"
                                                 data-attribute-value-id="{{ $color['value'] }}" data-bs-toggle="tooltip"
                                                 title="{{ $color['value'] }}">
@@ -270,7 +271,7 @@
                                     <i class="icon anm anm-paper-l-plane me-2"></i>
                                     <span>Delivery & Returns</span>
                                 </a>
-                                
+
                                 <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
                                     data-bs-target="#productInquiry_modal">
                                     <i class="icon anm anm-question-cil me-2"></i>
@@ -366,14 +367,11 @@
                                                 {{-- Lọc đánh giá --}}
                                                 <div class="d-flex mx-5 rating-filter">
                                                     <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
-                                                        class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất
-                                                        cả</a>
+                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
                                                     @for ($i = 5; $i >= 1; $i--)
                                                         <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                                            class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
-                                                            {{ $i }} <i
-                                                                class="icon anm anm-star text-warning"></i>
-                                                            ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
                                                         </a>
                                                     @endfor
                                                 </div>
@@ -388,11 +386,10 @@
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div style="height: 65px;" class="me-2">
-                                                    <img src="{{ $comment->user->avatar
-                                                        ? asset('storage/' . $comment->user->avatar)
-                                                        : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
-                                                        alt="avatar" style="width: 65px" height="65px"
-                                                        class="rounded-circle blur-up lazyloaded me-4" />
+                                                   <img src="{{ $comment->user->avatar
+                                                    ? asset('storage/' . $comment->user->avatar)
+                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
+                                                    alt="avatar" style="width: 65px; height:65px; object-fit: cover;"  class="rounded-circle blur-up lazyloaded me-4"/>
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div
@@ -477,16 +474,16 @@
                                         <a href="{{ route('productDetail', $products->slug) }}"
                                             class="product-img rounded-0">
                                             <img class="primary rounded-0 blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product5.jpg') }}"
-                                                src="{{ asset('client/images/products/product5.jpg') }}" alt="Product"
+                                                data-src="{{ Storage::url($products->img_thumbnail) }}"
+                                                src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
                                                 title="{{ $products->name }}" width="625" height="808" />
                                             <img class="hover rounded-0 blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                src="{{ asset('client/images/products/product5-1.jpg') }}" alt="Product"
+                                                data-src="{{ Storage::url($products->img_thumbnail) }}"
+                                                src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
                                                 title="{{ $products->name }}" width="625" height="808" />
                                         </a>
                                         <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
-                                        <div class="button-set style1">
+                                        {{-- <div class="button-set style1">
                                             <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
                                                 data-bs-toggle="modal" data-bs-target="#addtocart_modal">
                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -509,7 +506,7 @@
                                                 data-bs-toggle="tooltip" data-bs-placement="left"
                                                 title="Add to Compare"><i class="icon anm anm-random-r"></i><span
                                                     class="text">Add to Compare</span></a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="product-details text-center">
                                         <div class="product-vendor">{{ $products->catalogue->name }}</div>
@@ -1436,29 +1433,6 @@
         });
     </script>
 
-    {{-- select sao --}}
-    <script>
-        // Bắt tất cả các label và radio inputs
-        const stars = document.querySelectorAll('.review-rating label');
-        const inputs = document.querySelectorAll('.review-rating input[type="radio"]');
-
-        // Lặp qua tất cả các label (sao)
-        stars.forEach((star, index) => {
-            // Thêm sự kiện click vào mỗi label (sao)
-            star.addEventListener('click', function() {
-                // Lấy giá trị của input tương ứng (lấy giá trị đánh giá)
-                inputs[index].checked = true;
-
-                // Reset lại tất cả các sao thành class `anm-star-o` (trắng)
-                stars.forEach(s => s.querySelector('i').className = 'icon anm anm-star-o');
-
-                // Tô vàng tất cả các sao từ vị trí hiện tại trở về trước (bao gồm sao vừa click)
-                for (let i = 0; i <= index; i++) {
-                    stars[i].querySelector('i').className = 'icon anm anm-star';
-                }
-            });
-        });
-    </script>
 
     {{-- popup --}}
     <script>
@@ -1500,10 +1474,10 @@
             colorOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     // Lấy mã màu từ data attribute
+                    const colorName = this.getAttribute('data-color-name');
                     const colorCode = this.getAttribute('data-color-code');
-
                     // Cập nhật span hiển thị màu hoặc xóa nội dung nếu không chọn
-                    colorSpan.textContent = colorCode || '';
+                    colorSpan.textContent = colorName || '';
                 });
             });
 
@@ -1643,7 +1617,7 @@
     {{-- xuong dòng --}}
     <script>
         function toggleContent(element) {
-            element.classList.toggle('expanded'); // Thêm/xóa class 'expanded' khi bấm
+            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
         }
     </script>
 

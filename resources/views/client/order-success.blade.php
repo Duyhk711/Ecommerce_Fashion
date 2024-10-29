@@ -42,8 +42,8 @@
                                                 <td class="text-start"><a
                                                         href="{{ route('productDetail', $item->product_variant_id) }}"
                                                         class="thumb"><img class="rounded-0 blur-up lazyload"
-                                                            data-src="{{ $item->variant_image }}"
-                                                            src="{{ $item->variant_image }}" alt="product" title="product"
+                                                            data-src="{{ Storage::url($item->variant_image)  }}"
+                                                            src="{{Storage::url($item->variant_image) }}" alt="product" title="product"
                                                             width="120" height="170" /></a></td>
                                                 <td class="text-start proName">
                                                     <div class="list-view-item-title">

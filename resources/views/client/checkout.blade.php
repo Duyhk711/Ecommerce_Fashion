@@ -259,8 +259,8 @@
                                                                             href="{{ route('productDetail', $item['product_variant_id']) }}"
                                                                             class="thumb"><img
                                                                                 class="rounded-0 blur-up lazyload"
-                                                                                data-src="{{ $item['image'] }}"
-                                                                                src="{{ $item['image'] }}" alt="product"
+                                                                                data-src="{{ Storage::url($item['image'])  }}"
+                                                                                src="{{ Storage::url($item['image']) }}" alt="product"
                                                                                 title="product" width="120"
                                                                                 height="170" /></a></td>
                                                                     <td class="text-start proName">
@@ -276,14 +276,14 @@
                                                                     <td class="text-center">{{ $item['quantity'] }}</td>
                                                                     <td class="text-center">
 
-                                                                        {{ isset($item['price']) ? number_format($item['price'], 3, '.', 0) . ' VND' : 'Giá không xác định' }}
+                                                                        {{ isset($item['price']) ? number_format($item['price'], 3, '.', 0) . ' đ' : 'Giá không xác định' }}
                                                                     </td>
                                                                     @php
                                                                         $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
                                                                         <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', 0) }}
-                                                                            VND</strong>
+                                                                            đ</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -337,14 +337,14 @@
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
                                                             class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            VND</span></span>
+                                                            đ</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
                                                             giá</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-0 VND</span></span>
+                                                            class="money">-0 đ</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
@@ -359,7 +359,7 @@
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
                                                             class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            VND</b></span>
+                                                            đ</b></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -417,14 +417,14 @@
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
                                                             class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            VND</span></span>
+                                                            đ</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
                                                             giá</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-0 VND</span></span>
+                                                            class="money">-0 đ</span></span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
@@ -439,7 +439,7 @@
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
                                                             class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            VND</b></span>
+                                                            đ</b></span>
                                                 </div>
                                                 <input type="hidden" value="{{ $total }}" name="total_price">
 

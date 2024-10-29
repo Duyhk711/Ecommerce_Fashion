@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->enum('status', [
-                '1',
-                '2',
-                '3',
-                '4',
-                'huy_don_hang',
-            ])->default('1')->change();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('avatar')->nullable()->change();
         });
     }
 
@@ -27,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

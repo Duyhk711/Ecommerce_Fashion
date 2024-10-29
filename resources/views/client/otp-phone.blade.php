@@ -63,10 +63,10 @@
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                     <div class="inner h-100">
-                        <form method="POST" action="{{ route('send-otp-email') }}" class="customer-form">
+                        <form method="POST" action="{{ route('send.otp.phone') }}" class="customer-form">
                             @csrf
-                            <h2 class="text-center fs-4 mb-3">Đăng Nhập bằng OTP qua Email</h2>
-                            <p class="text-center mb-4">Vui lòng nhập email để nhận mã OTP.</p>
+                            <h2 class="text-center fs-4 mb-3">Đăng Nhập bằng OTP qua số điện thoại</h2>
+                            <p class="text-center mb-4">Vui lòng nhập số điện thoại để nhận mã OTP.</p>
                             <p class=" text-muted"><small><span class="required"></span> (Các trường có dấu <span
                                         class="required">*</span> là bắt buộc.)</small></p>
 
@@ -93,11 +93,11 @@
 
                             <div class="form-row">
                                 <div class="form-group col-12">
-                                    <label for="email">Email <span class="required">*</span></label>
-                                    <input type="email" name="email" placeholder="Email" id="email"
-                                        value="{{ old('email') }}"
-                                        class="form-control @error('email') is-invalid @enderror" required />
-                                    @error('email')
+                                    <label for="phone">Số điện thoại <span class="required">*</span></label>
+                                    <input type="text" name="phone" placeholder="Số điện thoại" id="phone"
+                                           value="{{ old('phone') }}"
+                                           class="form-control @error('phone') is-invalid @enderror" required />
+                                    @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -190,126 +190,118 @@
     </script>
 
     <script>
-        document.getElementById('sendOtpButton').addEventListener('click', function() {
-            const emailInput = document.getElementById('email').value;
+        document.getElementById('sendOtpButton').addEventListener('click', function () {
+            const phoneInput = document.getElementById('phone').value;
+            const formattedPhone = validateAndFormatPhone(phoneInput);
 
-            // Hiển thị thông báo chờ
-            Swal.fire({
-                title: 'Đang gửi mã OTP...',
-                text: 'Vui lòng chờ trong giây lát!',
-                icon: 'info',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            // Gửi AJAX request để yêu cầu OTP
-            fetch("{{ route('send-otp-email') }}", {
+            if (formattedPhone) {
+                fetch("{{ route('send.otp.phone') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
-                    body: JSON.stringify({
-                        email: emailInput
-                    })
+                    body: JSON.stringify({ phone: formattedPhone })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        Swal.close(); // Đóng thông báo chờ
-                        // Hiển thị modal nếu gửi thành công
+                        Swal.fire('Thành công', data.message, 'success');
                         $('#otpModal').modal('show');
+                        startOtpTimer();
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi',
-                            text: data.message,
-                        });
+                        Swal.fire('Lỗi', data.message, 'error');
                     }
                 })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại.',
-                    });
-                    console.error('Error:', error);
-                });
+                .catch(error => console.error('Error:', error));
+            }
         });
-        let otpExpiryTime = 60; // Thời gian tồn tại của OTP (giây)
-let timer;
 
-function startOtpTimer() {
-    document.getElementById('resendOtpButton').disabled = true; // Vô hiệu hóa nút gửi lại
-    document.getElementById('timeRemaining').innerText = otpExpiryTime;
-
-    timer = setInterval(() => {
-        otpExpiryTime--;
-        document.getElementById('timeRemaining').innerText = otpExpiryTime;
-
-        if (otpExpiryTime <= 0) {
-            clearInterval(timer);
-            document.getElementById('resendOtpButton').disabled = false; // Kích hoạt nút gửi lại
-            document.getElementById('otpTimer').innerText = "Mã OTP đã hết hạn!";
-        }
-    }, 1000);
-}
-
-document.getElementById('sendOtpButton').addEventListener('click', function () {
-    // Gửi OTP và bắt đầu hẹn giờ
-    startOtpTimer();
-});
-
-document.getElementById('resendOtpButton').addEventListener('click', function () {
-    // Gửi lại yêu cầu OTP
-    const emailInput = document.getElementById('email').value;
-
-    // Hiển thị thông báo chờ
-    Swal.fire({
-        title: 'Đang gửi mã OTP...',
-        text: 'Vui lòng chờ trong giây lát!',
-        icon: 'info',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    fetch("{{ route('send-otp-email') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({ email: emailInput })
-    })
-    .then(response => response.json())
-    .then(data => {
-        Swal.close();
-        if (data.success) {
-            otpExpiryTime = 60; // Reset thời gian
-            startOtpTimer(); // Bắt đầu lại hẹn giờ
-            // Hiển thị modal nếu gửi thành công
-            $('#otpModal').modal('show');
-        } else {
+        document.getElementById('resendOtpButton').addEventListener('click', function () {
             Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: data.message,
+                title: 'Đang gửi lại mã OTP...',
+                text: 'Vui lòng chờ trong giây lát!',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
             });
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Lỗi',
-            text: 'Có lỗi xảy ra khi gửi lại OTP. Vui lòng thử lại.',
+
+            fetch("{{ route('resend.otp.phone') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.close();
+                if (data.success) {
+                    otpExpiryTime = 60;
+                    startOtpTimer();
+                    $('#otpModal').modal('show');
+                } else {
+                    Swal.fire('Lỗi', data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
-        console.error('Error:', error);
-    });
-});
+
+        function startOtpTimer() {
+            let timeRemaining = 60;
+            const interval = setInterval(() => {
+                document.getElementById('timeRemaining').innerText = timeRemaining;
+                timeRemaining--;
+                if (timeRemaining < 0) {
+                    clearInterval(interval);
+                    document.getElementById('resendOtpButton').disabled = false;
+                }else{
+                    document.getElementById('resendOtpButton').disabled = true;
+                }
+            }, 1000);
+        }
+
+        function validateAndFormatPhone(phone) {
+            const phonePattern = /^(0|\+84)[0-9]{9,10}$/; // Kiểm tra định dạng số điện thoại có mã quốc gia hoặc số bắt đầu bằng 0
+            if (phonePattern.test(phone)) {
+                // Nếu số điện thoại bắt đầu bằng 0, chuyển đổi sang mã quốc gia
+                if (phone.startsWith('0')) {
+                    return '+84' + phone.slice(1); // Chuyển đổi sang mã quốc gia Việt Nam
+                }
+                return phone; // Đã có mã quốc gia
+            }
+            Swal.fire('Lỗi', 'Số điện thoại không hợp lệ!', 'error');
+            return null;
+        }
+
+
+
+    </script>
+
+    <script>
+        document.getElementById('otpModal form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Ngăn form reload trang
+            const otpInput = document.getElementById('otp').value;
+
+            fetch("{{ route('verifyOtpPhone') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ otp: otpInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success');
+                    $('#otpModal').modal('hide'); // Đóng modal khi OTP đúng
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
 
     </script>
 @endsection
