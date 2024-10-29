@@ -44,7 +44,7 @@
         }
 
         .modal-content {
-            width: 1000px;
+            width: 700px;
             /* Adjust based on your needs */
             margin: 0 auto;
         }
@@ -71,13 +71,14 @@
         }
 
         .rating-choose:hover {
-            background: rgb(255, 248, 230);
+            background: rgb(255, 235, 185);
             cursor: pointer;
         }
 
         .rating-choose.active {
             font-weight: bold;
-            text-decoration: underline;
+            /* text-decoration: underline; */
+            background: rgb(255, 235, 185);
         }
 
         .d-none {
@@ -279,30 +280,37 @@
                             <!-- End Product Action -->
 
                             <!-- Product Info link -->
-                            <p class="infolinks d-flex-center justify-content-between">
+                            <p class="infolinks d-flex-center ">
                                 <!-- Kiểm tra trạng thái yêu thích của sản phẩm -->
                                 <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
                                     data-product-id="{{ $product->id }}">
                                     <!-- Biểu tượng trái tim viền -->
                                     <i style="font-size:15px"
                                         class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
-
+                                    <span>Thêm vào yêu thích</span>
                                     <!-- Biểu tượng trái tim đổ đầy -->
                                     <i style="color: #e96f84;font-size:15px"
                                         class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
                                 </a>
 
-                                <a href="#sizeChartModal" class="text-link emaillink me-0" data-bs-toggle="modal"
+                                {{-- <a href="#sizeChartModal" class="text-link emaillink me-0" data-bs-toggle="modal"
                                     role="button">
                                     <i class="icon anm anm-question-cil me-2"></i>
                                     <span>Gợi ý size</span>
+                                </a> --}}
+                                <a href="#sizechart_modal" class="btn-icon sizechart_modal"
+                                    data-bs-toggle="modal" data-bs-target="#sizechart_modal">
+                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                        title="Quick View"><i class="icon anm anm-question-cil me-2"></i><span
+                                            class="text">Gợi ý size</span></span>
                                 </a>
 
-                                <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
+                                {{-- <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
                                     data-bs-target="#productInquiry_modal">
                                     <i class="icon anm anm-question-cil me-2"></i>
                                     <span>Enquiry</span>
-                                </a>
+                                </a> --}}
                             </p>
                             <!-- End Product Info link -->
                         </form>
@@ -1044,6 +1052,68 @@
     </div>
     <!--End Product Quickview Modal-->
 
+    <div class="sizechart-modal modal fade" id="sizechart_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div id="sizechart-modal" class="carousel slide">
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <td>SIZE</td>
+                                        <td>Chiều cao (cm)</td>
+                                        <td>Cân nặng (kg)</td>
+                                        <td>Rộng ngực (cm)</td>
+                                        <td>Rộng mông (cm)</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>S (29)</td>
+                                        <td>162-168</td>
+                                        <td>57-62</td>
+                                        <td>84-88</td>
+                                        <td>85-89</td>
+                                    </tr>
+                                    <tr>
+                                        <td>M (30)</td>
+                                        <td>169-173</td>
+                                        <td>63-67</td>
+                                        <td>88-94</td>
+                                        <td>90-94</td>
+                                    </tr>
+                                    <tr>
+                                        <td>L (31)</td>
+                                        <td>171-175</td>
+                                        <td>68-72</td>
+                                        <td>94-98</td>
+                                        <td>95-99</td>
+                                    </tr>
+                                    <tr>
+                                        <td>XL (32)</td>
+                                        <td>173-177</td>
+                                        <td>73-77</td>
+                                        <td>98-104</td>
+                                        <td>100-104</td>
+                                    </tr>
+                                    <tr>
+                                        <td>XXL (33)</td>
+                                        <td>175-179</td>
+                                        <td>78-82</td>
+                                        <td>104-107</td>
+                                        <td>104-108</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- popup --}}
     <div id="quantityPopup" class="modal">
         <div class="modal-content">
@@ -1055,7 +1125,7 @@
 
     {{-- gợi ý size --}}
     <!-- Size Chart Modal -->
-    <div class="modal fade" id="sizeChartModal" tabindex="-1" aria-labelledby="sizeChartModalLabel"
+    {{-- <div class="modal fade" id="sizeChartModal" tabindex="-1" aria-labelledby="sizeChartModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
@@ -1116,12 +1186,9 @@
                         </table>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('js')

@@ -396,10 +396,20 @@
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
                                             <div class="product-review">
-                                                <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                    class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
-                                                    class="icon anm anm-star-o"></i>
-                                                <span class="caption hidden ms-1">3 Reviews</span>
+                                                @php
+                                                    // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                    $rating = $ratings->firstWhere(
+                                                        'product_id',
+                                                        $product->id,
+                                                    );
+                                                    // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                    $averageRating = $rating['average_rating'] ?? 0;
+                                                @endphp
+
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    <i
+                                                        class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                @endfor
                                             </div>
                                             <!-- End Product Review -->
                                             <!--Sort Description-->

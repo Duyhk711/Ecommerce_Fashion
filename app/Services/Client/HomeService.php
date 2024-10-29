@@ -107,16 +107,63 @@ class HomeService
         ->take(8)
         ->with(['catalogue', 'variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue']) // Eager load quan hệ liên quan
         ->get();
-    
+
         return $bestsaleProducts;
     }
-    
+
  // voucher
     public function getAllVouchers()
-{
-    // Lấy tối đa 3 mã voucher mới nhất từ database, sắp xếp theo thời gian tạo gần nhất
-    return Voucher::orderBy('created_at', 'desc')
-    ->limit(3)
-    ->get();
-}
+    {
+        // Lấy tối đa 3 mã voucher mới nhất từ database, sắp xếp theo thời gian tạo gần nhất
+        return Voucher::orderBy('created_at', 'desc')
+        ->limit(3)
+        ->get();
+    }
+
+    public function calculateRatingsPercentage($product)
+    {
+        // Số lượng đánh giá của từng sao
+        // Số lượng đánh giá của từng sao
+        $ratingsCount = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
+
+        // Duyệt qua tất cả các comment
+        foreach ($product->comments as $comment) {
+            // Nếu comment có rating hợp lệ từ 1 đến 5
+            if (!is_null($comment->rating) && $comment->rating >= 1 && $comment->rating <= 5) {
+                $ratingsCount[$comment->rating]++;
+            }
+        }
+
+
+        return $ratingsCount;
+    }
+
+    public function getRatingsForRelatedProducts($relatedProducts)
+    {
+        // Lấy dữ liệu đánh giá cho từng sản phẩm
+        return $relatedProducts->map(function ($product) {
+            return [
+                'product_id' => $product->id,
+                'average_rating' => $this->calculateAverageRating($product),
+                'ratings_percentage' => $this->calculateRatingsPercentage($product),
+            ];
+        });
+    }
+
+    public function calculateAverageRating($product)
+    {
+        // Tính tổng và số lượng rating hợp lệ
+        $validRatingsCount = 0; // Số lượng comment có rating hợp lệ (1-5)
+        $sumRatings = 0; // Tổng điểm các rating hợp lệ
+
+        foreach ($product->comments as $comment) {
+            if (!is_null($comment->rating) && $comment->rating >= 1 && $comment->rating <= 5) {
+                $sumRatings += $comment->rating;
+                $validRatingsCount++;
+            }
+        }
+        // Trả về trung bình đánh giá, hoặc 0 nếu không có rating hợp lệ
+        return $validRatingsCount > 0 ? $sumRatings / $validRatingsCount : 0;
+    }
+
 }

@@ -27,9 +27,14 @@ class HomeController extends Controller
         $saleProduct = $this->homeService->getSaleProduct();
         $bestsaleProducts = $this->homeService->getbestsaleProducts();
         $vouchers = $this->homeService->getAllVouchers();
+        $newRatings = $this->homeService->getRatingsForRelatedProducts($newProducts);
+        $saleRatings = $this->homeService->getRatingsForRelatedProducts($saleProduct);
+        $bestsaleRatings = $this->homeService->getRatingsForRelatedProducts($bestsaleProducts);
 
         // dd($banners);
-        return view('client.home', compact('products', 'banners', 'catalogues', 'newProducts', 'saleProduct', 'bestsaleProducts', 'vouchers'));
+        return view('client.home', compact('products', 'banners', 'catalogues',
+        'newProducts', 'saleProduct', 'bestsaleProducts',
+        'vouchers', 'newRatings','saleRatings','bestsaleRatings'));
     }
 
 
