@@ -61,5 +61,4 @@ class VouchersController extends Controller
         // Trả về phản hồi JSON hoặc redirect
         return redirect()->back()->with('success', 'Lưu thành công!');
     }
-
 }
