@@ -1020,7 +1020,7 @@
                                                             class="icon anm anm-star-o"></i><i
                                                             class="icon anm anm-star-o"></i>
                                                         <span class="caption hidden ms-1">3 Reviews</span>
-                                                    </div>
+                                                    </div> 
                                                     <!-- End Product Review -->
                                                     <!--Sort Description-->
                                                     <p class="sort-desc hidden">There are many variations of passages of
@@ -1852,7 +1852,7 @@ title="Product" width="625" height="808" />
 </div>
 </div>
 </div> --}}
-    
+
     <!--End Product Quickview Modal-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {

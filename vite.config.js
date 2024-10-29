@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/js/dashmix/app.js',
                 'resources/js/app.js',
                 'resources/js/pages/datatables.js',
+                'resources/js/chat.js',
             ],
             refresh: true,
         }),

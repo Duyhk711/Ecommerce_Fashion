@@ -35,6 +35,30 @@
         }
     </style>
     <style>
+        .modal {
+            z-index: 1050 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1040 !important;
+        }
+
+        .modal-content {
+            width: 1000px;
+            /* Adjust based on your needs */
+            margin: 0 auto;
+        }
+
+        .table {
+            width: 100%;
+            /* Ensure the table takes the full width */
+        }
+
+        margin: 0 auto;
+        /* Center the modal content */
+    </style>
+
+    <style>
         .rating-choose {
             padding-left: 20px;
             padding-right: 20px;
@@ -260,16 +284,18 @@
                                 <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
                                     data-product-id="{{ $product->id }}">
                                     <!-- Biểu tượng trái tim viền -->
-                                    <i style="font-size:15px" class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
+                                    <i style="font-size:15px"
+                                        class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
 
                                     <!-- Biểu tượng trái tim đổ đầy -->
-                                    <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
+                                    <i style="color: #e96f84;font-size:15px"
+                                        class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
                                 </a>
 
-                                <a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal"
-                                    data-bs-target="#shippingInfo_modal">
-                                    <i class="icon anm anm-paper-l-plane me-2"></i>
-                                    <span>Delivery & Returns</span>
+                                <a href="#sizeChartModal" class="text-link emaillink me-0" data-bs-toggle="modal"
+                                    role="button">
+                                    <i class="icon anm anm-question-cil me-2"></i>
+                                    <span>Gợi ý size</span>
                                 </a>
 
                                 <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
@@ -328,20 +354,6 @@
                             <div class="row">
                                 <div class="col-12 col-sm-12 ">
                                     {!! $product->content !!}
-                                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                                        suffered alteration in some form, by injected humour, or randomised words which
-                                        don't look even slightly believable.</p>
-                                    <h4 class="mb-3">Features</h4>
-                                    <ul class="checkmark-info">
-                                        <li>High quality fabric, very comfortable to touch and wear.</li>
-                                        <li>This cardigan sweater is cute for no reason,perfect for travel and casual.</li>
-                                        <li>It can tie in front-is forgiving to you belly or tie behind.</li>
-                                        <li>Light weight and perfect for layering.</li>
-                                    </ul>
-                                    <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those
-                                        interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by
-                                        Cicero are also reproduced in their exact original form, accompanied by English
-                                        versions from the 1914 translation by H. Rackham.</p>
                                 </div>
                             </div>
                             <hr>
@@ -367,11 +379,14 @@
                                                 {{-- Lọc đánh giá --}}
                                                 <div class="d-flex mx-5 rating-filter">
                                                     <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
-                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
+                                                        class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất
+                                                        cả</a>
                                                     @for ($i = 5; $i >= 1; $i--)
                                                         <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
-                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                            class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                            {{ $i }} <i
+                                                                class="icon anm anm-star text-warning"></i>
+                                                            ({{ $ratingsPercentage[$i] ?? 0 }})
                                                         </a>
                                                     @endfor
                                                 </div>
@@ -386,10 +401,12 @@
                                         @forelse ($comments as $comment)
                                             <div class="spr-review d-flex w-100">
                                                 <div style="height: 65px;" class="me-2">
-                                                   <img src="{{ $comment->user->avatar
-                                                    ? asset('storage/' . $comment->user->avatar)
-                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
-                                                    alt="avatar" style="width: 65px; height:65px; object-fit: cover;"  class="rounded-circle blur-up lazyloaded me-4"/>
+                                                    <img src="{{ $comment->user->avatar
+                                                        ? asset('storage/' . $comment->user->avatar)
+                                                        : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
+                                                        alt="avatar"
+                                                        style="width: 65px; height:65px; object-fit: cover;"
+                                                        class="rounded-circle blur-up lazyloaded me-4" />
                                                 </div>
                                                 <div class="spr-review-content flex-grow-1">
                                                     <div
@@ -1035,6 +1052,76 @@
             <p id="popupMessage"></p>
         </div>
     </div>
+
+    {{-- gợi ý size --}}
+    <!-- Size Chart Modal -->
+    <div class="modal fade" id="sizeChartModal" tabindex="-1" aria-labelledby="sizeChartModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="sizeChartModalLabel">Hướng dẫn chọn size</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Table with responsive wrapper to handle overflow -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td>SIZE</td>
+                                    <td>Chiều cao (cm)</td>
+                                    <td>Cân nặng (kg)</td>
+                                    <td>Rộng ngực (cm)</td>
+                                    <td>Rộng mông (cm)</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>S (29)</td>
+                                    <td>162-168</td>
+                                    <td>57-62</td>
+                                    <td>84-88</td>
+                                    <td>85-89</td>
+                                </tr>
+                                <tr>
+                                    <td>M (30)</td>
+                                    <td>169-173</td>
+                                    <td>63-67</td>
+                                    <td>88-94</td>
+                                    <td>90-94</td>
+                                </tr>
+                                <tr>
+                                    <td>L (31)</td>
+                                    <td>171-175</td>
+                                    <td>68-72</td>
+                                    <td>94-98</td>
+                                    <td>95-99</td>
+                                </tr>
+                                <tr>
+                                    <td>XL (32)</td>
+                                    <td>173-177</td>
+                                    <td>73-77</td>
+                                    <td>98-104</td>
+                                    <td>100-104</td>
+                                </tr>
+                                <tr>
+                                    <td>XXL (33)</td>
+                                    <td>175-179</td>
+                                    <td>78-82</td>
+                                    <td>104-107</td>
+                                    <td>104-108</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -1617,7 +1704,7 @@
     {{-- xuong dòng --}}
     <script>
         function toggleContent(element) {
-            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
+            element.classList.toggle('expanded'); // Thêm/xóa class 'expanded' khi bấm
         }
     </script>
 
