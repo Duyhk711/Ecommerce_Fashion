@@ -58,7 +58,7 @@
 
         .voucher-button:hover {
             background-color: #e64a19;
-           
+
         }
         .voucher-copy {
             background-color: #2f415d;
@@ -75,7 +75,7 @@
 
         .voucher-copy:hover {
             background-color: #2f415d;
-        }   
+        }
 </style>
 @endsection
 @section('my-order')
@@ -97,7 +97,7 @@
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
-                   
+
                 </table>
             </div> -->
             <div class="container mt-5">
@@ -110,7 +110,7 @@
                     <div class="d-flex justify-content-between align-items-center mt-2  ">
                     <div class="voucher-expiry">HSD: 31/12/2024</div>
                     <div>
-                    <a href="{{ route('shop')}}"><button class="voucher-copy" onclick="">Mua ngay</button></a> 
+                    <a href="{{ route('shop')}}"><button class="voucher-copy" onclick="">Mua ngay</button></a>
                     </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                     <div class="d-flex justify-content-between align-items-center mt-2  ">
                     <div class="voucher-expiry">HSD: 31/12/2024</div>
                     <div>
-                       <a href="{{ route('shop')}}"><button class="voucher-copy" onclick="">Mua ngay</button></a> 
+                       <a href="{{ route('shop')}}"><button class="voucher-copy" onclick="">Mua ngay</button></a>
                     </div>
                     </div>
                 </div>

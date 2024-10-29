@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('title')
-Thêm mới sản phẩm
+    Thêm mới sản phẩm
 @endsection
 
 @section('css')
@@ -300,16 +300,18 @@ Thêm mới sản phẩm
                                     <!-- Dòng 1 -->
                                     <div class="d-flex justify-content-between">
                                         <!-- Is active -->
+                                        <input type="hidden" name="is_active" value="0">
                                         <div class="form-check form-switch form-check-inline col-md">
                                             <input class="form-check-input" type="checkbox" id="is_active"
-                                                name="is_active" {{ old('is_active', true) ? 'checked' : '' }}>
+                                                name="is_active" value="1" checked>
                                             <label class="form-check-label" for="is_active">Active</label>
                                         </div>
 
                                         <!-- Is new -->
+                                        <input type="hidden" name="is_new" value="0">
                                         <div class="form-check form-switch form-check-inline col-md">
                                             <input class="form-check-input" type="checkbox" id="is_new"
-                                                name="is_new" {{ old('is_new', true) ? 'checked' : '' }}>
+                                                name="is_new" value="1" checked>
                                             <label class="form-check-label" for="is_new">New</label>
                                         </div>
                                     </div>
@@ -319,16 +321,18 @@ Thêm mới sản phẩm
                                     <!-- Dòng 2 -->
                                     <div class="d-flex justify-content-between">
                                         <!-- Is hot deal -->
+                                        <input type="hidden" name="is_hot_deal" value="0">
                                         <div class="form-check form-switch form-check-inline col-md">
                                             <input class="form-check-input" type="checkbox" id="is_hot_deal"
-                                                name="is_hot_deal" {{ old('is_hot_deal') ? 'checked' : '' }}>
+                                                name="is_hot_deal" value="1">
                                             <label class="form-check-label" for="is_hot_deal">Hot deal</label>
                                         </div>
 
                                         <!-- Show home -->
+                                        <input type="hidden" name="is_show_home" value="0">
                                         <div class="form-check form-switch form-check-inline col-md">
                                             <input class="form-check-input" type="checkbox" id="is_show_home"
-                                                name="is_show_home" {{ old('is_show_home') ? 'checked' : '' }}>
+                                                name="is_show_home" value="1">
                                             <label class="form-check-label" for="is_show_home">Show home</label>
                                         </div>
                                     </div>
@@ -630,11 +634,14 @@ Thêm mới sản phẩm
                     return;
                 }
                 // Tính toán tổng số tổ hợp
-                    let totalCombinations = attributesData.reduce((total, attr) => total * attr.values.length, 1);
+                let totalCombinations = attributesData.reduce((total, attr) => total * attr.values.length,
+                    1);
 
                 // Kiểm tra giới hạn 50 biến thể
                 if (totalCombinations > 50) {
-                    const confirmContinue = confirm('Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?');
+                    const confirmContinue = confirm(
+                        'Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?'
+                        );
                     if (!confirmContinue) {
                         return; // Hủy tạo biến thể nếu người dùng không đồng ý
                     }
@@ -661,7 +668,7 @@ Thêm mới sản phẩm
                     });
 
                     // Hiển thị các giá trị thuộc tính đã được chọn (kích cỡ và màu sắc)
-                    // <td>${index + 1}</td> 
+                    // <td>${index + 1}</td>
                     let variantHtml = `
                     <tr class="variant">
                         <td>${getAttributeValueName(attributeNames[0].attribute_id, attributeNames[0].attribute_value_id)}</td>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
-    
+
     <link rel="stylesheet" href="{{ asset('admin/css/products/product-list.css') }}">
 @endsection
 
@@ -45,7 +45,7 @@
                         </a>
                     </div>
                 </div>
-                
+
             </div>
             <ul class="nav nav-tabs mb-3">
                 <li class="nav-item">
@@ -55,7 +55,7 @@
                     <a class="nav-link" id="deleted-products-tab" data-bs-toggle="tab" href="#deleted-products" role="tab">Đã xóa</a>
                 </li>
             </ul>
-            
+
             <div class="tab-content">
                 <!-- Tab sản phẩm thường -->
                 <div class="tab-pane fade show active" id="products" role="tabpanel" aria-labelledby="products-tab">
@@ -67,14 +67,14 @@
                                     <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                                            placeholder="Tìm kiếm sản phẩm theo tên, sku">
                                 </div>
-                            
+
                                 <!-- Lọc theo giá (dropdown) -->
                                 <div class="dropdown ms-3">
                                     <button class="btn btn-sm btn-alt dropdown-toggle p-2" style="font-weight: 400;border:1.5px solid #d1d7dd" type="button"
                                             id="priceFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Lọc theo giá
                                     </button>
-                            
+
                                     <div class="dropdown-menu p-3 " aria-labelledby="priceFilterDropdown">
                                         <div class="form-group">
                                             {{-- <label for="min_price">Giá từ</label> --}}
@@ -87,7 +87,7 @@
                                         <button type="submit" class="btn btn-sm btn-alt-secondary mt-3">Áp dụng</button>
                                     </div>
                                 </div>
-                            
+
                                 <!-- Lọc theo danh mục (category_id) -->
                                 <div class="ms-3">
                                     <select name="catalogue_id" id="catalogue-select" class="form-select">
@@ -99,7 +99,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            
+
                                 <!-- Lọc theo trạng thái số lượng (stock_status) -->
                                 <div class="ms-3">
                                     <select name="stock_status" class="form-select" id="stock-status-select">
@@ -109,15 +109,15 @@
                                         <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng</option>
                                     </select>
                                 </div>
-                            
+
                                 <!-- Nút đặt lại -->
                                 <div class="ms-3">
                                     <button type="button" class="btn btn-sm btn-alt-secondary p-2 px-4" id="reset-button">Đặt lại</button>
                                 </div>
                             </div>
-                            
+
                         </form>
-        
+
                     </div>
                     <div class="block-content block-content-full">
                         <!-- Table with data -->
@@ -144,7 +144,7 @@
                                                         <i class="fa fa-eye eye-icon"></i>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <!-- Popup để hiển thị ảnh lớn -->
                                                 <div class="popup" id="imagePopup">
                                                     <span class="close">&times;</span>
@@ -164,7 +164,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class=" fs-sm">{{ number_format($product->price_regular) }}₫</td>
+                                        <td class=" fs-sm">{{ number_format($product->price_regular, 3, '.', 0) }}₫</td>
                                         <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
                                             @if ($product->total_stock > 5)
                                                 <span class="" >{{ $product->total_stock }}</span>
@@ -176,7 +176,7 @@
                                                 title="Hết hàng">{{ $product->total_stock }}</span>
                                             @endif
                                         </td>
-                                        
+
                                         <td class="fs-sm">{{ $product->updated_at->format('H:i d-m-Y') }}</td>
 
                                         <td class="fs-sm text-center">
@@ -268,7 +268,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
 
                                                     <!-- Tạo form để gửi tất cả biến thể -->
                                                     <form class="variant-form-all" id="variant-form-{{ $product->id }}">
@@ -350,7 +350,7 @@
 
                 {{-- SP DA XOA --}}
                 <div class="tab-pane fade" id="deleted-products" role="tabpanel" aria-labelledby="deleted-products-tab">
-                    
+
                     <div class="block-content block-content-full">
                         <!-- Table with data -->
                         <table id="productTable" class="table  table-striped align-middle js-dataTable-full">
@@ -400,7 +400,7 @@
                                                 title="Hết hàng">{{ $product->total_stock }}</span>
                                             @endif 0
                                         </td>
-                                        
+
                                         <td class="fs-sm">{{ $product->deleted_at->format('H:i d-m-Y') }}</td>
 
                                         <td class="fs-sm text-center">
@@ -490,7 +490,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
 
                                                     <!-- Tạo form để gửi tất cả biến thể -->
                                                     <form class="variant-form-all" id="variant-form-{{ $product->id }}">
@@ -581,13 +581,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
-    
+
     <script>
         $(document).ready(function() {
-            $('#productTable').DataTable(); 
+            $('#productTable').DataTable();
         });
     </script>
-    
+
     <script>
         $(document).ready(function() {
             // Khởi tạo Select2 cho danh mục
@@ -603,7 +603,7 @@
             });
         });
 
-        
+
     </script>
 
     {{-- js lọc --}}
@@ -612,15 +612,15 @@
             document.getElementById('filter-form').submit();
         });
     </script>
-    
+
     <script>
         // Khi nhập từ khóa vào ô tìm kiếm
         let debounceTimeout;
         document.querySelector('input[name="search"]').addEventListener('keyup', function() {
-            clearTimeout(debounceTimeout); 
+            clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(function() {
                 document.getElementById('filter-form').submit();
-            }, 1000); 
+            }, 1000);
         });
     </script>
 
@@ -668,7 +668,7 @@
 
                     Swal.fire({
                         title: "Xác nhận xóa?",
-                        text: "Nếu xóa bạn sẽ không thể khôi phục!",
+                        text: "",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -712,7 +712,7 @@
             // Hiển thị form chỉnh sửa hàng loạt
             $(document).on('click', '.toggle-batch-edit', function() {
                 var $parent = $(this).closest('.content2'); // Chọn phần tử cha gần nhất của sản phẩm
-                var $form = $parent.find('.batch-edit-form'); 
+                var $form = $parent.find('.batch-edit-form');
                 $form.toggleClass('d-none'); // Hiển thị hoặc ẩn form nhập liệu
             });
 
