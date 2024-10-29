@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->enum('status', [
-                '1',
-                '2',
-                '3',
-                '4',
-                'huy_don_hang',
-            ])->default('1')->change();
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->string('address_line1')->nullable()->change();
+            $table->string('ward')->nullable()->change();
+            $table->string('district')->nullable()->change();
+            $table->string('city')->nullable()->change();
         });
     }
 
@@ -27,7 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('addresses', function (Blueprint $table) {
             //
         });
     }

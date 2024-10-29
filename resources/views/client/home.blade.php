@@ -3,121 +3,189 @@
 @section('content')
     <!--Home Slideshow-->
     <style>
-            .chat-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
 
-    .chat-button {
-        background-color: #0084ff;
-        color: white;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        font-size: 25px;
-    }
+        .chat-button {
+            background-color: #0084ff;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 25px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
-    .chat-button i {
-        font-size: 30px;
-    }
+        .chat-button:hover {
+            background-color: #006dbf;
+            transform: scale(1.1);
+        }
 
-    .chat-button:hover {
-        background-color: #006dbf;
-    }
+        .chat-box {
+            display: none;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height: 450px;
+            width: 350px;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+        }
 
-    .chat-box {
-        display: none;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-height: 400px;
-        overflow: hidden;
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 300px;
-    }
 
-    .chat-header {
-        background-color: #65c6f6;
-        color: white;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        .chat-header {
+            background-color: #fff;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px 5px 0 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-    .close-chat {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-    }
+        .close-chat {
+            background: none;
+            border: none;
+            color: rgb(14, 1, 1);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
 
-    .chat-body {
-        padding: 10px;
-        height: 280px;
-        overflow-y: auto;
-        border-bottom: 1px solid #ddd;
-    }
-    .message {
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        max-width: 70%;
-    }
-    .sent {
-        margin-left:30%;
-        align-self: flex-end;
-        background-color: #4cdaed;
-        color: white;
-        border-radius: 10px;
-        padding: 10px;
-        text-align: right;
-    }
-    .received {
-        align-self: flex-start;
-        background-color: #f1f1f1;
-        color: black;
-        border-radius: 10px;
-        padding: 10px;
-        text-align: left;
-    }
-    .message-time {
-        font-size: 10px;
-        color: #888;
-        margin-top: 5px;
-    }
-    .chat-footer {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
-    .chat-footer textarea {
-        flex: 1;
-        resize: none;
-        border-radius: 20px;
-        padding-left: 15px;
-    }
-    .chat-footer button {
-        margin-left: 10px;
-        border-radius: 50%;
-        height: 40px;
-        width: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-    }
+        .close-chat:hover {
+            color: #ff6b6b;
+        }
+
+        .chat-body {
+            padding: 10px;
+            height: 350px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .sent {
+            margin-left: 30%;
+            align-self: flex-end;
+            background-color: #0084ff;
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: right;
+            animation: slideInRight 0.3s;
+        }
+
+        .received {
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            color: black;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+            animation: slideInLeft 0.3s;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            padding: 0px;
+        }
+
+
+        .chat-footer textarea {
+            flex: 1;
+            resize: none;
+            border-radius: 20px;
+            padding-left: 15px;
+            min-height: 30px;
+        }
+
+        .chat-footer textarea:focus {
+            border-color: #0084ff;
+        }
+
+        .chat-footer button {
+            margin-left: 10px;
+            border-radius: 50%;
+            height: 35px;
+            width: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        .chat-footer button:hover {
+            background-color: #006dbf;
+        }
+
+        #chatWithAdminName {
+            font-weight: 400;
+            font-size: large;
+        }
+
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chat-box {
+                width: 90%;
+                max-height: 80%;
+                right: 5%;
+                bottom: 10px;
+            }
+        }
 
         .voucher-card {
             background-color: #ffffff;
@@ -205,14 +273,23 @@
         }
 
         .xt a {
-            font-size: 20px;
+            font-size: 15px;
         }
 
         .xt h3 {
             font-size: 30px;
         }
+        .product-name a {
+            display: inline-block;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 20ch;
+        }
     </style>
     <section class="slideshow slideshow-wrapper">
+
         <div class="home-slideshow slick-arrow-dots">
             @foreach ($banners['mainBanners'] as $banner)
                 @php
@@ -256,59 +333,59 @@
                     <picture>
                         <source media="(max-width:767px)"
                             srcset="{{ asset('client/images/slideshow/demo1-banner2-mbl.jpg') }}" width="1150"
-                            height="800" />
-                        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner2.jpg') }}"
-                            alt="slideshow" title="" width="1920" height="795" />
-                    </picture>
-                    <div class="container">
-                        <div class="slideshow-content slideshow-overlay middle-right">
-                            <div class="slideshow-content-in">
-                                <div class="wrap-caption animation style1">
-                                    <h2 class="ss-mega-title">
-                                        Spread Positive <br />Energy With Hema
-                                    </h2>
-                                    <p class="ss-sub-title xs-hide">
-                                        The must-have closet essential women wardrobe for the
-                                        year
-                                    </p>
-                                    <div class="ss-btnWrap d-flex-justify-start">
-                                        <a class="btn btn-primary" href="shop-grid-view.html">Explore Now!</a>
-                                    </div>
-                                </div>
+        height="800" />
+        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner2.jpg') }}"
+            alt="slideshow" title="" width="1920" height="795" />
+        </picture>
+        <div class="container">
+            <div class="slideshow-content slideshow-overlay middle-right">
+                <div class="slideshow-content-in">
+                    <div class="wrap-caption animation style1">
+                        <h2 class="ss-mega-title">
+                            Spread Positive <br />Energy With Hema
+                        </h2>
+                        <p class="ss-sub-title xs-hide">
+                            The must-have closet essential women wardrobe for the
+                            year
+                        </p>
+                        <div class="ss-btnWrap d-flex-justify-start">
+                            <a class="btn btn-primary" href="shop-grid-view.html">Explore Now!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="slide">
+        <div class="slideshow-wrap">
+            <picture>
+                <source media="(max-width:767px)"
+                    srcset="{{ asset('client/images/slideshow/demo1-banner3-mbl.jpg') }}" width="1150"
+                    height="800" />
+                <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner3.jpg') }}"
+                    alt="slideshow" title="" width="1920" height="795" />
+            </picture>
+            <div class="container">
+                <div class="slideshow-content slideshow-overlay middle-right">
+                    <div class="slideshow-content-in">
+                        <div class="wrap-caption animation style1">
+                            <h2 class="ss-mega-title">
+                                Design Your Next <br />Favourite Wear
+                            </h2>
+                            <p class="ss-sub-title xs-hide">
+                                The outfit that blend elegance and style for your
+                                casual wear
+                            </p>
+                            <div class="ss-btnWrap">
+                                <a class="btn btn-primary" href="shop-grid-view.html">Shop now</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="slide">
-                <div class="slideshow-wrap">
-                    <picture>
-                        <source media="(max-width:767px)"
-                            srcset="{{ asset('client/images/slideshow/demo1-banner3-mbl.jpg') }}" width="1150"
-                            height="800" />
-                        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner3.jpg') }}"
-                            alt="slideshow" title="" width="1920" height="795" />
-                    </picture>
-                    <div class="container">
-                        <div class="slideshow-content slideshow-overlay middle-right">
-                            <div class="slideshow-content-in">
-                                <div class="wrap-caption animation style1">
-                                    <h2 class="ss-mega-title">
-                                        Design Your Next <br />Favourite Wear
-                                    </h2>
-                                    <p class="ss-sub-title xs-hide">
-                                        The outfit that blend elegance and style for your
-                                        casual wear
-                                    </p>
-                                    <div class="ss-btnWrap">
-                                        <a class="btn btn-primary" href="shop-grid-view.html">Shop now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
+        </div>
+    </div> --}}
         </div>
     </section>
     <!--End Home Slideshow-->
@@ -372,7 +449,7 @@
                             @if ($selectedImage)
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 collection-banner-item">
                                     <div class="collection-item sp-col">
-                                        <a href="shop-left-sidebar.html" class="zoom-scal">
+                                        <a href="{{ route('shop') }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -399,7 +476,7 @@
                                 @endphp
                                 @if ($selectedImage)
                                     <div class="collection-item sp-col">
-                                        <a href="shop-left-sidebar.html" class="zoom-scal">
+                                        <a href="{{ route('shop') }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -424,7 +501,7 @@
                                 @endphp
                                 @if ($selectedImage)
                                     <div class="collection-item sp-col">
-                                        <a href="shop-left-sidebar.html" class="zoom-scal">
+                                        <a href="{{ route('shop') }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -452,50 +529,49 @@
         <section class="container mt-5">
             <div class="xt">
                 <h3>Ưu đãi đặc biệt</h3>
-                <a href="{{ route('vouchers') }}">Xem thêm >></a>
+                <a href="{{ route('vouchers.index') }}">Xem thêm >></a>
             </div>
             <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="voucher-card">
-                        <div class="voucher-header">Voucher 50K</div>
-                        <div class="voucher-code" id="voucher-code-1">GIAM50</div>
-                        <div class="voucher-description">Giảm 50k cho đơn hàng hàng từ 399k</div>
-                        <div class="d-flex justify-content-between align-items-center mt-2  ">
-                            <div class="voucher-expiry">HSD: 31/12/2024</div>
-                            <div>
-                                <!-- <button class="voucher-copy" onclick="saveVoucher('GIAM50')">Lưu</button> -->
-                            </div>
-                        </div>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
                     </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="voucher-card">
-                        <div class="voucher-header">Voucher 80K</div>
-                        <div class="voucher-code" id="voucher-code-2">GIAM80</div>
-                        <div class="voucher-description">Giảm 80k cho đơn hàng từ 599k</div>
-                        <div class="d-flex justify-content-between align-items-center mt-2  ">
-                            <div class="voucher-expiry">HSD: 31/12/2024</div>
-                            <div>
-                                <!-- <button class="voucher-copy" onclick="copyCode('voucher-code-2')">Lưu</button> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endif
 
-                <div class="col-md-4 mb-4">
-                    <div class="voucher-card">
-                        <div class="voucher-header">Voucher 80K</div>
-                        <div class="voucher-code" id="voucher-code-2">GIAM80</div>
-                        <div class="voucher-description">Giảm 80k cho đơn hàng từ 599k</div>
-                        <div class="d-flex justify-content-between align-items-center mt-2  ">
-                            <div class="voucher-expiry">HSD: 31/12/2024</div>
-                            <div>
-                                <!-- <button class="voucher-copy" onclick="copyCode('voucher-code-2')">Lưu</button> -->
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @foreach ($vouchers as $voucher)
+                    <div class="col-md-4 mb-4">
+                        <div class="voucher-card">
+                            <div class="voucher-header"> Voucher {{ $voucher->discount_value }}K</div>
+                            <div class="voucher-code" id="voucher-code-1">{{ $voucher->code }}</div>
+                            <div class="voucher-description">
+                                Giảm {{ $voucher->discount_value }}K
+                                cho đơn hàng từ {{ $voucher->minimum_order_value ?? 0 }}K
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="voucher-expiry"> HSD:
+                                    {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</div>
+                                <div>
+                                    <form action="{{ route('save-voucher') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="code" value="{{ $voucher->code }}">
+                                        <input type="hidden" name="discount_type"
+                                            value="{{ $voucher->discount_type }}">
+                                        <input type="hidden" name="discount_value"
+                                            value="{{ $voucher->discount_value }}">
+                                        <input type="hidden" name="start_date" value="{{ $voucher->start_date }}">
+                                        <input type="hidden" name="end_date" value="{{ $voucher->end_date }}">
+                                        <button type="submit" class="voucher-copy">Lưu</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                @endforeach
             </div>
         </section>
         <!-- ENDVOUCHER -->
@@ -513,102 +589,102 @@
                             <div class="zoom-scal zoom-scal-nopb rounded-3">
                                 <img class="blur-up lazyload"
                                     data-src="{{ asset('client/images/collection/sub-collection1.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection1.jpg') }}" alt="Men's Jakets"
-                                    title="Men's Jakets" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">Men's Jakets</h4>
-                                <p class="counts">20 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="category-item zoomscal-hov">
-                        <a href="{{route('shop')}}" class="category-link clr-none">
-                            <div class="zoom-scal zoom-scal-nopb rounded-3">
-                                <img class="blur-up lazyload"
-                                    data-src="{{ asset('client/images/collection/sub-collection3.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection3.jpg') }}" alt="Tops"
-                                    title="Tops" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">Tops</h4>
-                                <p class="counts">13 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="category-item zoomscal-hov">
-                        <a href="shop-left-sidebar.html" class="category-link clr-none">
-                            <div class="zoom-scal zoom-scal-nopb rounded-3">
-                                <img class="blur-up lazyload"
-                                    data-src="{{ asset('client/images/collection/sub-collection5.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection5.jpg') }}" alt="T-Shirts"
-                                    title="T-Shirts" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">T-Shirts</h4>
-                                <p class="counts">18 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="category-item zoomscal-hov">
-                        <a href="shop-left-sidebar.html" class="category-link clr-none">
-                            <div class="zoom-scal zoom-scal-nopb rounded-3">
-                                <img class="blur-up lazyload"
-                                    data-src="{{ asset('client/images/collection/sub-collection6.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection6.jpg') }}" alt="Shoes"
-                                    title="Shoes" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">Shoes</h4>
-                                <p class="counts">11 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="category-item zoomscal-hov">
-                        <a href="shop-left-sidebar.html" class="category-link clr-none">
-                            <div class="zoom-scal zoom-scal-nopb rounded-3">
-                                <img class="blur-up lazyload"
-                                    data-src="{{ asset('client/images/collection/sub-collection9.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection9.jpg') }}" alt="Shorts"
-                                    title="Shorts" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">Shorts</h4>
-                                <p class="counts">28 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="category-item zoomscal-hov">
-                        <a href="shop-left-sidebar.html" class="category-link clr-none">
-                            <div class="zoom-scal zoom-scal-nopb rounded-3">
-                                <img class="blur-up lazyload"
-                                    data-src="{{ asset('client/images/collection/sub-collection2.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection2.jpg') }}" alt="Sunglasses"
-                                    title="Sunglasses" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">Sunglasses</h4>
-                                <p class="counts">24 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="category-item zoomscal-hov">
-                        <a href="shop-left-sidebar.html" class="category-link clr-none">
-                            <div class="zoom-scal zoom-scal-nopb rounded-3">
-                                <img class="blur-up lazyload"
-                                    data-src="{{ asset('client/images/collection/sub-collection4.jpg') }}"
-                                    src="{{ asset('client/images/collection/sub-collection4.jpg') }}" alt="Girls Top"
-                                    title="Girls Top" width="365" height="365" />
-                            </div>
-                            <div class="details mt-3 text-center">
-                                <h4 class="category-title mb-0">Girls Top</h4>
-                                <p class="counts">26 Products</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section> --}}
+    src="{{ asset('client/images/collection/sub-collection1.jpg') }}" alt="Men's Jakets"
+    title="Men's Jakets" width="365" height="365" />
+</div>
+<div class="details mt-3 text-center">
+    <h4 class="category-title mb-0">Men's Jakets</h4>
+    <p class="counts">20 Products</p>
+</div>
+</a>
+</div>
+<div class="category-item zoomscal-hov">
+    <a href="{{route('shop')}}" class="category-link clr-none">
+        <div class="zoom-scal zoom-scal-nopb rounded-3">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/collection/sub-collection3.jpg') }}"
+                src="{{ asset('client/images/collection/sub-collection3.jpg') }}" alt="Tops"
+                title="Tops" width="365" height="365" />
+        </div>
+        <div class="details mt-3 text-center">
+            <h4 class="category-title mb-0">Tops</h4>
+            <p class="counts">13 Products</p>
+        </div>
+    </a>
+</div>
+<div class="category-item zoomscal-hov">
+    <a href="shop-left-sidebar.html" class="category-link clr-none">
+        <div class="zoom-scal zoom-scal-nopb rounded-3">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/collection/sub-collection5.jpg') }}"
+                src="{{ asset('client/images/collection/sub-collection5.jpg') }}" alt="T-Shirts"
+                title="T-Shirts" width="365" height="365" />
+        </div>
+        <div class="details mt-3 text-center">
+            <h4 class="category-title mb-0">T-Shirts</h4>
+            <p class="counts">18 Products</p>
+        </div>
+    </a>
+</div>
+<div class="category-item zoomscal-hov">
+    <a href="shop-left-sidebar.html" class="category-link clr-none">
+        <div class="zoom-scal zoom-scal-nopb rounded-3">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/collection/sub-collection6.jpg') }}"
+                src="{{ asset('client/images/collection/sub-collection6.jpg') }}" alt="Shoes"
+                title="Shoes" width="365" height="365" />
+        </div>
+        <div class="details mt-3 text-center">
+            <h4 class="category-title mb-0">Shoes</h4>
+            <p class="counts">11 Products</p>
+        </div>
+    </a>
+</div>
+<div class="category-item zoomscal-hov">
+    <a href="shop-left-sidebar.html" class="category-link clr-none">
+        <div class="zoom-scal zoom-scal-nopb rounded-3">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/collection/sub-collection9.jpg') }}"
+                src="{{ asset('client/images/collection/sub-collection9.jpg') }}" alt="Shorts"
+                title="Shorts" width="365" height="365" />
+        </div>
+        <div class="details mt-3 text-center">
+            <h4 class="category-title mb-0">Shorts</h4>
+            <p class="counts">28 Products</p>
+        </div>
+    </a>
+</div>
+<div class="category-item zoomscal-hov">
+    <a href="shop-left-sidebar.html" class="category-link clr-none">
+        <div class="zoom-scal zoom-scal-nopb rounded-3">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/collection/sub-collection2.jpg') }}"
+                src="{{ asset('client/images/collection/sub-collection2.jpg') }}" alt="Sunglasses"
+                title="Sunglasses" width="365" height="365" />
+        </div>
+        <div class="details mt-3 text-center">
+            <h4 class="category-title mb-0">Sunglasses</h4>
+            <p class="counts">24 Products</p>
+        </div>
+    </a>
+</div>
+<div class="category-item zoomscal-hov">
+    <a href="shop-left-sidebar.html" class="category-link clr-none">
+        <div class="zoom-scal zoom-scal-nopb rounded-3">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/collection/sub-collection4.jpg') }}"
+                src="{{ asset('client/images/collection/sub-collection4.jpg') }}" alt="Girls Top"
+                title="Girls Top" width="365" height="365" />
+        </div>
+        <div class="details mt-3 text-center">
+            <h4 class="category-title mb-0">Girls Top</h4>
+            <p class="counts">26 Products</p>
+        </div>
+    </a>
+</div>
+</div>
+</div>
+</section> --}}
         <!--End Popular Categories-->
 
         <!--Products With Tabs-->
@@ -662,15 +738,15 @@
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
-                                                            data-src="{{ $product->img_thumbnail }}"
-                                                            src="{{ asset('client/images/products/product5.jpg') }}"
+                                                            data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                            src="{{ Storage::url($product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
                                                         <!-- End Image -->
                                                         <!-- Hover Image -->
                                                         <img class="hover rounded-0 blur-up lazyload"
-                                                            data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                            src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                            data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                            src="{{ Storage::url($product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
                                                         <!-- End Hover Image -->
@@ -683,7 +759,7 @@
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        <a href="#addtocart-modal"
+                                                        {{-- <a href="#addtocart-modal"
                                                             class="btn-icon addtocart add-to-cart-modal"
                                                             data-bs-toggle="modal" data-bs-target="#addtocart_modal">
                                                             <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -691,7 +767,7 @@
                                                                 title="Add to Cart"><i
                                                                     class="icon anm anm-cart-l"></i><span
                                                                     class="text">Add to Cart</span></span>
-                                                        </a>
+                                                        </a> --}}
                                                         <!--End Cart Button-->
                                                         <!--Quick View Button-->
                                                         {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
@@ -730,7 +806,8 @@
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
                                                     <div class="product-price">
-                                                        <span class="price">{{ $product->price_sale }}đ</span>
+                                                        <span
+                                                            class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                                     </div>
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
@@ -822,7 +899,7 @@
                             <div class="grid-products grid-view-items">
                                 <div
                                     class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
-                                    @foreach ($products as $product)
+                                    @foreach ($bestsaleProducts as $product)
                                         <div class="item col-item">
                                             <div class="product-box">
                                                 <!-- Start Product Image -->
@@ -832,15 +909,15 @@
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
-                                                            data-src="{{ $product->img_thumbnail }}"
-                                                            src="{{ asset('client/images/products/product5.jpg') }}"
+                                                            data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                            src="{{ Storage::url($product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
                                                         <!-- End Image -->
                                                         <!-- Hover Image -->
                                                         <img class="hover rounded-0 blur-up lazyload"
-                                                            data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                            src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                            data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                            src="{{ Storage::url($product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
                                                         <!-- End Hover Image -->
@@ -853,7 +930,7 @@
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        <a href="#addtocart-modal"
+                                                        {{-- <a href="#addtocart-modal"
                                                             class="btn-icon addtocart add-to-cart-modal"
                                                             data-bs-toggle="modal" data-bs-target="#addtocart_modal">
                                                             <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -861,7 +938,7 @@
                                                                 title="Add to Cart"><i
                                                                     class="icon anm anm-cart-l"></i><span
                                                                     class="text">Add to Cart</span></span>
-                                                        </a>
+                                                        </a> --}}
                                                         <!--End Cart Button-->
                                                         <!--Quick View Button-->
                                                         {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
@@ -891,7 +968,8 @@
                                                 <!-- Start Product Details -->
                                                 <div class="product-details text-center">
                                                     <!--Product Vendor-->
-                                                    <div class="product-vendor">{{ $product->catalogue->name }}</div>
+                                                    <div class="product-vendor">{{ optional($product->catalogue)->name }}
+                                                    </div>
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
@@ -900,7 +978,8 @@
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
                                                     <div class="product-price">
-                                                        <span class="price">{{ $product->price_sale }}đ</span>
+                                                        <span
+                                                            class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                                     </div>
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
@@ -1001,15 +1080,15 @@
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
-                                                            data-src="{{ $product->img_thumbnail }}"
-                                                            src="{{ asset('client/images/products/product5.jpg') }}"
+                                                            data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                            src="{{ Storage::url($product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
                                                         <!-- End Image -->
                                                         <!-- Hover Image -->
                                                         <img class="hover rounded-0 blur-up lazyload"
-                                                            data-src="{{ asset('client/images/products/product5-1.jpg') }}"
-                                                            src="{{ asset('client/images/products/product5-1.jpg') }}"
+                                                            data-src="{{ Storage::url($product->img_thumbnail) }}"
+                                                            src="{{ Storage::url($product->img_thumbnail) }}"
                                                             alt="Product" title="Product" width="625"
                                                             height="808" />
                                                         <!-- End Hover Image -->
@@ -1023,57 +1102,59 @@
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                       @if($product->variants->count() > 0)
-                                                    <div class="product-variants">
-                                                        {{-- <h4>Available Variants:</h4>
+                                                        @if ($product->variants->count() > 0)
+                                                            <div class="product-variants">
+                                                                {{-- <h4>Available Variants:</h4>
                                                         <ul>
-                                                            @foreach($product->variants as $variant)
+                                                            @foreach ($product->variants as $variant)
                                                                 <li>
                                                                     Size: {{ $variant->variantAttributes->where('attribute.name', 'Size')->first()->attributeValue->value ?? 'N/A' }},
-                                                                    Color: {{ $variant->variantAttributes->where('attribute.name', 'Color')->first()->attributeValue->value ?? 'N/A' }}
-                                                                </li>
-                                                            @endforeach
-                                                        </ul> --}}
+                                                Color: {{ $variant->variantAttributes->where('attribute.name', 'Color')->first()->attributeValue->value ?? 'N/A' }}
+                                                </li>
+                                                @endforeach
+                                                </ul> --}}
 
-                                                        <!-- Nút "Add to Cart" -->
-                                                        <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#addtocart_modal"
-                                                        data-product-name="{{ $product->name }}"
-                                                        data-product-variant-id=""
-                                                        data-product-variant-stock=""
-                                                        data-product-image="{{ asset($product->img_thumbnail) }}"
-                                                        @php
-                                                            $color = 'N/A';
-                                                            $size = 'N/A';
-                                                            // Duyệt qua các thuộc tính của biến thể để tìm màu sắc và kích thước
-                                                            if ($product->selected_variant) {
-                                                                foreach ($product->selected_variant->variantAttributes as $attribute) {
-                                                                    if ($attribute->attribute->name === 'Color') {
-                                                                        $color = $attribute->attributeValue->value;
-                                                                    } elseif ($attribute->attribute->name === 'Size') {
-                                                                        $size = $attribute->attributeValue->value;
-}
-                                                                }
-                                                            }
-                                                        @endphp
-                                                        data-product-color="{{ $color }}"
-                                                        data-product-size="{{ $size }}"
-                                                        data-product-price="{{ $product->selected_variant ? $product->selected_variant->price_sale : 'N/A' }}"> <!-- Giá biến thể đã chọn -->
-                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                              data-bs-toggle="tooltip" data-bs-placement="left"
-                                                              title="Add to Cart">
-                                                            <i class="icon anm anm-cart-l"></i>
-                                                            <span class="text">Add to Cart</span>
-                                                        </span>
-                                                     </a>
+                                                                <!-- Nút "Add to Cart" -->
+                                                                {{-- <a href="#addtocart-modal"
+                                                                    class="btn-icon addtocart add-to-cart-modal"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#addtocart_modal"
+                                                                    data-product-name="{{ $product->name }}"
+                                                                    data-product-variant-id=""
+                                                                    data-product-variant-stock=""
+                                                                    data-product-image="{{ asset($product->img_thumbnail) }}"
+                                                                    @php
+                                                                $color='N/A' ;
+                                                                $size='N/A' ;
+                                                    // Duyệt qua các thuộc tính của biến thể để tìm màu sắc và kích thước
+                                                    if ($product->selected_variant) {
+                                                    foreach ($product->selected_variant->variantAttributes as $attribute) {
+                                                    if ($attribute->attribute->name === 'Color') {
+                                                    $color = $attribute->attributeValue->value;
+                                                    } elseif ($attribute->attribute->name === 'Size') {
+                                                    $size = $attribute->attributeValue->value;
+                                                    }
+                                                    }
+                                                    } @endphp
+                                                                    data-product-color="{{ $color }}"
+                                                                    data-product-size="{{ $size }}"
+                                                                    data-product-price="{{ $product->selected_variant ? $product->selected_variant->price_sale : 'N/A' }}">
+                                                                    <!-- Giá biến thể đã chọn -->
+                                                                    <span
+                                                                        class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                        title="Add to Cart">
+                                                                        <i class="icon anm anm-cart-l"></i>
+                                                                        <span class="text">Add to Cart</span>
+                                                                    </span>
+                                                                </a> --}}
 
 
 
-                                                    </div>
-                                                @else
-                                                    <p>No variants available</p>
-                                                @endif
+                                                            </div>
+                                                        @else
+                                                            <p>No variants available</p>
+                                                        @endif
                                                         <!--End Cart Button-->
                                                         <!--Quick View Button-->
                                                         {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
@@ -1168,7 +1249,7 @@
 
                                                     <!-- End Variant -->
                                                     <!-- Product Button -->
-                                                    <div class="button-action hidden">
+                                                    {{-- <div class="button-action hidden">
                                                         <div class="addtocart-btn">
                                                             <form class="addtocart" action="#" method="post">
                                                                 <a href="#addtocart-modal"
@@ -1181,7 +1262,7 @@
                                                                 </a>
                                                             </form>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
 
                                                     <!-- End Product Button -->
                                                 </div>
@@ -1259,154 +1340,154 @@
                                 <div class="quote-icon mb-3 mb-lg-4">
                                     <img class="blur-up lazyload mx-auto"
                                         data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
-                                        src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
-                                        width="40" height="40" />
-                                </div>
-                                <div class="content">
-                                    <div class="text mb-2">
-                                        <p>
-                                            Lorem Ipsum is simply dummy text of the printing and
-                                            typesetting industry. Lorem Ipsum has been the
-                                            industry's standard dummy text 1500s.
-                                        </p>
-                                    </div>
-                                    <div class="product-review my-3">
-                                        <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                            class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                            class="icon anm anm-star"></i>
-                                        <span class="caption hidden ms-1">24 Reviews</span>
-                                    </div>
-                                </div>
-                                <div class="auhimg d-flex-justify-center text-left">
-                                    <div class="image">
-                                        <img class="rounded-circle blur-up lazyload"
-                                            data-src="{{ asset('client/images/users/testimonial1-65x.jpg') }}"
-                                            src="{{ asset('client/images/users/testimonial1-65x.jpg') }}"
-                                            alt="John Doe" width="65" height="65" />
-                                    </div>
-                                    <div class="auhtext ms-3">
-                                        <h5 class="authour mb-1">John Doe</h5>
-                                        <p class="text-muted">Founder &amp; CEO</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-slide">
-                            <div class="testimonial-content text-center">
-                                <div class="quote-icon mb-3 mb-lg-4">
-                                    <img class="blur-up lazyload mx-auto"
-                                        data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
-                                        src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
-                                        width="40" height="40" />
-                                </div>
-                                <div class="content">
-                                    <div class="text mb-2">
-                                        <p>
-                                            Lorem Ipsum is simply dummy text of the printing and
-                                            typesetting industry. Lorem Ipsum has been the
-                                            industry's standard dummy text 1500s.
-                                        </p>
-                                    </div>
-                                    <div class="product-review my-3">
-                                        <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                            class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                            class="icon anm anm-star-o"></i>
-                                        <span class="caption hidden ms-1">15 Reviews</span>
-                                    </div>
-                                </div>
-                                <div class="auhimg d-flex-justify-center text-left">
-                                    <div class="image">
-                                        <img class="rounded-circle blur-up lazyload"
-                                            data-src="{{ asset('client/images/users/testimonial2-65x.jpg') }}"
-                                            src="{{ asset('client/images/users/testimonial2-65x.jpg') }}"
-                                            alt="Jessica Doe" width="65" height="65" />
-                                    </div>
-                                    <div class="auhtext ms-3">
-                                        <h5 class="authour mb-1">Jessica Doe</h5>
-                                        <p class="text-muted">Marketing</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-slide">
-                            <div class="testimonial-content text-center">
-                                <div class="quote-icon mb-3 mb-lg-4">
-                                    <img class="blur-up lazyload mx-auto"
-                                        data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
-                                        src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
-                                        width="40" height="40" />
-                                </div>
-                                <div class="content">
-                                    <div class="text mb-2">
-                                        <p>
-                                            Lorem Ipsum is simply dummy text of the printing and
-                                            typesetting industry. Lorem Ipsum has been the
-                                            industry's standard dummy text 1500s.
-                                        </p>
-                                    </div>
-                                    <div class="product-review my-3">
-                                        <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                            class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><i
-                                            class="icon anm anm-star-o"></i>
-                                        <span class="caption hidden ms-1">17 Reviews</span>
-                                    </div>
-                                </div>
-                                <div class="auhimg d-flex-justify-center text-left">
-                                    <div class="image">
-                                        <img class="rounded-circle blur-up lazyload"
-                                            data-src="{{ asset('client/images/users/testimonial3-65x.jpg') }}"
-                                            src="{{ asset('client/images/users/testimonial3-65x.jpg') }}"
-                                            alt="Rick Edward" width="65" height="65" />
-                                    </div>
-                                    <div class="auhtext ms-3">
-                                        <h5 class="authour mb-1">Rick Edward</h5>
-                                        <p class="text-muted">Developer</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-slide rounded-3">
-                            <div class="testimonial-content text-center">
-                                <div class="quote-icon mb-3 mb-lg-4">
-                                    <img class="blur-up lazyload mx-auto"
-                                        data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
-                                        src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
-                                        width="40" height="40" />
-                                </div>
-                                <div class="content">
-                                    <div class="text mb-2">
-                                        <p>
-                                            Lorem Ipsum is simply dummy text of the printing and
-                                            typesetting industry. Lorem Ipsum has been the
-                                            industry's standard dummy text 1500s.
-                                        </p>
-                                    </div>
-                                    <div class="product-review my-3">
-                                        <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                            class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
-                                            class="icon anm anm-star-o"></i>
-                                        <span class="caption hidden ms-1">29 Reviews</span>
-                                    </div>
-                                </div>
-                                <div class="auhimg d-flex-justify-center text-left">
-                                    <div class="image">
-                                        <img class="rounded-circle blur-up lazyload"
-                                            data-src="{{ asset('client/images/users/testimonial4-65x.jpg') }}"
-                                            src="{{ asset('client/images/users/testimonial4-65x.jpg') }}"
-                                            alt="Happy Buyer" width="65" height="65" />
-                                    </div>
-                                    <div class="auhtext ms-3">
-                                        <h5 class="authour mb-1">Happy Buyer</h5>
-                                        <p class="text-muted">Designer</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Testimonial Slider Items-->
-                </div>
+src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
+width="40" height="40" />
+</div>
+<div class="content">
+    <div class="text mb-2">
+        <p>
+            Lorem Ipsum is simply dummy text of the printing and
+            typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text 1500s.
+        </p>
+    </div>
+    <div class="product-review my-3">
+        <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+            class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+            class="icon anm anm-star"></i>
+        <span class="caption hidden ms-1">24 Reviews</span>
+    </div>
+</div>
+<div class="auhimg d-flex-justify-center text-left">
+    <div class="image">
+        <img class="rounded-circle blur-up lazyload"
+            data-src="{{ asset('client/images/users/testimonial1-65x.jpg') }}"
+            src="{{ asset('client/images/users/testimonial1-65x.jpg') }}"
+            alt="John Doe" width="65" height="65" />
+    </div>
+    <div class="auhtext ms-3">
+        <h5 class="authour mb-1">John Doe</h5>
+        <p class="text-muted">Founder &amp; CEO</p>
+    </div>
+</div>
+</div>
+</div>
+<div class="testimonial-slide">
+    <div class="testimonial-content text-center">
+        <div class="quote-icon mb-3 mb-lg-4">
+            <img class="blur-up lazyload mx-auto"
+                data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
+                src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
+                width="40" height="40" />
+        </div>
+        <div class="content">
+            <div class="text mb-2">
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text 1500s.
+                </p>
             </div>
-        </section> --}}
+            <div class="product-review my-3">
+                <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                    class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                    class="icon anm anm-star-o"></i>
+                <span class="caption hidden ms-1">15 Reviews</span>
+            </div>
+        </div>
+        <div class="auhimg d-flex-justify-center text-left">
+            <div class="image">
+                <img class="rounded-circle blur-up lazyload"
+                    data-src="{{ asset('client/images/users/testimonial2-65x.jpg') }}"
+                    src="{{ asset('client/images/users/testimonial2-65x.jpg') }}"
+                    alt="Jessica Doe" width="65" height="65" />
+            </div>
+            <div class="auhtext ms-3">
+                <h5 class="authour mb-1">Jessica Doe</h5>
+                <p class="text-muted">Marketing</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="testimonial-slide">
+    <div class="testimonial-content text-center">
+        <div class="quote-icon mb-3 mb-lg-4">
+            <img class="blur-up lazyload mx-auto"
+                data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
+                src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
+                width="40" height="40" />
+        </div>
+        <div class="content">
+            <div class="text mb-2">
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text 1500s.
+                </p>
+            </div>
+            <div class="product-review my-3">
+                <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                    class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><i
+                    class="icon anm anm-star-o"></i>
+                <span class="caption hidden ms-1">17 Reviews</span>
+            </div>
+        </div>
+        <div class="auhimg d-flex-justify-center text-left">
+            <div class="image">
+                <img class="rounded-circle blur-up lazyload"
+                    data-src="{{ asset('client/images/users/testimonial3-65x.jpg') }}"
+                    src="{{ asset('client/images/users/testimonial3-65x.jpg') }}"
+                    alt="Rick Edward" width="65" height="65" />
+            </div>
+            <div class="auhtext ms-3">
+                <h5 class="authour mb-1">Rick Edward</h5>
+                <p class="text-muted">Developer</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="testimonial-slide rounded-3">
+    <div class="testimonial-content text-center">
+        <div class="quote-icon mb-3 mb-lg-4">
+            <img class="blur-up lazyload mx-auto"
+                data-src="{{ asset('client/images/icons/demo1-quote-icon.png') }}"
+                src="{{ asset('client/images/icons/demo1-quote-icon.png') }}" alt="icon"
+                width="40" height="40" />
+        </div>
+        <div class="content">
+            <div class="text mb-2">
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text 1500s.
+                </p>
+            </div>
+            <div class="product-review my-3">
+                <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                    class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
+                    class="icon anm anm-star-o"></i>
+                <span class="caption hidden ms-1">29 Reviews</span>
+            </div>
+        </div>
+        <div class="auhimg d-flex-justify-center text-left">
+            <div class="image">
+                <img class="rounded-circle blur-up lazyload"
+                    data-src="{{ asset('client/images/users/testimonial4-65x.jpg') }}"
+                    src="{{ asset('client/images/users/testimonial4-65x.jpg') }}"
+                    alt="Happy Buyer" width="65" height="65" />
+            </div>
+            <div class="auhtext ms-3">
+                <h5 class="authour mb-1">Happy Buyer</h5>
+                <p class="text-muted">Designer</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--Testimonial Slider Items-->
+</div>
+</div>
+</section> --}}
         <!--End Testimonial section-->
 
         <!--Blog Post-->
@@ -1424,81 +1505,81 @@
                                 <a class="featured-image zoom-scal" href="blog-details.html"><img
                                         class="blur-up lazyload"
                                         data-src="{{ asset('client/images/blog/post-img1.jpg') }}"
-                                        src="{{ asset('client/images/blog/post-img1.jpg') }}"
-                                        alt="New shop collection our shop" width="740" height="410" /></a>
-                                <div class="date">
-                                    <span class="dt">25</span>
-                                    <span class="mt">Apr<br />
-                                        <b>2023</b></span>
-                                </div>
-                            </div>
-                            <div class="blog-content">
-                                <h2 class="h3 mb-3">
-                                    <a href="blog-details.html">New shop collection our shop</a>
-                                </h2>
-                                <p class="content">
-                                    There are many variations of passages of Lorem Ipsum
-                                    available, but the majority have suffered.
-                                </p>
-                                <a href="blog-details.html" class="btn btn-secondary btn-sm">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="blog-item">
-                        <div class="blog-article zoomscal-hov">
-                            <div class="blog-img">
-                                <a class="featured-image zoom-scal" href="blog-details.html"><img
-                                        class="blur-up lazyload"
-                                        data-src="{{ asset('client/images/blog/post-img2.jpg') }}"
-                                        src="{{ asset('client/images/blog/post-img2.jpg') }}"
-                                        alt="Gift ideas for everyone" width="740" height="410" /></a>
-                                <div class="date">
-                                    <span class="dt">31</span>
-                                    <span class="mt">Mar<br />
-                                        <b>2023</b></span>
-                                </div>
-                            </div>
-                            <div class="blog-content">
-                                <h2 class="h3 mb-3">
-                                    <a href="blog-details.html">Gift ideas for everyone</a>
-                                </h2>
-                                <p class="content">
-                                    There are many variations of passages of Lorem Ipsum
-                                    available, but the majority suffered.
-                                </p>
-                                <a href="blog-details.html" class="btn btn-secondary btn-sm">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="blog-item">
-                        <div class="blog-article zoomscal-hov">
-                            <div class="blog-img">
-                                <a class="featured-image zoom-scal" href="blog-details.html"><img
-                                        class="blur-up lazyload"
-                                        data-src="{{ asset('client/images/blog/post-img3.jpg') }}"
-                                        src="{{ asset('client/images/blog/post-img3.jpg') }}"
-                                        alt="Sales with best collection" width="740" height="410" /></a>
-                                <div class="date">
-                                    <span class="dt">30</span>
-                                    <span class="mt">Jan<br />
-                                        <b>2023</b></span>
-                                </div>
-                            </div>
-                            <div class="blog-content">
-                                <h2 class="h3 mb-3">
-                                    <a href="blog-details.html">Sales with best collection</a>
-                                </h2>
-                                <p class="content">
-                                    There are many variations of passages of Lorem Ipsum
-                                    available, but the majority.
-                                </p>
-                                <a href="blog-details.html" class="btn btn-secondary btn-sm">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+src="{{ asset('client/images/blog/post-img1.jpg') }}"
+alt="New shop collection our shop" width="740" height="410" /></a>
+<div class="date">
+    <span class="dt">25</span>
+    <span class="mt">Apr<br />
+        <b>2023</b></span>
+</div>
+</div>
+<div class="blog-content">
+    <h2 class="h3 mb-3">
+        <a href="blog-details.html">New shop collection our shop</a>
+    </h2>
+    <p class="content">
+        There are many variations of passages of Lorem Ipsum
+        available, but the majority have suffered.
+    </p>
+    <a href="blog-details.html" class="btn btn-secondary btn-sm">Read more</a>
+</div>
+</div>
+</div>
+<div class="blog-item">
+    <div class="blog-article zoomscal-hov">
+        <div class="blog-img">
+            <a class="featured-image zoom-scal" href="blog-details.html"><img
+                    class="blur-up lazyload"
+                    data-src="{{ asset('client/images/blog/post-img2.jpg') }}"
+                    src="{{ asset('client/images/blog/post-img2.jpg') }}"
+                    alt="Gift ideas for everyone" width="740" height="410" /></a>
+            <div class="date">
+                <span class="dt">31</span>
+                <span class="mt">Mar<br />
+                    <b>2023</b></span>
             </div>
-        </section> --}}
+        </div>
+        <div class="blog-content">
+            <h2 class="h3 mb-3">
+                <a href="blog-details.html">Gift ideas for everyone</a>
+            </h2>
+            <p class="content">
+                There are many variations of passages of Lorem Ipsum
+                available, but the majority suffered.
+            </p>
+            <a href="blog-details.html" class="btn btn-secondary btn-sm">Read more</a>
+        </div>
+    </div>
+</div>
+<div class="blog-item">
+    <div class="blog-article zoomscal-hov">
+        <div class="blog-img">
+            <a class="featured-image zoom-scal" href="blog-details.html"><img
+                    class="blur-up lazyload"
+                    data-src="{{ asset('client/images/blog/post-img3.jpg') }}"
+                    src="{{ asset('client/images/blog/post-img3.jpg') }}"
+                    alt="Sales with best collection" width="740" height="410" /></a>
+            <div class="date">
+                <span class="dt">30</span>
+                <span class="mt">Jan<br />
+                    <b>2023</b></span>
+            </div>
+        </div>
+        <div class="blog-content">
+            <h2 class="h3 mb-3">
+                <a href="blog-details.html">Sales with best collection</a>
+            </h2>
+            <p class="content">
+                There are many variations of passages of Lorem Ipsum
+                available, but the majority.
+            </p>
+            <a href="blog-details.html" class="btn btn-secondary btn-sm">Read more</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</section> --}}
         <!--End Blog Post-->
     </div>
 @endsection
@@ -1517,107 +1598,107 @@
                         <div class="row g-0 item mb-3">
                             <a class="col-4 product-image" href="product-layout1.html"><img class="blur-up lazyload"
                                     data-src="{{ asset('client/images/products/addtocart-modal.jpg') }}"
-                                    src="{{ asset('client/images/products/addtocart-modal.jpg') }}" alt="Product"
-                                    title="Product" width="625" height="800" /></a>
-                            <div class="col-8 product-details">
-                                <div class="product-variant ps-3">
-                                    <a class="product-title" href="product-layout1.html">Weave Hoodie Sweatshirt</a>
-                                    <div class="priceRow mt-2 mb-3">
-                                        <div class="product-price m-0">
-                                            <span class="old-price">$114.00</span><span class="price">$99.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="qtyField">
-                                        <a class="qtyBtn minus" href="#;"><i
-                                                class="icon anm anm-minus-r"></i></a>
-                                        <input type="text" name="quantity" value="1" class="qty" />
-                                        <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Product Info -->
-                        <!-- Swatches Color -->
-                        <div class="variants-clr swatches-image clearfix mb-3 swatch-0 option1" data-option-index="0">
-                            <label class="label d-flex justify-content-center">Color:<span
-                                    class="slVariant ms-1 fw-bold">Black</span></label>
-                            <ul class="swatches d-flex-justify-center pt-1 clearfix">
-                                <li class="swatch large radius available active">
-                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                        alt="image" width="70" height="70" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Blue" />
-                                </li>
-                                <li class="swatch large radius available">
-                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                        alt="image" width="70" height="70" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Black" />
-                                </li>
-                                <li class="swatch large radius available">
-                                    <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                        alt="image" width="70" height="70" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Pink" />
-                                </li>
-                                <li class="swatch large radius available green">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Green"></span>
-                                </li>
-                                <li class="swatch large radius soldout yellow">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Yellow"></span>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- End Swatches Color -->
-                        <!-- Swatches Size -->
-                        <div class="variants-size swatches-size clearfix mb-4 swatch-1 option2" data-option-index="1">
-                            <label class="label d-flex justify-content-center">Size:<span
-                                    class="slVariant ms-1 fw-bold">S</span></label>
-                            <ul class="size-swatches d-flex-justify-center pt-1 clearfix">
-                                <li class="swatch large radius soldout">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="XS">XS</span>
-                                </li>
-                                <li class="swatch large radius available active">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="S">S</span>
-                                </li>
-                                <li class="swatch large radius available">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="M">M</span>
-                                </li>
-                                <li class="swatch large radius available">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="L">L</span>
-                                </li>
-                                <li class="swatch large radius available">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="XL">XL</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- End Swatches Size -->
-                        <!-- Product Action -->
-                        <div class="product-form-submit d-flex-justify-center">
-                            <button type="submit" name="add" class="btn product-cart-submit me-2">
-                                <span>Add to cart</span>
-                            </button>
-                            <button type="submit" name="sold" class="btn btn-secondary product-sold-out d-none"
-                                disabled="disabled">
-                                Sold out
-                            </button>
-                            <button type="submit" name="buy" class="btn btn-secondary proceed-to-checkout">
-                                Buy it now
-                            </button>
-                        </div>
-                        <!-- End Product Action -->
-                        <div class="text-center mt-3">
-                            <a class="text-link" href="product-layout1.html">View More Details</a>
-                        </div>
-                    </form>
-                </div>
+src="{{ asset('client/images/products/addtocart-modal.jpg') }}" alt="Product"
+title="Product" width="625" height="800" /></a>
+<div class="col-8 product-details">
+    <div class="product-variant ps-3">
+        <a class="product-title" href="product-layout1.html">Weave Hoodie Sweatshirt</a>
+        <div class="priceRow mt-2 mb-3">
+            <div class="product-price m-0">
+                <span class="old-price">$114.00</span><span class="price">$99.00</span>
             </div>
         </div>
-    </div> --}}
+        <div class="qtyField">
+            <a class="qtyBtn minus" href="#;"><i
+                    class="icon anm anm-minus-r"></i></a>
+            <input type="text" name="quantity" value="1" class="qty" />
+            <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
+        </div>
+    </div>
+</div>
+</div>
+<!-- End Product Info -->
+<!-- Swatches Color -->
+<div class="variants-clr swatches-image clearfix mb-3 swatch-0 option1" data-option-index="0">
+    <label class="label d-flex justify-content-center">Color:<span
+            class="slVariant ms-1 fw-bold">Black</span></label>
+    <ul class="swatches d-flex-justify-center pt-1 clearfix">
+        <li class="swatch large radius available active">
+            <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                alt="image" width="70" height="70" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Blue" />
+        </li>
+        <li class="swatch large radius available">
+            <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                alt="image" width="70" height="70" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Black" />
+        </li>
+        <li class="swatch large radius available">
+            <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                alt="image" width="70" height="70" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Pink" />
+        </li>
+        <li class="swatch large radius available green">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Green"></span>
+        </li>
+        <li class="swatch large radius soldout yellow">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Yellow"></span>
+        </li>
+    </ul>
+</div>
+<!-- End Swatches Color -->
+<!-- Swatches Size -->
+<div class="variants-size swatches-size clearfix mb-4 swatch-1 option2" data-option-index="1">
+    <label class="label d-flex justify-content-center">Size:<span
+            class="slVariant ms-1 fw-bold">S</span></label>
+    <ul class="size-swatches d-flex-justify-center pt-1 clearfix">
+        <li class="swatch large radius soldout">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="XS">XS</span>
+        </li>
+        <li class="swatch large radius available active">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="S">S</span>
+        </li>
+        <li class="swatch large radius available">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="M">M</span>
+        </li>
+        <li class="swatch large radius available">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="L">L</span>
+        </li>
+        <li class="swatch large radius available">
+            <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="XL">XL</span>
+        </li>
+    </ul>
+</div>
+<!-- End Swatches Size -->
+<!-- Product Action -->
+<div class="product-form-submit d-flex-justify-center">
+    <button type="submit" name="add" class="btn product-cart-submit me-2">
+        <span>Add to cart</span>
+    </button>
+    <button type="submit" name="sold" class="btn btn-secondary product-sold-out d-none"
+        disabled="disabled">
+        Sold out
+    </button>
+    <button type="submit" name="buy" class="btn btn-secondary proceed-to-checkout">
+        Buy it now
+    </button>
+</div>
+<!-- End Product Action -->
+<div class="text-center mt-3">
+    <a class="text-link" href="product-layout1.html">View More Details</a>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div> --}}
     <!-- End Product Quickshop Modal -->
 
     <!-- Product Addtocart Modal-->
@@ -1691,270 +1772,270 @@
                                     <div class="item carousel-item active" data-bs-slide-number="0">
                                         <img class="blur-up lazyload" data-src="assets/images/products/product2.jpg"
                                             src="{{ asset('client/images/products/product2.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="1">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-1.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="2">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-2.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="3">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-3.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="4">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-4.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="5">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product5.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                </div>
-                                <!-- End Image Slide carousel items -->
-                                <!-- Thumbnail image -->
-                                <div class="model-thumbnail-img">
-                                    <!-- Thumbnail slide -->
-                                    <div class="carousel-indicators list-inline">
-                                        <div class="list-inline-item active" id="carousel-selector-0"
-                                            data-bs-slide-to="0" data-bs-target="#quickView">
-                                            <img class="blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-1" data-bs-slide-to="1"
-                                            data-bs-target="#quickView">
-                                            <img class="blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-2" data-bs-slide-to="2"
-                                            data-bs-target="#quickView">
-                                            <img class="blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-3" data-bs-slide-to="3"
-                                            data-bs-target="#quickView">
-                                            <img class="blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-4" data-bs-slide-to="4"
-                                            data-bs-target="#quickView">
-                                            <img class="blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-5" data-bs-slide-to="5"
-                                            data-bs-target="#quickView">
-                                            <img class="blur-up lazyload"
-                                                data-src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                alt="product" title="Product" width="625" height="808" />
-                                        </div>
-                                    </div>
-                                    <!-- End Thumbnail slide -->
-                                    <!-- Carousel arrow button -->
-                                    <a class="carousel-control-prev carousel-arrow rounded-1" href="#quickView"
-                                        data-bs-target="#quickView" data-bs-slide="prev"><i
-                                            class="icon anm anm-angle-left-r"></i></a>
-                                    <a class="carousel-control-next carousel-arrow rounded-1" href="#quickView"
-                                        data-bs-target="#quickView" data-bs-slide="next"><i
-                                            class="icon anm anm-angle-right-r"></i></a>
-                                    <!-- End Carousel arrow button -->
-                                </div>
-                                <!-- End Thumbnail image -->
-                            </div>
-                            <!-- End Model Thumbnail -->
-                            <div class="text-center mt-3">
-                                <a href="product-layout1.html" class="text-link">View More Details</a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="product-arrow d-flex justify-content-between">
-                                <h2 class="product-title">Product Quick View Popup</h2>
-                            </div>
-                            <div class="product-review d-flex mt-0 mb-2">
-                                <div class="rating">
-                                    <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star-o"></i>
-                                </div>
-                                <div class="reviews ms-2"><a href="#">6 Reviews</a></div>
-                            </div>
-                            <div class="product-info">
-                                <p class="product-vendor">
-                                    Vendor:<span class="text"><a href="#">Sparx</a></span>
-                                </p>
-                                <p class="product-type">
-                                    Product Type:<span class="text">Caps</span>
-                                </p>
-                                <p class="product-sku">
-                                    SKU:<span class="text">RF104456</span>
-                                </p>
-                            </div>
-                            <div class="pro-stockLbl my-2">
-                                <span class="d-flex-center stockLbl instock d-none"><i
-                                        class="icon anm anm-check-cil"></i><span> In stock</span></span>
-                                <span class="d-flex-center stockLbl preorder d-none"><i
-                                        class="icon anm anm-clock-r"></i><span> Pre-order Now</span></span>
-                                <span class="d-flex-center stockLbl outstock d-none"><i
-                                        class="icon anm anm-times-cil"></i>
-                                    <span>Sold out</span></span>
-                                <span class="d-flex-center stockLbl lowstock" data-qty="15"><i
-                                        class="icon anm anm-exclamation-cir"></i><span>
-                                        Order now, Only
-                                        <span class="items">10</span> left!</span></span>
-                            </div>
-                            <div class="product-price d-flex-center my-3">
-                                <span class="price old-price">$135.00</span><span class="price">$99.00</span>
-                            </div>
-                            <div class="sort-description">
-                                The standard chunk of Lorem Ipsum used since the 1500s is
-                                reproduced below for those interested.
-                            </div>
-                            <form method="post" action="#" id="product_form--option" class="product-form">
-                                @csrf
-                                <div class="product-options d-flex-wrap">
-                                    <div class="product-item swatches-image w-100 mb-3 swatch-0 option1"
-                                        data-option-index="0">
-                                        <label class="label d-flex align-items-center">Color:<span
-                                                class="slVariant ms-1 fw-bold">Blue</span></label>
-                                        <ul class="variants-clr swatches d-flex-center pt-1 clearfix">
-                                            <li class="swatch large radius available active">
-                                                <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                                    alt="image" width="70" height="70"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Blue" />
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                                    alt="image" width="70" height="70"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Black" />
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                                    alt="image" width="70" height="70"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Pink" />
-                                            </li>
-                                            <li class="swatch large radius available green">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="Green"></span>
-                                            </li>
-                                            <li class="swatch large radius soldout yellow">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="Yellow"></span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="product-item swatches-size w-100 mb-3 swatch-1 option2"
-                                        data-option-index="1">
-                                        <label class="label d-flex align-items-center">Size:<span
-                                                class="slVariant ms-1 fw-bold">S</span></label>
-                                        <ul class="variants-size size-swatches d-flex-center pt-1 clearfix">
-                                            <li class="swatch large radius soldout">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="XS">XS</span>
-                                            </li>
-                                            <li class="swatch large radius available active">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="S">S</span>
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="M">M</span>
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="L">L</span>
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="XL">XL</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="product-action d-flex-wrap w-100 pt-1 mb-3 clearfix">
-                                        <div class="quantity">
-                                            <div class="qtyField rounded">
-                                                <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"
-                                                        aria-hidden="true"></i></a>
-                                                <input type="text" name="quantity" value="1"
-                                                    class="product-form__input qty" />
-                                                <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-l"
-                                                        aria-hidden="true"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="addtocart ms-3 fl-1">
-                                            <button type="submit" name="add"
-                                                class="btn product-cart-submit w-100">
-                                                <span>Add to cart</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="wishlist-btn d-flex-center">
-                                <a class="add-wishlist d-flex-center me-3" href="wishlist-style1.html"
-                                    title="Add to Wishlist"><i class="icon anm anm-heart-l me-1"></i>
-                                    <span>Add to Wishlist</span></a>
-                                <a class="add-compare d-flex-center" href="compare-style1.html"
-                                    title="Add to Compare"><i class="icon anm anm-random-r me-2"></i>
-                                    <span>Add to Compare</span></a>
-                            </div>
-                            <!-- Social Sharing -->
-                            <div class="social-sharing share-icon d-flex-center mx-0 mt-3">
-                                <span class="sharing-lbl">Share :</span>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-facebook"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Facebook"><i
-                                        class="icon anm anm-facebook-f"></i><span
-                                        class="share-title d-none">Facebook</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tweet on Twitter"><i
-                                        class="icon anm anm-twitter"></i><span
-                                        class="share-title d-none">Tweet</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Pin on Pinterest"><i
-                                        class="icon anm anm-pinterest-p"></i>
-                                    <span class="share-title d-none">Pin it</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-linkedin"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Instagram"><i
-                                        class="icon anm anm-linkedin-in"></i><span
-                                        class="share-title d-none">Instagram</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-whatsapp"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share on WhatsApp"><i
-                                        class="icon anm anm-envelope-l"></i><span
-                                        class="share-title d-none">WhatsApp</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-email"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share by Email"><i
-                                        class="icon anm anm-whatsapp"></i><span
-                                        class="share-title d-none">Email</span></a>
-                            </div>
-                            <!-- End Social Sharing -->
-                        </div>
+title="Product" width="625" height="808" />
+</div>
+<div class="item carousel-item" data-bs-slide-number="1">
+    <img class="blur-up lazyload"
+        data-src="{{ asset('client/images/products/product2-1.jpg') }}"
+        src="{{ asset('client/images/products/product2-1.jpg') }}" alt="product"
+        title="Product" width="625" height="808" />
+</div>
+<div class="item carousel-item" data-bs-slide-number="2">
+    <img class="blur-up lazyload"
+        data-src="{{ asset('client/images/products/product2-2.jpg') }}"
+        src="{{ asset('client/images/products/product2-2.jpg') }}" alt="product"
+        title="Product" width="625" height="808" />
+</div>
+<div class="item carousel-item" data-bs-slide-number="3">
+    <img class="blur-up lazyload"
+        data-src="{{ asset('client/images/products/product2-3.jpg') }}"
+        src="{{ asset('client/images/products/product2-3.jpg') }}" alt="product"
+        title="Product" width="625" height="808" />
+</div>
+<div class="item carousel-item" data-bs-slide-number="4">
+    <img class="blur-up lazyload"
+        data-src="{{ asset('client/images/products/product2-4.jpg') }}"
+        src="{{ asset('client/images/products/product2-4.jpg') }}" alt="product"
+        title="Product" width="625" height="808" />
+</div>
+<div class="item carousel-item" data-bs-slide-number="5">
+    <img class="blur-up lazyload"
+        data-src="{{ asset('client/images/products/product5.jpg') }}"
+        src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
+        title="Product" width="625" height="808" />
+</div>
+</div>
+<!-- End Image Slide carousel items -->
+<!-- Thumbnail image -->
+<div class="model-thumbnail-img">
+    <!-- Thumbnail slide -->
+    <div class="carousel-indicators list-inline">
+        <div class="list-inline-item active" id="carousel-selector-0"
+            data-bs-slide-to="0" data-bs-target="#quickView">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/products/product2.jpg') }}"
+                src="{{ asset('client/images/products/product2.jpg') }}"
+                alt="product" title="Product" width="625" height="808" />
+        </div>
+        <div class="list-inline-item" id="carousel-selector-1" data-bs-slide-to="1"
+            data-bs-target="#quickView">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/products/product2-1.jpg') }}"
+                src="{{ asset('client/images/products/product2-1.jpg') }}"
+                alt="product" title="Product" width="625" height="808" />
+        </div>
+        <div class="list-inline-item" id="carousel-selector-2" data-bs-slide-to="2"
+            data-bs-target="#quickView">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/products/product2-2.jpg') }}"
+                src="{{ asset('client/images/products/product2-2.jpg') }}"
+                alt="product" title="Product" width="625" height="808" />
+        </div>
+        <div class="list-inline-item" id="carousel-selector-3" data-bs-slide-to="3"
+            data-bs-target="#quickView">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/products/product2-3.jpg') }}"
+                src="{{ asset('client/images/products/product2-3.jpg') }}"
+                alt="product" title="Product" width="625" height="808" />
+        </div>
+        <div class="list-inline-item" id="carousel-selector-4" data-bs-slide-to="4"
+            data-bs-target="#quickView">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/products/product2-4.jpg') }}"
+                src="{{ asset('client/images/products/product2-4.jpg') }}"
+                alt="product" title="Product" width="625" height="808" />
+        </div>
+        <div class="list-inline-item" id="carousel-selector-5" data-bs-slide-to="5"
+            data-bs-target="#quickView">
+            <img class="blur-up lazyload"
+                data-src="{{ asset('client/images/products/product2-5.jpg') }}"
+                src="{{ asset('client/images/products/product2-5.jpg') }}"
+                alt="product" title="Product" width="625" height="808" />
+        </div>
+    </div>
+    <!-- End Thumbnail slide -->
+    <!-- Carousel arrow button -->
+    <a class="carousel-control-prev carousel-arrow rounded-1" href="#quickView"
+        data-bs-target="#quickView" data-bs-slide="prev"><i
+            class="icon anm anm-angle-left-r"></i></a>
+    <a class="carousel-control-next carousel-arrow rounded-1" href="#quickView"
+        data-bs-target="#quickView" data-bs-slide="next"><i
+            class="icon anm anm-angle-right-r"></i></a>
+    <!-- End Carousel arrow button -->
+</div>
+<!-- End Thumbnail image -->
+</div>
+<!-- End Model Thumbnail -->
+<div class="text-center mt-3">
+    <a href="product-layout1.html" class="text-link">View More Details</a>
+</div>
+</div>
+<div class="col-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="product-arrow d-flex justify-content-between">
+        <h2 class="product-title">Product Quick View Popup</h2>
+    </div>
+    <div class="product-review d-flex mt-0 mb-2">
+        <div class="rating">
+            <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
+                class="icon anm anm-star-o"></i>
+        </div>
+        <div class="reviews ms-2"><a href="#">6 Reviews</a></div>
+    </div>
+    <div class="product-info">
+        <p class="product-vendor">
+            Vendor:<span class="text"><a href="#">Sparx</a></span>
+        </p>
+        <p class="product-type">
+            Product Type:<span class="text">Caps</span>
+        </p>
+        <p class="product-sku">
+            SKU:<span class="text">RF104456</span>
+        </p>
+    </div>
+    <div class="pro-stockLbl my-2">
+        <span class="d-flex-center stockLbl instock d-none"><i
+                class="icon anm anm-check-cil"></i><span> In stock</span></span>
+        <span class="d-flex-center stockLbl preorder d-none"><i
+                class="icon anm anm-clock-r"></i><span> Pre-order Now</span></span>
+        <span class="d-flex-center stockLbl outstock d-none"><i
+                class="icon anm anm-times-cil"></i>
+            <span>Sold out</span></span>
+        <span class="d-flex-center stockLbl lowstock" data-qty="15"><i
+                class="icon anm anm-exclamation-cir"></i><span>
+                Order now, Only
+                <span class="items">10</span> left!</span></span>
+    </div>
+    <div class="product-price d-flex-center my-3">
+        <span class="price old-price">$135.00</span><span class="price">$99.00</span>
+    </div>
+    <div class="sort-description">
+        The standard chunk of Lorem Ipsum used since the 1500s is
+        reproduced below for those interested.
+    </div>
+    <form method="post" action="#" id="product_form--option" class="product-form">
+        @csrf
+        <div class="product-options d-flex-wrap">
+            <div class="product-item swatches-image w-100 mb-3 swatch-0 option1"
+                data-option-index="0">
+                <label class="label d-flex align-items-center">Color:<span
+                        class="slVariant ms-1 fw-bold">Blue</span></label>
+                <ul class="variants-clr swatches d-flex-center pt-1 clearfix">
+                    <li class="swatch large radius available active">
+                        <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                            alt="image" width="70" height="70"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Blue" />
+                    </li>
+                    <li class="swatch large radius available">
+                        <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                            alt="image" width="70" height="70"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Black" />
+                    </li>
+                    <li class="swatch large radius available">
+                        <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
+                            alt="image" width="70" height="70"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Pink" />
+                    </li>
+                    <li class="swatch large radius available green">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Green"></span>
+                    </li>
+                    <li class="swatch large radius soldout yellow">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Yellow"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="product-item swatches-size w-100 mb-3 swatch-1 option2"
+                data-option-index="1">
+                <label class="label d-flex align-items-center">Size:<span
+                        class="slVariant ms-1 fw-bold">S</span></label>
+                <ul class="variants-size size-swatches d-flex-center pt-1 clearfix">
+                    <li class="swatch large radius soldout">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="XS">XS</span>
+                    </li>
+                    <li class="swatch large radius available active">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="S">S</span>
+                    </li>
+                    <li class="swatch large radius available">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="M">M</span>
+                    </li>
+                    <li class="swatch large radius available">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="L">L</span>
+                    </li>
+                    <li class="swatch large radius available">
+                        <span class="swatchLbl" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="XL">XL</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="product-action d-flex-wrap w-100 pt-1 mb-3 clearfix">
+                <div class="quantity">
+                    <div class="qtyField rounded">
+                        <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"
+                                aria-hidden="true"></i></a>
+                        <input type="text" name="quantity" value="1"
+                            class="product-form__input qty" />
+                        <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-l"
+                                aria-hidden="true"></i></a>
                     </div>
+                </div>
+                <div class="addtocart ms-3 fl-1">
+                    <button type="submit" name="add"
+                        class="btn product-cart-submit w-100">
+                        <span>Add to cart</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </form>
+    <div class="wishlist-btn d-flex-center">
+        <a class="add-wishlist d-flex-center me-3" href="wishlist-style1.html"
+            title="Add to Wishlist"><i class="icon anm anm-heart-l me-1"></i>
+            <span>Add to Wishlist</span></a>
+        <a class="add-compare d-flex-center" href="compare-style1.html"
+            title="Add to Compare"><i class="icon anm anm-random-r me-2"></i>
+            <span>Add to Compare</span></a>
+    </div>
+    <!-- Social Sharing -->
+    <div class="social-sharing share-icon d-flex-center mx-0 mt-3">
+        <span class="sharing-lbl">Share :</span>
+        <a href="#" class="d-flex-center btn btn-link btn--share share-facebook"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Facebook"><i
+                class="icon anm anm-facebook-f"></i><span
+                class="share-title d-none">Facebook</span></a>
+        <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Tweet on Twitter"><i
+                class="icon anm anm-twitter"></i><span
+                class="share-title d-none">Tweet</span></a>
+        <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Pin on Pinterest"><i
+                class="icon anm anm-pinterest-p"></i>
+            <span class="share-title d-none">Pin it</span></a>
+        <a href="#" class="d-flex-center btn btn-link btn--share share-linkedin"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Instagram"><i
+                class="icon anm anm-linkedin-in"></i><span
+                class="share-title d-none">Instagram</span></a>
+        <a href="#" class="d-flex-center btn btn-link btn--share share-whatsapp"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Share on WhatsApp"><i
+                class="icon anm anm-envelope-l"></i><span
+                class="share-title d-none">WhatsApp</span></a>
+        <a href="#" class="d-flex-center btn btn-link btn--share share-email"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Share by Email"><i
+                class="icon anm anm-whatsapp"></i><span
+                class="share-title d-none">Email</span></a>
+    </div>
+    <!-- End Social Sharing -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> --}}
     <div class="chat-container">
         <div class="chat-button" id="chatButton">
             <i class="anm anm-chat"></i>
@@ -1987,129 +2068,87 @@
     @vite(['resources/js/app.js'])
     <script>
         $(document).ready(function() {
-       let adminId;
-       let userId = {{ Auth::id() }}; 
-       $('#chatButton').click(function() {
-           $('#chatBox').show();
-           $.get('/get-first-admin', function(response) {
-               if (response.admin_id) {
-                   adminId = response.admin_id;
-                   $('#chatWithAdminName').text('Chatting with ' + response.admin_name);
-                   $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
-                       $('#chatMessages').empty(); 
-                       messagesResponse.messages.forEach(function(message) {
-                           let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                           let messageHtml = `
-                               <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
-                                   <div class="message-text">${message.message}</div>
-                                   <div class="message-time">${messageTime}</div>
-                               </div>`;
-                           
-                           $('#chatMessages').append(messageHtml);
-                       });
-   
-                       scrollToBottom(); 
-                   });
-               }
-           });
-       });
-   
-       $('#closeChat').click(function() {
-           $('#chatBox').hide();
-       });
-   
-       $('#sendMessage').click(function() {
-           sendMessage();
-       });
-   
-       $('#messageInput').keypress(function(event) {
-           if (event.which == 13 && !event.shiftKey) {
-               event.preventDefault();
-               sendMessage();
-           }
-       });
-       function sendMessage() {
-           let message = $('#messageInput').val().trim();
-           if (message) {
-               $.post('/send-message', {
-                   _token: '{{ csrf_token() }}',
-                   message: message,
-                   receiver_id: adminId
-               }, function(response) {
-                   if (response.success) {
-                       let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                       let messageHtml = `
-                           <div class="message sent">
-                               <div class="message-text">${message}</div>
-                               <div class="message-time">${messageTime}</div>
-                           </div>`;
-                       
-                       $('#chatMessages').append(messageHtml);
-                       $('#messageInput').val(''); 
-                       scrollToBottom(); 
-                   }
-               });
-           }
-       }
-   
-       var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-           cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-           encrypted: true
-       });
-   
-   
-       var channel = pusher.subscribe('chat.' + userId);
-       channel.bind('admin-message', function(data) {
-           let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-           let messageHtml = `
-               <div class="message received">
-                   <div class="message-text">${data.user.name}: ${data.message}</div>
-                   <div class="message-time">${messageTime}</div>
-               </div>`;
-           
-           $('#chatMessages').append(messageHtml);
-           scrollToBottom(); 
-       });
-       function scrollToBottom() {
-           const chatBody = $('.chat-body'); 
-           chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
-       }
-   });
-       </script> 
-
-    <!--End Product Quickview Modal-->
-    <script>
-        function saveVoucher(voucherCode) {
-            fetch('/api/save-voucher', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        code: voucherCode
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+            let adminId;
+            let userId = {{ Auth::id() }};
+            $('#chatButton').click(function() {
+                $('#chatBox').slideToggle(300);
+                $.get('/get-first-admin', function(response) {
+                    if (response.admin_id) {
+                        adminId = response.admin_id;
+                        $('#chatWithAdminName').text('   ' + response.admin_name);
+                        $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
+                            $('#chatMessages').empty();
+                            messagesResponse.messages.forEach(function(message) {
+                                let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                let messageHtml = `
+                                    <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
+                                        <div class="message-text">${message.message}</div>
+                                        <div class="message-time">${messageTime}</div>
+                                    </div>`;
+                                $('#chatMessages').append(messageHtml);
+                            });
+                            scrollToBottom();
+                        });
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        alert('Voucher đã được lưu thành công!');
-                    } else {
-                        alert('Lỗi: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Có lỗi xảy ra:', error);
-                    alert('Lỗi khi lưu voucher');
                 });
-        }
-    </script>
-
+            });
+            $('#closeChat').click(function() {
+                $('#chatBox').slideUp(300);
+            });
+            $('#sendMessage').click(function() {
+                sendMessage();
+            });
+            $('#messageInput').keypress(function(event) {
+                if (event.which == 13 && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+            function sendMessage() {
+                let message = $('#messageInput').val().trim();
+                if (message) {
+                    $.post('/send-message', {
+                        _token: '{{ csrf_token() }}',
+                        message: message,
+                        receiver_id: adminId
+                    }, function(response) {
+                        if (response.success) {
+                            let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            let messageHtml = `
+                                <div class="message sent">
+                                    <div class="message-text">${message}</div>
+                                    <div class="message-time">${messageTime}</div>
+                                </div>`;
+                            $('#chatMessages').append(messageHtml);
+                            $('#messageInput').val('');
+                            scrollToBottom();
+                        }
+                    });
+                }
+            }
+            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+                encrypted: true
+            });
+            var channel = pusher.subscribe('chat.' + userId);
+            channel.bind('admin-message', function(data) {
+                let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                let messageHtml = `
+                    <div class="message received">
+                        <div class="message-text">${data.user.name}: ${data.message}</div>
+                        <div class="message-time">${messageTime}</div>
+                    </div>`;
+                
+                $('#chatMessages').append(messageHtml);
+                scrollToBottom();
+            });
+            function scrollToBottom() {
+                const chatBody = $('.chat-body');
+                chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
+            }
+        });
+        </script>
+    <!--End Product Quickview Modal-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lắng nghe sự kiện khi modal được hiển thị
@@ -2130,7 +2169,7 @@
                 modal.find('.product-title').text(productName); // Cập nhật tên sản phẩm
                 modal.find('.product-image img').attr('src', productImage); // Cập nhật hình ảnh sản phẩm
                 modal.find('.product-clr').text(productColor + ' / ' +
-                productSize); // Cập nhật màu sắc và kích thước
+                    productSize); // Cập nhật màu sắc và kích thước
                 modal.find('.price').text(productPrice); // Cập nhật giá
                 // modal.find('.price').text(product_variant_id); // Cập nhật giá
 

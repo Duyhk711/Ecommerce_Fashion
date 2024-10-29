@@ -26,10 +26,12 @@ class HomeController extends Controller
         $newProducts = $this->homeService->getNewProducts();
         $saleProduct = $this->homeService->getSaleProduct();
         $bestsaleProducts = $this->homeService->getbestsaleProducts();
+        $vouchers = $this->homeService->getAllVouchers();
         
         // dd($banners);
-        return view('client.home', compact('products', 'banners', 'catalogues', 'newProducts', 'saleProduct', 'bestsaleProducts'));
+        return view('client.home', compact('products', 'banners', 'catalogues', 'newProducts', 'saleProduct', 'bestsaleProducts', 'vouchers'));
     }
+    
 
     // Tìm kiếm sản phẩm theo tên
     public function search(Request $request)
