@@ -5,16 +5,22 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
 class VouchersController extends Controller
 {
+    protected $userService;
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function voucher()
     {
+        $currentUser = $this->userService->getCurrentUser();
         // Bạn có thể thêm logic xử lý để lấy dữ liệu voucher từ database nếu cần
-        return view('client.my-account.vouchers');
+        return view('client.my-account.vouchers', compact( 'currentUser', ));
     }
     public function index()
     {

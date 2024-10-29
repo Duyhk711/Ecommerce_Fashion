@@ -33,6 +33,7 @@ class ShopService
         if ($request->has('categories')) {
             $products->filterByCategory($request->input('categories'));
         } else if ($request->has('price_text')) {
+            // dd('ok');
             $products->filterByPrice($request->input('price_text'));
         } else if ($request->has('colors')) {
             $products->filterByAttributes($request->input('colors'));
@@ -93,10 +94,10 @@ class ShopService
                 $query->orderBy('name', 'desc');
                 break;
             case 'price-ascending':
-                $query->orderBy('price_regular', 'asc');
+                $query->orderBy('price_sale', 'asc');
                 break;
             case 'price-descending':
-                $query->orderBy('price_regular', 'desc');
+                $query->orderBy('price_sale', 'desc');
                 break;
             case 'created-ascending':
                 $query->orderBy('created_at', 'asc');
