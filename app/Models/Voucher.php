@@ -14,9 +14,14 @@ class Voucher extends Model
         'code',
         'discount_type',
         'discount_value',
+        'minimum_order_value',
+        'quantity',
+        'description',
+        'is_active',
         'start_date',
         'end_date',
     ];
+
     // public function users()
     // {
     //     return $this->belongsToMany(User::class, 'user_voucher')

@@ -15,9 +15,9 @@
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
-   
+
   <!-- Modules -->
-  
+
   @yield('css')
   {{-- @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js']) --}}
   @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
@@ -232,7 +232,7 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-            
+
            {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
@@ -304,19 +304,19 @@
             </li>
 
             {{-- VOUCHER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
+            <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/vouchers*') ? 'true' : 'false' }}" href="{{ route('admin.vouchers.index') }}">
                 <i class="nav-main-link-icon fa fa-gift"></i>
                 <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
+              <ul class="nav-main-submenu{{ request()->is('admin/vouchers*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
                     <span class="nav-main-link-name">Voucher</span>
                   </a>
                 </li>
               </ul>
-            </li> --}}
+            </li>
 
             {{-- BANNER --}}
             <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
@@ -411,7 +411,7 @@
               @else
               <span class="d-none d-sm-inline-block">Admin</span>
               @endif
-              
+
               <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
@@ -422,7 +422,7 @@
                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
-                
+
                 <a class="dropdown-item" href="javascript:void(0)">
                   <i class="far fa-fw fa-file-alt me-1"></i> Invoices
                 </a>
@@ -618,9 +618,8 @@
           @endif
       });
   </script>
-  
+
 </body>
 @yield('js')
 
 </html>
-  

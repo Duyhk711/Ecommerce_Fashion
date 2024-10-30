@@ -108,9 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const positionSelect = document.getElementById('position');
     const imageFields = document.getElementById('image-fields');
     const addImageButton = document.querySelector('.add-image');
-    
-    let maxImages = Infinity; 
-    let positionSelected = false; 
+
+    let maxImages = Infinity;
+    let positionSelected = false;
 
     function togglePositionField() {
         if (typeSelect.value === 'sub') {
@@ -122,8 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
             positionField.style.display = 'none';
             document.getElementById('position').removeAttribute('required');
             document.getElementById('position').value = '';
-            maxImages = Infinity; 
-            addImageButton.disabled = false; 
+            maxImages = Infinity;
+            addImageButton.disabled = false;
         }
     }
 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addImageButton.addEventListener('click', function () {
         if (maxImages === 0) {
-            return; 
+            return;
         }
 
         let newField = document.createElement('div');
