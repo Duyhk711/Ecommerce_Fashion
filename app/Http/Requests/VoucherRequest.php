@@ -13,15 +13,20 @@ class VoucherRequest extends FormRequest
     }
 
     public function rules()
-    {
-        return [
-            'code' => 'required|string|max:255',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ];
-    }
+{
+    return [
+        'code' => 'required|string|unique:vouchers,code',
+        'discount_type' => 'required|string|in:percentage,fixed',
+        'discount_value' => 'required|numeric|min:1',
+        'minimum_order_value' => 'required|numeric|min:0',
+        'quantity' => 'required|integer|min:0',
+        'description' => 'required|string',
+        'is_active' => 'nullable|boolean',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+    ];
+}
+
 
     // Hàm để cung cấp các thông báo lỗi tùy chỉnh
     public function messages()

@@ -15,9 +15,9 @@
           <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb">
                   <li class="breadcrumb-item">
-                      <a href="#" style="color: inherit;">Products</a>
+                      <a href="#" style="color: inherit;">Bình luận</a>
                   </li>
-                  <li class="breadcrumb-item active" aria-current="page">Danh sách Bình luận/li>
+                  <li class="breadcrumb-item active" aria-current="page">Danh sách Bình luận
               </ol>
           </nav>
       </div>
@@ -26,14 +26,14 @@
 <!-- END Hero -->
 
 <div class="content">
-  
+
   <!-- Dynamic Table Full -->
   <div class="block block-rounded">
       <div class="block-header block-header-default">
           <h3 class="block-title">Danh sách Bình luận</h3>
           <div class="block-options">
               <div class="block-options-item">
-                
+
                   <a href="{{route('admin.comments.create')}}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
                       <i class="fa fa-plus"></i>
                   </a>
@@ -54,7 +54,7 @@
                       <!-- <th class="d-none d-sm-table-cell text-end">Value</th> -->
                       <th style="text-align: center;" class="text-center">Actions</th>
                   </tr>
-              </thead>   
+              </thead>
               <tbody>
                 @foreach( $comments as $comment)
                   <tr>
@@ -88,7 +88,7 @@
                                             <i class="fa fa-fw fa-times text-danger"></i>
                                         </button>
                                </form>
-                             
+
                           </div>
                       </td>
                   </tr>

@@ -32,63 +32,104 @@
                     </div>
                 </div>
             </div>
-
-
-
-
             <div class="block-content">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
                 <table class="table table-hover align-middle table-striped js-dataTable-full">
                     <thead>
                         <tr>
                             <th>STT</th>
                             <th>Mã</th>
-                            <th>Kiểu</th>
+                            {{-- <th>Kiểu</th> --}}
                             <th>Giá trị</th>
-                            <th>Ngày bắt đầu</th>
-                            <th>Ngày kết thúc</th>
+                            <th>Giá trị đơn hàng tối thiểu</th>
+                            <th>Số lượng</th>
+                            <th>Mô tả</th>
+                            <th>Trạng thái</th>
+                            {{-- <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th> --}}
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($vouchers as $voucher)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="fs-sm">{{ $loop->iteration }}</td>
                                 <td>{{ $voucher->code }}</td>
-                                <td>{{ $voucher->discount_type }}</td>
-                                <td>{{ $voucher->discount_value }}</td>
+                                {{-- <td>{{ $voucher->discount_type }}</td> --}}
+                                <td>
+                                    @if($voucher->discount_type == 'fixed')
+                                        {{ number_format($voucher->discount_value, 3, '.') }} ₫
+                                    @else
+                                        {{ $voucher->discount_value }} %
+                                    @endif
+                                </td>
+                                <td>{{ number_format($voucher->minimum_order_value * 1000, 0, '.', ',') }} ₫</td>
+                                <td>{{ $voucher->quantity }}</td>
+                                <td>{{ $voucher->description }}</td>
+                                <td>
+                                    @if ($voucher->is_active)
+                                    <span class="text-success">
+                                        <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip" title="Hoạt động"></i>
+                                    </span>
+                                    @else
+                                    <span class="text-danger">
+                                        <i class="fa fa-ban text-danger"data-bs-toggle="tooltip" title="Không hoạt động"></i>
+                                    </span>
+                                    @endif
+                                </td>
 
                                 <!-- Sử dụng Carbon format để hiển thị datetime -->
-                                <td>{{ \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y H:i') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y H:i') }}</td>
+                                {{-- <td>{{ \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y H:i') }}</td> --}}
 
-                                <td>
-                                    <a href="{{ route('admin.vouchers.edit', $voucher) }}"
-                                        class="btn btn-sm btn-alt-secondary">
-                                        <i class="fa fa-pencil-alt"></i> Edit
-                                    </a>
-                                    <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST"
-                                        class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-alt-secondary">
-                                            <i class="fa fa-fw fa-times text-danger"></i> Xóa
-                                        </button>
-                                    </form>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <!-- ACTIVATE -->
+                                        @if (!$voucher->is_active)
+                                            <form action="{{ route('admin.vouchers.activate', $voucher->id) }}" method="POST"
+                                                style="display:inline;" class="form-activate">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-alt-success"
+                                                    data-bs-toggle="tooltip" title="Kích hoạt">
+                                                    <i class="fa fa-fw fa-check"></i>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <form action="{{route('admin.vouchers.deactivate',$voucher->id)}}" method="POST"
+                                                style="display:inline;" class="form-deactivate">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-alt-danger"
+                                                    data-bs-toggle="tooltip" title="Huỷ kích hoạt">
+                                                    <i class="fa-solid fa-power-off"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        <!-- EDIT -->
+                                        <a href="{{ route('admin.vouchers.edit', $voucher->id) }}"
+                                            class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Sửa">
+                                            <i class="fa fa-pencil-alt"></i>
+                                        </a>
+                                        <!-- DELETE -->
+                                        <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST"
+                                            style="display:inline;" class="form-delete">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-alt-secondary"
+                                                data-bs-toggle="tooltip" title="Xóa">
+                                                <i class="fa fa-fw fa-times text-danger"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
 
+
             </div>
         </div>
     </div>
-
 @endsection
 @section('js')
     <!-- Page JS Plugins -->
