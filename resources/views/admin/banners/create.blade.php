@@ -204,4 +204,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
 @endsection
