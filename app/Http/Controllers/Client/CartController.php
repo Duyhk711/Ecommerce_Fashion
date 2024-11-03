@@ -23,12 +23,13 @@ class CartController extends Controller
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
-
+        $urlWithoutParams = url()->previous();
+        $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
             $this->cartService->addToCart($productId, $productVariantId, $quantity);
-            return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+            return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect($urlWithoutParams)->with('error', $e->getMessage());
         }
     }
 
@@ -98,7 +99,7 @@ class CartController extends Controller
         $userId = Auth::id();
 
         if (!$userId) {
-            $cart = session()->get('cart', []); 
+            $cart = session()->get('cart', []);
             if (isset($cart[$request->product_variant_id])) {
                 $cart[$request->product_variant_id]['quantity'] += $request->quantity;
             } else {
@@ -107,7 +108,7 @@ class CartController extends Controller
                     'price' => $request->price,
                     'stock' => $request->stock,
                     'quantity' => $request->quantity,
-                    'image' => $request->product_image, 
+                    'image' => $request->product_image,
                 ];
             }
 
