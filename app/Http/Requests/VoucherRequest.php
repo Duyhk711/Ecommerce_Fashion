@@ -14,22 +14,23 @@ class VoucherRequest extends FormRequest
     }
 
     public function rules()
-{
-    return [
-         'code' => [
+    {
+        $voucherId = $this->voucher ? $this->voucher->id : null;
+        return [
+            'code' => [
                 'required',
-                Rule::unique('vouchers')->ignore($this->voucher->id), // Bỏ qua mã voucher hiện tại
+                Rule::unique('vouchers')->ignore($voucherId), // Bỏ qua mã voucher hiện tại
             ],
-        'discount_type' => 'required|string|in:percentage,fixed',
-        'discount_value' => 'required|numeric|min:1',
-        'minimum_order_value' => 'required|numeric|min:0',
-        'quantity' => 'required|integer|min:0',
-        'description' => 'required|string',
-        'is_active' => 'nullable|boolean',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date|after_or_equal:start_date',
-    ];
-}
+            'discount_type' => 'required|string|in:percentage,fixed',
+            'discount_value' => 'required|numeric|min:1',
+            'minimum_order_value' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'is_active' => 'nullable|boolean',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ];
+    }
 
 
     // Hàm để cung cấp các thông báo lỗi tùy chỉnh
