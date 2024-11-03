@@ -1,6 +1,35 @@
 @extends('layouts.backend')
 
 @section('content')
+    <style>
+        .form-control, select {
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .form-control:focus, select:focus {
+            border-color: #5b9bd5;
+            box-shadow: 0 0 5px rgba(91, 155, 213, 0.5);
+        }
+
+        .btn-primary {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #41729f;
+            transform: scale(1.05);
+        }
+
+        .btn-primary:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
+
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
@@ -14,7 +43,7 @@
                 </div>
             </div>
             <div class="block-content d-flex justify-content-center">
-                <form action="{{ route('admin.vouchers.store') }}" method="POST" class="w-75">
+                <form action="{{ route('admin.vouchers.store') }}" method="POST" class="w-75" id="voucherForm">
                     @csrf
                     @if($errors->any())
                         <div class="alert alert-danger">
@@ -34,7 +63,7 @@
                         <label for="discount_type">Kiểu giảm giá</label>
                         <select name="discount_type" class="form-control" id="discount_type" required>
                             <option value="" disabled selected>Chọn kiểu giảm giá</option>
-                            <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
+                            <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Giảm theo phần trăm</option>
                             <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Số tiền cố định</option>
                         </select>
                     </div>
@@ -65,22 +94,37 @@
                         <textarea name="description" class="form-control" id="description" rows="4" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="start_date">Ngày bắt đầu</label>
-                        <input type="datetime-local" name="start_date" class="form-control" id="start_date" value="{{ old('start_date') ? old('start_date') : now()->format('Y-m-d\TH:i') }}" required>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="start_date">Ngày bắt đầu</label>
+                                <input type="datetime-local" name="start_date" class="form-control" id="start_date" value="{{ old('start_date') ? old('start_date') : now()->format('Y-m-d\TH:i') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="end_date">Ngày kết thúc</label>
+                                <input type="datetime-local" name="end_date" class="form-control" id="end_date" value="{{ old('end_date') }}" required>
+                                @if($errors->has('end_date'))
+                                    <span class="text-danger">{{ $errors->first('end_date') }}</span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="end_date">Ngày kết thúc</label>
-                        <input type="datetime-local" name="end_date" class="form-control" id="end_date" value="{{ old('end_date') }}" required>
-                        @if($errors->has('end_date'))
-                            <span class="text-danger">{{ $errors->first('end_date') }}</span>
-                        @endif
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">Lưu</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('voucherForm').addEventListener('submit', function() {
+            var button = document.getElementById('submitButton');
+            button.innerHTML = 'Đang xử lý...';
+            button.disabled = true;
+            button.style.cursor = 'not-allowed';
+            button.classList.add('disabled'); // Thêm lớp disabled cho nút
+        });
+    </script>
 @endsection

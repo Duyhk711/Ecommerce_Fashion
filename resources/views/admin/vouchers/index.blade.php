@@ -4,7 +4,37 @@
     <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+    <style>
+        /* Tùy chỉnh CSS cho bảng */
+        .table {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table th {
+            background-color: #f8f9fa; /* Màu nền cho header */
+            color: #495057; /* Màu chữ cho header */
+            font-weight: bold;
+        }
+
+        .btn-group .btn {
+            margin: 0 2px; /* Căn giữa các nút */
+        }
+
+        .text-success {
+            color: #28a745 !important; /* Màu xanh cho trạng thái hoạt động */
+        }
+
+        .text-danger {
+            color: #dc3545 !important; /* Màu đỏ cho trạng thái không hoạt động */
+        }
+    </style>
 @endsection
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -25,8 +55,7 @@
                 <h3 class="block-title">Danh sách voucher</h3>
                 <div class="block-options">
                     <div class="block-options-item">
-                        <a href="{{ route('admin.vouchers.create') }}" class="btn btn-sm btn-alt-secondary"
-                            data-bs-toggle="tooltip" title="Add">
+                        <a href="{{ route('admin.vouchers.create') }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -38,14 +67,11 @@
                         <tr>
                             <th>STT</th>
                             <th>Mã</th>
-                            {{-- <th>Kiểu</th> --}}
                             <th>Giá trị</th>
                             <th>Giá trị đơn hàng tối thiểu</th>
                             <th>Số lượng</th>
                             <th>Mô tả</th>
                             <th>Trạng thái</th>
-                            {{-- <th>Ngày bắt đầu</th>
-                            <th>Ngày kết thúc</th> --}}
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -54,7 +80,6 @@
                             <tr>
                                 <td class="fs-sm">{{ $loop->iteration }}</td>
                                 <td>{{ $voucher->code }}</td>
-                                {{-- <td>{{ $voucher->discount_type }}</td> --}}
                                 <td>
                                     @if($voucher->discount_type == 'fixed')
                                         {{ number_format($voucher->discount_value, 3, '.') }} ₫
@@ -66,56 +91,41 @@
                                 <td>{{ $voucher->quantity }}</td>
                                 <td>{{ $voucher->description }}</td>
                                 <td>
-                                    @if ($voucher->is_active)
+                                    @if (!$voucher->is_active)
                                     <span class="text-success">
-                                        <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip" title="Hoạt động"></i>
+                                        <i class="fa fa-check-circle" data-bs-toggle="tooltip" title="Hoạt động"></i>
                                     </span>
                                     @else
                                     <span class="text-danger">
-                                        <i class="fa fa-ban text-danger"data-bs-toggle="tooltip" title="Không hoạt động"></i>
+                                        <i class="fa fa-ban" data-bs-toggle="tooltip" title="Không hoạt động"></i>
                                     </span>
                                     @endif
                                 </td>
-
-                                <!-- Sử dụng Carbon format để hiển thị datetime -->
-                                {{-- <td>{{ \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y H:i') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y H:i') }}</td> --}}
-
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <!-- ACTIVATE -->
-                                        @if (!$voucher->is_active)
-                                            <form action="{{ route('admin.vouchers.activate', $voucher->id) }}" method="POST"
-                                                style="display:inline;" class="form-activate">
+                                        @if ($voucher->is_active)
+                                            <form action="{{ route('admin.vouchers.activate', $voucher->id) }}" method="POST" style="display:inline;" class="form-activate">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-alt-success"
-                                                    data-bs-toggle="tooltip" title="Kích hoạt">
+                                                <button type="submit" class="btn btn-sm btn-alt-success" data-bs-toggle="tooltip" title="Kích hoạt">
                                                     <i class="fa fa-fw fa-check"></i>
                                                 </button>
                                             </form>
                                         @else
-                                            <form action="{{route('admin.vouchers.deactivate',$voucher->id)}}" method="POST"
-                                                style="display:inline;" class="form-deactivate">
+                                            <form action="{{ route('admin.vouchers.deactivate', $voucher->id) }}" method="POST" style="display:inline;" class="form-deactivate">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-alt-danger"
-                                                    data-bs-toggle="tooltip" title="Huỷ kích hoạt">
+                                                <button type="submit" class="btn btn-sm btn-alt-danger" data-bs-toggle="tooltip" title="Huỷ kích hoạt">
                                                     <i class="fa-solid fa-power-off"></i>
                                                 </button>
                                             </form>
                                         @endif
 
-                                        <!-- EDIT -->
-                                        <a href="{{ route('admin.vouchers.edit', $voucher->id) }}"
-                                            class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Sửa">
+                                        <a href="{{ route('admin.vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Sửa">
                                             <i class="fa fa-pencil-alt"></i>
                                         </a>
-                                        <!-- DELETE -->
-                                        <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST"
-                                            style="display:inline;" class="form-delete">
+                                        <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST" style="display:inline;" class="form-delete">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-alt-secondary"
-                                                data-bs-toggle="tooltip" title="Xóa">
+                                            <button type="submit" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Xóa">
                                                 <i class="fa fa-fw fa-times text-danger"></i>
                                             </button>
                                         </form>
@@ -125,12 +135,11 @@
                         @endforeach
                     </tbody>
                 </table>
-
-
             </div>
         </div>
     </div>
 @endsection
+
 @section('js')
     <!-- Page JS Plugins -->
     <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
