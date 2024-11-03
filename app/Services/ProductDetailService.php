@@ -120,7 +120,7 @@ class ProductDetailService
         return $canComment;
     }
 
-    public function getCommentsData($product, $rating, $perPage = 4)
+    public function getCommentsData($product, $rating, $perPage = 3)
     {
         $query = $product->comments()->with('user')->orderBy('created_at', 'desc');
 
@@ -189,7 +189,7 @@ class ProductDetailService
                 'product_id' => $product->id,
                 'average_rating' => $this->calculateAverageRating($product),
                 'ratings_percentage' => $this->calculateRatingsPercentage($product),
-            ]; 
+            ];
         });
     }
 }

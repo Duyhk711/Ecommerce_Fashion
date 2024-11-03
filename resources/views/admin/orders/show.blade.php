@@ -146,7 +146,7 @@
                 </p>
               </div>
             </a>
-            
+
             @elseif($orderDetail->status == "4")
             <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
               <div class="block-content py-5">
@@ -172,7 +172,7 @@
             </a>
 
             @endif
-            
+
           </div>
         </div>
         <!-- END Quick Overview -->
@@ -209,7 +209,7 @@
                 <address class="fs-sm">
                   {{$orderDetail->address_line1}}
                   {{$orderDetail->address_line2}} <br>
-                  {{$orderDetail->ward}}, 
+                  {{$orderDetail->ward}},
                   {{$orderDetail->district}},
                   {{$orderDetail->city}}<br><br>
                   <i class="fa fa-phone"></i> {{$orderDetail->customer_phone}}<br>
@@ -224,8 +224,22 @@
 
         <!-- Products -->
         <div class="block block-rounded">
-          <div class="block-header block-header-default">
+          <div class="block-header block-header-default d-flex justify-content-between">
             <h3 class="block-title">Sản phẩm</h3>
+            @if ($orderDetail->status == '4' || $orderDetail->status == 'huy_don_hang')
+                <button type="button" class="btn btn-sm btn-primary "
+                    style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
+                    data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
+                   Chỉnh sửa trạng thái
+                </button>
+            @else
+                <button class="btn btn-sm btn-primary" style="height: 30px;"
+                    data-bs-toggle="modal" data-bs-target="#updateStatusModal"
+                    data-id="{{ $orderDetail->id }}" data-status="{{ $orderDetail->status }}"
+                    title="Chỉnh sửa">
+                    Chỉnh sửa trạng thái
+                </button>
+            @endif
           </div>
           <div class="block-content">
             <div class="table-responsive">
@@ -241,7 +255,7 @@
                 <tbody>
                   @foreach ($items as $item)
                     <tr>
-                      <td>                      
+                      <td>
                           <div class="d-flex">
                             <div>
                               <img src="{{asset('storage/' . $item->productVariant->image)}}" width="80px" alt="">
@@ -249,18 +263,18 @@
                             <div class="mx-2">
                               <a class="text-black fs-5"  href="{{route('productDetail',$item->productVariant->product->slug)}}"><strong>{{$item->product_name}}</strong></a><br>
                               <strong style="font-size: 13px"> {{$item->productVariant->sku}}</strong> <br>
-                              <p style="font-size: 13px"> 
+                              <p style="font-size: 13px">
                               @foreach ($item->productVariant->variantAttributes as $variantAttribute)
-                                  @if ($variantAttribute->attribute->name == 'Size') 
+                                  @if ($variantAttribute->attribute->name == 'Size')
                                       {{ $variantAttribute->attributeValue->value }}  ,
                                   @endif
                                 @endforeach
                                 @foreach ($item->productVariant->variantAttributes as $variantAttribute)
-                                  @if ($variantAttribute->attribute->name == 'Color') 
+                                  @if ($variantAttribute->attribute->name == 'Color')
                                     {{ $variantAttribute->attributeValue->value }}
                                   @endif
                                 @endforeach
-                              </p> 
+                              </p>
                               </div>
                           </div>
                       </td>
@@ -309,7 +323,11 @@
                               @foreach($statusChanges as $change)
                                   <tr>
                                       <td class="fs-base" style="width: 80px;">
+                                        @if ($change->new_status == '4')
+                                          <span class="badge bg-success">Đơn hàng</span>
+                                        @else
                                           <span class="badge bg-primary">Đơn hàng</span>
+                                        @endif
                                       </td>
                                       <td style="width: 220px;">
                                           <span class="fw-semibold">{{ $change->created_at->format('F d, Y - H:i') }}</span>
@@ -326,7 +344,7 @@
                                               @elseif($change->new_status == '3')
                                                   Đơn hàng đã được chuẩn bị giao cho đơn vị vận chuyển
                                               @elseif($change->new_status == '4')
-                                                  Đơn hàng đã giao thành công 
+                                                  Đơn hàng đã giao thành công
                                               @elseif($change->new_status == 'huy_don_hang')
                                                   Đơn hàng đã bị hủy
                                               @endif
@@ -347,9 +365,9 @@
                                       <a href="javascript:void(0)">{{ $user->name}}</a>
                                   </td>
                                   <td class="text-success">
-                                    
+
                                       <strong>{{ $paymentStatusMessage }}</strong>
-                                    
+
                                   </td>
                                 </tr>
                             @endif
@@ -358,8 +376,107 @@
               </div>
           </div>
       </div>
-      
+
         <!-- END Log Messages -->
       </div>
       <!-- END Page Content -->
+@endsection
+
+@section('modal')
+  <div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateStatusModalLabel">Cập Nhật Trạng Thái</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="updateStatusForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <input type="hidden" id="orderId" name="id">
+                    <div class="mb-3">
+                        <label for="statusSelect" class="form-label">Chọn trạng thái mới</label>
+                        <select id="statusSelect" class="form-select" name="status">
+                            <option value="1">Chờ xác nhận</option>
+                            <option value="2">Chờ vận chuyển</option>
+                            <option value="3">Đang vận chuyển</option>
+                            <option value="4">Hoàn thành</option>
+                            <option value="huy_don_hang">Hủy bỏ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+@endsection
+
+@section('js')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var updateStatusModal = document.getElementById('updateStatusModal');
+        var statusSelect = document.getElementById('statusSelect');
+        var submitBtn = document.querySelector('.modal-footer .btn-primary');
+        var form = document.getElementById('updateStatusForm');
+
+        updateStatusModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var orderId = button.getAttribute('data-id');
+            var orderStatus = button.getAttribute('data-status');
+
+
+            var orderIdInput = document.getElementById('orderId');
+            orderIdInput.value = orderId;
+
+            // Set the current order status as the selected option
+            statusSelect.value = orderStatus;
+
+            // Array of possible statuses, reflecting the order of progression
+            var statuses = ['1', '2', '3', '4', 'huy_don_hang'];
+            var currentStatusIndex = statuses.indexOf(orderStatus);
+              console.log(currentStatusIndex);
+              // if (statuses['1']) {
+              //     statusSelect.options[i].disabled = false;
+              // }else{
+              //     statusSelect.options[i].disabled = true;
+              // }
+            // Loop through the options and disable those that are prior to the current status and 'huy_don_hang'
+            for (var i = 0; i < statusSelect.options.length; i++) {
+              var optionValue = statusSelect.options[i].value;
+
+              // Nếu là 'huy_don_hang'
+              if (optionValue === 'huy_don_hang') {
+                  // Cho phép chọn nếu trạng thái hiện tại là 1, ngược lại disable
+                  statusSelect.options[i].disabled = !(currentStatusIndex === 0);
+              } else {
+                  // Các trạng thái khác: disable nếu thứ tự trước trạng thái hiện tại
+                  statusSelect.options[i].disabled = statuses.indexOf(optionValue) < currentStatusIndex;
+              }
+          }
+
+            form.action = '/admin/orders/update/' + orderId;
+
+            // Disable the "Cập Nhật" button if the status is already the current one
+            submitBtn.disabled = true;
+        });
+
+        // Enable the "Cập Nhật" button only if a new status is selected
+        statusSelect.addEventListener('change', function() {
+            var currentStatus = document.getElementById('orderId').getAttribute('data-status');
+            console.log(document.getElementById('orderId').getAttribute('data-status'));
+
+            if (statusSelect.value != currentStatus) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        });
+    });
+  </script>
 @endsection
