@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VoucherRequest extends FormRequest
 {
@@ -15,7 +16,10 @@ class VoucherRequest extends FormRequest
     public function rules()
 {
     return [
-        'code' => 'required|string|unique:vouchers,code',
+         'code' => [
+                'required',
+                Rule::unique('vouchers')->ignore($this->voucher->id), // Bỏ qua mã voucher hiện tại
+            ],
         'discount_type' => 'required|string|in:percentage,fixed',
         'discount_value' => 'required|numeric|min:1',
         'minimum_order_value' => 'required|numeric|min:0',
