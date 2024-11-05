@@ -15,6 +15,7 @@
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
    
   <!-- Modules -->
   
@@ -349,18 +350,11 @@
             </li>
 
             {{-- MESSAGE --}}
-            <li class="nav-main-item{{ request()->is('admin/chats*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/chats*') ? 'true' : 'false' }}" href="#">
+            <li class="nav-main-item">
+              <a class="nav-main-link" href="{{ route('admin.admin.chats') }}">
                 <i class="nav-main-link-icon fa fa-envelope"></i>
-                <span class="nav-main-link-name">Quản lý tin nhắn</span>
+                <span class="nav-main-link-name">Tin nhắn</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('/admin/chats*') ? ' show' : '' }}">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('/admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
-                    <span class="nav-main-link-name">Tin nhắn</span>
-                  </a>
-                </li>
-              </ul>
             </li>
 
             <li class="nav-main-heading">More</li>

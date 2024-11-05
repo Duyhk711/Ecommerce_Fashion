@@ -110,9 +110,10 @@ Route::post('/comments', [CommentController::class, 'store'])->name('comments.st
 Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
 Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
 
-
+Route::get('/api/vouchers/all', [VouchersController::class, 'loadAllVouchers'])->name('vouchers.load.all');
 Route::post('/save-voucher', [VouchersController::class, 'save'])->name('save-voucher'); 
-
+Route::get('/api/vouchers', [VouchersController::class, 'getAllVouchers']);
+Route::get('/check-voucher/{code}', [VouchersController::class, 'checkVoucher']);
 
 // User chat routes
 Route::middleware('auth')->group(function () {
