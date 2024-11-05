@@ -3,190 +3,6 @@
 @section('content')
     <!--Home Slideshow-->
     <style>
-        .chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .chat-button {
-            background-color: #0084ff;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            font-size: 25px;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .chat-button:hover {
-            background-color: #006dbf;
-            transform: scale(1.1);
-        }
-
-        .chat-box {
-            display: none;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-height: 450px;
-            width: 350px;
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-        }
-
-
-        .chat-header {
-            background-color: #fff;
-            color: rgb(0, 0, 0);
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 5px 5px 0 0;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .close-chat {
-            background: none;
-            border: none;
-            color: rgb(14, 1, 1);
-            font-size: 20px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-chat:hover {
-            color: #ff6b6b;
-        }
-
-        .chat-body {
-            padding: 10px;
-            height: 350px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            border-bottom: 1px solid #ddd;
-            position: relative;
-        }
-
-        .message {
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            max-width: 70%;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .sent {
-            margin-left: 30%;
-            align-self: flex-end;
-            background-color: #0084ff;
-            color: white;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: right;
-            animation: slideInRight 0.3s;
-        }
-
-        .received {
-            align-self: flex-start;
-            background-color: #f0f0f0;
-            color: black;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: left;
-            animation: slideInLeft 0.3s;
-        }
-
-        .message-time {
-            font-size: 10px;
-            color: #888;
-            margin-top: 5px;
-        }
-
-        .chat-footer {
-            display: flex;
-            align-items: center;
-            padding: 0px;
-        }
-
-
-        .chat-footer textarea {
-            flex: 1;
-            resize: none;
-            border-radius: 20px;
-            padding-left: 15px;
-            min-height: 30px;
-        }
-
-        .chat-footer textarea:focus {
-            border-color: #0084ff;
-        }
-
-        .chat-footer button {
-            margin-left: 10px;
-            border-radius: 50%;
-            height: 35px;
-            width: 35px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-        }
-
-        .chat-footer button:hover {
-            background-color: #006dbf;
-        }
-
-        #chatWithAdminName {
-            font-weight: 400;
-            font-size: large;
-        }
-
-        @keyframes slideInRight {
-            0% {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideInLeft {
-            0% {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .chat-box {
-                width: 90%;
-                max-height: 80%;
-                right: 5%;
-                bottom: 10px;
-            }
-        }
-
         .voucher-card {
             background-color: #ffffff;
             border-radius: 12px;
@@ -288,6 +104,62 @@
             text-overflow: ellipsis;
             max-width: 20ch;
         }
+        /* Nút Lưu */
+.voucher-button-save {
+    background-color: #0084ff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    line-height: 1; /* Căn chỉnh dòng */
+    height: 40px; /* Đảm bảo chiều cao nút nhất quán */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.voucher-button-save:hover {
+    background-color: #e64a19;
+}
+
+/* Nút Đã Lưu */
+.voucher-button-saved {
+    background-color: #0084ff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: not-allowed;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Nút Đã Hết */
+.voucher-button-out-of-stock {
+    background-color: #bdbdbd;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: not-allowed;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
     </style>
     <section class="slideshow slideshow-wrapper">
 
@@ -599,47 +471,8 @@
                 <h3>Ưu đãi đặc biệt</h3>
                 <a href="{{ route('vouchers.index') }}">Xem thêm >></a>
             </div>
-            <div class="row">
-                {{-- @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif --}}
-                @foreach ($vouchers as $voucher)
-                    <div class="col-md-4 mb-4">
-                        <div class="voucher-card">
-                            <div class="voucher-header"> Voucher {{ $voucher->discount_value }}K</div>
-                            <div class="voucher-code" id="voucher-code-1">{{ $voucher->code }}</div>
-                            <div class="voucher-description">
-                                Giảm {{ $voucher->discount_value }}K
-                                cho đơn hàng từ {{ $voucher->minimum_order_value ?? 0 }}K
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD:
-                                    {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</div>
-                                <div>
-                                    <form action="{{ route('save-voucher') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="code" value="{{ $voucher->code }}">
-                                        <input type="hidden" name="discount_type"
-                                            value="{{ $voucher->discount_type }}">
-                                        <input type="hidden" name="discount_value"
-                                            value="{{ $voucher->discount_value }}">
-                                        <input type="hidden" name="start_date" value="{{ $voucher->start_date }}">
-                                        <input type="hidden" name="end_date" value="{{ $voucher->end_date }}">
-                                        <button type="submit" class="voucher-copy">Lưu</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="row vouchers">
+                {{-- voucher đổ ra ở đây --}}
             </div>
         </section>
         <!-- ENDVOUCHER -->
@@ -2025,138 +1858,132 @@ title="Product" width="625" height="808" />
 </div>
 </div>
 </div> --}}
-    <div class="chat-container">
-        <div class="chat-button" id="chatButton">
-            <i class="anm anm-chat"></i>
-        </div>
-        <div class="chat-box" id="chatBox">
-            <div class="chat-header">
-                <span id="chatWithAdminName">Chat</span>
-                <button class="close-chat" id="closeChat">&times;</button>
-            </div>
-            <div class="chat-body">
-                <div id="chatMessages" class="chat-messages">
-                    <div class="message received">
-                        <div class="message-text"></div>
-                        <div class="message-time"></div>
-                    </div>
-                    <div class="message sent">
-                        <div class="message-text"></div>
-                        <div class="message-time"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-footer">
-                <textarea id="messageInput" class="form-control" rows="1" placeholder="Type a message..."></textarea>
-                <button id="sendMessage" class="btn btn-primary">Send</button>
-            </div>
-        </div>
-    </div>
 
-    <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-    @vite(['resources/js/app.js'])
-    <script>
-        $(document).ready(function() {
-            let adminId;
-            let userId = {{ Auth::id() }} ;
-            $('#chatButton').click(function() {
-                $('#chatBox').slideToggle(300);
-                $.get('/get-first-admin', function(response) {
-                    if (response.admin_id) {
-                        adminId = response.admin_id;
-                        $('#chatWithAdminName').text('   ' + response.admin_name);
-                        $.get('/fetch-messages', {
-                            receiver_id: adminId
-                        }, function(messagesResponse) {
-                            $('#chatMessages').empty();
-                            messagesResponse.messages.forEach(function(message) {
-                                let messageTime = new Date(message.created_at)
-                                    .toLocaleTimeString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    });
-                                let messageHtml = `
-                                    <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
-                                        <div class="message-text">${message.message}</div>
-                                        <div class="message-time">${messageTime}</div>
-                                    </div>`;
-                                $('#chatMessages').append(messageHtml);
-                            });
-                            scrollToBottom();
-                        });
-                    }
-                });
-            });
-            $('#closeChat').click(function() {
-                $('#chatBox').slideUp(300);
-            });
-            $('#sendMessage').click(function() {
-                sendMessage();
-            });
-            $('#messageInput').keypress(function(event) {
-                if (event.which == 13 && !event.shiftKey) {
-                    event.preventDefault();
-                    sendMessage();
+    <!--End Product Quickview Modal-->
+@endsection
+
+@section('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
+        loadVouchers();
+        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            encrypted: true
+        });
+        const channel = pusher.subscribe('vouchers');
+        channel.bind('voucher-out-of-stock', function(data) {
+            loadVouchers();
+        });
+        channel.bind('voucher-saved', function(data) {
+            loadVouchers();
+        });
+        function loadVouchers() {
+            $.ajax({
+                url: '/api/vouchers',
+                method: 'GET',
+                success: function(data) {
+                    renderVouchers(data);
+                },
+                error: function(xhr) {
+                    console.log('Có lỗi xảy ra:', xhr);
                 }
             });
+        }
 
-            function sendMessage() {
-                let message = $('#messageInput').val().trim();
-                if (message) {
-                    $.post('/send-message', {
-                        _token: '{{ csrf_token() }}',
-                        message: message,
-                        receiver_id: adminId
-                    }, function(response) {
-                        if (response.success) {
-                            let messageTime = new Date().toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            });
-                            let messageHtml = `
-                                <div class="message sent">
-                                    <div class="message-text">${message}</div>
-                                    <div class="message-time">${messageTime}</div>
-                                </div>`;
-                            $('#chatMessages').append(messageHtml);
-                            $('#messageInput').val('');
-                            scrollToBottom();
-                        }
-                    });
+        function renderVouchers(vouchers) {
+          const voucherContainer = $('.vouchers');
+          voucherContainer.empty();
+
+          vouchers.forEach(voucher => {
+              const isOutOfStock = voucher.quantity === 0;
+              const isSaved = voucher.is_saved;
+
+              // Xác định trạng thái của nút
+              let buttonClass = 'voucher-button-save';
+              let buttonText = 'Lưu';
+              let isButtonDisabled = false;
+
+              if (isSaved) {
+                  buttonClass = 'voucher-button-saved';
+                  buttonText = 'Đã lưu';
+                  isButtonDisabled = true;
+              } else if (isOutOfStock) {
+                  buttonClass = 'voucher-button-out-of-stock';
+                  buttonText = 'Đã hết';
+                  isButtonDisabled = true;
+              }
+
+              const voucherCard = `
+                  <div class="col-md-4 mb-4">
+                      <div class="voucher-card">
+                          <div class="voucher-header">Voucher ${voucher.discount_value}K</div>
+                          <div class="voucher-code">${voucher.code}</div>
+                          <div class="voucher-description">
+                              Giảm ${voucher.discount_value}K cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
+                          </div>
+                          <div class="d-flex justify-content-between align-items-center mt-2">
+                              <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                              <div>
+                                  <button class="voucher-copy ${buttonClass}"
+                                          data-code="${voucher.code}"
+                                          data-discount-type="${voucher.discount_type}"
+                                          data-discount-value="${voucher.discount_value}"
+                                          data-start-date="${voucher.start_date}"
+                                          data-end-date="${voucher.end_date}"
+                                          ${isButtonDisabled ? 'disabled' : ''}>
+                                      ${buttonText}
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              `;
+              voucherContainer.append(voucherCard);
+          });
+
+    $('.voucher-copy').on('click', function() {
+        if (!isAuthenticated) {
+                    alert('Vui lòng đăng nhập để lưu voucher!');
+                    return;
                 }
-            }
-            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-                encrypted: true
-            });
-            var channel = pusher.subscribe('chat.' + userId);
-            channel.bind('admin-message', function(data) {
-                let messageTime = new Date(data.created_at).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                let messageHtml = `
-                    <div class="message received">
-                        <div class="message-text">${data.user.name}: ${data.message}</div>
-                        <div class="message-time">${messageTime}</div>
-                    </div>`;
+        const code = $(this).data('code');
+        const discountType = $(this).data('discount-type');
+        const discountValue = $(this).data('discount-value');
+        const startDate = $(this).data('start-date');
+        const endDate = $(this).data('end-date');
 
-                $('#chatMessages').append(messageHtml);
-                scrollToBottom();
-            });
-
-            function scrollToBottom() {
-                const chatBody = $('.chat-body');
-                chatBody.animate({
-                    scrollTop: chatBody[0].scrollHeight
-                }, 300);
+        $.ajax({
+            url: '{{ route('save-voucher') }}',
+            method: 'POST',
+            data: {
+                code: code,
+                discount_type: discountType,
+                discount_value: discountValue,
+                start_date: startDate,
+                end_date: endDate,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    loadVouchers(); // Tải lại các voucher để cập nhật trạng thái
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                console.log('Có lỗi xảy ra khi lưu voucher:', xhr);
             }
         });
-    </script>
-    <!--End Product Quickview Modal-->
+    });
+}
 
-    {{-- ADD FAVOVITE --}}
-    <script>
+
+    });
+</script>
+
+<script>
         var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
         document.addEventListener('DOMContentLoaded', function() {
             const wishlistLinks = document.querySelectorAll('.wishlist');
@@ -2267,20 +2094,22 @@ title="Product" width="625" height="808" />
     });
 
     function updateCartCount() {
-        $.ajax({
-            url: '/cart/count', // Thay đổi đường dẫn này
-            type: 'GET',
-            success: function(data) {
-                $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
-            },
-            error: function(xhr) {
-                console.error('Error:', xhr);
-            }
-        });
-    }
-});
+          $.ajax({
+              url: '/cart/count', // Thay đổi đường dẫn này
+              type: 'GET',
+              success: function(data) {
+                  $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+              },
+              error: function(xhr) {
+                  console.error('Error:', xhr);
+              }
+          });
+      }
+    });
 
 
 
     </script>
+
+
 @endsection

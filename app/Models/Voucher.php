@@ -20,12 +20,12 @@ class Voucher extends Model
         'is_active',
         'start_date',
         'end_date',
+        'quantity',
+        'used_quantity',
     ];
 
-    // public function users()
-    // {
-    //     return $this->belongsToMany(User::class, 'user_voucher')
-    //                 ->withPivot('saved_at', 'is_used')
-    //                 ->withTimestamps();
-    // }
+    public function userVouchers()
+    {
+        return $this->hasMany(UserVoucher::class);
+    }
 }

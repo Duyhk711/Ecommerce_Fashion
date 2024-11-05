@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
 use App\Services\UserService;
+use App\Events\VoucherOutOfStock;
+use App\Events\VoucherSaved;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 class VouchersController extends Controller
 {
     protected $userService;
@@ -19,52 +22,101 @@ class VouchersController extends Controller
     public function voucher()
     {
         $currentUser = $this->userService->getCurrentUser();
-        // Bạn có thể thêm logic xử lý để lấy dữ liệu voucher từ database nếu cần
         return view('client.my-account.vouchers', compact( 'currentUser', ));
     }
     public function index()
     {
-        $vouchers = Voucher::all(); // Lấy tất cả các voucher từ database
-        return view('client.vouchers', compact('vouchers')); // Trả về view với biến vouchers
+        return view('client.vouchers');
     }
 
-    public function save(Request $request)
+    public function loadAllVouchers()
     {
-        // Kiểm tra và xác thực dữ liệu từ frontend
-        $request->validate([
-            'code' => 'required|string|max:255',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-        ]);
+        $userId = Auth::id();
+        $currentDate = now(); 
 
-        // Lưu voucher nếu chưa tồn tại
-        $voucher = Voucher::firstOrCreate(
-            ['code' => $request->input('code')],
-            [
-                'discount_type' => $request->input('discount_type'),
-                'discount_value' => $request->input('discount_value'),
-                'start_date' => $request->input('start_date'),
-                'end_date' => $request->input('end_date')
-            ]
-        );
+        $vouchers = Voucher::where('is_active', 1) 
+            ->where('end_date', '>', $currentDate) 
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        // Lưu quan hệ giữa người dùng và voucher vào bảng user_voucher
-        $user = Auth::user(); // Lấy người dùng hiện tại
+        foreach ($vouchers as $voucher) {
+            $voucher->is_out_of_stock = $voucher->used_quantity >= $voucher->quantity;
+            $voucher->is_saved = UserVoucher::where('user_id', $userId)
+                ->where('voucher_id', $voucher->id)
+                ->exists();
+        }
 
-        UserVoucher::updateOrCreate(
-            [
-                'user_id' => $user->id,
-                'voucher_id' => $voucher->id
-            ],
-            [
-                'saved_at' => now(),
-                'is_used' => false
-            ]
-        );
-
-        // Trả về phản hồi JSON hoặc redirect
-        return redirect()->back()->with('success', 'Lưu thành công!');
+        return response()->json($vouchers);
     }
+
+    public function getAllVouchers()
+    {
+        $userId = Auth::id();
+        $currentDate = now(); 
+
+        $vouchers = Voucher::where('is_active', 1) 
+            ->where('end_date', '>', $currentDate) 
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        foreach ($vouchers as $voucher) {
+            $voucher->is_out_of_stock = $voucher->used_quantity >= $voucher->quantity;
+            $voucher->is_saved = UserVoucher::where('user_id', $userId)
+                ->where('voucher_id', $voucher->id)
+                ->exists();
+        }
+
+        return response()->json($vouchers);
+    }
+
+
+
+  public function save(Request $request)
+  {
+      $request->validate([
+          'code' => 'required|string|max:255',
+          'discount_type' => 'required|in:percentage,fixed',
+          'discount_value' => 'required|numeric',
+          'start_date' => 'required|date',
+          'end_date' => 'required|date',
+      ]);
+
+      $user = Auth::user();
+
+      return DB::transaction(function () use ($request, $user) {
+          $voucher = Voucher::where('code', $request->input('code'))->lockForUpdate()->first();
+
+          if (!$voucher) {
+              return response()->json(['success' => false, 'message' => 'Voucher không tồn tại.']);
+          }
+
+          if ($voucher->quantity <= 0) {
+              return response()->json(['success' => false, 'message' => 'Voucher đã hết số lượng.']);
+          }
+
+          $existingVoucher = UserVoucher::where('user_id', $user->id)
+              ->where('voucher_id', $voucher->id)
+              ->first();
+
+          if ($existingVoucher) {
+              return response()->json(['success' => false, 'message' => 'Voucher này đã được lưu.']);
+          }
+
+          UserVoucher::create([
+              'user_id' => $user->id,
+              'voucher_id' => $voucher->id,
+              'saved_at' => now(),
+              'is_used' => false
+          ]);
+
+          $voucher->decrement('quantity');
+
+          if ($voucher->quantity == 0) {
+              broadcast(new VoucherOutOfStock($voucher));
+          }
+          broadcast(new VoucherSaved($voucher->id));
+          return response()->json(['success' => true, 'message' => 'Lưu thành công!']);
+      });
+  }
 }
