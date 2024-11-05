@@ -113,7 +113,7 @@ class ShopService
 
     public function getPerPage(Request $request)
     {
-        return $request->input('ShowBy', 10); // Mặc định là 10
+        return $request->input('ShowBy', 12); // Mặc định là 10
     }
 
     public function getSortBy(Request $request)

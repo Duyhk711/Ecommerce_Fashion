@@ -315,7 +315,7 @@
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-5 col-lg-4">
                                         <!--Apply Promocode-->
-                                        <div class="block mb-3 apply-code mb-4">
+                                        {{-- <div class="block mb-3 apply-code mb-4">
                                             <div class="block-content">
                                                 <h3 class="title mb-3">ÁP DỤNG MÃ KHUYẾN MẠI</h3>
                                                 <div id="coupon" class="coupon-dec">
@@ -329,7 +329,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <!--End Apply Promocode-->
                                         <!--Cart Summary-->
                                         <div class="cart-info mb-4">
