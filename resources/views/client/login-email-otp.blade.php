@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Đăng nhập OTP
+@endsection
 @section('css')
     <style>
         .login-social {

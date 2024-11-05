@@ -1,5 +1,7 @@
 @extends('layouts.client')
-
+@section('title')
+    Giỏ hàng
+@endsection
 @section('css')
     <!-- Đặt CSS tùy chỉnh nếu cần -->
     <!-- CSS cho Modal Popup -->

@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Mã giảm giá
+@endsection
 @section('css')
 <style>
     .voucher-card {
@@ -76,41 +79,42 @@
     .voucher-copy:hover {
         background-color: #2f415d;
     }
+    
     .voucher-save {
-    background-color: #0084ff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
+      background-color: #0084ff;
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
 
 /* Nút với trạng thái 'Đã lưu' */
-.voucher-saved {
-    background-color: ;
-    border: 1px solid #0084ff;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: not-allowed;
-    text-align: center;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
+    .voucher-saved {
+        background-color: ;
+        border: 1px solid #0084ff;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: not-allowed;
+        text-align: center;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
 
-/* Nút với trạng thái 'Đã hết' */
-.voucher-out-of-stock {
-    background-color: #999;
-    color: #ffffff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: not-allowed;
-    text-align: center;
-    font-weight: bold;
-}
+    /* Nút với trạng thái 'Đã hết' */
+    .voucher-out-of-stock {
+        background-color: #999;
+        color: #ffffff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: not-allowed;
+        text-align: center;
+        font-weight: bold;
+    }
 </style>
 @endsection
 
@@ -189,7 +193,7 @@
         `;
         voucherContainer.append(voucherCard);
     });
-
+    
     // Xử lý sự kiện khi nhấn nút lưu
     $('.voucher-save').on('click', function(e) {
         e.preventDefault();

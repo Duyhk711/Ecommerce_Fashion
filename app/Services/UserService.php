@@ -8,6 +8,7 @@ use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Http\Requests\AuthRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -117,10 +118,19 @@ class UserService
     public function updateProfile(array $data, User $user)
     {
         $old_avatar = $user->avatar;
+        // dd($data);
         if (isset($data['avatar'])) {
+            Log::info('Uploaded file info', [
+                'name' => $data['avatar']->getClientOriginalName(),
+                'mimeType' => $data['avatar']->getMimeType(),
+                'size' => $data['avatar']->getSize(),
+                'path' => $data['avatar']->getRealPath(), // Kiểm tra đường dẫn thực tế
+            ]);
             $data['avatar'] = $data['avatar']->store('avatars', 'public');
+            Log::info('Avatar stored at:', ['path' => $data['avatar']]);
             if ($old_avatar && Storage::disk('public')->exists($old_avatar)) {
                 Storage::disk('public')->delete($old_avatar);
+                Log::info('Old avatar deleted:', ['path' => $old_avatar]);
             }
         } else {
             $data['avatar'] = $old_avatar;
