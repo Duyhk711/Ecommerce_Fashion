@@ -868,4 +868,5 @@ Cập nhật sản phẩm
 
 {{-- validate variant --}}
 <script src="{{asset('admin/js/ui/validations/product-edit.js')}}"></script>
+<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
 @endsection

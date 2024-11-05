@@ -125,113 +125,113 @@
 @section('js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    const typeSelect = document.getElementById('type');
-    const positionField = document.getElementById('position-field');
-    const positionSelect = document.getElementById('position');
-    const imageFields = document.getElementById('image-fields');
-    const addImageButton = document.querySelector('.add-image');
+          const typeSelect = document.getElementById('type');
+          const positionField = document.getElementById('position-field');
+          const positionSelect = document.getElementById('position');
+          const imageFields = document.getElementById('image-fields');
+          const addImageButton = document.querySelector('.add-image');
 
-    let maxImages = 0;
+          let maxImages = 0;
 
-    function updateMaxImages() {
-        const type = typeSelect.value;
-        const position = positionSelect.value;
+          function updateMaxImages() {
+              const type = typeSelect.value;
+              const position = positionSelect.value;
 
-        if (type === 'main') {
-            maxImages = 3; // Banner chính tối đa 3 ảnh
-        } else if (type === 'sub') {
-            if (position === 'top') {
-                maxImages = 3; // Banner phụ top tối đa 3 ảnh
-            } else if (position === 'middle') {
-                maxImages = 1; // Banner phụ middle tối đa 1 ảnh
-            } else {
-                maxImages = 0; // Các vị trí khác không cho phép ảnh
-            }
-        } else {
-            maxImages = 0; // Không có ảnh cho loại banner khác
-        }
-    }
+              if (type === 'main') {
+                  maxImages = 3; // Banner chính tối đa 3 ảnh
+              } else if (type === 'sub') {
+                  if (position === 'top') {
+                      maxImages = 3; // Banner phụ top tối đa 3 ảnh
+                  } else if (position === 'middle') {
+                      maxImages = 1; // Banner phụ middle tối đa 1 ảnh
+                  } else {
+                      maxImages = 0; // Các vị trí khác không cho phép ảnh
+                  }
+              } else {
+                  maxImages = 0; // Không có ảnh cho loại banner khác
+              }
+          }
 
-    function checkImageLimit() {
-        const currentImageCount = imageFields.querySelectorAll('.image-row').length;
+          function checkImageLimit() {
+              const currentImageCount = imageFields.querySelectorAll('.image-row').length;
 
-        addImageButton.disabled = currentImageCount >= maxImages || maxImages === 0; // Tắt nút thêm nếu đã đủ ảnh
-    }
+              addImageButton.disabled = currentImageCount >= maxImages || maxImages === 0; // Tắt nút thêm nếu đã đủ ảnh
+          }
 
-    function togglePositionField() {
-        if (typeSelect.value === 'sub') {
-            positionField.style.display = 'block';
-            document.getElementById('position').setAttribute('required', 'required');
-        } else {
-            positionField.style.display = 'none';
-            document.getElementById('position').removeAttribute('required');
-            document.getElementById('position').value = '';
-        }
-        updateMaxImages(); // Cập nhật số lượng ảnh tối đa
-        checkImageLimit(); // Kiểm tra số lượng ảnh hiện tại
-    }
+          function togglePositionField() {
+              if (typeSelect.value === 'sub') {
+                  positionField.style.display = 'block';
+                  document.getElementById('position').setAttribute('required', 'required');
+              } else {
+                  positionField.style.display = 'none';
+                  document.getElementById('position').removeAttribute('required');
+                  document.getElementById('position').value = '';
+              }
+              updateMaxImages(); // Cập nhật số lượng ảnh tối đa
+              checkImageLimit(); // Kiểm tra số lượng ảnh hiện tại
+          }
 
-    function resetImageFields() {
-        imageFields.innerHTML = ''; // Xóa tất cả các ảnh đã thêm
-    }
+          function resetImageFields() {
+              imageFields.innerHTML = ''; // Xóa tất cả các ảnh đã thêm
+          }
 
-    togglePositionField(); // Thiết lập ban đầu
-    checkImageLimit(); // Kiểm tra số lượng ảnh ban đầu
+          togglePositionField(); // Thiết lập ban đầu
+          checkImageLimit(); // Kiểm tra số lượng ảnh ban đầu
 
-    typeSelect.addEventListener('change', function() {
-        resetImageFields(); // Xóa các ảnh khi thay đổi kiểu banner
-        togglePositionField(); // Thay đổi kiểu banner
-        updateMaxImages(); // Cập nhật giới hạn ảnh
-        checkImageLimit(); // Kiểm tra số lượng ảnh sau khi thay đổi
-    });
+          typeSelect.addEventListener('change', function() {
+              resetImageFields(); // Xóa các ảnh khi thay đổi kiểu banner
+              togglePositionField(); // Thay đổi kiểu banner
+              updateMaxImages(); // Cập nhật giới hạn ảnh
+              checkImageLimit(); // Kiểm tra số lượng ảnh sau khi thay đổi
+          });
 
-    positionSelect.addEventListener('change', function() {
-        resetImageFields(); // Xóa các ảnh khi thay đổi vị trí
-        updateMaxImages(); // Cập nhật giới hạn ảnh khi chọn vị trí
-        checkImageLimit(); // Kiểm tra số lượng ảnh hiện tại
-    });
+          positionSelect.addEventListener('change', function() {
+              resetImageFields(); // Xóa các ảnh khi thay đổi vị trí
+              updateMaxImages(); // Cập nhật giới hạn ảnh khi chọn vị trí
+              checkImageLimit(); // Kiểm tra số lượng ảnh hiện tại
+          });
 
-    addImageButton.addEventListener('click', function() {
-        const currentImageCount = imageFields.querySelectorAll('.image-row').length;
+          addImageButton.addEventListener('click', function() {
+              const currentImageCount = imageFields.querySelectorAll('.image-row').length;
 
-        if (currentImageCount >= maxImages) {
-            return; // Không thêm nếu đã đủ số lượng ảnh
-        }
+              if (currentImageCount >= maxImages) {
+                  return; // Không thêm nếu đã đủ số lượng ảnh
+              }
 
-        let newField = document.createElement('div');
-        newField.classList.add('row', 'mb-3', 'image-row'); // Thêm class image-row
-        newField.innerHTML = `
-            <div class="col">
-                <label class="form-label">Tải ảnh:</label>
-                <div class="input-group mb-3">
-                    <input type="file" name="images[]" class="form-control" required>
-                </div>
-            </div>
-            <div class="col">
-                <label class="form-label">Liên kết:</label>
-                <div class="input-group mb-3">
-                    <input type="text" name="link[]" class="form-control" placeholder="Nhập vào liên kết">
-                    <button type="button" class="btn btn-alt remove-image"><i class="fa fa-fw fa-times text-danger"></i></button>
-                </div>
-            </div>
-        `;
-        imageFields.appendChild(newField);
+              let newField = document.createElement('div');
+              newField.classList.add('row', 'mb-3', 'image-row'); // Thêm class image-row
+              newField.innerHTML = `
+                  <div class="col">
+                      <label class="form-label">Tải ảnh:</label>
+                      <div class="input-group mb-3">
+                          <input type="file" name="images[]" class="form-control" required>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <label class="form-label">Liên kết:</label>
+                      <div class="input-group mb-3">
+                          <input type="text" name="link[]" class="form-control" placeholder="Nhập vào liên kết">
+                          <button type="button" class="btn btn-alt remove-image"><i class="fa fa-fw fa-times text-danger"></i></button>
+                      </div>
+                  </div>
+              `;
+              imageFields.appendChild(newField);
 
-        newField.querySelector('.remove-image').addEventListener('click', function() {
-            newField.remove();
-            checkImageLimit(); // Kiểm tra lại số lượng ảnh sau khi xóa
-        });
+              newField.querySelector('.remove-image').addEventListener('click', function() {
+                  newField.remove();
+                  checkImageLimit(); // Kiểm tra lại số lượng ảnh sau khi xóa
+              });
 
-        checkImageLimit(); // Kiểm tra số lượng ảnh sau khi thêm
-    });
+              checkImageLimit(); // Kiểm tra số lượng ảnh sau khi thêm
+          });
 
-    imageFields.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('remove-image')) {
-            e.target.closest('.row').remove();
-            checkImageLimit(); // Kiểm tra lại số lượng ảnh sau khi xóa
-        }
-    });
-});
+          imageFields.addEventListener('click', function(e) {
+              if (e.target && e.target.classList.contains('remove-image')) {
+                  e.target.closest('.row').remove();
+                  checkImageLimit(); // Kiểm tra lại số lượng ảnh sau khi xóa
+              }
+          });
+      });
+  </script>
 
-    </script>
 @endsection
