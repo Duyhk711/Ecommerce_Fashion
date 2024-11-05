@@ -95,6 +95,7 @@
         .xt h3 {
             font-size: 30px;
         }
+
         .product-name a {
             display: inline-block;
             width: 100%;
@@ -103,6 +104,62 @@
             text-overflow: ellipsis;
             max-width: 20ch;
         }
+        /* Nút Lưu */
+.voucher-button-save {
+    background-color: #0084ff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    line-height: 1; /* Căn chỉnh dòng */
+    height: 40px; /* Đảm bảo chiều cao nút nhất quán */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.voucher-button-save:hover {
+    background-color: #e64a19;
+}
+
+/* Nút Đã Lưu */
+.voucher-button-saved {
+    background-color: #0084ff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: not-allowed;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Nút Đã Hết */
+.voucher-button-out-of-stock {
+    background-color: #bdbdbd;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: not-allowed;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
     </style>
     <section class="slideshow slideshow-wrapper">
 
@@ -347,47 +404,8 @@
                 <h3>Ưu đãi đặc biệt</h3>
                 <a href="{{ route('vouchers.index') }}">Xem thêm >></a>
             </div>
-            <div class="row">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-                @foreach ($vouchers as $voucher)
-                    <div class="col-md-4 mb-4">
-                        <div class="voucher-card">
-                            <div class="voucher-header"> Voucher {{ $voucher->discount_value }}K</div>
-                            <div class="voucher-code" id="voucher-code-1">{{ $voucher->code }}</div>
-                            <div class="voucher-description">
-                                Giảm {{ $voucher->discount_value }}K
-                                cho đơn hàng từ {{ $voucher->minimum_order_value ?? 0 }}K
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD:
-                                    {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</div>
-                                <div>
-                                    <form action="{{ route('save-voucher') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="code" value="{{ $voucher->code }}">
-                                        <input type="hidden" name="discount_type"
-                                            value="{{ $voucher->discount_type }}">
-                                        <input type="hidden" name="discount_value"
-                                            value="{{ $voucher->discount_value }}">
-                                        <input type="hidden" name="start_date" value="{{ $voucher->start_date }}">
-                                        <input type="hidden" name="end_date" value="{{ $voucher->end_date }}">
-                                        <button type="submit" class="voucher-copy">Lưu</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="row vouchers">
+                {{-- voucher đổ ra ở đây --}}
             </div>
         </section>
         <!-- ENDVOUCHER -->
@@ -1852,37 +1870,128 @@ title="Product" width="625" height="808" />
 </div>
 </div>
 </div> --}}
-    
+
     <!--End Product Quickview Modal-->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Lắng nghe sự kiện khi modal được hiển thị
-            $('#addtocart_modal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Nút kích hoạt modal
+@endsection
 
-                // Lấy các thông tin từ thuộc tính data-* của nút
-                var productName = button.data('product-name');
-                var productImage = button.data('product-image');
-                var productColor = button.data('product-color');
-                var productSize = button.data('product-size');
-                var productPrice = button.data('product-price');
-                var productVariantId = button.data('product-variant-id');
-                var productVariantStock = button.data('product-variant-stock');
-
-                // Cập nhật thông tin trong modal
-                var modal = $(this);
-                modal.find('.product-title').text(productName); // Cập nhật tên sản phẩm
-                modal.find('.product-image img').attr('src', productImage); // Cập nhật hình ảnh sản phẩm
-                modal.find('.product-clr').text(productColor + ' / ' +
-                    productSize); // Cập nhật màu sắc và kích thước
-                modal.find('.price').text(productPrice); // Cập nhật giá
-                // modal.find('.price').text(product_variant_id); // Cập nhật giá
-
-                modal.find('#modal-product-variant-id').val(productVariantId);
-                modal.find('#modal-product-variant-price').val(productPrice);
-                modal.find('#modal-product-variant-stock').val(productVariantStock);
-
-            });
+@section('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
+        loadVouchers();
+        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            encrypted: true
         });
-    </script>
+        const channel = pusher.subscribe('vouchers');
+        channel.bind('voucher-out-of-stock', function(data) {
+            loadVouchers();
+        });
+        channel.bind('voucher-saved', function(data) {
+            loadVouchers();
+        });
+        function loadVouchers() {
+            $.ajax({
+                url: '/api/vouchers',
+                method: 'GET',
+                success: function(data) {
+                    renderVouchers(data);
+                },
+                error: function(xhr) {
+                    console.log('Có lỗi xảy ra:', xhr);
+                }
+            });
+        }
+
+        function renderVouchers(vouchers) {
+    const voucherContainer = $('.vouchers');
+    voucherContainer.empty();
+
+    vouchers.forEach(voucher => {
+        const isOutOfStock = voucher.quantity === 0;
+        const isSaved = voucher.is_saved;
+
+        // Xác định trạng thái của nút
+        let buttonClass = 'voucher-button-save';
+        let buttonText = 'Lưu';
+        let isButtonDisabled = false;
+
+        if (isSaved) {
+            buttonClass = 'voucher-button-saved';
+            buttonText = 'Đã lưu';
+            isButtonDisabled = true;
+        } else if (isOutOfStock) {
+            buttonClass = 'voucher-button-out-of-stock';
+            buttonText = 'Đã hết';
+            isButtonDisabled = true;
+        }
+
+        const voucherCard = `
+            <div class="col-md-4 mb-4">
+                <div class="voucher-card">
+                    <div class="voucher-header">Voucher ${voucher.discount_value}K</div>
+                    <div class="voucher-code">${voucher.code}</div>
+                    <div class="voucher-description">
+                        Giảm ${voucher.discount_value}K cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                        <div>
+                            <button class="voucher-copy ${buttonClass}" 
+                                    data-code="${voucher.code}" 
+                                    data-discount-type="${voucher.discount_type}" 
+                                    data-discount-value="${voucher.discount_value}" 
+                                    data-start-date="${voucher.start_date}" 
+                                    data-end-date="${voucher.end_date}"
+                                    ${isButtonDisabled ? 'disabled' : ''}>
+                                ${buttonText}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        voucherContainer.append(voucherCard);
+    });
+
+    $('.voucher-copy').on('click', function() {
+        if (!isAuthenticated) {
+                    alert('Vui lòng đăng nhập để lưu voucher!');
+                    return;
+                }
+        const code = $(this).data('code');
+        const discountType = $(this).data('discount-type');
+        const discountValue = $(this).data('discount-value');
+        const startDate = $(this).data('start-date');
+        const endDate = $(this).data('end-date');
+
+        $.ajax({
+            url: '{{ route('save-voucher') }}',
+            method: 'POST',
+            data: {
+                code: code,
+                discount_type: discountType,
+                discount_value: discountValue,
+                start_date: startDate,
+                end_date: endDate,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    loadVouchers(); // Tải lại các voucher để cập nhật trạng thái
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                console.log('Có lỗi xảy ra khi lưu voucher:', xhr);
+            }
+        });
+    });
+}
+
+
+    });
+</script>
 @endsection

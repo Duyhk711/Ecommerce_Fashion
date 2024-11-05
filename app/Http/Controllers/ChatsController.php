@@ -40,7 +40,7 @@ public function getSortedUsers()
             ->where('sender_id', $user->id)
             ->where('seen', 0)
             ->count();
-        $user->avatar_url = $user->avatar ? Storage::url($user->avatar) : asset('images/default-avatar.png');
+        $user->avatar_url = $user->avatar ? Storage::url($user->avatar) : Storage::url('images/default-avatar.png');
     }
 
     return response()->json(['users' => $users]);
