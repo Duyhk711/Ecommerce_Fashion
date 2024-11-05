@@ -30,94 +30,93 @@ class VouchersController extends Controller
     }
 
     public function loadAllVouchers()
-{
-    $userId = Auth::id();
-    $currentDate = now(); 
+    {
+        $userId = Auth::id();
+        $currentDate = now(); 
 
-    $vouchers = Voucher::where('is_active', 1) 
-        ->where('end_date', '>', $currentDate) 
-        ->orderBy('created_at', 'desc')
-        ->get();
+        $vouchers = Voucher::where('is_active', 1) 
+            ->where('end_date', '>', $currentDate) 
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    foreach ($vouchers as $voucher) {
-        $voucher->is_out_of_stock = $voucher->used_quantity >= $voucher->quantity;
-        $voucher->is_saved = UserVoucher::where('user_id', $userId)
-            ->where('voucher_id', $voucher->id)
-            ->exists();
+        foreach ($vouchers as $voucher) {
+            $voucher->is_out_of_stock = $voucher->used_quantity >= $voucher->quantity;
+            $voucher->is_saved = UserVoucher::where('user_id', $userId)
+                ->where('voucher_id', $voucher->id)
+                ->exists();
+        }
+
+        return response()->json($vouchers);
     }
-
-    return response()->json($vouchers);
-}
 
     public function getAllVouchers()
-{
-    $userId = Auth::id();
-    $currentDate = now(); 
+    {
+        $userId = Auth::id();
+        $currentDate = now(); 
 
-    $vouchers = Voucher::where('is_active', 1) 
-        ->where('end_date', '>', $currentDate) 
-        ->orderBy('created_at', 'desc')
-        ->limit(3)
-        ->get();
+        $vouchers = Voucher::where('is_active', 1) 
+            ->where('end_date', '>', $currentDate) 
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
 
-    foreach ($vouchers as $voucher) {
-        $voucher->is_out_of_stock = $voucher->used_quantity >= $voucher->quantity;
-        $voucher->is_saved = UserVoucher::where('user_id', $userId)
-            ->where('voucher_id', $voucher->id)
-            ->exists();
+        foreach ($vouchers as $voucher) {
+            $voucher->is_out_of_stock = $voucher->used_quantity >= $voucher->quantity;
+            $voucher->is_saved = UserVoucher::where('user_id', $userId)
+                ->where('voucher_id', $voucher->id)
+                ->exists();
+        }
+
+        return response()->json($vouchers);
     }
 
-    return response()->json($vouchers);
-}
 
 
+  public function save(Request $request)
+  {
+      $request->validate([
+          'code' => 'required|string|max:255',
+          'discount_type' => 'required|in:percentage,fixed',
+          'discount_value' => 'required|numeric',
+          'start_date' => 'required|date',
+          'end_date' => 'required|date',
+      ]);
 
-public function save(Request $request)
-{
-    $request->validate([
-        'code' => 'required|string|max:255',
-        'discount_type' => 'required|in:percentage,fixed',
-        'discount_value' => 'required|numeric',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date',
-    ]);
+      $user = Auth::user();
 
-    $user = Auth::user();
+      return DB::transaction(function () use ($request, $user) {
+          $voucher = Voucher::where('code', $request->input('code'))->lockForUpdate()->first();
 
-    return DB::transaction(function () use ($request, $user) {
-        $voucher = Voucher::where('code', $request->input('code'))->lockForUpdate()->first();
+          if (!$voucher) {
+              return response()->json(['success' => false, 'message' => 'Voucher không tồn tại.']);
+          }
 
-        if (!$voucher) {
-            return response()->json(['success' => false, 'message' => 'Voucher không tồn tại.']);
-        }
+          if ($voucher->quantity <= 0) {
+              return response()->json(['success' => false, 'message' => 'Voucher đã hết số lượng.']);
+          }
 
-        if ($voucher->quantity <= 0) {
-            return response()->json(['success' => false, 'message' => 'Voucher đã hết số lượng.']);
-        }
+          $existingVoucher = UserVoucher::where('user_id', $user->id)
+              ->where('voucher_id', $voucher->id)
+              ->first();
 
-        $existingVoucher = UserVoucher::where('user_id', $user->id)
-            ->where('voucher_id', $voucher->id)
-            ->first();
+          if ($existingVoucher) {
+              return response()->json(['success' => false, 'message' => 'Voucher này đã được lưu.']);
+          }
 
-        if ($existingVoucher) {
-            return response()->json(['success' => false, 'message' => 'Voucher này đã được lưu.']);
-        }
+          UserVoucher::create([
+              'user_id' => $user->id,
+              'voucher_id' => $voucher->id,
+              'saved_at' => now(),
+              'is_used' => false
+          ]);
 
-        UserVoucher::create([
-            'user_id' => $user->id,
-            'voucher_id' => $voucher->id,
-            'saved_at' => now(),
-            'is_used' => false
-        ]);
+          $voucher->decrement('quantity');
 
-        $voucher->decrement('quantity');
-
-        if ($voucher->quantity == 0) {
-            broadcast(new VoucherOutOfStock($voucher));
-        }
-        broadcast(new VoucherSaved($voucher->id));
-        return response()->json(['success' => true, 'message' => 'Lưu thành công!']);
-    });
-}
-
+          if ($voucher->quantity == 0) {
+              broadcast(new VoucherOutOfStock($voucher));
+          }
+          broadcast(new VoucherSaved($voucher->id));
+          return response()->json(['success' => true, 'message' => 'Lưu thành công!']);
+      });
+  }
 }
