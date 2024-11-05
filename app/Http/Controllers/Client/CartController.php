@@ -20,16 +20,36 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        // dd($request->all());
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
 
         try {
             $this->cartService->addToCart($productId, $productVariantId, $quantity);
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
+                ]);
+            }
             return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
         } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function getCartCount()
+    {
+        $cartCount = $this->cartService->getCartItemCount();
+
+        return response()->json(['count' => $cartCount]);
     }
 
     public function viewCart()
@@ -98,7 +118,7 @@ class CartController extends Controller
         $userId = Auth::id();
 
         if (!$userId) {
-            $cart = session()->get('cart', []); 
+            $cart = session()->get('cart', []);
             if (isset($cart[$request->product_variant_id])) {
                 $cart[$request->product_variant_id]['quantity'] += $request->quantity;
             } else {
@@ -107,7 +127,7 @@ class CartController extends Controller
                     'price' => $request->price,
                     'stock' => $request->stock,
                     'quantity' => $request->quantity,
-                    'image' => $request->product_image, 
+                    'image' => $request->product_image,
                 ];
             }
 
