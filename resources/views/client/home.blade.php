@@ -279,6 +279,7 @@
         .xt h3 {
             font-size: 30px;
         }
+
         .product-name a {
             display: inline-block;
             width: 100%;
@@ -399,8 +400,8 @@
                             <i class="icon anm anm-phone-call-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Call us any time</h3>
-                            <span class="text-muted">Contact us 24/7 hours a day</span>
+                            <h3 class="title mb-2">Liên hệ chúng tôi</h3>
+                            <span class="text-muted">Hoạt động 24/7</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -417,7 +418,7 @@
                             <i class="icon anm anm-credit-card-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Secured Payment</h3>
+                            <h3 class="title mb-2">THANH TOÁN BẢO ĐẢM</h3>
                             <span class="text-muted">We accept all major credit cards</span>
                         </div>
                     </div>
@@ -460,7 +461,7 @@
                                                 <div class="inner">
                                                     <p class="mb-2">Trending Now</p>
                                                     <h3 class="title">Banner Title</h3>
-                                                    <span class="btn btn-outline-secondary btn-md">Shop Now</span>
+                                                    <span class="btn btn-outline-secondary btn-md">Thời trang nữ</span>
                                                 </div>
                                             </div>
                                         </a>
@@ -487,7 +488,7 @@
                                                 <div class="inner">
                                                     <h3 class="title mb-2">Mens Wear</h3>
                                                     <p class="mb-3">Tailor-made with passion</p>
-                                                    <span class="btn btn-outline-secondary btn-md">Shop Now</span>
+                                                    <span class="btn btn-outline-secondary btn-md">Thời trang nam</span>
                                                 </div>
                                             </div>
                                         </a>
@@ -734,7 +735,7 @@
                                                 <!-- Start Product Image -->
                                                 <div class="product-image">
                                                     <!-- Start Product Image -->
-                                                    <a href="{{ route('productDetail', $product->id) }}"
+                                                    <a href="{{ route('productDetail', $product->slug) }}"
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
@@ -1076,7 +1077,7 @@
                                                 <!-- Start Product Image -->
                                                 <div class="product-image">
                                                     <!-- Start Product Image -->
-                                                    <a href="{{ route('productDetail', $product->id) }}"
+                                                    <a href="{{ route('productDetail', $product->slug) }}"
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
@@ -2076,10 +2077,16 @@ title="Product" width="625" height="808" />
                     if (response.admin_id) {
                         adminId = response.admin_id;
                         $('#chatWithAdminName').text('   ' + response.admin_name);
-                        $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
+                        $.get('/fetch-messages', {
+                            receiver_id: adminId
+                        }, function(messagesResponse) {
                             $('#chatMessages').empty();
                             messagesResponse.messages.forEach(function(message) {
-                                let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                let messageTime = new Date(message.created_at)
+                                    .toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
                                 let messageHtml = `
                                     <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
                                         <div class="message-text">${message.message}</div>
@@ -2104,6 +2111,7 @@ title="Product" width="625" height="808" />
                     sendMessage();
                 }
             });
+
             function sendMessage() {
                 let message = $('#messageInput').val().trim();
                 if (message) {
@@ -2113,7 +2121,10 @@ title="Product" width="625" height="808" />
                         receiver_id: adminId
                     }, function(response) {
                         if (response.success) {
-                            let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            let messageTime = new Date().toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
                             let messageHtml = `
                                 <div class="message sent">
                                     <div class="message-text">${message}</div>
@@ -2126,28 +2137,34 @@ title="Product" width="625" height="808" />
                     });
                 }
             }
-            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            var pusher = new Pusher('{{ env('PUSHER_CHAT_APP_KEY') }}', {
+                cluster: '{{ env('PUSHER_CHAT_APP_CLUSTER') }}',
                 encrypted: true
             });
             var channel = pusher.subscribe('chat.' + userId);
             channel.bind('admin-message', function(data) {
-                let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                let messageTime = new Date(data.created_at).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
                 let messageHtml = `
                     <div class="message received">
                         <div class="message-text">${data.user.name}: ${data.message}</div>
                         <div class="message-time">${messageTime}</div>
                     </div>`;
-                
+
                 $('#chatMessages').append(messageHtml);
                 scrollToBottom();
             });
+
             function scrollToBottom() {
                 const chatBody = $('.chat-body');
-                chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
+                chatBody.animate({
+                    scrollTop: chatBody[0].scrollHeight
+                }, 300);
             }
         });
-        </script>
+    </script>
     <!--End Product Quickview Modal-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
