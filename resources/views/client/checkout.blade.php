@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Đặt hàng
+@endsection
 @section('css')
     <style>
         .offcanvas-body {
@@ -161,7 +164,7 @@
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="email" class="form-label">E-Mail <span
                                                             class="required">*</span></label>
-                                                    <input name="email"
+                                                    <input name="customer_email"
                                                         value="{{ Auth::check() ? Auth::user()->email : '' }}"
                                                         id="email" type="email" required="" class="form-control">
                                                 </div>
@@ -259,10 +262,10 @@
                                                                             href="{{ route('productDetail', $item['product_variant_id']) }}"
                                                                             class="thumb"><img
                                                                                 class="rounded-0 blur-up lazyload"
-                                                                                data-src="{{ Storage::url($item['image'])  }}"
-                                                                                src="{{ Storage::url($item['image']) }}" alt="product"
-                                                                                title="product" width="120"
-                                                                                height="170" /></a></td>
+                                                                                data-src="{{ Storage::url($item['image']) }}"
+                                                                                src="{{ Storage::url($item['image']) }}"
+                                                                                alt="product" title="product"
+                                                                                width="120" height="170" /></a></td>
                                                                     <td class="text-start proName">
                                                                         <div class="list-view-item-title">
                                                                             <a href="product-layout1.html">

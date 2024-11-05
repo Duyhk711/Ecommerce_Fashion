@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Đăng nhập
+@endsection
 @section('css')
     <style>
         .login-social {

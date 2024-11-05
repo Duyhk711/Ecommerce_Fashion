@@ -41,13 +41,14 @@ class OrderUpdated implements ShouldBroadcast
             'huy_don_hang' => 'bg-danger',
         ];
 
+        $orderSku = $this->order->sku;
         $orderId = $this->order->id;
         $status = $this->order->status;
         $statusName = $statusMapping[$status] ?? 'Không xác định';
 
         // Store the notification in session
         session()->flash('order_notification', [
-            'message' => "Trạng thái đơn hàng #$orderId đã thay đổi thành: $statusName",
+            'message' => "Trạng thái đơn hàng #$orderSku đã thay đổi thành: $statusName",
             'badge' => $badgeColor[$status] ?? 'bg-secondary',
         ]);
 
@@ -58,6 +59,7 @@ class OrderUpdated implements ShouldBroadcast
                 'statusMapping' => $statusMapping,
                 'badgeColor' => $badgeColor,
             ],
+            'success' => "Trạng thái đơn hàng #$orderSku đã thay đổi thành: $statusName"
         ];
     }
 

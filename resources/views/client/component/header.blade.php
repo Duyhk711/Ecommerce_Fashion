@@ -36,9 +36,9 @@
          <div class="row">
              <!--Logo-->
              <div class="logo col-5 col-sm-3 col-md-3 col-lg-2 align-self-center">
-                 <a class="logoImg" href="{{ route('home') }}"><img src="{{ asset('client/images/logo.png') }}"
-                         alt="Hema Multipurpose Html Template" title="Hema Multipurpose Html Template" width="149"
-                         height="39" /></a>
+                 <a class="logoImg" href="{{ route('home') }}"><img src="{{ asset('client/images/logo-5.png') }}"
+                         alt="Hema Multipurpose Html Template" title="Hema Multipurpose Html Template" width="200"
+                         height="50" /></a>
              </div>
              <!--End Logo-->
              <!--Menu-->
@@ -187,15 +187,7 @@
                      <a href="{{ route('cart.show') }}" class="header-cart btn-minicart clr-none"
                          ><i class="hdr-icon icon anm anm-cart-l"></i>
                          <span class="cart-count">
-                             @auth
-                                 @php
-                                     $cart = \App\Models\Cart::where('user_id', auth()->id())->first();
-                                     $count = $cart ? $cart->items()->count() : 0;
-                                 @endphp
-                                 {{ $count }}
-                             @else
-                                 {{ session()->has('cart') ? count(session('cart')) : 0 }}
-                             @endauth
+                             {{ app(App\Services\Client\CartService::class)->getCartItemCount() }}
                          </span>
                      </a>
                  </div>
