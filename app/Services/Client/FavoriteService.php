@@ -46,7 +46,8 @@ class FavoriteService
         if (Auth::check()) {
             return Favorite::with('product', 'productVariant')
                 ->where('user_id', Auth::id())
-                ->get();
+                ->latest()
+                ->paginate(10);
         } else {
             return [];
         }
