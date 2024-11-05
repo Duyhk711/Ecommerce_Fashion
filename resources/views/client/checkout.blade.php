@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Đặt hàng
+@endsection
 @section('css')
     <style>
         .offcanvas-body {

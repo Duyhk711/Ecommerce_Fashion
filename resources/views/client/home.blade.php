@@ -332,8 +332,8 @@
                             <i class="icon anm anm-phone-call-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Gọi cho chúng tôi bất cứ lúc nào</h3>
-                            <span class="text-muted">Liên hệ với chúng tôi 24/7</span>
+                            <h3 class="title mb-2">Liên hệ 24/7</h3>
+                            <span class="text-muted"> Gọi chúng tôi bất cứ lúc nào</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -341,8 +341,8 @@
                             <i class="icon anm anm-truck-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Nhận hàng tại bất kỳ cửa hàng nào</h3>
-                            {{-- <span class="text-muted">Giao hàng miễn phí cho đơn hàng trên $65</span> --}}
+                            <h3 class="title mb-2">Giao hàng bất kì đâu</h3>
+                            <span class="text-muted">Miễn phí vận chuyển đơn hàng từ 400k</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -359,8 +359,8 @@
                             <i class="icon anm anm-redo-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Đổi trả miễn phí</h3>
-                            <span class="text-muted">Chính sách đổi trả miễn phí trong vòng 30 ngày</span>
+                            <h3 class="title mb-2">Miễn phí trả hàng</h3>
+                            <span class="text-muted">Miễn phí trả hàng trong 30 ngày</span>
                         </div>
                     </div>
                     
@@ -707,11 +707,22 @@
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
                                                     <div class="product-review">
-                                                        <i class="icon anm anm-star"></i><i
-                                                            class="icon anm anm-star"></i><i
-                                                            class="icon anm anm-star-o"></i><i
-                                                            class="icon anm anm-star-o"></i><i
-                                                            class="icon anm anm-star-o"></i>
+                                                        @php
+                                                            // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                            $newRating = $newRatings->firstWhere(
+                                                                'product_id',
+                                                                $product->id,
+                                                            );
+                                                            // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                            $averageRating = $newRating['average_rating'] ?? 0;
+                                                        @endphp
+
+
+                                                        @for ($i = 0; $i < 5; $i++)
+                                                            <i
+                                                                class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                        @endfor
+
                                                         <span class="caption hidden ms-1">3 Reviews</span>
                                                     </div>
                                                     <!-- End Product Review -->
@@ -874,11 +885,22 @@
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
                                                     <div class="product-review">
-                                                        <i class="icon anm anm-star"></i><i
-                                                            class="icon anm anm-star"></i><i
-                                                            class="icon anm anm-star-o"></i><i
-                                                            class="icon anm anm-star-o"></i><i
-                                                            class="icon anm anm-star-o"></i>
+                                                        @php
+                                                            // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                            $bestsaleRating = $bestsaleRatings->firstWhere(
+                                                                'product_id',
+                                                                $product->id,
+                                                            );
+                                                            // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                            $averageRating = $bestsaleRating['average_rating'] ?? 0;
+                                                        @endphp
+
+
+                                                        @for ($i = 0; $i < 5; $i++)
+                                                            <i
+                                                                class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                        @endfor
+
                                                         <span class="caption hidden ms-1">3 Reviews</span>
                                                     </div>
                                                     <!-- End Product Review -->
@@ -1024,12 +1046,20 @@
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
                                                     <div class="product-review">
-                                                        <i class="icon anm anm-star"></i><i
-                                                            class="icon anm anm-star"></i><i
-                                                            class="icon anm anm-star-o"></i><i
-                                                            class="icon anm anm-star-o"></i><i
-                                                            class="icon anm anm-star-o"></i>
-                                                        <span class="caption hidden ms-1">3 Reviews</span>
+                                                        @php
+                                                            // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                            $saleRating = $saleRatings->firstWhere(
+                                                                'product_id',
+                                                                $product->id,
+                                                            );
+                                                            // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                            $averageRating = $saleRating['average_rating'] ?? 0;
+                                                        @endphp
+
+                                                        @for ($i = 0; $i < 5; $i++)
+                                                            <i
+                                                                class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                        @endfor
                                                     </div>
                                                     <!-- End Product Review -->
                                                     <!--Sort Description-->

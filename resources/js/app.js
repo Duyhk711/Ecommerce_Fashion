@@ -2,24 +2,21 @@
 
 import './bootstrap';
 
-    window.Echo.channel('orders')
+window.Echo.channel('orders')
     .listen('OrderUpdated', (event) => {
         console.log(event);
-        // Lấy tất cả các đơn hàng từ DOM
-        const orders = document.querySelectorAll('tr[data-order-id]');
 
-        // Tìm kiếm phần tử <span> với ID tương ứng
+        // Update the order status in the DOM
         const orderStatusElement = document.getElementById(`orderStatus-${event.order.id}`);
-
         if (orderStatusElement) {
-            window.Pusher.logToConsole = true;
-            // Cập nhật trạng thái
             const currentStatus = event.order.status;
-
-            // Cập nhật nội dung và class của span
-            orderStatusElement.innerHTML = `
-                ${event.order.statusMapping[currentStatus] ?? currentStatus}
-            `;
+            orderStatusElement.innerHTML = `${event.order.statusMapping[currentStatus] ?? currentStatus}`;
             orderStatusElement.className = `badge rounded-pill ${event.order.badgeColor[currentStatus]}`;
         }
+
+        // Display real-time toastr notification using the success message from the event
+        toastr.success(event.success, 'Thành công', {
+            positionClass: 'toast-top-right',
+            timeOut: 3000
+        });
     });
