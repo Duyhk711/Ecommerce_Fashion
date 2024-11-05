@@ -279,6 +279,7 @@
         .xt h3 {
             font-size: 30px;
         }
+
         .product-name a {
             display: inline-block;
             width: 100%;
@@ -294,31 +295,34 @@
             @foreach ($banners['mainBanners'] as $banner)
                 @php
                     $bannerImages = $banner->images;
+                    $imageIndex = 0;
+                    $selectedImage = $bannerImages->get($imageIndex);
                 @endphp
-                @foreach ($bannerImages as $bannerImage)
+                {{-- @foreach ($bannerImages as $bannerImage) --}}
+                @if ($selectedImage)
                     <div class="slide">
                         <div class="slideshow-wrap">
                             <picture>
-                                <source media="(max-width:767px)" srcset="{{ Storage::url($bannerImage->image) }}"
+                                <source media="(max-width:767px)" srcset="{{ Storage::url($selectedImage->image) }}"
                                     width="1150" height="800" />
-                                <img class="blur-up lazyload" src="{{ Storage::url($bannerImage->image) }}" alt="slideshow"
+                                <img class="blur-up lazyload" src="{{ Storage::url($selectedImage->image) }}" alt="slideshow"
                                     title="" width="1920" height="795" />
                             </picture>
                             <div class="container">
                                 <div class="slideshow-content slideshow-overlay middle-left">
                                     <div class="slideshow-content-in">
                                         <div class="wrap-caption animation style1">
-                                            <p class="ss-small-title">Elegant design</p>
+                                            <p class="ss-small-title">Thiết kế thanh lịch</p>
                                             <h2 class="ss-mega-title">
-                                                Making someone feel <br />pretty is an art
+                                                Khiến ai đó cảm thấy <br />đẹp là một nghệ thuật
                                             </h2>
                                             <p class="ss-sub-title xs-hide">
-                                                Perfectly designed to ensures ultimate comfort and
-                                                style
+                                                Thiết kế hoàn hảo để đảm bảo sự thoải mái và phong cách tuyệt đối
                                             </p>
+
                                             <div class="ss-btnWrap">
-                                                <a class="btn btn-primary" href="shop-grid-view.html">Shop Women</a>
-                                                <a class="btn btn-secondary" href="shop-grid-view.html">Shop Men</a>
+                                                {{-- <a class="btn btn-primary" href="{{$selectedImage->link}}">Shop Women</a> --}}
+                                                <a class="btn btn-secondary" href="{{$selectedImage->link}}">Xem ngay</a>
                                             </div>
                                         </div>
                                     </div>
@@ -326,66 +330,123 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
-            @endforeach
-            {{-- <div class="slide">
-                <div class="slideshow-wrap">
-                    <picture>
-                        <source media="(max-width:767px)"
-                            srcset="{{ asset('client/images/slideshow/demo1-banner2-mbl.jpg') }}" width="1150"
-        height="800" />
-        <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner2.jpg') }}"
-            alt="slideshow" title="" width="1920" height="795" />
-        </picture>
-        <div class="container">
-            <div class="slideshow-content slideshow-overlay middle-right">
-                <div class="slideshow-content-in">
-                    <div class="wrap-caption animation style1">
-                        <h2 class="ss-mega-title">
-                            Spread Positive <br />Energy With Hema
-                        </h2>
-                        <p class="ss-sub-title xs-hide">
-                            The must-have closet essential women wardrobe for the
-                            year
-                        </p>
-                        <div class="ss-btnWrap d-flex-justify-start">
-                            <a class="btn btn-primary" href="shop-grid-view.html">Explore Now!</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="slide">
-        <div class="slideshow-wrap">
-            <picture>
-                <source media="(max-width:767px)"
-                    srcset="{{ asset('client/images/slideshow/demo1-banner3-mbl.jpg') }}" width="1150"
-                    height="800" />
-                <img class="blur-up lazyload" src="{{ asset('client/images/slideshow/demo1-banner3.jpg') }}"
-                    alt="slideshow" title="" width="1920" height="795" />
-            </picture>
-            <div class="container">
-                <div class="slideshow-content slideshow-overlay middle-right">
-                    <div class="slideshow-content-in">
-                        <div class="wrap-caption animation style1">
-                            <h2 class="ss-mega-title">
-                                Design Your Next <br />Favourite Wear
-                            </h2>
-                            <p class="ss-sub-title xs-hide">
-                                The outfit that blend elegance and style for your
-                                casual wear
-                            </p>
-                            <div class="ss-btnWrap">
-                                <a class="btn btn-primary" href="shop-grid-view.html">Shop now</a>
+                @endif
+                {{-- @endforeach --}}
+                @php
+                    $bannerImages = $banner->images;
+                    $imageIndex = 1;
+                    $selectedImage = $bannerImages->get($imageIndex);
+                @endphp
+                @if ($selectedImage)
+                    <div class="slide">
+                        <div class="slideshow-wrap">
+                            <picture>
+                                <source media="(max-width:767px)" srcset="{{ Storage::url($selectedImage->image) }}"
+                                    width="1150" height="800" />
+                                <img class="blur-up lazyload" src="{{ Storage::url($selectedImage->image) }}"
+                                    alt="slideshow" title="" width="1920" height="795" />
+                            </picture>
+                            <div class="container">
+                                <div class="slideshow-content slideshow-overlay middle-right">
+                                    <div class="slideshow-content-in">
+                                        <div class="wrap-caption animation style1">
+                                            <h2 class="ss-mega-title">
+                                                Lan tỏa Năng Lượng Tích Cực <br /> Với Hema
+                                            </h2>
+                                            <p class="ss-sub-title xs-hide">
+                                                Những món đồ thiết yếu không thể thiếu trong tủ đồ của phụ nữ cho năm nay
+                                            </p>
+                                            
+                                            <div class="ss-btnWrap d-flex-justify-start">
+                                                <a class="btn btn-primary" href="{{$selectedImage->link}}">Xem ngay</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+                @endif
+
+                @php
+                    $bannerImages = $banner->images;
+                    $imageIndex = 2;
+                    $selectedImage = $bannerImages->get($imageIndex);
+                @endphp
+                @if ($selectedImage)
+                    <div class="slide">
+                        <div class="slideshow-wrap">
+                            <picture>
+                                <source media="(max-width:767px)" srcset="{{ Storage::url($selectedImage->image) }}"
+                                    width="1150" height="800" />
+                                <img class="blur-up lazyload" src="{{ Storage::url($selectedImage->image) }}" alt="slideshow"
+                                    title="" width="1920" height="795" />
+                            </picture>
+                            <div class="container">
+                                <div class="slideshow-content slideshow-overlay middle-right">
+                                    <div class="slideshow-content-in">
+                                        <div class="wrap-caption animation style1">
+                                            <h2 class="ss-mega-title">
+                                                Thiết Kế Trang Phục Yêu Thích Tiếp Theo Của Bạn <br /> 
+                                            </h2>
+                                            <p class="ss-sub-title xs-hide">
+                                                Bộ trang phục kết hợp sự thanh lịch và phong cách cho trang phục thường ngày của bạn
+                                            </p>
+                                            <div class="ss-btnWrap">
+                                                <a class="btn btn-primary" href="{{$selectedImage->link}}">Mua sắm ngay bây giờ</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- @php
+                    $banner = $bannerCollection['mainBanners'] ?? []; // Giả sử đây là cấu trúc mảng của bạn
+                @endphp
+
+                @if (count($banner) > 3)
+                    @foreach (array_slice($banner, 3) as $banne) 
+                        @php
+                            $selectedImage = $banne['images'][0] ?? null; // Lấy ảnh đầu tiên của banner (nếu có)
+                        @endphp
+
+                        @if ($selectedImage)
+                            <div class="slide">
+                                <div class="slideshow-wrap">
+                                    <picture>
+                                        <source media="(max-width:767px)" srcset="{{ Storage::url($selectedImage['image']) }}"
+                                            width="1150" height="800" />
+                                        <img class="blur-up lazyload" src="{{ Storage::url($selectedImage['image']) }}" alt="slideshow"
+                                            title="" width="1920" height="795" />
+                                    </picture>
+                                    <div class="container">
+                                        <div class="slideshow-content slideshow-overlay middle-right">
+                                            <div class="slideshow-content-in">
+                                                <div class="wrap-caption animation style1">
+                                                    <h2 class="ss-mega-title">
+                                                        Design Your Next <br />Favourite Wear
+                                                    </h2>
+                                                    <p class="ss-sub-title xs-hide">
+                                                        The outfit that blends elegance and style for your
+                                                        casual wear
+                                                    </p>
+                                                    <div class="ss-btnWrap">
+                                                        <a class="btn btn-primary" href="shop-grid-view.html">Shop now</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif --}}
+
+            @endforeach
         </div>
     </section>
     <!--End Home Slideshow-->
@@ -399,8 +460,8 @@
                             <i class="icon anm anm-phone-call-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Call us any time</h3>
-                            <span class="text-muted">Contact us 24/7 hours a day</span>
+                            <h3 class="title mb-2">Gọi cho chúng tôi bất cứ lúc nào</h3>
+                            <span class="text-muted">Liên hệ với chúng tôi 24/7</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -408,8 +469,8 @@
                             <i class="icon anm anm-truck-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Pickup At Any Store</h3>
-                            <span class="text-muted">Free shipping on orders over $65</span>
+                            <h3 class="title mb-2">Nhận hàng tại bất kỳ cửa hàng nào</h3>
+                            {{-- <span class="text-muted">Giao hàng miễn phí cho đơn hàng trên $65</span> --}}
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -417,8 +478,8 @@
                             <i class="icon anm anm-credit-card-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Secured Payment</h3>
-                            <span class="text-muted">We accept all major credit cards</span>
+                            <h3 class="title mb-2">Thanh toán an toàn</h3>
+                            <span class="text-muted">Chúng tôi chấp nhận tất cả các thẻ tín dụng chính</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -426,10 +487,11 @@
                             <i class="icon anm anm-redo-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Free Returns</h3>
-                            <span class="text-muted">30-days free return policy</span>
+                            <h3 class="title mb-2">Đổi trả miễn phí</h3>
+                            <span class="text-muted">Chính sách đổi trả miễn phí trong vòng 30 ngày</span>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </section>
@@ -449,18 +511,20 @@
                             @if ($selectedImage)
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 collection-banner-item">
                                     <div class="collection-item sp-col">
-                                        <a href="{{ route('shop') }}" class="zoom-scal">
+                                        <a href="{{ $selectedImage->link }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
                                                     src="{{ Storage::url($selectedImage->image) }}" alt="Banner Image"
                                                     title="Banner Image" style="height:723px ; width:100%" />
                                             </div>
+                                            {{-- <p>{{$selectedImage->link}}</p> --}}
                                             <div class="details middle-right">
                                                 <div class="inner">
-                                                    <p class="mb-2">Trending Now</p>
-                                                    <h3 class="title">Banner Title</h3>
-                                                    <span class="btn btn-outline-secondary btn-md">Shop Now</span>
+                                                    <p class="mb-2">Xu hướng hiện nay</p>
+                                                    {{-- <h3 class="title">Tiêu đề banner</h3> --}}
+                                                    <span class="btn btn-outline-secondary btn-md">Mua ngay</span>
+
                                                 </div>
                                             </div>
                                         </a>
@@ -476,7 +540,7 @@
                                 @endphp
                                 @if ($selectedImage)
                                     <div class="collection-item sp-col">
-                                        <a href="{{ route('shop') }}" class="zoom-scal">
+                                        <a href="{{ $selectedImage->link }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
@@ -485,9 +549,10 @@
                                             </div>
                                             <div class="details middle-left">
                                                 <div class="inner">
-                                                    <h3 class="title mb-2">Mens Wear</h3>
-                                                    <p class="mb-3">Tailor-made with passion</p>
-                                                    <span class="btn btn-outline-secondary btn-md">Shop Now</span>
+                                                    <h3 class="title mb-2">Thời trang nam</h3>
+                                                    <p class="mb-3">Được may đo với niềm đam mê</p>
+                                                    <span class="btn btn-outline-secondary btn-md">Mua ngay</span>
+                                                    
                                                 </div>
                                             </div>
                                         </a>
@@ -499,25 +564,28 @@
                                     $imageIndex = 2;
                                     $selectedImage = $bannerImages->get($imageIndex);
                                 @endphp
+
                                 @if ($selectedImage)
                                     <div class="collection-item sp-col">
-                                        <a href="{{ route('shop') }}" class="zoom-scal">
+                                        <a href="{{ $selectedImage->link }}" class="zoom-scal">
                                             <div class="img">
                                                 <img class="blur-up lazyload"
                                                     data-src="{{ Storage::url($selectedImage->image) }}"
                                                     src="{{ Storage::url($selectedImage->image) }}" alt="Banner Image"
-                                                    title="Banner Image" style="height:349px ; width:100%" />
+                                                    title="Banner Image" style="height:349px; width:100%" />
                                             </div>
                                             <div class="details middle-right">
                                                 <div class="inner">
-                                                    <p class="mb-2">Buy one get one free</p>
-                                                    <h3 class="title">Kids Wear</h3>
-                                                    <span class="btn btn-outline-secondary btn-md">Shop Now</span>
+                                                    <p class="mb-2">Mua một tặng một</p>
+                                                    <h3 class="title">Thời trang trẻ em</h3>
+                                                    <span class="btn btn-outline-secondary btn-md">Mua ngay</span>
+                                                    
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
                                 @endif
+
                             </div>
                         @endforeach
                     </div>
@@ -532,7 +600,7 @@
                 <a href="{{ route('vouchers.index') }}">Xem thêm >></a>
             </div>
             <div class="row">
-                @if (session('success'))
+                {{-- @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
                     </div>
@@ -542,7 +610,7 @@
                     <div class="alert alert-danger">
                         {{ session('error') }}
                     </div>
-                @endif
+                @endif --}}
                 @foreach ($vouchers as $voucher)
                     <div class="col-md-4 mb-4">
                         <div class="voucher-card">
@@ -759,37 +827,31 @@
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        {{-- <a href="#addtocart-modal"
-                                                            class="btn-icon addtocart add-to-cart-modal"
-                                                            data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                            <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                                data-bs-toggle="tooltip" data-bs-placement="left"
-                                                                title="Add to Cart"><i
-                                                                    class="icon anm anm-cart-l"></i><span
-                                                                    class="text">Add to Cart</span></span>
-                                                        </a> --}}
+                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                            @csrf 
+                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <button type="submit" class="btn-icon addtocart">
+                                                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    title="Add to Cart">
+                                                                    <i class="icon anm anm-cart-l"></i>
+                                                                    <span class="text">Add to Cart</span>
+                                                                </span>
+                                                            </button>
+                                                        </form>
                                                         <!--End Cart Button-->
-                                                        <!--Quick View Button-->
-                                                        {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
-                                                        data-bs-toggle="modal" data-bs-target="#quickview_modal">
-                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
-                                                                class="text">Quick View</span></span>
-                                                    </a> --}}
-                                                        <!--End Quick View Button-->
+
                                                         <!--Wishlist Button-->
-                                                        {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                            class="text">Add To Wishlist</span></a> --}}
+                                                        <a class="btn-icon wishlist text-link wishlist {{ $product->isFavorite ? 'active' : '' }}"
+                                                            href="#" data-product-id="{{ $product->id }}"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="{{ $product->isFavorite ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích' }}">
+                                                            <i style="font-size:15px"
+                                                                class="icon anm anm-heart-l  favorite {{ $product->isFavorite ? 'd-none' : '' }}"></i>
+                                                            <i style="color: #e96f84;font-size:15px"
+                                                                class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
+                                                        </a>
                                                         <!--End Wishlist Button-->
-                                                        <!--Compare Button-->
-                                                        {{-- <a href="compare-style2.html" class="btn-icon compare"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add to Compare"><i class="icon anm anm-random-r"></i><span
-                                                            class="text">Add to Compare</span></a> --}}
-                                                        <!--End Compare Button-->
                                                     </div>
                                                     <!--End Product Button-->
                                                 </div>
@@ -927,40 +989,35 @@
                                                     <div class="product-labels"><span class="lbl pr-label1">Best
                                                             seller</span></div>
                                                     <!-- End Product label -->
+
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        {{-- <a href="#addtocart-modal"
-                                                            class="btn-icon addtocart add-to-cart-modal"
-                                                            data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                            <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                                data-bs-toggle="tooltip" data-bs-placement="left"
-                                                                title="Add to Cart"><i
-                                                                    class="icon anm anm-cart-l"></i><span
-                                                                    class="text">Add to Cart</span></span>
-                                                        </a> --}}
+                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                            @csrf 
+                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <button type="submit" class="btn-icon addtocart">
+                                                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    title="Add to Cart">
+                                                                    <i class="icon anm anm-cart-l"></i>
+                                                                    <span class="text">Add to Cart</span>
+                                                                </span>
+                                                            </button>
+                                                        </form>
                                                         <!--End Cart Button-->
-                                                        <!--Quick View Button-->
-                                                        {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
-                                                        data-bs-toggle="modal" data-bs-target="#quickview_modal">
-                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
-                                                                class="text">Quick View</span></span>
-                                                    </a> --}}
-                                                        <!--End Quick View Button-->
+
                                                         <!--Wishlist Button-->
-                                                        {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                            class="text">Add To Wishlist</span></a> --}}
+                                                        <a class="btn-icon wishlist text-link wishlist {{ $product->isFavorite ? 'active' : '' }}"
+                                                            href="#" data-product-id="{{ $product->id }}"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="{{ $product->isFavorite ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích' }}">
+                                                            <i style="font-size:15px"
+                                                                class="icon anm anm-heart-l  favorite {{ $product->isFavorite ? 'd-none' : '' }}"></i>
+                                                            <i style="color: #e96f84;font-size:15px"
+                                                                class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
+                                                        </a>
                                                         <!--End Wishlist Button-->
-                                                        <!--Compare Button-->
-                                                        {{-- <a href="compare-style2.html" class="btn-icon compare"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add to Compare"><i class="icon anm anm-random-r"></i><span
-                                                            class="text">Add to Compare</span></a> --}}
-                                                        <!--End Compare Button-->
                                                     </div>
                                                     <!--End Product Button-->
                                                 </div>
@@ -1035,20 +1092,7 @@
 
                                                     <!-- End Variant -->
                                                     <!-- Product Button -->
-                                                    <div class="button-action hidden">
-                                                        <div class="addtocart-btn">
-                                                            <form class="addtocart" action="#" method="post">
-                                                                <a href="#addtocart-modal"
-                                                                    class="btn btn-md add-to-cart-modal"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#addtocart_modal">
-                                                                    <i class="icon anm anm-cart-l me-2"></i><span
-                                                                        class="text">Add
-                                                                        to Cart</span>
-                                                                </a>
-                                                            </form>
-                                                        </div>
-                                                    </div>
+                                                    
                                                     <!-- End Product Button -->
                                                 </div>
                                                 <!-- End product details -->
@@ -1102,81 +1146,30 @@
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        @if ($product->variants->count() > 0)
-                                                            <div class="product-variants">
-                                                                {{-- <h4>Available Variants:</h4>
-                                                        <ul>
-                                                            @foreach ($product->variants as $variant)
-                                                                <li>
-                                                                    Size: {{ $variant->variantAttributes->where('attribute.name', 'Size')->first()->attributeValue->value ?? 'N/A' }},
-                                                Color: {{ $variant->variantAttributes->where('attribute.name', 'Color')->first()->attributeValue->value ?? 'N/A' }}
-                                                </li>
-                                                @endforeach
-                                                </ul> --}}
-
-                                                                <!-- Nút "Add to Cart" -->
-                                                                {{-- <a href="#addtocart-modal"
-                                                                    class="btn-icon addtocart add-to-cart-modal"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#addtocart_modal"
-                                                                    data-product-name="{{ $product->name }}"
-                                                                    data-product-variant-id=""
-                                                                    data-product-variant-stock=""
-                                                                    data-product-image="{{ asset($product->img_thumbnail) }}"
-                                                                    @php
-                                                                $color='N/A' ;
-                                                                $size='N/A' ;
-                                                    // Duyệt qua các thuộc tính của biến thể để tìm màu sắc và kích thước
-                                                    if ($product->selected_variant) {
-                                                    foreach ($product->selected_variant->variantAttributes as $attribute) {
-                                                    if ($attribute->attribute->name === 'Color') {
-                                                    $color = $attribute->attributeValue->value;
-                                                    } elseif ($attribute->attribute->name === 'Size') {
-                                                    $size = $attribute->attributeValue->value;
-                                                    }
-                                                    }
-                                                    } @endphp
-                                                                    data-product-color="{{ $color }}"
-                                                                    data-product-size="{{ $size }}"
-                                                                    data-product-price="{{ $product->selected_variant ? $product->selected_variant->price_sale : 'N/A' }}">
-                                                                    <!-- Giá biến thể đã chọn -->
-                                                                    <span
-                                                                        class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                                        title="Add to Cart">
-                                                                        <i class="icon anm anm-cart-l"></i>
-                                                                        <span class="text">Add to Cart</span>
-                                                                    </span>
-                                                                </a> --}}
-
-
-
-                                                            </div>
-                                                        @else
-                                                            <p>No variants available</p>
-                                                        @endif
-                                                        <!--End Cart Button-->
-                                                        <!--Quick View Button-->
-                                                        {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
-                                                        data-bs-toggle="modal" data-bs-target="#quickview_modal">
-                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
-                                                                class="text">Quick View</span></span>
-                                                    </a> --}}
-                                                        <!--End Quick View Button-->
+                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                            @csrf 
+                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <button type="submit" class="btn-icon addtocart">
+                                                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    title="Add to Cart">
+                                                                    <i class="icon anm anm-cart-l"></i>
+                                                                    <span class="text">Add to Cart</span>
+                                                                </span>
+                                                            </button>
+                                                        </form>
+                                                        
                                                         <!--Wishlist Button-->
-                                                        {{-- <a href="wishlist-style2.html" class="btn-icon wishlist"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                            class="text">Add To Wishlist</span></a> --}}
-                                                        <!--End Wishlist Button-->
-                                                        <!--Compare Button-->
-                                                        {{-- <a href="compare-style2.html" class="btn-icon compare"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add to Compare"><i class="icon anm anm-random-r"></i><span
-                                                            class="text">Add to Compare</span></a> --}}
-                                                        <!--End Compare Button-->
+                                                        <a class="btn-icon wishlist text-link wishlist {{ $product->isFavorite ? 'active' : '' }}"
+                                                            href="#" data-product-id="{{ $product->id }}"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="{{ $product->isFavorite ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích' }}">
+                                                            <i style="font-size:15px"
+                                                                class="icon anm anm-heart-l  favorite {{ $product->isFavorite ? 'd-none' : '' }}"></i>
+                                                            <i style="color: #e96f84;font-size:15px"
+                                                                class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
+                                                        </a>
+                                                       
                                                     </div>
                                                     <!--End Product Button-->
                                                 </div>
@@ -1315,7 +1308,7 @@
                                 customers a smooth shopping experience which can be used for
                                 various kinds of stores such as fashion.
                             </p>
-                            <a href="{{ route('shop') }}" class="hero-btn btn btn-light">Shop now</a>
+                            <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -1702,7 +1695,7 @@ title="Product" width="625" height="800" /></a>
     <!-- End Product Quickshop Modal -->
 
     <!-- Product Addtocart Modal-->
-    <div class="addtocart-modal modal fade" id="addtocart_modal" tabindex="-1" aria-hidden="true">
+    {{-- <div class="addtocart-modal modal fade" id="addtocart_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -1728,7 +1721,6 @@ title="Product" width="625" height="800" /></a>
                                 </div>
                                 <div class="addcart-total rounded-5">
                                     <p class="product-items mb-2">
-                                        {{-- There are <strong>1</strong> items in your cart --}}
                                         Số lượng: 1
                                     </p>
                                     <p class="d-flex-justify-center">
@@ -1737,14 +1729,11 @@ title="Product" width="625" height="800" /></a>
                                 </div>
                                 <input type="hidden" name="product_variant_id" id="modal-product-variant-id" />
                                 <input type="hidden" name="stock" id="#modal-product-variant-stock" />
-                                {{-- <input type="hidden" name="product_image" id="modal-product-image" /> --}}
                                 <input type="hidden" name="quantity" value="1" />
                                 <input type="hidden" name="price" id="modal-product-variant-price" />
                                 <div class="product-form-submit d-flex-justify-center">
-                                    {{-- <a href="#" class="btn btn-outline-primary product-continue w-100">Continue Shopping</a> --}}
                                     <button class="btn btn-secondary product-viewcart w-100 my-2 my-md-3">View
                                         Cart</button>
-                                    {{-- <a href="checkout-style1.html" class="btn btn-primary product-checkout w-100">Proceed to checkout</a> --}}
                                 </div>
                             </div>
                         </div>
@@ -1752,7 +1741,7 @@ title="Product" width="625" height="800" /></a>
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     <!-- End Product Addtocart Modal -->
@@ -2069,17 +2058,23 @@ title="Product" width="625" height="808" />
     <script>
         $(document).ready(function() {
             let adminId;
-            let userId = {{ Auth::id() }};
+            let userId = {{ Auth::id() }} ;
             $('#chatButton').click(function() {
                 $('#chatBox').slideToggle(300);
                 $.get('/get-first-admin', function(response) {
                     if (response.admin_id) {
                         adminId = response.admin_id;
                         $('#chatWithAdminName').text('   ' + response.admin_name);
-                        $.get('/fetch-messages', { receiver_id: adminId }, function(messagesResponse) {
+                        $.get('/fetch-messages', {
+                            receiver_id: adminId
+                        }, function(messagesResponse) {
                             $('#chatMessages').empty();
                             messagesResponse.messages.forEach(function(message) {
-                                let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                let messageTime = new Date(message.created_at)
+                                    .toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
                                 let messageHtml = `
                                     <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
                                         <div class="message-text">${message.message}</div>
@@ -2104,6 +2099,7 @@ title="Product" width="625" height="808" />
                     sendMessage();
                 }
             });
+
             function sendMessage() {
                 let message = $('#messageInput').val().trim();
                 if (message) {
@@ -2113,7 +2109,10 @@ title="Product" width="625" height="808" />
                         receiver_id: adminId
                     }, function(response) {
                         if (response.success) {
-                            let messageTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            let messageTime = new Date().toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
                             let messageHtml = `
                                 <div class="message sent">
                                     <div class="message-text">${message}</div>
@@ -2132,52 +2131,156 @@ title="Product" width="625" height="808" />
             });
             var channel = pusher.subscribe('chat.' + userId);
             channel.bind('admin-message', function(data) {
-                let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                let messageTime = new Date(data.created_at).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
                 let messageHtml = `
                     <div class="message received">
                         <div class="message-text">${data.user.name}: ${data.message}</div>
                         <div class="message-time">${messageTime}</div>
                     </div>`;
-                
+
                 $('#chatMessages').append(messageHtml);
                 scrollToBottom();
             });
+
             function scrollToBottom() {
                 const chatBody = $('.chat-body');
-                chatBody.animate({ scrollTop: chatBody[0].scrollHeight }, 300);
+                chatBody.animate({
+                    scrollTop: chatBody[0].scrollHeight
+                }, 300);
             }
         });
-        </script>
+    </script>
     <!--End Product Quickview Modal-->
+
+    {{-- ADD FAVOVITE --}}
     <script>
+        var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
         document.addEventListener('DOMContentLoaded', function() {
-            // Lắng nghe sự kiện khi modal được hiển thị
-            $('#addtocart_modal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Nút kích hoạt modal
+            const wishlistLinks = document.querySelectorAll('.wishlist');
+            const wishlistCountElement = document.getElementById('wishlist-count');
 
-                // Lấy các thông tin từ thuộc tính data-* của nút
-                var productName = button.data('product-name');
-                var productImage = button.data('product-image');
-                var productColor = button.data('product-color');
-                var productSize = button.data('product-size');
-                var productPrice = button.data('product-price');
-                var productVariantId = button.data('product-variant-id');
-                var productVariantStock = button.data('product-variant-stock');
+            wishlistLinks.forEach(wishlistLink => {
+                const productId = wishlistLink.getAttribute('data-product-id');
+                let isFavorite = wishlistLink.classList.contains('active');
 
-                // Cập nhật thông tin trong modal
-                var modal = $(this);
-                modal.find('.product-title').text(productName); // Cập nhật tên sản phẩm
-                modal.find('.product-image img').attr('src', productImage); // Cập nhật hình ảnh sản phẩm
-                modal.find('.product-clr').text(productColor + ' / ' +
-                    productSize); // Cập nhật màu sắc và kích thước
-                modal.find('.price').text(productPrice); // Cập nhật giá
-                // modal.find('.price').text(product_variant_id); // Cập nhật giá
+                // Thêm sự kiện click vào wishlist link
+                wishlistLink.addEventListener('click', function(event) {
+                    event.preventDefault();
 
-                modal.find('#modal-product-variant-id').val(productVariantId);
-                modal.find('#modal-product-variant-price').val(productPrice);
-                modal.find('#modal-product-variant-stock').val(productVariantStock);
+                    if (!isLoggedIn) {
+                        // Chuyển hướng sang trang đăng nhập nếu chưa đăng nhập
+                        window.location.href = '/login';
+                        return;
+                    }
+                    const url = isFavorite ? `/wishlist/remove/${productId}` :
+                        `/wishlist/add/${productId}`;
+                    const method = isFavorite ? 'DELETE' : 'POST';
 
+                    fetch(url, {
+                            method: method,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content'),
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                isFavorite = !isFavorite; // Đổi trạng thái yêu thích
+
+                                // Toggle giữa biểu tượng viền và đổ đầy
+                                const heartOutline = wishlistLink.querySelector('.anm-heart-l');
+                                const heartFill = wishlistLink.querySelector('.bi-heart-fill');
+
+                                if (isFavorite) {
+                                    wishlistLink.classList.add('active');
+                                    heartOutline.classList.add('d-none');
+                                    heartFill.classList.remove('d-none');
+                                    updateWishlistCount(1);
+                                } else {
+                                    wishlistLink.classList.remove('active');
+                                    heartOutline.classList.remove('d-none');
+                                    heartFill.classList.add('d-none');
+                                    updateWishlistCount(-1);
+                                }
+                            } else {
+                                alert('Lỗi: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Lỗi:', error);
+                        });
+                });
             });
+
+            function updateWishlistCount(change) {
+                let currentCount = parseInt(wishlistCountElement.textContent) || 0;
+                currentCount += change;
+                wishlistCountElement.textContent = currentCount;
+            }
         });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    $('.add-to-cart-form').on('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn tải lại trang
+
+        const form = $(this); // Lấy form hiện tại đang được submit
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    updateCartCount();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Có lỗi xảy ra!',
+                        text: response.message || 'Xin vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Có lỗi xảy ra!',
+                    text: 'Xin vui lòng thử lại!',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+
+    function updateCartCount() {
+        $.ajax({
+            url: '/cart/count', // Thay đổi đường dẫn này
+            type: 'GET',
+            success: function(data) {
+                $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+            }
+        });
+    }
+});
+
+
+
     </script>
 @endsection
