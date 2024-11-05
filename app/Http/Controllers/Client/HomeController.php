@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catalogue;
+use App\Models\Favorite;
 use App\Models\Product;
 use App\Services\Client\HomeService;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class HomeController extends Controller
     // Lấy 12 sản phẩm trang chủ
     public function index()
     {
+        $user = auth()->user();
         $products = $this->homeService->getHomeProducts();
         $banners  = $this->homeService->getBannerShowHome();
         $catalogues = $this->homeService->getAllCatalogues();
@@ -30,7 +32,23 @@ class HomeController extends Controller
         $newRatings = $this->homeService->getRatingsForRelatedProducts($newProducts);
         $saleRatings = $this->homeService->getRatingsForRelatedProducts($saleProduct);
         $bestsaleRatings = $this->homeService->getRatingsForRelatedProducts($bestsaleProducts);
-
+        foreach ($newProducts as $product) {
+            $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                                                 ->where('product_id', $product->id)
+                                                 ->exists() : false;
+        }
+    
+        foreach ($saleProduct as $product) {
+            $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                                                 ->where('product_id', $product->id)
+                                                 ->exists() : false;
+        }
+    
+        foreach ($bestsaleProducts as $product) {
+            $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                                                 ->where('product_id', $product->id)
+                                                 ->exists() : false;
+        }
         // dd($banners);
         return view('client.home', compact('products', 'banners', 'catalogues',
         'newProducts', 'saleProduct', 'bestsaleProducts',

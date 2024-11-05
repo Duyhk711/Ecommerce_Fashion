@@ -212,7 +212,7 @@
     </div>
     <div class="chat-box" id="chatBox" style="display: none;">
         <div class="chat-header">
-            <span id="chatWithAdminName">Chat</span>
+            <span id="chatWithAdminName">Trò chuyện Hỗ trợ</span>
             <button class="close-chat" id="closeChat">&times;</button>
         </div>
         <div class="chat-body">
@@ -253,7 +253,7 @@
             $.get('/get-first-admin', function(response) {
                 if (response.admin_id) {
                     adminId = response.admin_id;
-                    $('#chatWithAdminName').text('   ' + response.admin_name);
+                    //$('#chatWithAdminName').text('   ' + response.admin_name);
                     $.get('/fetch-messages', {
                         receiver_id: adminId
                     }, function(messagesResponse) {

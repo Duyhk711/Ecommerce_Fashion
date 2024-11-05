@@ -190,15 +190,7 @@
                      <a href="#;" class="header-cart btn-minicart clr-none" data-bs-toggle="offcanvas"
                          data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i>
                          <span class="cart-count">
-                             @auth
-                                 @php
-                                     $cart = \App\Models\Cart::where('user_id', auth()->id())->first();
-                                     $count = $cart ? $cart->items()->count() : 0;
-                                 @endphp
-                                 {{ $count }}
-                             @else
-                                 {{ session()->has('cart') ? count(session('cart')) : 0 }}
-                             @endauth
+                             {{ app(App\Services\Client\CartService::class)->getCartItemCount() }}
                          </span>
                      </a>
                  </div>

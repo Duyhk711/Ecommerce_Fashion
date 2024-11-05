@@ -37,8 +37,12 @@ class ProductController extends Controller
         $ratingsPercentage = $this->productDetailService->calculateRatingsPercentage($product);
         $user = auth()->user();
         $isFavorite = $user ? Favorite::where('user_id', $user->id)->where('product_id', $product->id)->exists() : false;
+        foreach ($relatedProducts as $relatedProduct) {
+              $relatedProduct->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                                                             ->where('product_id', $relatedProduct->id)
+                                                             ->exists() : false;
+        }
         $relatedRatings = $this->productDetailService->getRatingsForRelatedProducts($relatedProducts);
-
         // Kiểm tra nếu có tham số cho bình luận
         if ($request->has('rating') || $request->ajax()) {
             $ratingFilter = $request->input('rating', 'all'); // Lọc theo sao
@@ -69,8 +73,4 @@ class ProductController extends Controller
             'paginationLinks' => $this->productDetailService->getCommentsData($product, 'all', 3)->links()->render() // Fix here for pagination
         ]);
     }
-
-
-
-
 }
