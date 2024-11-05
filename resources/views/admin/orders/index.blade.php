@@ -200,7 +200,7 @@
         </div>
     </div>
 @endsection
-
+@vite(['resources/js/app.js'])
 @section('js')
   <!-- Page JS Plugins -->
   <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>

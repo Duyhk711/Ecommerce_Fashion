@@ -1,4 +1,5 @@
 <!--Footer-->
+@include('client.component.chat')
 <div class="footer">
     <div class="newsletterbg clearfix">
         <div class="container">
