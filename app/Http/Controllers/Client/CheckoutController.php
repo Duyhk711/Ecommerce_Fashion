@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmation;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -11,6 +12,7 @@ use App\Services\Client\CartService;
 use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -94,6 +96,8 @@ class CheckoutController extends Controller
         $order->total_price = $request->input('total_price');
         $order->payment_method = $request->input('payment_method');
         $order->save();
+        // dd($order->customer_email);
+        Mail::to($order->customer_email)->send(new OrderConfirmation($order));
 
         // dd($request->input('cartItem'));
         // Lưu các sản phẩm vào bảng 'order_items'
@@ -139,5 +143,10 @@ class CheckoutController extends Controller
         } else {
             return redirect()->route('vnpay.payment', ['order_id' => $order->id, 'products' => $products]);
         }
+    }
+
+    public function orderPayment($id)
+    {
+        return redirect()->route('vnpay.payment', ['order_id' => $id]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services\Client;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -14,10 +15,20 @@ class CartService
 {
     public function addToCart($productId, $productVariantId, $quantity)
     {
-        $price = $this->getProductVariantPrice($productVariantId);
-
-        if ($price === null) {
-            throw new \Exception('Giá của biến thể sản phẩm không hợp lệ.');
+        $product = Product::with('variants')->findOrFail($productId);
+        $price = null;
+        // Nếu không có biến thể được chỉ định, chọn ngẫu nhiên một biến thể từ sản phẩm
+        if (is_null($productVariantId) && $product->variants->isNotEmpty()) {
+            $variant = $product->variants->random();
+            $productVariantId = $variant->id;
+            $quantity = 1;
+            $price = $this->getProductVariantPrice($productVariantId);
+        } else {
+            // Nếu biến thể đã được chỉ định, kiểm tra giá của biến thể đó
+            $price = $this->getProductVariantPrice($productVariantId);
+            if ($price === null) {
+                throw new \Exception('Giá của biến thể sản phẩm không hợp lệ.');
+            }
         }
 
         $variant = ProductVariant::with(['product', 'variantAttributes.attribute', 'variantAttributes.attributeValue'])
@@ -304,5 +315,23 @@ class CartService
         }
 
         return ['success' => true, 'message' => 'Sản phẩm đã được xóa khỏi giỏ hàng'];
+    }
+
+    public function getCartItemCount()
+    {
+        if (Auth::check()) {
+            // Đã đăng nhập, lấy số lượng sản phẩm trong giỏ hàng từ cơ sở dữ liệu
+            $cart = Cart::where('user_id', Auth::id())->first();
+    
+            if ($cart) {
+                // Lấy tổng số item chưa bị xóa
+                return $cart->items()->whereNull('deleted_at')->count(); // Đếm số lượng item
+            }
+            return 0; // Không có giỏ hàng
+        } else {
+            // Chưa đăng nhập, lấy số lượng sản phẩm trong giỏ hàng từ session
+            $cart = Session::get('cart', []);
+            return count($cart); // Đếm số lượng sản phẩm trong session cart
+        }
     }
 }
