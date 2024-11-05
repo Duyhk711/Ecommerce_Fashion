@@ -199,9 +199,8 @@
 
         checkImageLimit(); // Kiểm tra ngay khi load trang
     });
-
     </script>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Logic cho các nút xóa ảnh đã upload
