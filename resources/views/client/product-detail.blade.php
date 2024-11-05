@@ -453,121 +453,132 @@
         <!--End Main Content-->
 
         <!--Related Products-->
-            <section class="section product-slider pb-0">
-                <div class="container">
-                    <div class="section-header">
-                        <p class="mb-1 mt-0">Khám Phá</p>
-                        <h2>Sản phẩm cùng loại</h2>
-                    </div>
-                    <!--Product Grid-->
-                    <div class="grid-products grid-view-items gp10 arwOut5">
-                        <div
-                            class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
-                            @foreach ($relatedProducts as $products)
-                                <div class="item col-item">
-                                    <div class="product-box">
-                                        <!-- Start Product Image -->
-                                        <div class="product-image">
-                                            <a href="{{ route('productDetail', $products->slug) }}"
-                                                class="product-img rounded-0">
-                                                <img class="primary rounded-0 blur-up lazyload"
-                                                    data-src="{{ Storage::url($products->img_thumbnail) }}"
-                                                    src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
-                                                    title="{{ $products->name }}" width="625" height="808" />
-                                                <img class="hover rounded-0 blur-up lazyload"
-                                                    data-src="{{ Storage::url($products->img_thumbnail) }}"
-                                                    src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
-                                                    title="{{ $products->name }}" width="625" height="808" />
-                                            </a>
-                                            <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
-                                            {{-- <div class="button-set style1">
-                                                <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                    data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
-                                                            class="text">Add to Cart</span></span>
-                                                </a>
-                                                <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
-                                                    data-bs-toggle="modal" data-bs-target="#quickview_modal">
-                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
-                                                            class="text">Quick View</span></span>
-                                                </a>
-                                                <a href="wishlist-style2.html" class="btn-icon wishlist"
-                                                    data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                        class="text">Add To Wishlist</span></a>
-                                                <a href="compare-style2.html" class="btn-icon compare"
-                                                    data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    title="Add to Compare"><i class="icon anm anm-random-r"></i><span
-                                                        class="text">Add to Compare</span></a>
-                                            </div> --}}
-                                        </div>
-                                        <div class="product-details text-center">
-                                            <div class="product-vendor">{{ $products->catalogue->name }}</div>
-                                            <div class="product-name">
-                                                <a
-                                                    href="{{ route('productDetail', $products->slug) }}">{{ $products->name }}</a>
-                                            </div>
-                                            <div class="product-price">
-                                                @if ($products->price_sale == 0)
-                                                    <span class="price">
-                                                        {{ number_format($products->price_regular, 3, '.', 0) }}đ</span>
-                                                @else
-                                                    <span
-                                                        class="price old-price">{{ number_format($products->price_regular, 3, '.', 0) }}đ</span>
-                                                    <span
-                                                        class="price">{{ number_format($products->price_sale, 3, '.', 0) }}đ</span>
-                                                @endif
-                                            </div>
-                                            <div class="product-review">
-                                                @php
-                                                    // Lấy đánh giá tương ứng cho sản phẩm hiện tại
-                                                    $relatedRating = $relatedRatings->firstWhere(
-                                                        'product_id',
-                                                        $products->id,
-                                                    );
-                                                    // Nếu không có đánh giá thì thiết lập mặc định là 0
-                                                    $averageRating = $relatedRating['average_rating'] ?? 0;
-                                                @endphp
+        <section class="section product-slider pb-0">
+            <div class="container">
+                <div class="section-header">
+                    <p class="mb-1 mt-0">Khám Phá</p>
+                    <h2>Sản phẩm cùng loại</h2>
+                </div>
 
-                                                <div class="related-product">
-                                                    <div class="star-rating">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <i
-                                                                class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
-                                                        @endfor
-                                                    </div>
+                <!--Product Grid-->
+                <div class="grid-products grid-view-items gp10 arwOut5">
+                    <div
+                        class="row col-row product-options row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-3 row-cols-2">
+                        @foreach ($relatedProducts as $products)
+                            <div class="item col-item">
+                                <div class="product-box">
+                                    <!-- Start Product Image -->
+                                    <div class="product-image">
+                                        <a href="{{ route('productDetail', $products->slug) }}"
+                                            class="product-img rounded-0">
+                                            <img class="primary rounded-0 blur-up lazyload"
+                                                data-src="{{ Storage::url($products->img_thumbnail) }}"
+                                                src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
+                                                title="{{ $products->name }}" width="625" height="808" />
+                                            <img class="hover rounded-0 blur-up lazyload"
+                                                data-src="{{ Storage::url($products->img_thumbnail) }}"
+                                                src="{{ Storage::url($products->img_thumbnail) }}" alt="Product"
+                                                title="{{ $products->name }}" width="625" height="808" />
+                                        </a>
+                                        <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
+                                         <div class="button-set style1">
+                                            <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
+                                                data-bs-toggle="modal" data-bs-target="#addtocart_modal">
+                                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Thêm vào giỏ hàng"><i class="icon anm anm-cart-l"></i><span
+                                                        class="text">Add to Cart</span></span>
+                                            </a>
+                                            {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                                data-bs-toggle="modal" data-bs-target="#quickview_modal">
+                                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
+                                                        class="text">Quick View</span></span>
+                                            </a> --}}
+                                            <a class="btn-icon wishlist text-link wishlist {{ $products->isFavorite ? 'active' : '' }}" href="#"
+                                            data-product-id="{{ $products->id }}"  data-bs-toggle="tooltip" data-bs-placement="left" title="Thêm vào yêu thích">
+                                                <i style="font-size:15px" class="icon anm anm-heart-l  favorite {{ $products->isFavorite ? 'd-none' : '' }}"></i>
+                                                <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill  favorite {{ $products->isFavorite ? '' : 'd-none' }}"></i>
+                                            </a>
+                                            {{-- <a href="compare-style2.html" class="btn-icon compare"
+                                                data-bs-toggle="tooltip" data-bs-placement="left"
+                                                title="Add to Compare"><i class="icon anm anm-random-r"></i><span
+                                                    class="text">Add to Compare</span></a> --}}
+                                                    {{-- <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
+                                                    data-product-id="{{ $products->id }}">
+                                                    <!-- Biểu tượng trái tim viền -->
+                                                    <i style="font-size:15px" class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
+                
+                                                    <!-- Biểu tượng trái tim đổ đầy -->
+                                                    <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
+                                                </a> --}}
+                                        </div> 
+                                    </div>
+                                    <div class="product-details text-center">
+                                        <div class="product-vendor">{{ $products->catalogue->name }}</div>
+                                        <div class="product-name">
+                                            <a
+                                                href="{{ route('productDetail', $products->slug) }}">{{ $products->name }}</a>
+                                        </div>
+                                        <div class="product-price">
+                                            @if ($products->price_sale == 0)
+                                                <span class="price">
+                                                    {{ number_format($products->price_regular, 3, '.', 0) }}đ</span>
+                                            @else
+                                                <span
+                                                    class="price old-price">{{ number_format($products->price_regular, 3, '.', 0) }}đ</span>
+                                                <span
+                                                    class="price">{{ number_format($products->price_sale, 3, '.', 0) }}đ</span>
+                                            @endif
+                                        </div>
+                                        <div class="product-review">
+                                            @php
+                                                // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                $relatedRating = $relatedRatings->firstWhere(
+                                                    'product_id',
+                                                    $products->id,
+                                                );
+                                                // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                $averageRating = $relatedRating['average_rating'] ?? 0;
+                                            @endphp
+
+                                            <div class="related-product">
+                                                <div class="star-rating">
+                                                    @for ($i = 0; $i < 5; $i++)
+                                                        <i
+                                                            class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                    @endfor
                                                 </div>
                                             </div>
-
-                                            <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
-                                                available...</p>
-                                            <ul class="variants-clr swatches">
-                                                @foreach ($products->uniqueAttributes->where('attributeName', 'Color') as $color)
-                                                    <li class="swatch x-small available"
-                                                        style="background-color: {{ $color['colorCode'] }}"
-                                                        data-color-code="{{ $color['colorCode'] }}"
-                                                        data-attribute-value-id="{{ $color['value'] }}"
-                                                        data-bs-toggle="tooltip" title="{{ $color['value'] }}">
-                                                    </li>
-                                                @endforeach
-                                            </ul>
                                         </div>
+
+                                        <p class="sort-desc hidden">There are many variations of passages of Lorem Ipsum
+                                            available...</p>
+                                        <ul class="variants-clr swatches">
+                                            @foreach ($products->uniqueAttributes->where('attributeName', 'Color') as $color)
+                                                <li class="swatch x-small available"
+                                                    style="background-color: {{ $color['colorCode'] }}"
+                                                    data-color-code="{{ $color['colorCode'] }}"
+                                                    data-attribute-value-id="{{ $color['value'] }}"
+                                                    data-bs-toggle="tooltip" title="{{ $color['value'] }}">
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
-
-                        <div class="view-collection text-center mt-4 mt-md-5">
-                            <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">Xem thêm sản phẩm</a>
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
-                    <!--End Product Grid-->
+
+                    <div class="view-collection text-center mt-4 mt-md-5">
+                        <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">Xem thêm sản phẩm</a>
+                    </div>
                 </div>
-            </section>
+                <!--End Product Grid-->
+
+            </div>
+        </section>
         <!--End Related Products-->
     </div>
     <br/>
@@ -963,6 +974,7 @@
         });
 
         // add favorite
+        var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
         document.addEventListener('DOMContentLoaded', function() {
             const wishlistLinks = document.querySelectorAll('.wishlist');
             const wishlistCountElement = document.getElementById('wishlist-count');
@@ -975,6 +987,11 @@
                 wishlistLink.addEventListener('click', function(event) {
                     event.preventDefault();
 
+                    if (!isLoggedIn) {
+                        // Chuyển hướng sang trang đăng nhập nếu chưa đăng nhập
+                        window.location.href = '/login';
+                        return;
+                    }
                     const url = isFavorite ? `/wishlist/remove/${productId}` :
                         `/wishlist/add/${productId}`;
                     const method = isFavorite ? 'DELETE' : 'POST';

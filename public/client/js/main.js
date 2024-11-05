@@ -1192,17 +1192,16 @@
     $("#slider-range").slider({
       range: true,
       min: 10000,
-      max: 3000000,
-      values: [0, 3000000],
+      max: 500000,
+      values: [0, 500000],
       slide: function (event, ui) {
-        $("#amount").val(ui.values[0] + "đ-" + ui.values[1]) + "đ";
+        $("#amount").val(ui.values[0] + "-" + ui.values[1]);
       },
     });
     $("#amount").val(
       $("#slider-range").slider("values", 0) +
-        "đ-" +
-        $("#slider-range").slider("values", 1) +
-        "đ"
+        " - " +
+        $("#slider-range").slider("values", 1)
     );
   }
   price_slider();

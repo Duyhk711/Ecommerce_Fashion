@@ -3,16 +3,29 @@
     Cửa hàng
 @endsection
 @section('css')
-<style>
-    .product-name a {
-    display: inline-block;
-    width: 100%; /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
-    white-space: nowrap; /* Không cho phép xuống dòng */
-    overflow: hidden; /* Ẩn văn bản thừa */
-    text-overflow: ellipsis; /* Thêm dấu "..." vào phần cuối nếu vượt quá */
-    max-width: 20ch; /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
-}
-</style>
+    <style>
+        .product-name a {
+            display: inline-block;
+            width: 100%;
+            /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
+            white-space: nowrap;
+            /* Không cho phép xuống dòng */
+            overflow: hidden;
+            /* Ẩn văn bản thừa */
+            text-overflow: ellipsis;
+            /* Thêm dấu "..." vào phần cuối nếu vượt quá */
+            max-width: 20ch;
+            /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
+        }
+
+        .price-filter input[type="text"] {
+            height: 34px;
+            padding: 0 10px;
+            text-align: center;
+            font-size: 13px;
+            width: 140px;
+        }
+    </style>
 @endsection
 @section('content')
     @include('client.component.page_header')
@@ -147,15 +160,14 @@
                         <!--Price Filter-->
                         <div class="sidebar-widget filterBox filter-widget">
                             <div class="widget-title">
-                                <h2>Price</h2>
+                                <h2>Lọc theo giá</h2>
                             </div>
                             <form class="widget-content price-filter filterDD" id="priceFilter" method="GET">
                                 <div id="slider-range" class="mt-2"></div>
                                 <input type="hidden" name="price" id="priceRange" />
                                 <div class="row">
                                     <div class="col-6">
-                                        <input id="amount" type="text" name="price_text" readonly
-                                            style="font-size: 10px" />
+                                        <input id="amount" type="text" name="price_text" readonly />
                                     </div>
                                     <div class="col-6 text-right">
                                         <button class="btn btn-sm" type="submit"
@@ -337,14 +349,14 @@
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
                                                     data-src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product" title="Product"
-                                                    width="625" height="808" />
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product"
+                                                    title="Product" width="625" height="808" />
                                                 <!-- End Image -->
                                                 <!-- Hover Image -->
                                                 <img class="hover rounded-0 blur-up lazyload"
                                                     data-src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    alt="Product" title="Product" width="625" height="808" />
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product"
+                                                    title="Product" width="625" height="808" />
                                                 <!-- End Hover Image -->
                                             </a>
                                             <!-- End Product Image -->
@@ -394,7 +406,8 @@
                                             <!-- End Product Name -->
                                             <!-- Product Price -->
                                             <div class="product-price">
-                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                <span
+                                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
@@ -1012,7 +1025,7 @@
                 selectedCategories.push(item.getAttribute('data-id'));
             });
 
-            let priceRange = document.getElementById('amount').value;
+            let priceRange = document.getElementById('priceRange').value;
 
             let selectedColors = [];
             document.querySelectorAll('.filter-color .swatch.selected').forEach(color => {

@@ -100,18 +100,17 @@ class HomeService
             'products.img_thumbnail',
             DB::raw('SUM(order_items.quantity) as total_quantity')
         )
-        ->leftJoin('order_items', 'products.sku', '=', 'order_items.product_sku') // Sử dụng LEFT JOIN
-        ->groupBy('products.id', 'products.name', 'products.slug', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
-        ->orderBy('total_quantity', 'desc')
-        ->where('products.is_active', 1)
-        ->take(8)
-        ->with(['catalogue', 'variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue']) // Eager load quan hệ liên quan
-        ->get();
-
+            ->leftJoin('order_items', 'products.sku', '=', 'order_items.product_sku') // Sử dụng LEFT JOIN
+            ->groupBy('products.id', 'products.name', 'products.slug', 'products.price_regular', 'products.price_sale', 'products.img_thumbnail')
+            ->orderBy('total_quantity', 'desc')
+            ->where('products.is_active', 1)
+            ->take(8)
+            ->with(['catalogue', 'variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue']) // Eager load quan hệ liên quan
+            ->get();
         return $bestsaleProducts;
     }
 
- // voucher
+    // voucher
     public function getAllVouchers()
     {
         // Lấy tối đa 3 mã voucher mới nhất từ database, sắp xếp theo thời gian tạo gần nhất
@@ -165,5 +164,4 @@ class HomeService
         // Trả về trung bình đánh giá, hoặc 0 nếu không có rating hợp lệ
         return $validRatingsCount > 0 ? $sumRatings / $validRatingsCount : 0;
     }
-
 }

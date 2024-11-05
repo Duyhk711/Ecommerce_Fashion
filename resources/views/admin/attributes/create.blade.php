@@ -52,5 +52,7 @@
         </div>
     </div>
 </div>
-
+@section('js')
+<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
+@endsection
 @endsection

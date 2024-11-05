@@ -197,7 +197,7 @@
                                                     </button>
                                                 </form>
                                             </td>
-                                            </td>
+                                           
                                         </tr>
                                     @endforeach
                                 </tbody>
