@@ -1,5 +1,7 @@
 @extends('layouts.client')
-
+@section('title')
+    Sản phẩm chi tiết
+@endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('client/css/product-detail.css') }}">
     <style>

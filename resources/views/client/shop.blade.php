@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Cửa hàng
+@endsection
 @section('css')
 <style>
     .product-name a {
