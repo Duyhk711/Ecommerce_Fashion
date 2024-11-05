@@ -424,4 +424,5 @@
         }
     });
 </script>
+<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
 @endsection
