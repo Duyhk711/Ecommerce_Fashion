@@ -20,7 +20,7 @@ class ShopController extends Controller
     }
 
     public function index(Request $request)
-    {
+    {    $pageTitle = 'Cửa Hàng';
         $categories = $this->shopService->getCategories();
         $colorValues = $this->shopService->getColorValues();
         $sizeValues = $this->shopService->getSizeValues();
@@ -34,7 +34,6 @@ class ShopController extends Controller
         // Lấy sản phẩm từ database
         $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
         $ratings = $this->homeService->getRatingsForRelatedProducts($products);
-
         return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'ratings'));
     }
     public function filterShop(Request $request)

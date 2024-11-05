@@ -21,6 +21,7 @@ class VouchersController extends Controller
     }
     public function voucher()
     {
+        $pageTitle='Mã ưu đãi';
         $currentUser = $this->userService->getCurrentUser();
         return view('client.my-account.vouchers', compact( 'currentUser', ));
     }
