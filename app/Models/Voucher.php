@@ -14,6 +14,10 @@ class Voucher extends Model
         'code',
         'discount_type',
         'discount_value',
+        'minimum_order_value',
+        'quantity',
+        'description',
+        'is_active',
         'start_date',
         'end_date',
         'quantity',
@@ -21,13 +25,7 @@ class Voucher extends Model
     ];
 
     public function userVouchers()
-{
-    return $this->hasMany(UserVoucher::class);
-}
-    // public function users()
-    // {
-    //     return $this->belongsToMany(User::class, 'user_voucher')
-    //                 ->withPivot('saved_at', 'is_used')
-    //                 ->withTimestamps();
-    // }
+    {
+        return $this->hasMany(UserVoucher::class);
+    }
 }

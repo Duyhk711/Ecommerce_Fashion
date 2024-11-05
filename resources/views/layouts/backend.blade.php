@@ -240,7 +240,6 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-
             {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
@@ -312,20 +311,20 @@
             </li>
 
             {{-- VOUCHER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
-            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
-              <i class="nav-main-link-icon fa fa-gift"></i>
-              <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
-            </a>
-            <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
-                  <span class="nav-main-link-name">Voucher</span>
-                </a>
-              </li>
-            </ul>
-            </li> --}}
 
+            <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/vouchers*') ? 'true' : 'false' }}" href="{{ route('admin.vouchers.index') }}">
+                <i class="nav-main-link-icon fa fa-gift"></i>
+                <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/vouchers*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                    <span class="nav-main-link-name">Voucher</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
             {{-- BANNER --}}
             <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
@@ -690,5 +689,6 @@
 
 </body>
 @yield('js')
+
 
 </html>
