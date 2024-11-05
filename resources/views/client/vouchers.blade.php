@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Mã giảm giá
+@endsection
 @section('css')
 <style>
     .voucher-card {
@@ -77,7 +80,7 @@
     .voucher-copy:hover {
         background-color: #2f415d;
     }
-    
+
 </style>
 @endsection
 @section('content')
@@ -110,7 +113,7 @@
                 </div>
             </div>
             @endforeach
-        
+
 
     </div>
 </div>

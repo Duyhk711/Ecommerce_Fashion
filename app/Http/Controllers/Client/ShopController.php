@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\CartItem;
+use App\Services\Client\HomeService;
 use App\Services\Client\ShopService;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
     protected $shopService;
+    protected $homeService;
 
-    public function __construct(ShopService $shopService)
+    public function __construct(ShopService $shopService, HomeService $homeService)
     {
         $this->shopService = $shopService;
+        $this->homeService = $homeService;
     }
 
     public function index(Request $request)
@@ -30,8 +33,9 @@ class ShopController extends Controller
 
         // Lấy sản phẩm từ database
         $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
+        $ratings = $this->homeService->getRatingsForRelatedProducts($products);
 
-        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues'));
+        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'ratings'));
     }
     public function filterShop(Request $request)
     {

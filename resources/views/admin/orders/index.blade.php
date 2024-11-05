@@ -133,14 +133,14 @@
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
                                                     style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
                                                     data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
-                                                    <i class="fa fa-pencil-alt pb-2"></i>
+                                                    <i class="fa fa-pencil-alt"></i>
                                                 </button>
                                             @else
                                                 <button class="btn btn-sm btn-alt-warning" style="height: 30px;"
                                                     data-bs-toggle="modal" data-bs-target="#updateStatusModal"
                                                     data-id="{{ $order->id }}" data-status="{{ $order->status }}"
                                                     title="Chỉnh sửa">
-                                                    <i class="fa fa-pencil-alt" style="margin-top: -15px"></i>
+                                                    <i class="fa fa-pencil-alt" style="padding-top: -15px"></i>
                                                 </button>
                                             @endif
                                         </div>
@@ -200,7 +200,7 @@
         </div>
     </div>
 @endsection
-
+@vite(['resources/js/app.js'])
 @section('js')
   <!-- Page JS Plugins -->
   <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -224,7 +224,7 @@
               var orderId = button.getAttribute('data-id');
               var orderStatus = button.getAttribute('data-status');
 
-              
+
               var orderIdInput = document.getElementById('orderId');
               orderIdInput.value = orderId;
 

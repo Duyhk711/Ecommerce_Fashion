@@ -36,9 +36,9 @@
          <div class="row">
              <!--Logo-->
              <div class="logo col-5 col-sm-3 col-md-3 col-lg-2 align-self-center">
-                 <a class="logoImg" href="{{ route('home') }}"><img src="{{ asset('client/images/logo.png') }}"
-                         alt="Hema Multipurpose Html Template" title="Hema Multipurpose Html Template" width="149"
-                         height="39" /></a>
+                 <a class="logoImg" href="{{ route('home') }}"><img src="{{ asset('client/images/logo-5.png') }}"
+                         alt="Hema Multipurpose Html Template" title="Hema Multipurpose Html Template" width="200"
+                         height="50" /></a>
              </div>
              <!--End Logo-->
              <!--Menu-->

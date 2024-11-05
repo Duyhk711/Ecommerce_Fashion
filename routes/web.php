@@ -115,9 +115,11 @@ Route::post('/save-voucher', [VouchersController::class, 'save'])->name('save-vo
 
 
 // User chat routes
-Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
-Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
-Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
-Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
+Route::middleware('auth')->group(function () {
+    Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
+    Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
+    Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
+    Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
+});
 
 
