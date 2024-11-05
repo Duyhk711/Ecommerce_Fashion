@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Cửa hàng
+@endsection
 @section('css')
     <style>
         .product-name a {
@@ -13,6 +16,14 @@
             /* Thêm dấu "..." vào phần cuối nếu vượt quá */
             max-width: 20ch;
             /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
+        }
+
+        .price-filter input[type="text"] {
+            height: 34px;
+            padding: 0 10px;
+            text-align: center;
+            font-size: 13px;
+            width: 140px;
         }
     </style>
 @endsection
@@ -85,15 +96,14 @@
                         <!--Price Filter-->
                         <div class="sidebar-widget filterBox filter-widget">
                             <div class="widget-title">
-                                <h2>Price</h2>
+                                <h2>Lọc theo giá</h2>
                             </div>
                             <form class="widget-content price-filter filterDD" id="priceFilter" method="GET">
                                 <div id="slider-range" class="mt-2"></div>
                                 <input type="hidden" name="price" id="priceRange" />
                                 <div class="row">
                                     <div class="col-6">
-                                        <input id="amount" type="text" name="price_text" readonly
-                                            style="font-size: 10px" />
+                                        <input id="amount" type="text" name="price_text" readonly />
                                     </div>
                                     <div class="col-6 text-right">
                                         <button class="btn btn-sm" type="submit"
@@ -338,10 +348,20 @@
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
                                             <div class="product-review">
-                                                <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                    class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
-                                                    class="icon anm anm-star-o"></i>
-                                                <span class="caption hidden ms-1">3 Reviews</span>
+                                                @php
+                                                    // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                    $rating = $ratings->firstWhere(
+                                                        'product_id',
+                                                        $product->id,
+                                                    );
+                                                    // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                    $averageRating = $rating['average_rating'] ?? 0;
+                                                @endphp
+
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    <i
+                                                        class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                @endfor
                                             </div>
                                             <!-- End Product Review -->
                                             <!--Sort Description-->
@@ -941,7 +961,7 @@
                 selectedCategories.push(item.getAttribute('data-id'));
             });
 
-            let priceRange = document.getElementById('amount').value;
+            let priceRange = document.getElementById('priceRange').value;
 
             let selectedColors = [];
             document.querySelectorAll('.filter-color .swatch.selected').forEach(color => {

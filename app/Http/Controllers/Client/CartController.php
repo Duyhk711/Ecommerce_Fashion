@@ -20,17 +20,36 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
-
+        $urlWithoutParams = url()->previous();
+        $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
-            $this->cartService->addToCart($productId, $productVariantId, $quantity);
-            return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+              $this->cartService->addToCart($productId, $productVariantId, $quantity);
+              if ($request->ajax()) {
+                  return response()->json([
+                      'success' => true,
+                      'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
+                  ]);
+              }
+               return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.')
+          } catch (\Exception $e) {
+              if ($request->ajax()) {
+                  return response()->json([
+                      'success' => false,
+                      'message' => $e->getMessage()
+                  ], 500);
+              }
+              return redirect($urlWithoutParams)->with('error', $e->getMessage());
+          }
+    }
+
+    public function getCartCount()
+    {
+        $cartCount = $this->cartService->getCartItemCount();
+
+        return response()->json(['count' => $cartCount]);
     }
 
     public function viewCart()

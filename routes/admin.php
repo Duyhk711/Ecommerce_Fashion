@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\OrderStatusChangeController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\ThongkeController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ChatsController;
 use Illuminate\Support\Facades\Route;
@@ -95,7 +96,8 @@ Route::prefix('admin')
 
       // VOUCHER
       Route::resource('vouchers', VoucherController::class);
-
+      Route::post('vouchers/{voucher}/activate', [VoucherController::class, 'toggleActive'])->name('vouchers.activate');
+      Route::post('vouchers/{voucher}/deactivate', [VoucherController::class, 'toggleDeactive'])->name('vouchers.deactivate');
       //COMMENT
       Route::resource('/comments', CommentController::class);
       Route::get('admin/comments/{id}', [CommentController::class, 'show']);
@@ -107,5 +109,10 @@ Route::prefix('admin')
       Route::post('/chat/mark-messages-as-read', [ChatsController::class, 'markMessagesAsRead'])->name('markMessagesAsRead');
       Route::get('/fetch-sorted-users', [ChatsController::class, 'fetchSortedUsers'])->name('fetchSortedUsers');
       Route::get('/get-sorted-users', [ChatsController::class, 'getSortedUsers'])->name('getSortedUsers');
+
+      //THONGKE
+      Route::resource('/thongkes', ThongkeController::class);
+      Route::get('/admin/thongkes', [ThongkeController::class, 'index'])->name('admin.thongkes.index');
     });
   });
+  
