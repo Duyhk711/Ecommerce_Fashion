@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Comment;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Client\MyOrderService;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 
 class MyOrderController extends Controller
 {
@@ -34,33 +32,59 @@ class MyOrderController extends Controller
         $currentUser = $this->userService->getCurrentUser();
         $order = $this->myOrderService->getOrderDetail($id);
         $commentDataArray = [];
-            foreach ($order->items as $item) {
-                $commentData = $this->myOrderService->getCommentForProduct($id, $item->productVariant->product->id);
-                $commentDataArray[$item->productVariant->product->id] = [
-                    'comment' => $commentData['comment'],
-                    'status' => $commentData['status'],
-                    'product_id' => $item->productVariant->product->id
-                ];
-                $currentComments[$item->productVariant->product->id] = $commentData['comment'];
-            }
-            $productId = $order->items->first()->productVariant->product->id ?? null;
+        foreach ($order->items as $item) {
+            $commentData = $this->myOrderService->getCommentForProduct($id, $item->productVariant->product->id);
+            $commentDataArray[$item->productVariant->product->id] = [
+                'comment' => $commentData['comment'],
+                'status' => $commentData['status'],
+                'product_id' => $item->productVariant->product->id,
+            ];
+            $currentComments[$item->productVariant->product->id] = $commentData['comment'];
+        }
+        $productId = $order->items->first()->productVariant->product->id ?? null;
+        $currentComment = null;
+        // dd($productId);
+        if ($productId !== null && isset($commentDataArray[$productId]) && isset($commentDataArray[$productId]['comment'])) {
+            $currentComment = $commentDataArray[$productId]['comment']['id'];
+        } else {
             $currentComment = null;
-            // dd($productId);
-            if ($productId !== null && isset($commentDataArray[$productId]) && isset($commentDataArray[$productId]['comment'])) {
-                $currentComment = $commentDataArray[$productId]['comment']['id'];
-            } else {
-                $currentComment = null;
-            }
+        }
 
+        $commentDetails = $currentComment ? $this->myOrderService->getCommentById($currentComment) : null;
 
-            $commentDetails = $currentComment ? $this->myOrderService->getCommentById($currentComment) : null;
-
-            // dd($order);
-            // dd($commentDataArray[$productId]['comment']['id']);
-            return view('client.my-account.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment','commentDetails','currentUser'));
+        // dd($order);
+        // dd($commentDataArray[$productId]['comment']['id']);
+        return view('client.my-account.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment', 'commentDetails', 'currentUser'));
     }
 
+    public function showOne($id)
+    {
+        $order = $this->myOrderService->getOrderDetail($id);
+        $commentDataArray = [];
+        foreach ($order->items as $item) {
+            $commentData = $this->myOrderService->getCommentForProduct($id, $item->productVariant->product->id);
+            $commentDataArray[$item->productVariant->product->id] = [
+                'comment' => $commentData['comment'],
+                'status' => $commentData['status'],
+                'product_id' => $item->productVariant->product->id,
+            ];
+            $currentComments[$item->productVariant->product->id] = $commentData['comment'];
+        }
+        $productId = $order->items->first()->productVariant->product->id ?? null;
+        $currentComment = null;
+        // dd($productId);
+        if ($productId !== null && isset($commentDataArray[$productId]) && isset($commentDataArray[$productId]['comment'])) {
+            $currentComment = $commentDataArray[$productId]['comment']['id'];
+        } else {
+            $currentComment = null;
+        }
 
+        $commentDetails = $currentComment ? $this->myOrderService->getCommentById($currentComment) : null;
+
+        // dd($order);
+        // dd($commentDataArray[$productId]['comment']['id']);
+        return view('client.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment', 'commentDetails'));
+    }
 
     public function cancelOrder(Request $request, $order_id)
     {
