@@ -38,7 +38,12 @@ class ProductController extends Controller
         $user = auth()->user();
         $isFavorite = $user ? Favorite::where('user_id', $user->id)->where('product_id', $product->id)->exists() : false;
         $relatedRatings = $this->productDetailService->getRatingsForRelatedProducts($relatedProducts);
-
+        foreach ($relatedProducts as $relatedProduct) {
+            $relatedProduct->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                                                           ->where('product_id', $relatedProduct->id)
+                                                           ->exists() : false;
+        }
+        
         $ratingFilter = $request->input('rating', 'all'); // Lọc theo sao, mặc định là 'all'
         $commentsData = $this->productDetailService->getCommentsData(
             $product,
