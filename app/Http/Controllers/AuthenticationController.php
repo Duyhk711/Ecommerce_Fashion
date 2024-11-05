@@ -38,7 +38,7 @@ class AuthenticationController extends Controller
         if ($isAuthenticated) {
             return response()->json([
                 'success' => true,
-                'message' => 'Đăng nhập thành công!',
+                // 'message' => 'Đăng nhập thành công!',
                 'redirect' => route('home')
             ]);
         }

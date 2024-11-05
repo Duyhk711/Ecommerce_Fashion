@@ -20,6 +20,7 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
@@ -34,10 +35,11 @@ class CartController extends Controller
 
     public function viewCart()
     {
+        $pageTitle = 'Giỏ hàng';
         $cartItems = $this->cartService->getCartItems();
         // dd($cartItems);
         // dd(session('cart'));
-        return view('client.cart', compact('cartItems'));
+        return view('client.cart', compact('cartItems','pageTitle'));
     }
 
     public function updateCart(Request $request)
@@ -98,7 +100,7 @@ class CartController extends Controller
         $userId = Auth::id();
 
         if (!$userId) {
-            $cart = session()->get('cart', []); 
+            $cart = session()->get('cart', []);
             if (isset($cart[$request->product_variant_id])) {
                 $cart[$request->product_variant_id]['quantity'] += $request->quantity;
             } else {
@@ -107,7 +109,7 @@ class CartController extends Controller
                     'price' => $request->price,
                     'stock' => $request->stock,
                     'quantity' => $request->quantity,
-                    'image' => $request->product_image, 
+                    'image' => $request->product_image,
                 ];
             }
 

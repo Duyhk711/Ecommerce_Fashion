@@ -25,7 +25,7 @@ class CheckoutController extends Controller
 
     public function renderCheckout(Request $request)
     {
-
+        $pageTitle = 'c';
         if (Auth::check()) {
             $dataAddress = $this->checkoutService->getAddresses();
             if ($request->has('address')) {
@@ -48,7 +48,7 @@ class CheckoutController extends Controller
             // dd($dataCart);
         }
         // dd(session('checkoutItem'));
-        return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
+        return view('client.checkout', compact('dataAddress', 'dataCart', 'address','pageTitle'));
 
     }
 
@@ -65,16 +65,17 @@ class CheckoutController extends Controller
             $dataAddress = [];
             $address = '';
         }
+        $pageTitle='Mua Ngay';
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
         $dataCart = $this->checkoutService->buyNow($productVariantId, $quantity);
 
-        return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
+        return view('client.checkout', compact('dataAddress', 'dataCart', 'address', 'pageTitle'));
     }
 
     public function storeCheckout(Request $request)
     {
-
+        $pageTitle = 'Thanh toán';
         $products = json_decode($request->input('cartItem'));
 
         // dd($request->all());
@@ -135,7 +136,7 @@ class CheckoutController extends Controller
 
         // Kiểm tra phương thức thanh toán
         if ($request->payment_method == 'COD') {
-            return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
+            return view('client.order-success', compact('orderItems', 'order','pageTitle'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
         } else {
             return redirect()->route('vnpay.payment', ['order_id' => $order->id, 'products' => $products]);
         }

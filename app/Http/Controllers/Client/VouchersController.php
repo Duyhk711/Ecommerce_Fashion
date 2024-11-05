@@ -18,9 +18,10 @@ class VouchersController extends Controller
     }
     public function voucher()
     {
+        $pageTitle='Mã ưu đãi';
         $currentUser = $this->userService->getCurrentUser();
         // Bạn có thể thêm logic xử lý để lấy dữ liệu voucher từ database nếu cần
-        return view('client.my-account.vouchers', compact( 'currentUser', ));
+        return view('client.my-account.vouchers', compact( 'currentUser', 'pageTitle' ));
     }
     public function index()
     {

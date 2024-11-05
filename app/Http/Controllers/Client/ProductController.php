@@ -16,25 +16,23 @@ class ProductController extends Controller
     public function __construct(ProductDetailService $productDetailService){
         $this->productDetailService = $productDetailService;
     }
-    
+
 
     public function getProductDetail($id, Request $request)
     {
-
         $product = $this->productDetailService->getProduct($id);
         $variantDetails = $this->productDetailService->getVariantDetails($product);
         $totalStock = $this->productDetailService->calculateTotalStock($product);
         $uniqueAttributes = $this->productDetailService->getUniqueAttributes($product);
         $relatedProducts = $this->productDetailService->getRelatedProducts($product, $id);
-        
+
         foreach ($relatedProducts as $relatedProduct) {
             $relatedProduct->uniqueAttributes = $this->productDetailService->getUniqueAttributes($relatedProduct);
         }
-        
+
         $canComment = $this->productDetailService->getUserCommentStatus($product, $id);
         $averageRating = $this->productDetailService->calculateAverageRating($product);
         $ratingsPercentage = $this->productDetailService->calculateRatingsPercentage($product);
-        // $isFavorite = $this->productDetailService->isProductFavorite($id);
         $user = auth()->user();
         $isFavorite = $user ? Favorite::where('user_id', $user->id)->where('product_id', $product->id)->exists() : false;
         $relatedRatings = $this->productDetailService->getRatingsForRelatedProducts($relatedProducts);
@@ -45,27 +43,27 @@ class ProductController extends Controller
             $ratingFilter,
             4
         );
-        // dd($commentsData);
 
-        return view('client.product-detail', 
-            [   
-                'product' => $product,
-                'totalStock' => $totalStock,
-                'variantDetails' => $variantDetails,
-                'uniqueAttributes' => $uniqueAttributes,
-                'relatedProducts' => $relatedProducts,
-                'canComment' => $canComment,
-                'comments' => $commentsData,
-                'averageRating' => $averageRating,
-                'totalRatings' => $product->comments->count(),
-                'ratingsPercentage' => $ratingsPercentage,
-                'isFavorite' => $isFavorite,
-                'relatedRatings' => $relatedRatings,
-                'paginationLinks' => $commentsData->links()->render() // Fix here for pagination
-            ]
-        );
+        // Thêm biến $pageTitle
+        $pageTitle = $product->name; // Gán tên sản phẩm cho biến $pageTitle
+
+        return view('client.product-detail', [
+            'product' => $product,
+            'totalStock' => $totalStock,
+            'variantDetails' => $variantDetails,
+            'uniqueAttributes' => $uniqueAttributes,
+            'relatedProducts' => $relatedProducts,
+            'canComment' => $canComment,
+            'comments' => $commentsData,
+            'averageRating' => $averageRating,
+            'totalRatings' => $product->comments->count(),
+            'ratingsPercentage' => $ratingsPercentage,
+            'isFavorite' => $isFavorite,
+            'relatedRatings' => $relatedRatings,
+            'paginationLinks' => $commentsData->links()->render(),
+            'pageTitle' => $pageTitle, // Truyền biến $pageTitle vào view
+        ]);
     }
 
 
-    
 }
