@@ -1,5 +1,7 @@
 @extends('layouts.client')
-
+@section('title')
+    sản phẩm yêu thích
+@endsection
 @section('content')
 @include('client.component.page_header')
 <div class="container" style="max-width: 80%;">
@@ -84,7 +86,7 @@
 </div>
 @endsection
 @section('modal')
-    
+
     <!-- Product Quickview Modal-->
     <div class="quickview-modal modal fade" id="quickview_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">

@@ -215,8 +215,8 @@
                             <i class="icon anm anm-phone-call-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Call us any time</h3>
-                            <span class="text-muted">Contact us 24/7 hours a day</span>
+                            <h3 class="title mb-2">Liên hệ 24/7</h3>
+                            <span class="text-muted"> Gọi chúng tôi bất cứ lúc nào</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -224,8 +224,8 @@
                             <i class="icon anm anm-truck-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Pickup At Any Store</h3>
-                            <span class="text-muted">Free shipping on orders over $65</span>
+                            <h3 class="title mb-2">Giao hàng bất kì đâu</h3>
+                            <span class="text-muted">Miễn phí vận chuyển đơn hàng từ 400k</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -233,8 +233,8 @@
                             <i class="icon anm anm-credit-card-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Secured Payment</h3>
-                            <span class="text-muted">We accept all major credit cards</span>
+                            <h3 class="title mb-2">Thanh toán dễ dàng</h3>
+                            <span class="text-muted">Chấp nhận thanh toán qua VN Pay</span>
                         </div>
                     </div>
                     <div class="service-wrap col-item">
@@ -242,8 +242,8 @@
                             <i class="icon anm anm-redo-l"></i>
                         </div>
                         <div class="service-content">
-                            <h3 class="title mb-2">Free Returns</h3>
-                            <span class="text-muted">30-days free return policy</span>
+                            <h3 class="title mb-2">Miễn phí trả hàng</h3>
+                            <span class="text-muted">Miễn phí trả hàng trong 30 ngày</span>
                         </div>
                     </div>
                 </div>

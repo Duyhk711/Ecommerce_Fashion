@@ -1,5 +1,7 @@
     @extends('layouts.client')
-
+    @section('title')
+        Lấy lại mật khẩu
+    @endsection
     @section('content')
         @include('client.component.page_header')
         <div class="container" style="max-width: 80%;">

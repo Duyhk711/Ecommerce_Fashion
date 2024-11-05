@@ -641,7 +641,7 @@
     .page-title h1 { font-size: 22px; margin-bottom: 10px; }
     .text-large { font-size: 14px !important; line-height: 1.6 !important; }
     .top-info-bar .item { padding-top: 7px; padding-bottom: 7px; }
-    .logo img { max-width: 120px; }
+    .logo img { max-width: 180px; }
 
     .minicart-modal-style .minicart-content,
     .minicart-modal-style .minicart-bottom { width:100%; padding:0; border:none; }
@@ -720,7 +720,7 @@
     .footer.ftr-bg-black .footer-top .footer-links .h4,
     .footer.ftr-bg-gray .footer-top .footer-links .h4 { border-color: #434343; }
 
-    .ftr-logoText .logoImg { max-width: 100px; }
+    .ftr-logoText .logoImg { max-width: 180px; }
     .footer-logo-links .inline-links.left-brd .list-inline-item:not(:last-child) { margin-right: 10px; padding-right: 10px; border-width: 1px; }
 
     .phone-info .phone-icon { font-size: 32px; }
