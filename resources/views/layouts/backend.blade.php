@@ -11,13 +11,19 @@
   <meta name="author" content="pixelcave">
   <meta name="robots" content="noindex, nofollow">
 
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.js"></script>
+
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
-   
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <!-- Modules -->
-  
+
   @yield('css')
   {{-- @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js']) --}}
   @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
@@ -26,34 +32,36 @@
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/dashmix/themes/xwork.scss', 'resources/js/dashmix/app.js']) --}}
 
 </head>
+
 <body>
   {{-- @if (session('success'))
   <script>
       document.addEventListener('DOMContentLoaded', function() {
           $.notify({
               message: '{{ session('success') }}'
-          },{
-              type: 'success',
-              icon: 'fa fa-check me-1',
-              delay: 3000
-          });
-      });
+  },{
+  type: 'success',
+  icon: 'fa fa-check me-1',
+  delay: 3000
+  });
+  });
   </script>
-@endif
+  @endif
 
-@if (session('error'))
+  @if (session('error'))
   <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          $.notify({
-              message: '{{ session('error') }}'
-          },{
-              type: 'danger',
-              icon: 'fa fa-times me-1',
-              delay: 3000
-          });
+    document.addEventListener('DOMContentLoaded', function() {
+      $.notify({
+        message: '{{ session('
+        error ') }}'
+      }, {
+        type: 'danger',
+        icon: 'fa fa-times me-1',
+        delay: 3000
       });
+    });
   </script>
-@endif --}}
+  @endif --}}
 
   <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow fs-sm">
     <!-- Side Overlay-->
@@ -232,8 +240,7 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-            
-           {{-- SAN PHAM --}}
+            {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-box"></i>
@@ -304,20 +311,20 @@
             </li>
 
             {{-- VOUCHER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
+
+            <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/vouchers*') ? 'true' : 'false' }}" href="{{ route('admin.vouchers.index') }}">
                 <i class="nav-main-link-icon fa fa-gift"></i>
                 <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
+              <ul class="nav-main-submenu{{ request()->is('admin/vouchers*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
                     <span class="nav-main-link-name">Voucher</span>
                   </a>
                 </li>
               </ul>
-            </li> --}}
-
+            </li>
             {{-- BANNER --}}
             <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
@@ -349,19 +356,28 @@
             </li>
 
             {{-- MESSAGE --}}
-            <li class="nav-main-item{{ request()->is('admin/chats*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/chats*') ? 'true' : 'false' }}" href="#">
+            <li class="nav-main-item">
+              <a class="nav-main-link" href="{{ route('admin.admin.chats') }}">
                 <i class="nav-main-link-icon fa fa-envelope"></i>
-                <span class="nav-main-link-name">Quản lý tin nhắn</span>
+                <span class="nav-main-link-name">Tin nhắn</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('/admin/chats*') ? ' show' : '' }}">
+            </li>
+            {{-- THONGKE --}}
+            <li class="nav-main-item{{ request()->is('admin/thongkes*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/thongkes*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-keyboard"></i>
+                <span class="nav-main-link-name">Quản lý Thống kê</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/thongkes*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('/admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
-                    <span class="nav-main-link-name">Tin nhắn</span>
+                  <a class="nav-main-link{{ request()->is('admin/thongkes') ? ' active' : '' }}" href="{{ route('admin.thongkes.index') }}">
+                    <span class="nav-main-link-name">Thống kê</span>
                   </a>
                 </li>
               </ul>
             </li>
+
+
 
             <li class="nav-main-heading">More</li>
             <li class="nav-main-item">
@@ -407,11 +423,11 @@
             <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-fw fa-user d-sm-none"></i>
               @if(Auth::check())
-                  <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
+              <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
               @else
               <span class="d-none d-sm-inline-block">Admin</span>
               @endif
-              
+
               <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
@@ -422,7 +438,7 @@
                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
-                
+
                 <a class="dropdown-item" href="javascript:void(0)">
                   <i class="far fa-fw fa-file-alt me-1"></i> Invoices
                 </a>
@@ -436,13 +452,13 @@
                 <!-- END Side Overlay -->
 
                 <div role="separator" class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
-                  </a>
-                  <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
-                    @csrf
-                  </form>
-                </div>
+                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
+                </a>
+                <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
+                  @csrf
+                </form>
+              </div>
             </div>
           </div>
           <!-- END User Dropdown -->
@@ -578,10 +594,10 @@
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">
-            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold"  target="_blank">pixelcave</a>
+            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold" target="_blank">pixelcave</a>
           </div>
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold"  target="_blank">Dashmix</a> &copy;
+            <a class="fw-semibold" target="_blank">Dashmix</a> &copy;
             <span data-toggle="year-copy"></span>
           </div>
         </div>
@@ -591,6 +607,7 @@
   </div>
   @yield('modal')
   <!-- END Page Container -->
+  <!-- <script src=" {{ asset('admin/js/dashmix.app.min.js') }}"></script> -->
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -601,26 +618,77 @@
   <!-- toastr JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          @if (session('success'))
-              toastr.success('{{ session('success') }}', 'Thành công', {
-                  positionClass: 'toast-top-right',
-                  timeOut: 3000
-              });
-          @endif
 
-          @if (session('error'))
-              toastr.error('{{ session('error') }}', 'Lỗi', {
-                  positionClass: 'toast-top-right',
-                  timeOut: 3000
-              });
-          @endif
-      });
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      @if(session('success'))
+      toastr.success('{{ session('
+        success ') }}', 'Thành công', {
+          positionClass: 'toast-top-right',
+          timeOut: 3000
+        });
+      @endif
+
+      @if(session('error'))
+      toastr.error('{{ session('
+        error ') }}', 'Lỗi', {
+          positionClass: 'toast-top-right',
+          timeOut: 3000
+        });
+      @endif
+    });
   </script>
-  
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('revenueChart').getContext('2d');
+      const revenueChart = new Chart(ctx, {
+        type: 'line', // kiểu biểu đồ (line, bar, pie, ...)
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // nhãn cho trục X
+          datasets: [{
+            label: 'Doanh thu (VNĐ)', // tiêu đề cho chuỗi dữ liệu
+            data: [12000, 15000, 10000, 17000, 20000, 25000, 23000, 30000, 28000, 32000, 35000, 40000], // dữ liệu doanh thu
+            borderColor: 'rgba(75, 192, 192, 1)', // màu đường
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // màu nền dưới đường
+            borderWidth: 2,
+            fill: true, // điền màu dưới đường
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true // bắt đầu trục Y từ 0
+            }
+          }
+        }
+      });
+    });
+  </script>
+
+  <script>
+    $(function() {
+      $('.js-pie-chart').knob({
+        readOnly: true,
+        'fgColor': '#e04f1a',
+        'bgColor': '#e9e9e9'
+      });
+
+      // Khởi động biểu đồ sau khi tải trang
+      $('.js-pie-chart').each(function() {
+        var $this = $(this);
+        var percent = $this.data('percent');
+        $this.knob({
+          'fgColor': $this.data('bar-color')
+        });
+        $this.val(percent).trigger('change');
+      });
+    });
+  </script>
+
 </body>
 @yield('js')
 
+
 </html>
-  
