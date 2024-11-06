@@ -17,7 +17,10 @@
                 <div class="breadcrumbs"><a href="{{route('home')}}" title="Back to the home page">Trang chủ</a><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>@yield('title')</span></div>
                 <!--End Breadcrumbs-->
             </div>
+            <!--End Breadcrumbs-->
         </div>
     </div>
+</div>
+
 </div>
 <!--End Page Header-->

@@ -84,7 +84,7 @@
         <div id="site-scroll"><i class="icon anm anm-arw-up"></i></div>
         <!--End Scoll Top-->
 
-        @include('client.component.mini_cart')
+        {{-- @include('client.component.mini_cart') --}}
 
         @yield('modal')
 

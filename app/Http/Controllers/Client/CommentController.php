@@ -18,7 +18,7 @@ class CommentController extends Controller
             'comment' => 'nullable|string|max:300',
             'rating' => 'nullable|integer|between:1,5',
         ]);
-    
+
         if (empty($request->comment) && empty($request->rating)) {
             return redirect()->back()->with('error' , 'Vui lòng nhập bình luận hoặc chọn đánh giá.');
         }
@@ -26,7 +26,7 @@ class CommentController extends Controller
         if (!empty($request->comment) && strlen($request->comment) > 300) {
             return redirect()->back()->with(['error', 'Bình luận chỉ được tối đa 300 kí tự.']);
         }
-    
+        
         $user = Auth::user();
         $comment = new Comment();
         $comment->user_id = $user->id;
@@ -36,11 +36,11 @@ class CommentController extends Controller
         $comment->rating = $request->input('rating');
         $comment->comment = $request->input('comment');
         $comment->save();
-    
+
         // Redirect back với thông báo thành công
         return redirect()->back()->with('success', 'Bình luận sản phẩm thành công!');
     }
-    
+
 
     public function update(Request $request, $id)
     {
@@ -51,7 +51,7 @@ class CommentController extends Controller
             'comment' => 'nullable|string|max:300',
             'rating' => 'nullable|integer|between:1,5',
         ]);
-        
+
         if (!$comment) {
             return redirect()->back()->with('error', 'Comment not found.');
         }

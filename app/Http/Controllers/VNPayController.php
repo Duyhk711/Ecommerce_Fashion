@@ -68,7 +68,7 @@ class VNPayController extends Controller
     }
 
     public function vnpayReturn(Request $request)
-    {
+    {   
         // dd($request->all());
         $vnp_SecureHash = $request->get('vnp_SecureHash');
         $inputData = $request->except('vnp_SecureHash');

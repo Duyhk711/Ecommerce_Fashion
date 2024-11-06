@@ -95,7 +95,7 @@
             blogContainer.innerHTML = `<p>Không thể tải bài viết.</p>`;
         }
     }
-    
+
     function displayArticles(articles) {
 
         blogContainer.innerHTML = '';
@@ -119,7 +119,7 @@
                     </div>
                     <div class="blog-content">
                             <h2 class="h3"><a href="${article.url}" target="_blank">${article.title}</a></h2>
-                                <ul class="publish-detail d-flex-wrap">                      
+                                <ul class="publish-detail d-flex-wrap">
                                     <li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Posted by:</span> ${article.author || 'Lỗi'}</li>
                                     <li><i class="icon anm anm-clock-r"></i> <time datetime="${new Date(article.publishedAt).toISOString()}">${new Date(article.publishedAt).toLocaleDateString()}</time></li>
                                     <li><i class="icon anm anm-comments-l"></i> <a href="#">Comments</a></li>
@@ -138,3 +138,4 @@
     fetchFashionArticles();
 </script>
 @endsection
+

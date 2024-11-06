@@ -16,8 +16,8 @@ class ChatsController extends Controller
 
     public function adminIndex()
 {
-    $pusherKey = env('PUSHER_APP_KEY');
-    $pusherCluster = env('PUSHER_APP_CLUSTER');
+    $pusherKey = env('PUSHER_CHAT_APP_KEY');
+    $pusherCluster = env('PUSHER_CHAT_APP_CLUSTER');
 
     // Simply return the view without passing the users
     return view('admin.chat.chat', compact('pusherKey', 'pusherCluster'));
@@ -45,7 +45,7 @@ public function getSortedUsers()
 
     return response()->json(['users' => $users]);
 }
-    
+
     public function markMessagesAsRead(Request $request)
     {
         $receiverId = $request->input('receiver_id');
@@ -59,8 +59,8 @@ public function getSortedUsers()
     }
     public function userIndex()
     {
-        $pusherKey = env('PUSHER_APP_KEY');
-        $pusherCluster = env('PUSHER_APP_CLUSTER');
+        $pusherKey = env('PUSHER_CHAT_APP_KEY');
+        $pusherCluster = env('PUSHER_CHAT_APP_CLUSTER');
         $admins = User::where('role', 'admin')->get();
         return view('client.chat', compact('admins', 'pusherKey', 'pusherCluster'));
     }
