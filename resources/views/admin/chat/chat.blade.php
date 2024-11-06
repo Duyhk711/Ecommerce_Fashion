@@ -238,8 +238,8 @@
 
 <script>
     $(document).ready(function() {
-        var pusher = new Pusher('{{ $pusherKey }}', {
-            cluster: '{{ $pusherCluster }}',
+        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
             encrypted: true
         });
 
