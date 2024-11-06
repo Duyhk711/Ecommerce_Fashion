@@ -1,5 +1,7 @@
 @extends('layouts.client')
-
+@section('title')
+    Tìm kiếm
+@endsection
 @section('content')
 <div class="container">
     <div class=" mt-5"><h5 >Kết quả tìm kiếm cho: "{{ $query }}"</h5></div>
@@ -15,7 +17,7 @@
         </div>
     @else
         <!-- Nội dung khi có sản phẩm -->
-    
+
     <div class="tab-content" id="productTabsContent">
         <div class="tab-pane show active" id="bestsellers" role="tabpanel"
             aria-labelledby="bestsellers-tab">
@@ -136,7 +138,7 @@
                                         @endforeach
                                     @endif
                                 </ul>
-                                
+
                                 <!-- End Variant -->
                                 <!-- Product Button -->
                                 <div class="button-action hidden">
@@ -156,15 +158,15 @@
                         </div>
                     </div>
                     @endforeach
-                    
-                    
+
+
                 </div>
 
             </div>
             <!--End Product Grid-->
         </div>
 
-      
+
     </div>
     @endif
 </div>

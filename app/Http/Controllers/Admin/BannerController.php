@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BannerRequest;
 use App\Models\Banner;
+use App\Models\BannerImage;
 use App\Services\BannerService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
@@ -28,6 +31,7 @@ class BannerController extends Controller
 
     public function store(BannerRequest $request)
     {
+        // dd($request->all());
         $this->bannerService->storeBanner($request->all());
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner được tạo mới thành công');
@@ -38,12 +42,12 @@ class BannerController extends Controller
         return view('admin.banners.edit', compact('banner'));
     }
 
-    public function update(BannerRequest $request, Banner $banner)
+    public function update(Request $request, $id)
     {
-        $this->bannerService->updateBanner($banner, $request->all());
-
-        return redirect()->route('admin.banners.index')->with('success', 'Banner được cập nhật thành công');
+        $message = $this->bannerService->update($request, $id);
+        return redirect()->route('admin.banners.index')->with('success', $message);
     }
+    
 
     public function destroy(Banner $banner)
     {
