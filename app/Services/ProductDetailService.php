@@ -76,7 +76,7 @@ class ProductDetailService
         } elseif ($count >= 8) {
             $limit = 8;
         } else {
-            $limit = $count; 
+            $limit = $count;
         }
         return $relatedProducts->limit($limit)->get();
     }
@@ -120,22 +120,22 @@ class ProductDetailService
         return $canComment;
     }
 
-    public function getCommentsData($product, $rating, $perPage = 4)
+    public function getCommentsData($product, $rating, $perPage = 3)
     {
         $query = $product->comments()->with('user')->orderBy('created_at', 'desc');
-    
+
         if ($rating !== 'all') {
             $query->where('rating', $rating);
         }
-    
+
         return $query->paginate($perPage);
     }
-    
 
 
 
 
-   
+
+
     public function calculateAverageRating($product)
     {
         // Tính tổng và số lượng rating hợp lệ
@@ -193,4 +193,3 @@ class ProductDetailService
         });
     }
 }
-

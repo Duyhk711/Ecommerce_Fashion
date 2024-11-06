@@ -20,29 +20,29 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        // dd($request->all());
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
-
+        $urlWithoutParams = url()->previous();
+        $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
-            $this->cartService->addToCart($productId, $productVariantId, $quantity);
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
-                ]);
-            }
-            return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
-        } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 500);
-            }
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+              $this->cartService->addToCart($productId, $productVariantId, $quantity);
+              if ($request->ajax()) {
+                  return response()->json([
+                      'success' => true,
+                      'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
+                  ]);
+              }
+               return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.')
+          } catch (\Exception $e) {
+              if ($request->ajax()) {
+                  return response()->json([
+                      'success' => false,
+                      'message' => $e->getMessage()
+                  ], 500);
+              }
+              return redirect($urlWithoutParams)->with('error', $e->getMessage());
+          }
     }
 
     public function getCartCount()
@@ -54,10 +54,11 @@ class CartController extends Controller
 
     public function viewCart()
     {
+        $pageTitle = 'Giỏ hàng';
         $cartItems = $this->cartService->getCartItems();
         // dd($cartItems);
         // dd(session('cart'));
-        return view('client.cart', compact('cartItems'));
+        return view('client.cart', compact('cartItems','pageTitle'));
     }
 
     public function updateCart(Request $request)

@@ -124,7 +124,7 @@
 
             <!-- End Edit Profile Modal -->
 
-            <div class="top-sec d-flex-justify-center justify-content-between mb-4">
+            {{-- <div class="top-sec d-flex-justify-center justify-content-between mb-4">
                 <h2 class="mb-0">Login details</h2>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                     data-bs-target="#editLoginModal"><i class="icon anm anm-plus-r me-1"></i> Edit</button>
@@ -146,8 +146,8 @@
                         <p>{{ $currentUser->phone }}</p>
                     </div>
                 </div>
-              
-            </div>
+
+            </div> --}}
 
             <!-- Edit Login details Modal -->
             <div class="modal fade" id="editLoginModal" tabindex="-1" aria-labelledby="editLoginModalLabel"

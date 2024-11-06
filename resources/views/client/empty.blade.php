@@ -1,8 +1,10 @@
 @extends('layouts.client')
-
+@section('title')
+    
+@endsection
 @section('content')
     <!--Main Content-->
-    <div class="container">     
+    <div class="container">
         <!--Category Empty-->
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center">
