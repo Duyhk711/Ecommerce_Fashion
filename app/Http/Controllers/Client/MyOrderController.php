@@ -20,15 +20,17 @@ class MyOrderController extends Controller
 
     public function myOrders(Request $request)
     {
+        $pageTitle = 'Đơn hàng';
         $currentUser = $this->userService->getCurrentUser();
         $status = $request->query('status');
         $searchTerm = $request->input('search');
         $orders = $this->myOrderService->getOrder($status, $searchTerm);
-        return view('client.my-account.my-order', compact('orders', 'currentUser', 'status'));
+        return view('client.my-account.my-order', compact('orders', 'currentUser', 'status', 'pageTitle'));
     }
 
     public function show($id)
     {
+        $pageTitle = 'Chi tiết đơn hàng';
         $currentUser = $this->userService->getCurrentUser();
         $order = $this->myOrderService->getOrderDetail($id);
         $commentDataArray = [];
@@ -51,7 +53,6 @@ class MyOrderController extends Controller
         }
 
         $commentDetails = $currentComment ? $this->myOrderService->getCommentById($currentComment) : null;
-
         // dd($order);
         // dd($commentDataArray[$productId]['comment']['id']);
         return view('client.my-account.order-detail', compact('order', 'commentDataArray', 'productId', 'currentComment', 'commentDetails', 'currentUser'));

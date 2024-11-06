@@ -20,7 +20,6 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        // dd($request->all());
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
@@ -55,10 +54,11 @@ class CartController extends Controller
 
     public function viewCart()
     {
+        $pageTitle = 'Giỏ hàng';
         $cartItems = $this->cartService->getCartItems();
         // dd($cartItems);
         // dd(session('cart'));
-        return view('client.cart', compact('cartItems'));
+        return view('client.cart', compact('cartItems','pageTitle'));
     }
 
     public function updateCart(Request $request)
