@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Blog
+@endsection
 @section('css')
 <style>
     article img{
@@ -138,4 +141,3 @@
     fetchFashionArticles();
 </script>
 @endsection
-
