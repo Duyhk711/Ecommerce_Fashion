@@ -117,7 +117,7 @@
     .rounded-start-lg-0 { border-top-left-radius: 0px !important; border-bottom-left-radius: 0px !important; }
     .rounded-end-lg-0 { border-top-right-radius: 0px !important; border-bottom-right-radius: 0px !important; }
     .mih-75:not(.stickyNav) { min-height: 75px !important; }
-    #page-content { min-height:400px; }
+    #page-content { min-height:100px; }
 
     .collection-banner-grid .details.middle-right { right: 20px; }
     .collection-banner-grid .details.middle-left { left: 20px; }

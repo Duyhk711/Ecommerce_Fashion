@@ -228,7 +228,7 @@
                                             <p class="ss-sub-title xs-hide">
                                                 Những món đồ thiết yếu không thể thiếu trong tủ đồ của phụ nữ cho năm nay
                                             </p>
-                                            
+
                                             <div class="ss-btnWrap d-flex-justify-start">
                                                 <a class="btn btn-primary" href="{{$selectedImage->link}}">Xem ngay</a>
                                             </div>
@@ -259,7 +259,7 @@
                                     <div class="slideshow-content-in">
                                         <div class="wrap-caption animation style1">
                                             <h2 class="ss-mega-title">
-                                                Thiết Kế Trang Phục Yêu Thích Tiếp Theo Của Bạn <br /> 
+                                                Thiết Kế Trang Phục Yêu Thích Tiếp Theo Của Bạn <br />
                                             </h2>
                                             <p class="ss-sub-title xs-hide">
                                                 Bộ trang phục kết hợp sự thanh lịch và phong cách cho trang phục thường ngày của bạn
@@ -280,7 +280,7 @@
                 @endphp
 
                 @if (count($banner) > 3)
-                    @foreach (array_slice($banner, 3) as $banne) 
+                    @foreach (array_slice($banner, 3) as $banne)
                         @php
                             $selectedImage = $banne['images'][0] ?? null; // Lấy ảnh đầu tiên của banner (nếu có)
                         @endphp
@@ -363,7 +363,7 @@
                             <span class="text-muted">Miễn phí trả hàng trong 30 ngày</span>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </section>
@@ -424,7 +424,7 @@
                                                     <h3 class="title mb-2">Thời trang nam</h3>
                                                     <p class="mb-3">Được may đo với niềm đam mê</p>
                                                     <span class="btn btn-outline-secondary btn-md">Mua ngay</span>
-                                                    
+
                                                 </div>
                                             </div>
                                         </a>
@@ -451,7 +451,7 @@
                                                     <p class="mb-2">Mua một tặng một</p>
                                                     <h3 class="title">Thời trang trẻ em</h3>
                                                     <span class="btn btn-outline-secondary btn-md">Mua ngay</span>
-                                                    
+
                                                 </div>
                                             </div>
                                         </a>
@@ -661,7 +661,7 @@
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
                                                         <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
-                                                            @csrf 
+                                                            @csrf
                                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                                                             <button type="submit" class="btn-icon addtocart">
                                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -838,7 +838,7 @@
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
                                                         <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
-                                                            @csrf 
+                                                            @csrf
                                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                                                             <button type="submit" class="btn-icon addtocart">
                                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -947,7 +947,7 @@
 
                                                     <!-- End Variant -->
                                                     <!-- Product Button -->
-                                                    
+
                                                     <!-- End Product Button -->
                                                 </div>
                                                 <!-- End product details -->
@@ -1002,7 +1002,7 @@
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
                                                         <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
-                                                            @csrf 
+                                                            @csrf
                                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                                                             <button type="submit" class="btn-icon addtocart">
                                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -1013,7 +1013,7 @@
                                                                 </span>
                                                             </button>
                                                         </form>
-                                                        
+
                                                         <!--Wishlist Button-->
                                                         <a class="btn-icon wishlist text-link wishlist {{ $product->isFavorite ? 'active' : '' }}"
                                                             href="#" data-product-id="{{ $product->id }}"
@@ -1024,7 +1024,7 @@
                                                             <i style="color: #e96f84;font-size:15px"
                                                                 class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
                                                         </a>
-                                                       
+
                                                     </div>
                                                     <!--End Product Button-->
                                                 </div>
@@ -1129,8 +1129,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">View
-                                        Collection</a>
+                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg"> Xem Thêm</a>
                                 </div>
                             </div>
                             <!--End Product Grid-->
