@@ -96,7 +96,8 @@ Route::prefix('admin')
 
       // VOUCHER
       Route::resource('vouchers', VoucherController::class);
-
+      Route::post('vouchers/{voucher}/activate', [VoucherController::class, 'toggleActive'])->name('vouchers.activate');
+      Route::post('vouchers/{voucher}/deactivate', [VoucherController::class, 'toggleDeactive'])->name('vouchers.deactivate');
       //COMMENT
       Route::resource('/comments', CommentController::class);
       Route::get('admin/comments/{id}', [CommentController::class, 'show']);

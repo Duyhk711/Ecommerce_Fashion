@@ -1,5 +1,7 @@
 @extends('layouts.client')
-
+@section('title')
+    Đăng kí
+@endsection
 @section('content')
     @include('client.component.page_header')
     <!--Main Content-->

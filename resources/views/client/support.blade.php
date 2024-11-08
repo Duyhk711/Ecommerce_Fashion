@@ -1,5 +1,7 @@
 @extends('layouts.client')
-
+@section('title')
+    Hỗ trợ
+@endsection
 @section('content')
 <style>
     * {
