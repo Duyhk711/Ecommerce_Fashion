@@ -9,7 +9,7 @@ class Chat extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sender_id', 'receiver_id', 'message', 'seen'];
+    protected $fillable = ['sender_id', 'receiver_id', 'message', 'seen','image'];
 
     // Liên kết với model User (cả người gửi và người nhận đều là user)
     public function sender()

@@ -1,8 +1,20 @@
 @extends('layouts.client')
-
+@section('title')
+    Sản phẩm chi tiết
+@endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('client/css/product-detail.css') }}">
     <style>
+        /* Ẩn pagination ở màn hình nhỏ */
+        #pagination-box .d-sm-none {
+            display: none !important;
+        }
+
+        /* Hiển thị pagination ở màn hình lớn */
+        #pagination-box .d-none.d-sm-flex {
+            display: flex !important;
+        }
+
         * {
             box-sizing: border-box;
         }
@@ -35,6 +47,29 @@
         }
     </style>
     <style>
+        .modal {
+            z-index: 1050 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1040 !important;
+        }
+
+        .modal-content {
+            width: 700px;
+            margin: 0 auto;
+        }
+
+        .table {
+            width: 100%;
+            /* Ensure the table takes the full width */
+        }
+
+        margin: 0 auto;
+        /* Center the modal content */
+    </style>
+
+    <style>
         .rating-choose {
             padding-left: 20px;
             padding-right: 20px;
@@ -47,13 +82,14 @@
         }
 
         .rating-choose:hover {
-            background: rgb(255, 248, 230);
+            background: rgb(255, 235, 185);
             cursor: pointer;
         }
 
         .rating-choose.active {
             font-weight: bold;
-            text-decoration: underline;
+            /* text-decoration: underline; */
+            background: rgb(255, 235, 185);
         }
 
         .d-none {
@@ -255,28 +291,37 @@
                             <!-- End Product Action -->
 
                             <!-- Product Info link -->
-                            <p class="infolinks d-flex-center justify-content-between">
+                            <p class="infolinks d-flex-center ">
                                 <!-- Kiểm tra trạng thái yêu thích của sản phẩm -->
                                 <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
                                     data-product-id="{{ $product->id }}">
                                     <!-- Biểu tượng trái tim viền -->
-                                    <i style="font-size:15px" class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
-
+                                    <i style="font-size:15px"
+                                        class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
+                                    <span>Thêm vào yêu thích</span>
                                     <!-- Biểu tượng trái tim đổ đầy -->
-                                    <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
+                                    <i style="color: #e96f84;font-size:15px"
+                                        class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
                                 </a>
 
-                                <a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal"
-                                    data-bs-target="#shippingInfo_modal">
-                                    <i class="icon anm anm-paper-l-plane me-2"></i>
-                                    <span>Delivery & Returns</span>
+                                {{-- <a href="#sizeChartModal" class="text-link emaillink me-0" data-bs-toggle="modal"
+                                    role="button">
+                                    <i class="icon anm anm-question-cil me-2"></i>
+                                    <span>Gợi ý size</span>
+                                </a> --}}
+                                <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                data-bs-toggle="modal" data-bs-target="#quickview_modal">
+                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                    title="Gợi ý size"><i class="icon anm anm-question-cil me-2"></i><span
+                                        class="text">Gợi ý size</span></span>
                                 </a>
 
-                                <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
+                                {{-- <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal"
                                     data-bs-target="#productInquiry_modal">
                                     <i class="icon anm anm-question-cil me-2"></i>
                                     <span>Enquiry</span>
-                                </a>
+                                </a> --}}
                             </p>
                             <!-- End Product Info link -->
                         </form>
@@ -314,142 +359,95 @@
             <!--Product Content-->
 
             <!--Product Tabs-->
-            <div class="tabs-listing section pb-0">
-                <ul class="product-tabs style2 list-unstyled d-flex-wrap d-flex-justify-center d-none d-md-flex">
-                    <li rel="description" class="active"><a class="tablink">Mô tả</a></li>
-                    <li rel="shipping-return"><a class="tablink">Giao hàng &amp; Trả hàng</a></li>
-                </ul>
+                <div class="tabs-listing section pb-0">
 
-                <div class="tab-container">
-                    <!--Description-->
-                    <h3 class="tabs-ac-style d-md-none active" rel="description">Description</h3>
-                    <div id="description" class="tab-content">
-                        <div class="product-description">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 ">
-                                    {!! $product->content !!}
-                                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                                        suffered alteration in some form, by injected humour, or randomised words which
-                                        don't look even slightly believable.</p>
-                                    <h4 class="mb-3">Features</h4>
-                                    <ul class="checkmark-info">
-                                        <li>High quality fabric, very comfortable to touch and wear.</li>
-                                        <li>This cardigan sweater is cute for no reason,perfect for travel and casual.</li>
-                                        <li>It can tie in front-is forgiving to you belly or tie behind.</li>
-                                        <li>Light weight and perfect for layering.</li>
-                                    </ul>
-                                    <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those
-                                        interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by
-                                        Cicero are also reproduced in their exact original form, accompanied by English
-                                        versions from the 1914 translation by H. Rackham.</p>
+
+                    <div class="tab-container">
+                        <!--Description-->
+                        <h3 class="tabs-ac-style d-md-none active" rel="description">Description</h3>
+                        <div id="description" class="tab-content">
+                            <div class="product-description">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 ">
+                                        {!! $product->content !!}
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div>
-                                <div class="mt-5" id="ratings-comment">
-                                    {{-- Đánh giá trung bình --}}
-                                    <div class="d-flex">
-                                        <div class="ratings-main">
-                                            <div class="avg-rating d-flex-center mb-3">
-                                                <h3 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h3>
-                                                <div class="avg-content ms-3">
-                                                    <p class="text-rating">Đánh giá trung bình</p>
-                                                    <div class="ratings-full product-review">
-                                                        <a class="reviewLink d-flex-center" href="#reviews">
-                                                            @for ($i = 0; $i < 5; $i++)
-                                                                <i
-                                                                    class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
-                                                            @endfor
-                                                            <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
-                                                        </a>
+                                <hr>
+                                <div>
+                                    <div class="mt-5" id="ratings-comment">
+                                        {{-- Đánh giá trung bình --}}
+                                        <div class="d-flex">
+                                            <div class="ratings-main">
+                                                <div class="avg-rating d-flex-center mb-3">
+                                                    <h3 class="avg-mark">{{ number_format($averageRating, 1) }}/5</h3>
+                                                    <div class="avg-content ms-3">
+                                                        <p class="text-rating">Đánh giá trung bình</p>
+                                                        <div class="ratings-full product-review">
+                                                            <a class="reviewLink d-flex-center" href="#reviews">
+                                                                @for ($i = 0; $i < 5; $i++)
+                                                                    <i
+                                                                        class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                                @endfor
+                                                                <span class="caption ms-2">{{ $totalRatings }} đánh giá</span>
+                                                            </a>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                {{-- Lọc đánh giá --}}
-                                                <div class="d-flex mx-5 rating-filter">
-                                                    <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
-                                                    class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất cả</a>
-                                                    @for ($i = 5; $i >= 1; $i--)
-                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                                        class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
-                                                            {{ $i }} <i class="icon anm anm-star text-warning"></i> ({{ $ratingsPercentage[$i] ?? 0 }})
-                                                        </a>
-                                                    @endfor
+                                                    {{-- Lọc đánh giá --}}
+                                                    <div class="d-flex mx-5 rating-filter">
+                                                        <a href="{{ request()->fullUrlWithQuery(['rating' => 'all']) }}"
+                                                            id="rating-choose" class="rating-choose {{ request('rating') == 'all' ? 'active' : '' }}">Tất
+                                                            cả</a>
+                                                        @for ($i = 5; $i >= 1; $i--)
+                                                            <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
+                                                               id="rating-choose" class="rating-choose {{ request('rating') == $i ? 'active' : '' }}">
+                                                                {{ $i }} <i
+                                                                    class="icon anm anm-star text-warning"></i>
+                                                                ({{ $ratingsPercentage[$i] ?? 0 }})
+                                                            </a>
+                                                        @endfor
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
-                                    <br>
-                                    {{-- Danh sách bình luận --}}
-                                    <div class="review-inner" id="comment-list">
-                                        @forelse ($comments as $comment)
-                                            <div class="spr-review d-flex w-100">
-                                                <div style="height: 65px;" class="me-2">
-                                                   <img src="{{ $comment->user->avatar
-                                                    ? asset('storage/' . $comment->user->avatar)
-                                                    : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg' }}"
-                                                    alt="avatar" style="width: 65px; height:65px; object-fit: cover;"  class="rounded-circle blur-up lazyloaded me-4"/>
-                                                </div>
-                                                <div class="spr-review-content flex-grow-1">
-                                                    <div
-                                                        class="title-review d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <h5>{{ $comment->user->name }}</h5>
-                                                            <span class="product-review spr-starratings">
-                                                                @for ($i = 0; $i < 5; $i++)
-                                                                    <i
-                                                                        class="icon anm anm-star {{ $i < $comment->rating ? '' : 'anm-star-o' }}"></i>
-                                                                @endfor
-                                                            </span> |
-                                                            {{ $comment->created_at->format('d-m-Y H:i') }}
-                                                        </div>
-
-                                                    </div>
-                                                    <p>{{ $comment->comment }}</p>
-                                                </div>
-                                            </div> <br>
-                                            <hr>
-                                        @empty
-                                            <p>Chưa có bình luận nào.</p>
-                                        @endforelse
-                                    </div>
-
-                                    {{-- Phân trang --}}
-                                    <div id="pagination-container" class="pagination d-flex justify-content-end">
-                                        {{ $comments->withQueryString()->links() }}
+                                        <br>
+                                        {{-- Danh sách bình luận --}}
+                                        <div class="review-inner" id="comment-list">
+                                            @include('client.partials.comment-list', ['comments' => $comments])
+                                        </div>
+                                        {{-- Phân trang --}}
+                                        <div id="pagination-box" class="pagination d-flex justify-content-end">
+                                            {{$comments->links()}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <!--End Description-->
 
                     <!--Shipping &amp; Return-->
-                    <h3 class="tabs-ac-style d-md-none" rel="shipping-return">Shipping &amp; Return</h3>
-                    <div id="shipping-return" class="tab-content">
-                        <h4>Giao hàng &amp; Trả hàng</h4>
-                        <ul class="checkmark-info">
-                            <li>Giao hàng: Trong vòng 24 giờ</li>
-                            <li>Bảo hành thương hiệu 1 năm</li>
-                            <li>Miễn phí vận chuyển cho tất cả các sản phẩm khi mua tối thiểu 500.000đ</li>
-                            <li>Thời gian giao hàng quốc tế - 7-10 ngày làm việc</li>
-                            <li>Có thể thanh toán khi nhận hàng</li>
-                            <li>Trả hàng và đổi hàng dễ dàng trong vòng 30 ngày</li>
-                        </ul>
-                        <h4>Trả hàng miễn phí và dễ dàng</h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                            the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book. It has survived not only five centuries,
-                            but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                        <h4>Tài trợ đặc biệt</h4>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
-                            alteration in some form, by injected humour, or randomised words which don't look even slightly
-                            believable. If you are going to use a passage.</p>
-                    </div>
+                        {{-- <h3 class="tabs-ac-style d-md-none" rel="shipping-return">Shipping &amp; Return</h3>
+                        <div id="shipping-return" class="tab-content">
+                            <h4>Giao hàng &amp; Trả hàng</h4>
+                            <ul class="checkmark-info">
+                                <li>Giao hàng: Trong vòng 24 giờ</li>
+                                <li>Bảo hành thương hiệu 1 năm</li>
+                                <li>Miễn phí vận chuyển cho tất cả các sản phẩm khi mua tối thiểu 500.000đ</li>
+                                <li>Thời gian giao hàng quốc tế - 7-10 ngày làm việc</li>
+                                <li>Có thể thanh toán khi nhận hàng</li>
+                                <li>Trả hàng và đổi hàng dễ dàng trong vòng 30 ngày</li>
+                            </ul>
+                            <h4>Trả hàng miễn phí và dễ dàng</h4>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                                the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
+                                of type and scrambled it to make a type specimen book. It has survived not only five centuries,
+                                but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            <h4>Tài trợ đặc biệt</h4>
+                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
+                                alteration in some form, by injected humour, or randomised words which don't look even slightly
+                                believable. If you are going to use a passage.</p>
+                        </div> --}}
                     <!--End Shipping &amp; Return-->
                 </div>
-            </div>
             <!--End Product Tabs-->
         </div>
         <!--End Main Content-->
@@ -483,30 +481,39 @@
                                                 title="{{ $products->name }}" width="625" height="808" />
                                         </a>
                                         <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
-                                        {{-- <div class="button-set style1">
+                                         <div class="button-set style1">
                                             <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
                                                 data-bs-toggle="modal" data-bs-target="#addtocart_modal">
                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
+                                                    title="Thêm vào giỏ hàng"><i class="icon anm anm-cart-l"></i><span
                                                         class="text">Add to Cart</span></span>
                                             </a>
-                                            <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
+                                            {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
                                                 data-bs-toggle="modal" data-bs-target="#quickview_modal">
                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
                                                     title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
                                                         class="text">Quick View</span></span>
+                                            </a> --}}
+                                            <a class="btn-icon wishlist text-link wishlist {{ $products->isFavorite ? 'active' : '' }}" href="#"
+                                            data-product-id="{{ $products->id }}"  data-bs-toggle="tooltip" data-bs-placement="left" title="Thêm vào yêu thích">
+                                                <i style="font-size:15px" class="icon anm anm-heart-l  favorite {{ $products->isFavorite ? 'd-none' : '' }}"></i>
+                                                <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill  favorite {{ $products->isFavorite ? '' : 'd-none' }}"></i>
                                             </a>
-                                            <a href="wishlist-style2.html" class="btn-icon wishlist"
-                                                data-bs-toggle="tooltip" data-bs-placement="left"
-                                                title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                    class="text">Add To Wishlist</span></a>
-                                            <a href="compare-style2.html" class="btn-icon compare"
+                                            {{-- <a href="compare-style2.html" class="btn-icon compare"
                                                 data-bs-toggle="tooltip" data-bs-placement="left"
                                                 title="Add to Compare"><i class="icon anm anm-random-r"></i><span
-                                                    class="text">Add to Compare</span></a>
-                                        </div> --}}
+                                                    class="text">Add to Compare</span></a> --}}
+                                                    {{-- <a class="text-link wishlist {{ $isFavorite ? 'active' : '' }}" href="#"
+                                                    data-product-id="{{ $products->id }}">
+                                                    <!-- Biểu tượng trái tim viền -->
+                                                    <i style="font-size:15px" class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
+                
+                                                    <!-- Biểu tượng trái tim đổ đầy -->
+                                                    <i style="color: #e96f84;font-size:15px" class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
+                                                </a> --}}
+                                        </div> 
                                     </div>
                                     <div class="product-details text-center">
                                         <div class="product-vendor">{{ $products->catalogue->name }}</div>
@@ -574,6 +581,7 @@
         </section>
         <!--End Related Products-->
     </div>
+    <br/>
 @endsection
 
 @section('modal')
@@ -747,285 +755,67 @@
     </div>
     <!-- End Product Addtocart Modal -->
 
-    <!-- Product Quickview Modal-->
+    {{-- gợi ý size --}}
     <div class="quickview-modal modal fade" id="quickview_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="row">
-                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-3 mb-md-0">
-                            <!-- Model Thumbnail -->
-                            <div id="quickView" class="carousel slide">
-                                <!-- Image Slide carousel items -->
-                                <div class="carousel-inner">
-                                    <div class="item carousel-item active" data-bs-slide-number="0">
-                                        <img class="blur-up lazyload" data-src="assets/images/products/product2.jpg"
-                                            src="{{ asset('client/images/products/product2.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="1">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-1.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="2">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-2.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="3">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-3.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="4">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-4.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                    <div class="item carousel-item" data-bs-slide-number="5">
-                                        <img class="blur-up lazyload"
-                                            data-src="{{ asset('client/images/products/product5.jpg') }}"
-                                            src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
-                                            title="Product" width="625" height="808" />
-                                    </div>
-                                </div>
-                                <!-- End Image Slide carousel items -->
-                                <!-- Thumbnail image -->
-                                <div class="model-thumbnail-img">
-                                    <!-- Thumbnail slide -->
-                                    <div class="carousel-indicators list-inline">
-                                        <div class="list-inline-item active" id="carousel-selector-0"
-                                            data-bs-slide-to="0" data-bs-target="#quickView">
-                                            <img class="carousel-indicator-img"
-                                                data-src="{{ asset('client/images/products/product2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2.jpg') }}" alt="product"
-                                                title="Product" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-1" data-bs-slide-to="1"
-                                            data-bs-target="#quickView">
-                                            <img class="carousel-indicator-img"
-                                                data-src="{{ asset('client/images/products/product2-1.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-1.jpg') }}" alt="product"
-                                                title="Product" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-2" data-bs-slide-to="2"
-                                            data-bs-target="#quickView">
-                                            <img class="carousel-indicator-img"
-                                                data-src="{{ asset('client/images/products/product2-2.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-2.jpg') }}" alt="product"
-                                                title="Product" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-3" data-bs-slide-to="3"
-                                            data-bs-target="#quickView">
-                                            <img class="carousel-indicator-img"
-                                                data-src="{{ asset('client/images/products/product2-3.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-3.jpg') }}" alt="product"
-                                                title="Product" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-4" data-bs-slide-to="4"
-                                            data-bs-target="#quickView">
-                                            <img class="carousel-indicator-img"
-                                                data-src="{{ asset('client/images/products/product2-4.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-4.jpg') }}" alt="product"
-                                                title="Product" />
-                                        </div>
-                                        <div class="list-inline-item" id="carousel-selector-5" data-bs-slide-to="5"
-                                            data-bs-target="#quickView">
-                                            <img class="carousel-indicator-img"
-                                                data-src="{{ asset('client/images/products/product2-5.jpg') }}"
-                                                src="{{ asset('client/images/products/product2-5.jpg') }}" alt="product"
-                                                title="Product" />
-                                        </div>
-                                    </div>
-
-                                    <!-- End Thumbnail slide -->
-                                    <!-- Carousel arrow button -->
-                                    <a class="carousel-control-prev carousel-arrow rounded-1" href="#quickView"
-                                        data-bs-target="#quickView" data-bs-slide="prev"><i
-                                            class="icon anm anm-angle-left-r"></i></a>
-                                    <a class="carousel-control-next carousel-arrow rounded-1" href="#quickView"
-                                        data-bs-target="#quickView" data-bs-slide="next"><i
-                                            class="icon anm anm-angle-right-r"></i></a>
-                                    <!-- End Carousel arrow button -->
-                                </div>
-                                <!-- End Thumbnail image -->
-                            </div>
-                            <!-- End Model Thumbnail -->
-                            <div class="text-center mt-3">
-                                <a href="product-layout1.html" class="text-link">View More Details</a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="product-arrow d-flex justify-content-between">
-                                <h2 class="product-title">Product Quick View Popup</h2>
-                            </div>
-                            <div class="product-review d-flex mt-0 mb-2">
-                                <div class="rating">
-                                    <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                        class="icon anm anm-star-o"></i>
-                                </div>
-                                <div class="reviews ms-2"><a href="#">6 Reviews</a></div>
-                            </div>
-                            <div class="product-info">
-                                <p class="product-vendor">
-                                    Vendor:<span class="text"><a href="#">Sparx</a></span>
-                                </p>
-                                <p class="product-type">
-                                    Product Type:<span class="text">Caps</span>
-                                </p>
-                                <p class="product-sku">
-                                    SKU:<span class="text">RF104456</span>
-                                </p>
-                            </div>
-                            <div class="pro-stockLbl my-2">
-                                <span class="d-flex-center stockLbl instock d-none"><i
-                                        class="icon anm anm-check-cil"></i><span> In stock</span></span>
-                                <span class="d-flex-center stockLbl preorder d-none"><i
-                                        class="icon anm anm-clock-r"></i><span> Pre-order Now</span></span>
-                                <span class="d-flex-center stockLbl outstock d-none"><i
-                                        class="icon anm anm-times-cil"></i>
-                                    <span>Sold out</span></span>
-                                <span class="d-flex-center stockLbl lowstock" data-qty="15"><i
-                                        class="icon anm anm-exclamation-cir"></i><span>
-                                        Order now, Only
-                                        <span class="items">10</span> left!</span></span>
-                            </div>
-                            <div class="product-price d-flex-center my-3">
-                                <span class="price old-price">$135.00</span><span class="price">$99.00</span>
-                            </div>
-                            <div class="sort-description">
-                                The standard chunk of Lorem Ipsum used since the 1500s is
-                                reproduced below for those interested.
-                            </div>
-                            <form method="post" action="#" id="product_form--option" class="product-form">
-                                @csrf
-                                <div class="product-options d-flex-wrap">
-                                    <div class="product-item swatches-image w-100 mb-3 swatch-0 option1"
-                                        data-option-index="0">
-                                        <label class="label d-flex align-items-center">Color:<span
-                                                class="slVariant ms-1 fw-bold">Blue</span></label>
-                                        <ul class="variants-clr swatches d-flex-center pt-1 clearfix">
-                                            <li class="swatch large radius available active">
-                                                <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                                    alt="image" width="70" height="70"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Blue" />
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                                    alt="image" width="70" height="70"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Black" />
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <img src="{{ asset('client/images/products/swatches/blue-red.jpg') }}"
-                                                    alt="image" width="70" height="70"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Pink" />
-                                            </li>
-                                            <li class="swatch large radius available green">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Green"></span>
-                                            </li>
-                                            <li class="swatch large radius soldout yellow">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Yellow"></span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="product-item swatches-size w-100 mb-3 swatch-1 option2"
-                                        data-option-index="1">
-                                        <label class="label d-flex align-items-center">Size:<span
-                                                class="slVariant ms-1 fw-bold">S</span></label>
-                                        <ul class="variants-size size-swatches d-flex-center pt-1 clearfix">
-                                            <li class="swatch large radius soldout">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="XS">XS</span>
-                                            </li>
-                                            <li class="swatch large radius available active">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="S">S</span>
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="M">M</span>
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="L">L</span>
-                                            </li>
-                                            <li class="swatch large radius available">
-                                                <span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="XL">XL</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="product-action d-flex-wrap w-100 pt-1 mb-3 clearfix">
-                                        <div class="quantity">
-                                            <div class="qtyField rounded">
-                                                <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"
-                                                        aria-hidden="true"></i></a>
-                                                <input type="text" name="quantity" value="1"
-                                                    class="product-form__input qty" />
-                                                <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-l"
-                                                        aria-hidden="true"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="addtocart ms-3 fl-1">
-                                            <button type="submit" name="add" class="btn product-cart-submit w-100">
-                                                <span>Add to cart</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="wishlist-btn d-flex-center">
-                                <a class="add-wishlist d-flex-center me-3" href="wishlist-style1.html"
-                                    title="Add to Wishlist"><i class="icon anm anm-heart-l me-1"></i>
-                                    <span>Add to Wishlist</span></a>
-                                <a class="add-compare d-flex-center" href="compare-style1.html" title="Add to Compare"><i
-                                        class="icon anm anm-random-r me-2"></i>
-                                    <span>Add to Compare</span></a>
-                            </div>
-                            <!-- Social Sharing -->
-                            <div class="social-sharing share-icon d-flex-center mx-0 mt-3">
-                                <span class="sharing-lbl">Share :</span>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-facebook"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Facebook"><i
-                                        class="icon anm anm-facebook-f"></i><span
-                                        class="share-title d-none">Facebook</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tweet on Twitter"><i
-                                        class="icon anm anm-twitter"></i><span class="share-title d-none">Tweet</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Pin on Pinterest"><i
-                                        class="icon anm anm-pinterest-p"></i>
-                                    <span class="share-title d-none">Pin it</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-linkedin"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Instagram"><i
-                                        class="icon anm anm-linkedin-in"></i><span
-                                        class="share-title d-none">Instagram</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-whatsapp"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share on WhatsApp"><i
-                                        class="icon anm anm-envelope-l"></i><span
-                                        class="share-title d-none">WhatsApp</span></a>
-                                <a href="#" class="d-flex-center btn btn-link btn--share share-email"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Share by Email"><i
-                                        class="icon anm anm-whatsapp"></i><span
-                                        class="share-title d-none">Email</span></a>
-                            </div>
-                            <!-- End Social Sharing -->
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td>SIZE</td>
+                                    <td>Chiều cao (cm)</td>
+                                    <td>Cân nặng (kg)</td>
+                                    <td>Rộng ngực (cm)</td>
+                                    <td>Rộng mông (cm)</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>S (29)</td>
+                                    <td>162-168</td>
+                                    <td>57-62</td>
+                                    <td>84-88</td>
+                                    <td>85-89</td>
+                                </tr>
+                                <tr>
+                                    <td>M (30)</td>
+                                    <td>169-173</td>
+                                    <td>63-67</td>
+                                    <td>88-94</td>
+                                    <td>90-94</td>
+                                </tr>
+                                <tr>
+                                    <td>L (31)</td>
+                                    <td>171-175</td>
+                                    <td>68-72</td>
+                                    <td>94-98</td>
+                                    <td>95-99</td>
+                                </tr>
+                                <tr>
+                                    <td>XL (32)</td>
+                                    <td>173-177</td>
+                                    <td>73-77</td>
+                                    <td>98-104</td>
+                                    <td>100-104</td>
+                                </tr>
+                                <tr>
+                                    <td>XXL (33)</td>
+                                    <td>175-179</td>
+                                    <td>78-82</td>
+                                    <td>104-107</td>
+                                    <td>104-108</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--End Product Quickview Modal-->
+    <!--gợi ý size-->
 
     {{-- popup --}}
     <div id="quantityPopup" class="modal">
@@ -1035,6 +825,9 @@
             <p id="popupMessage"></p>
         </div>
     </div>
+
+
+
 @endsection
 
 @section('js')
@@ -1181,6 +974,7 @@
         });
 
         // add favorite
+        var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
         document.addEventListener('DOMContentLoaded', function() {
             const wishlistLinks = document.querySelectorAll('.wishlist');
             const wishlistCountElement = document.getElementById('wishlist-count');
@@ -1193,6 +987,11 @@
                 wishlistLink.addEventListener('click', function(event) {
                     event.preventDefault();
 
+                    if (!isLoggedIn) {
+                        // Chuyển hướng sang trang đăng nhập nếu chưa đăng nhập
+                        window.location.href = '/login';
+                        return;
+                    }
                     const url = isFavorite ? `/wishlist/remove/${productId}` :
                         `/wishlist/add/${productId}`;
                     const method = isFavorite ? 'DELETE' : 'POST';
@@ -1617,46 +1416,72 @@
     {{-- xuong dòng --}}
     <script>
         function toggleContent(element) {
-            element.classList.toggle('expanded');  // Thêm/xóa class 'expanded' khi bấm
+            element.classList.toggle('expanded'); // Thêm/xóa class 'expanded' khi bấm
         }
     </script>
 
+    {{-- comment --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Hàm cuộn đến khung bình luận với độ trễ
-            function scrollToComments() {
-                const commentBox = document.getElementById('ratings-comment');
-                if (commentBox) {
-                    commentBox.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'end'
-                    });
+        document.addEventListener("DOMContentLoaded", function () {
+            const ratingLinks = document.querySelectorAll('#rating-choose');
+
+            function loadComments(url) {
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.querySelector('#comment-list').innerHTML = data.html;
+                        document.querySelector('#pagination-box').innerHTML = data.pagination;
+                    })
+                    .catch(error => console.error('Error loading comments:', error));
+            }
+
+            function setActiveRating(selectedLink) {
+                ratingLinks.forEach(link => {
+                    if (link === selectedLink) {
+                        link.classList.add('active'); // Thêm lớp active cho liên kết được chọn
+                    } else {
+                        link.classList.remove('active'); // Loại bỏ lớp active cho các liên kết khác
+                    }
+                });
+            }
+
+            ratingLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault(); // Ngăn trang không tải lại
+                    const url = this.href; // Lấy URL từ thuộc tính href của thẻ a
+                    setActiveRating(this);
+
+                    history.pushState(null, '', url); // Cập nhật URL mà không load lại trang
+                    loadComments(url); // Gọi AJAX để load comment
+                });
+            });
+
+            document.addEventListener('click', function (event) {
+                const paginationLink = event.target.closest('.pagination a');
+                if (paginationLink) {
+                    event.preventDefault();
+
+                    // Giữ tham số rating trong URL phân trang
+                    const url = new URL(paginationLink.href);
+                    const currentRating = new URLSearchParams(window.location.search).get('rating');
+                    if (currentRating) {
+                        url.searchParams.set('rating', currentRating); // Gắn rating vào URL phân trang
+                    }
+
+                    history.pushState(null, '', url); // Cập nhật URL
+                    loadComments(url); // Gọi AJAX để load comment mới
                 }
-            }
-
-            // Xử lý sự kiện khi chọn filter
-            const filters = document.querySelectorAll('.rating-choose');
-            filters.forEach(filter => {
-                filter.addEventListener('click', function() {
-                    // Lưu ý định cuộn vào sessionStorage
-                    sessionStorage.setItem('scrollToComments', 'true');
-                });
             });
-
-            // Xử lý sự kiện phân trang
-            const paginationLinks = document.querySelectorAll('.pagination a');
-            paginationLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    // Lưu ý định cuộn vào sessionStorage
-                    sessionStorage.setItem('scrollToComments', 'true');
-                });
-            });
-
-            // Kiểm tra nếu cần cuộn sau khi trang được load lại
-            if (sessionStorage.getItem('scrollToComments') === 'true') {
-                sessionStorage.removeItem('scrollToComments'); // Xóa flag sau khi cuộn
-                setTimeout(scrollToComments, 300); // Cuộn với độ trễ sau khi trang tải
-            }
         });
+
+        window.onpopstate = function () {
+            loadComments(location.href); // Tải lại bình luận cho URL hiện tại
+        };
+
     </script>
 @endsection
