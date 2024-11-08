@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class BannerImage extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['banner_id', 'image'];
+    protected $fillable = ['banner_id', 'image', 'link'];
 
     public function banner()
     {

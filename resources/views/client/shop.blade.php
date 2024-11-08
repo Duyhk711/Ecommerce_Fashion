@@ -1,108 +1,60 @@
 @extends('layouts.client')
+@section('title')
+    Cửa hàng
+@endsection
 @section('css')
-<style>
-    .product-name a {
-    display: inline-block;
-    width: 100%; /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
-    white-space: nowrap; /* Không cho phép xuống dòng */
-    overflow: hidden; /* Ẩn văn bản thừa */
-    text-overflow: ellipsis; /* Thêm dấu "..." vào phần cuối nếu vượt quá */
-    max-width: 20ch; /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
-}
-</style>
+    <style>
+        .product-name a {
+            display: inline-block;
+            width: 100%;
+            /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
+            white-space: nowrap;
+            /* Không cho phép xuống dòng */
+            overflow: hidden;
+            /* Ẩn văn bản thừa */
+            text-overflow: ellipsis;
+            /* Thêm dấu "..." vào phần cuối nếu vượt quá */
+            max-width: 20ch;
+            /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
+        }
+
+        .price-filter input[type="text"] {
+            height: 34px;
+            padding: 0 10px;
+            text-align: center;
+            font-size: 13px;
+            width: 140px;
+        }
+    </style>
 @endsection
 @section('content')
     @include('client.component.page_header')
     <div class="container" style="max-width: 80%;">
         <!--Main Content-->
         <div class="container">
+
             <!--Category Slider-->
             <div class="collection-slider-6items gp10 slick-arrow-dots sub-collection section pt-0">
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection1.jpg') }}"
-                                src="assets/images/collection/sub-collection1.jpg" alt="Men's" title="Men's"
-                                width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Men's</h4>
-                            <p class="counts">20 Items</p>
+                @foreach ($categories as $catalogue)
+                    @if ($catalogue->is_active)
+                        <div class="category-item zoomscal-hov">
+                            <a href="{{ route('shop', ['slug' => $catalogue->slug]) }}" class="category-link clr-none">
+                                <div class="zoom-scal zoom-scal-nopb rounded-0">
+                                    <img class="rounded-0 blur-up lazyload"
+                                        data-src="{{ asset('storage/' . $catalogue->cover) }}"
+                                        src="{{ asset('storage/' . $catalogue->cover) }}" alt="{{ $catalogue->name }}"
+                                        title="{{ $catalogue->name }}" width="365" height="365" />
+                                </div>
+                                <div class="details text-center">
+                                    <h4 class="category-title mb-0">{{ $catalogue->name }}</h4>
+                                    <p class="counts">{{ $catalogue->children->count() }} Items</p>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="{{ route('shop') }}" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection2.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection2.jpg') }}" alt="Women's"
-                                title="Women's" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Women's</h4>
-                            <p class="counts">24 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection3.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection3.jpg') }}" alt="Top"
-                                title="Top" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Top</h4>
-                            <p class="counts">13 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection4.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection4.jpg') }}" alt="Bottom"
-                                title="Bottom" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Bottom</h4>
-                            <p class="counts">26 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection5.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection5.jpg') }}" alt="T-Shirts"
-                                title="T-Shirts" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">T-Shirts</h4>
-                            <p class="counts">18 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection6.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection6.jpg') }}" alt="Shirts"
-                                title="Shirts" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Shirts</h4>
-                            <p class="counts">11 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection24.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection24.jpg') }}" alt="Jeans"
-                                title="Jeans" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Jeans</h4>
-                            <p class="counts">28 Items</p>
-                        </div>
-                    </a>
-                </div>
+                    @endif
+                @endforeach
             </div>
+
             <!--End Category Slider-->
             <div class="row">
                 <!--Sidebar-->
@@ -144,15 +96,14 @@
                         <!--Price Filter-->
                         <div class="sidebar-widget filterBox filter-widget">
                             <div class="widget-title">
-                                <h2>Price</h2>
+                                <h2>Lọc theo giá</h2>
                             </div>
                             <form class="widget-content price-filter filterDD" id="priceFilter" method="GET">
                                 <div id="slider-range" class="mt-2"></div>
                                 <input type="hidden" name="price" id="priceRange" />
                                 <div class="row">
                                     <div class="col-6">
-                                        <input id="amount" type="text" name="price_text" readonly
-                                            style="font-size: 10px" />
+                                        <input id="amount" type="text" name="price_text" readonly />
                                     </div>
                                     <div class="col-6 text-right">
                                         <button class="btn btn-sm" type="submit"
@@ -164,7 +115,7 @@
                         <!--End Price Filter-->
 
                         <!--Color Swatches-->
-                        <div class="sidebar-widget filterBox filter-widget">
+                        {{-- <div class="sidebar-widget filterBox filter-widget">
                             <div class="widget-title">
                                 <h2>Màu</h2>
                             </div>
@@ -181,7 +132,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--End Color Swatches-->
 
                         <!--Size Swatches-->
@@ -334,14 +285,14 @@
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
                                                     data-src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product" title="Product"
-                                                    width="625" height="808" />
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product"
+                                                    title="Product" width="625" height="808" />
                                                 <!-- End Image -->
                                                 <!-- Hover Image -->
                                                 <img class="hover rounded-0 blur-up lazyload"
                                                     data-src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    alt="Product" title="Product" width="625" height="808" />
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product"
+                                                    title="Product" width="625" height="808" />
                                                 <!-- End Hover Image -->
                                             </a>
                                             <!-- End Product Image -->
@@ -391,15 +342,26 @@
                                             <!-- End Product Name -->
                                             <!-- Product Price -->
                                             <div class="product-price">
-                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                <span
+                                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
                                             <div class="product-review">
-                                                <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i
-                                                    class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i
-                                                    class="icon anm anm-star-o"></i>
-                                                <span class="caption hidden ms-1">3 Reviews</span>
+                                                @php
+                                                    // Lấy đánh giá tương ứng cho sản phẩm hiện tại
+                                                    $rating = $ratings->firstWhere(
+                                                        'product_id',
+                                                        $product->id,
+                                                    );
+                                                    // Nếu không có đánh giá thì thiết lập mặc định là 0
+                                                    $averageRating = $rating['average_rating'] ?? 0;
+                                                @endphp
+
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    <i
+                                                        class="icon anm anm-star {{ $i < floor($averageRating) ? '' : 'anm-star-o' }}"></i>
+                                                @endfor
                                             </div>
                                             <!-- End Product Review -->
                                             <!--Sort Description-->
@@ -999,7 +961,7 @@
                 selectedCategories.push(item.getAttribute('data-id'));
             });
 
-            let priceRange = document.getElementById('amount').value;
+            let priceRange = document.getElementById('priceRange').value;
 
             let selectedColors = [];
             document.querySelectorAll('.filter-color .swatch.selected').forEach(color => {

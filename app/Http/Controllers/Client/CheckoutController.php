@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmation;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -11,6 +12,7 @@ use App\Services\Client\CartService;
 use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -25,7 +27,7 @@ class CheckoutController extends Controller
 
     public function renderCheckout(Request $request)
     {
-
+        $pageTitle = 'c';
         if (Auth::check()) {
             $dataAddress = $this->checkoutService->getAddresses();
             if ($request->has('address')) {
@@ -48,7 +50,7 @@ class CheckoutController extends Controller
             // dd($dataCart);
         }
         // dd(session('checkoutItem'));
-        return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
+        return view('client.checkout', compact('dataAddress', 'dataCart', 'address','pageTitle'));
 
     }
 
@@ -65,16 +67,17 @@ class CheckoutController extends Controller
             $dataAddress = [];
             $address = '';
         }
+        $pageTitle='Mua Ngay';
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
         $dataCart = $this->checkoutService->buyNow($productVariantId, $quantity);
 
-        return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
+        return view('client.checkout', compact('dataAddress', 'dataCart', 'address', 'pageTitle'));
     }
 
     public function storeCheckout(Request $request)
     {
-
+        $pageTitle = 'Thanh toán';
         $products = json_decode($request->input('cartItem'));
 
         // dd($request->all());
@@ -94,6 +97,8 @@ class CheckoutController extends Controller
         $order->total_price = $request->input('total_price');
         $order->payment_method = $request->input('payment_method');
         $order->save();
+        // dd($order->customer_email);
+        Mail::to($order->customer_email)->send(new OrderConfirmation($order));
 
         // dd($request->input('cartItem'));
         // Lưu các sản phẩm vào bảng 'order_items'
@@ -135,9 +140,14 @@ class CheckoutController extends Controller
 
         // Kiểm tra phương thức thanh toán
         if ($request->payment_method == 'COD') {
-            return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
+            return view('client.order-success', compact('orderItems', 'order','pageTitle'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
         } else {
             return redirect()->route('vnpay.payment', ['order_id' => $order->id, 'products' => $products]);
         }
+    }
+
+    public function orderPayment($id)
+    {
+        return redirect()->route('vnpay.payment', ['order_id' => $id]);
     }
 }

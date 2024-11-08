@@ -33,7 +33,19 @@ class VoucherController extends Controller
 
     public function store(VoucherRequest $request)
     {
-        $this->voucherService->storeVoucher($request->validated());
+        $data = $request->validated();
+
+        if (Voucher::where('code', $data['code'])->exists()) {
+            return redirect()->back()->withErrors(['code' => 'Mã giảm giá này đã tồn tại.'])->withInput();
+        }
+        if ($data['discount_value'] > $data['minimum_order_value']) {
+            return redirect()->back()->withErrors(['discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.'])->withInput();
+        }
+        if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
+            return redirect()->back()->withErrors(['end_date' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.'])->withInput();
+        }
+        $voucher= $this->voucherService->storeVoucher($data);
+        $this->voucherService->sendNewVoucherNotification($voucher);
         return redirect()->route('admin.vouchers.create')->with('success', 'Voucher mới đã được tạo thành công.');
     }
 
@@ -62,4 +74,16 @@ class VoucherController extends Controller
             return redirect()->route('admin.vouchers.index')->with('error', 'Voucher không tồn tại.');
         }
     }
+    public function toggleActive(Voucher $voucher)
+{
+    $this->voucherService->toggleActiveStatus($voucher);
+    return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
+}
+
+public function toggleDeactive(Voucher $voucher)
+{
+    $this->voucherService->toggleDeactiveStatus($voucher);
+    return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
+}
+
 }

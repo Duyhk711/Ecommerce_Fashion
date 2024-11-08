@@ -16,6 +16,7 @@ class BannerRequest extends FormRequest
             'type' => 'required|in:main,sub',
             'position' => 'nullable',
             'description' => 'nullable',
+            'link' => 'nullable',
             'images.*' => 'nullable|image',
             'is_active' => 'sometimes|boolean',
             'remove_images' => 'array',

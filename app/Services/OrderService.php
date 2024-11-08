@@ -16,7 +16,7 @@ class OrderService{
         if ($payment_status) {
             $query->where('payment_status', $payment_status);
         }
-
+        $query->orderBy('created_at', 'desc');
         return $query->paginate($perPage);
     }
 
@@ -52,7 +52,7 @@ class OrderService{
         } catch (\Exception $e) {
             throw $e;
         }
-        
+
         return $order;
     }
 }

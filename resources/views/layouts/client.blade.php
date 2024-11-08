@@ -12,9 +12,9 @@
     {{-- CSS MENU --}}
     <link rel="stylesheet" href="{{ asset('client/css/menu.css') }}">
     <!-- Title Of Site -->
-    <title>Hema - Multipurpose eCommerce Bootstrap 5 Html Template</title>
+    <title>Fashion Poly Shop</title>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('client/images/favicon.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('client/images/title.png') }}" />
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('client/css/plugins.css') }} ">
     <!-- Main Style CSS -->
@@ -73,6 +73,7 @@
             {{-- end main --}}
             <!-- End Body Container -->
         </div>
+
         @include('client.component.footer')
 
 
@@ -83,7 +84,7 @@
         <div id="site-scroll"><i class="icon anm anm-arw-up"></i></div>
         <!--End Scoll Top-->
 
-        @include('client.component.mini_cart')
+        {{-- @include('client.component.mini_cart') --}}
 
         @yield('modal')
 
