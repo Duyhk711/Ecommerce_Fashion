@@ -16,8 +16,8 @@ class ChatsController extends Controller
 
     public function adminIndex()
 {
-    $pusherKey = env('PUSHER_APP_KEY');
-    $pusherCluster = env('PUSHER_APP_CLUSTER');
+    $pusherKey = env('PUSHER_CHAT_APP_KEY');
+    $pusherCluster = env('PUSHER_CHAT_APP_CLUSTER');
 
     // Simply return the view without passing the users
     return view('admin.chat.chat', compact('pusherKey', 'pusherCluster'));
@@ -40,12 +40,12 @@ public function getSortedUsers()
             ->where('sender_id', $user->id)
             ->where('seen', 0)
             ->count();
-        $user->avatar_url = $user->avatar ? Storage::url($user->avatar) : asset('images/default-avatar.png');
+        $user->avatar_url = $user->avatar ? Storage::url($user->avatar) : Storage::url('images/default-avatar.png');
     }
 
     return response()->json(['users' => $users]);
 }
-    
+
     public function markMessagesAsRead(Request $request)
     {
         $receiverId = $request->input('receiver_id');
@@ -59,8 +59,8 @@ public function getSortedUsers()
     }
     public function userIndex()
     {
-        $pusherKey = env('PUSHER_APP_KEY');
-        $pusherCluster = env('PUSHER_APP_CLUSTER');
+        $pusherKey = env('PUSHER_CHAT_APP_KEY');
+        $pusherCluster = env('PUSHER_CHAT_APP_CLUSTER');
         $admins = User::where('role', 'admin')->get();
         return view('client.chat', compact('admins', 'pusherKey', 'pusherCluster'));
     }
@@ -93,7 +93,7 @@ public function getSortedUsers()
         $chat->seen = 0;
         $chat->save();
 
-        event(new SendAdminMessage($chat));
+        broadcast(new SendAdminMessage($chat))->toOthers();
 
         return response()->json(['success' => true, 'message' => 'Tin nhắn đã được gửi']);
     }
@@ -125,7 +125,7 @@ public function getSortedUsers()
         $chat->seen = 0;
         $chat->save();
 
-        event(new SendUserMessage($chat));
+        broadcast(new SendUserMessage($chat))->toOthers();
 
         return response()->json(['success' => true, 'message' => 'Tin nhắn đã được gửi']);
     }

@@ -21,8 +21,7 @@
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
-
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <!-- Modules -->
 
   @yield('css')
@@ -241,7 +240,6 @@
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-
             {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
@@ -313,20 +311,20 @@
             </li>
 
             {{-- VOUCHER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
-            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
-              <i class="nav-main-link-icon fa fa-gift"></i>
-              <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
-            </a>
-            <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
-                  <span class="nav-main-link-name">Voucher</span>
-                </a>
-              </li>
-            </ul>
-            </li> --}}
 
+            <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/vouchers*') ? 'true' : 'false' }}" href="{{ route('admin.vouchers.index') }}">
+                <i class="nav-main-link-icon fa fa-gift"></i>
+                <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/vouchers*') ? ' show' : '' }}">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                    <span class="nav-main-link-name">Voucher</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
             {{-- BANNER --}}
             <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
@@ -358,18 +356,11 @@
             </li>
 
             {{-- MESSAGE --}}
-            <li class="nav-main-item{{ request()->is('admin/chats*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/thongke*') ? 'true' : 'false' }}" href="#">
+            <li class="nav-main-item">
+              <a class="nav-main-link" href="{{ route('admin.admin.chats') }}">
                 <i class="nav-main-link-icon fa fa-envelope"></i>
-                <span class="nav-main-link-name">Quản lý tin nhắn</span>
+                <span class="nav-main-link-name">Tin nhắn</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('/admin/chats*') ? ' show' : '' }}">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('/admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
-                    <span class="nav-main-link-name">Tin nhắn</span>
-                  </a>
-                </li>
-              </ul>
             </li>
             {{-- THONGKE --}}
             <li class="nav-main-item{{ request()->is('admin/thongkes*') ? ' open' : '' }}">
@@ -698,5 +689,6 @@
 
 </body>
 @yield('js')
+
 
 </html>

@@ -74,7 +74,7 @@ Table of Content:
   2. Basic Styles
 ========================================================================*/
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", 'Times New Roman', Times, serif;
     color: #171717;
     font-size: 14px;
     line-height: 1.7;
@@ -121,7 +121,7 @@ button,
 input,
 select,
 textarea {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 input,
 textarea,
@@ -134,7 +134,7 @@ select,
 textarea,
 .form-control {
     font-size: 14px;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     color: #171717;
     background-color: #ffffff;
     border: 1px solid #dddddd;
@@ -633,7 +633,7 @@ h6,
 .h6 {
     color: #000000;
     margin: 0 0 20px;
-    font-family: "Heebo", sans-serif;
+    font-family: "Heebo", 'Times New Roman', Times, serif;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: 0;
@@ -685,7 +685,7 @@ p:last-child {
 
 /* Font specialized */
 .body-font {
-    font-family: "Poppins", sans-serif !important;
+    font-family: "Roboto", 'Times New Roman', Times, serif !important;
 }
 .head-font {
     font-family: "Heebo", sans-serif !important;
@@ -714,7 +714,7 @@ p:last-child {
 ========================================================================*/
 .btn,
 .btn-primary {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     background-color: #2f415d;
     color: #ffffff;
     border: 1px solid #2f415d;
@@ -732,11 +732,12 @@ p:last-child {
     font-size: 14px;
     font-weight: 600;
     line-height: normal;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     white-space: normal;
     opacity: 1;
     outline: none !important;
     box-shadow: none !important;
+    font-family: "Roboto", 'Times New Roman', Times, serif;
     -ms-transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
@@ -4798,6 +4799,10 @@ textarea:-ms-input-placeholder {
 .index-demo4 .quickview-modal .text-primary {
     color: #e96f84 !important;
 }
+
+.index-demo4 .sizechart-modal .text-primary {
+    color: #e96f84 !important;
+}
 .header-4 #siteNav > li .dropdown,
 .header-4 #siteNav > li .dropdown ul,
 .header-4 #siteNav > li .megamenu {
@@ -5710,6 +5715,10 @@ textarea:-ms-input-placeholder {
     font-weight: 600;
 }
 .index-demo7 .quickview-modal .product-action .addtocart .btn i {
+    display: none;
+}
+
+.index-demo7 .sizechart-modal .product-action .addtocart .btn i {
     display: none;
 }
 .index-demo7 .pop_cate {
@@ -6636,7 +6645,7 @@ textarea:-ms-input-placeholder {
 .index-demo11 .slideshow .ss-small-title {
     font-size: 16px;
     margin: 0 0 5px;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", 'Times New Roman', Times, serif;
 }
 .index-demo11 .slideshow picture img {
     width: 100%;
@@ -6672,7 +6681,7 @@ textarea:-ms-input-placeholder {
     font-size: 18px;
     font-weight: 500;
     margin: 0 10px 0 0;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", 'Times New Roman', Times, serif;
 }
 .index-demo11 .section-header .saleTime {
     position: static;
@@ -9547,7 +9556,7 @@ textarea:-ms-input-placeholder {
     font-weight: 600;
     letter-spacing: 1px;
     border-bottom: 1px solid #e8e9eb;
-    font-family: Poppins, Helvetica, Tahoma, Arial, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin: 0;
     font-size: 12px;
     cursor: pointer;
@@ -11518,6 +11527,52 @@ textarea:-ms-input-placeholder {
     font-size: 18px;
 }
 .quickview-modal .product-action .addtocart .btn {
+    height: 40px;
+}
+
+.sizechart-modal.modal .modal-body {
+    padding: 30px;
+}
+.sizechart-modal .modal-dialog {
+    max-width: 860px;
+}
+.sizechart-modal .product-title {
+    font-size: 22px;
+    margin: 0 0 10px;
+    text-transform: none;
+    color: #171717;
+}
+.sizechart-modal .product-review .icon {
+    font-size: 14px;
+}
+.sizechart-modal .product-arrow .icon {
+    font-size: 22px;
+    margin-left: 10px;
+}
+.sizechart-modal .sort-description {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dotted #bdbdbd;
+}
+.sizechart-modal .product-price {
+    border-bottom: 1px dotted #bdbdbd;
+    border-top: 0;
+    padding: 0 0 20px;
+}
+.sizechart-modal .product-price .price {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: none;
+}
+.sizechart-modal .product-subtitle {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.sizechart-modal .product-price .old-price {
+    font-size: 18px;
+}
+.sizechart-modal .product-action .addtocart .btn {
     height: 40px;
 }
 
