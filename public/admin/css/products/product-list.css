@@ -48,7 +48,11 @@
 
 .popup-content {
     display: block;
-    margin: 10% auto;
+    position: fixed;
+    top: calc(50% + 50px); 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
     max-width: 90%;
     max-height: 80%;
 }

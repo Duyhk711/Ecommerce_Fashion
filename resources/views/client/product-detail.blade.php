@@ -298,7 +298,7 @@
                                     <!-- Biểu tượng trái tim viền -->
                                     <i style="font-size:15px"
                                         class="icon anm anm-heart-l me-2 favorite {{ $isFavorite ? 'd-none' : '' }}"></i>
-                                    <span>Thêm vào yêu thích</span>
+                                    {{-- <span>Thêm vào yêu thích</span> --}}
                                     <!-- Biểu tượng trái tim đổ đầy -->
                                     <i style="color: #e96f84;font-size:15px"
                                         class="bi bi-heart-fill me-2 favorite {{ $isFavorite ? '' : 'd-none' }}"></i>
@@ -482,13 +482,18 @@
                                         </a>
                                         <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
                                          <div class="button-set style1">
-                                            <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                    data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    title="Thêm vào giỏ hàng"><i class="icon anm anm-cart-l"></i><span
-                                                        class="text">Add to Cart</span></span>
-                                            </a>
+                                            <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                @csrf 
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <button type="submit" class="btn-icon addtocart">
+                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="Add to Cart">
+                                                        <i class="icon anm anm-cart-l"></i>
+                                                        <span class="text">Add to Cart</span>
+                                                    </span>
+                                                </button>
+                                            </form>
                                             {{-- <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
                                                 data-bs-toggle="modal" data-bs-target="#quickview_modal">
                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -1483,5 +1488,60 @@
             loadComments(location.href); // Tải lại bình luận cho URL hiện tại
         };
 
+    </script>
+
+    <script>
+        $(document).ready(function() {
+        $('.add-to-cart-form').on('submit', function(event) {
+            event.preventDefault(); // Ngăn chặn tải lại trang
+
+            const form = $(this); // Lấy form hiện tại đang được submit
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        updateCartCount();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Có lỗi xảy ra!',
+                            text: response.message || 'Xin vui lòng thử lại!',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error:', xhr);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Có lỗi xảy ra!',
+                        text: 'Xin vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+        function updateCartCount() {
+          $.ajax({
+              url: '/cart/count', // Thay đổi đường dẫn này
+              type: 'GET',
+              success: function(data) {
+                  $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+              },
+              error: function(xhr) {
+                  console.error('Error:', xhr);
+              }
+          });
+      }
+    });
     </script>
 @endsection
