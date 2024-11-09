@@ -12,10 +12,9 @@
   <meta name="robots" content="noindex, nofollow">
 
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css"> -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.js"></script>
+  {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css"> --}}
+  {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+  {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.js"></script> --}}
 
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
@@ -34,34 +33,6 @@
 </head>
 
 <body>
-  {{-- @if (session('success'))
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          $.notify({
-              message: '{{ session('success') }}'
-  },{
-  type: 'success',
-  icon: 'fa fa-check me-1',
-  delay: 3000
-  });
-  });
-  </script>
-  @endif
-
-  @if (session('error'))
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      $.notify({
-        message: '{{ session('
-        error ') }}'
-      }, {
-        type: 'danger',
-        icon: 'fa fa-times me-1',
-        delay: 3000
-      });
-    });
-  </script>
-  @endif --}}
 
   <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow fs-sm">
     <!-- Side Overlay-->
@@ -607,7 +578,7 @@
   </div>
   @yield('modal')
   <!-- END Page Container -->
-  <!-- <script src=" {{ asset('admin/js/dashmix.app.min.js') }}"></script> -->
+  {{-- <!-- <script src=" {{ asset('admin/js/dashmix.app.min.js') }}"></script> --> --}}
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -639,7 +610,7 @@
     });
   </script>
 
-  <script>
+  {{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
       const ctx = document.getElementById('revenueChart').getContext('2d');
       const revenueChart = new Chart(ctx, {
@@ -685,7 +656,7 @@
         $this.val(percent).trigger('change');
       });
     });
-  </script>
+  </script> --}}
 
 </body>
 @yield('js')
