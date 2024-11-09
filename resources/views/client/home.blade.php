@@ -635,7 +635,7 @@
                                                 <!-- Start Product Image -->
                                                 <div class="product-image">
                                                     <!-- Start Product Image -->
-                                                    <a href="{{ route('productDetail', $product->id) }}"
+                                                    <a href="{{ route('productDetail', $product->slug) }}"
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
@@ -696,13 +696,20 @@
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
-                                                        <a href="product-layout1.html">{{ $product->name }}</a>
+                                                        <a href="{{route('productDetail', $product->slug)}}" data-bs-toggle="tooltip" title="{{$product->name}}">{{ $product->name }}</a>
                                                     </div>
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
                                                     <div class="product-price">
-                                                        <span
-                                                            class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                        @if ($product->price_sale == $product->price_regular || $product->price_sale == 0 || $product->price_sale == null )
+                                                            <span class="price">
+                                                                {{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                        @else
+                                                            <span
+                                                                class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                            <span
+                                                                class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span>
+                                                        @endif
                                                     </div>
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
@@ -792,8 +799,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">View
-                                        Collection</a>
+                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">Xem thêm</a>
                                 </div>
                             </div>
                             <!--End Product Grid-->
@@ -874,13 +880,20 @@
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
-                                                        <a href="product-layout1.html">{{ $product->name }}</a>
+                                                        <a href="{{route('productDetail', $product->slug)}}" data-bs-toggle="tooltip" title="{{$product->name}}">{{ $product->name }}</a>
                                                     </div>
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
                                                     <div class="product-price">
-                                                        <span
-                                                            class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                        @if ($product->price_sale == $product->price_regular || $product->price_sale == 0 || $product->price_sale == null)
+                                                            <span class="price">
+                                                                {{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                        @else
+                                                            <span
+                                                                class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                            <span
+                                                                class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span>
+                                                        @endif
                                                     </div>
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
@@ -957,8 +970,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">View
-                                        Collection</a>
+                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">Xem thêm</a>
                                 </div>
                             </div>
                             <!--End Product Grid-->
@@ -975,7 +987,7 @@
                                                 <!-- Start Product Image -->
                                                 <div class="product-image">
                                                     <!-- Start Product Image -->
-                                                    <a href="{{ route('productDetail', $product->id) }}"
+                                                    <a href="{{ route('productDetail', $product->slug) }}"
                                                         class="product-img rounded-0">
                                                         <!-- Image -->
                                                         <img class="primary rounded-0 blur-up lazyload"
@@ -1036,12 +1048,20 @@
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
-                                                        <a href="product-layout1.html">{{ $product->name }}</a>
+                                                        <a href="{{route('productDetail', $product->slug)}}" data-bs-toggle="tooltip" title="{{$product->name}}">{{ $product->name }}</a>
                                                     </div>
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
                                                     <div class="product-price">
-                                                        <span class="price">{{ $product->price_sale }}đ</span>
+                                                        @if ($product->price_sale == $product->price_regular || $product->price_sale == 0 || $product->price_sale == null)
+                                                            <span class="price">
+                                                                {{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                        @else
+                                                            <span
+                                                                class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                            <span
+                                                                class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span>
+                                                        @endif
                                                     </div>
                                                     <!-- End Product Price -->
                                                     <!-- Product Review -->
@@ -1129,7 +1149,7 @@
                                 </div>
 
                                 <div class="view-collection text-center mt-4 mt-md-5">
-                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg"> Xem Thêm</a>
+                                    <a href="{{ route('shop') }}" class="btn btn-secondary btn-lg">Xem Thêm</a>
                                 </div>
                             </div>
                             <!--End Product Grid-->

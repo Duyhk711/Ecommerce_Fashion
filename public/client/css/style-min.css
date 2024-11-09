@@ -712,11 +712,11 @@ p:last-child {
 .btn-primary,
 .preLoader {
     font-weight: 600;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 .btn,
 .btn-primary {
-    font-family: Poppins, sans-serif;
+    font-family: 'Quicksand', sans-serif;
     background-color: #2f415d;
     color: #fff;
     border: 1px solid #2f415d;
@@ -874,12 +874,12 @@ p:last-child {
     text-align: center;
 }
 .text-link {
-    text-decoration: underline;
+    /* text-decoration: underline; */
     text-underline-offset: 3px;
 }
 .text-link:hover {
     color: #e80016;
-    text-decoration: underline;
+    /* text-decoration: underline; */
 }
 .btn-brd {
     background-color: transparent;
@@ -2312,8 +2312,8 @@ textarea:-ms-input-placeholder {
     margin: 5px 0;
 }
 .product-price .old-price {
-    opacity: 0.6;
     text-decoration: line-through;
+    /* opacity: 0.6; */
 }
 .product-price .old-price + .price {
     padding-left: 10px;
@@ -2461,6 +2461,7 @@ textarea:-ms-input-placeholder {
         text-transform: uppercase;
         display: inline-flex;
         align-items: center;
+        font-family: 'Quicksand', sans-serif;
     }
     #siteNav.medium > li a {
         font-weight: 600;
@@ -4087,7 +4088,7 @@ textarea:-ms-input-placeholder {
 .index-demo2 .btn-primary:hover,
 .index-demo2 .btn:focus,
 .index-demo2 .btn:hover {
-    color: #ff;
+    color: #ffffff;
     background-color: #333;
     border-color: #333;
 }

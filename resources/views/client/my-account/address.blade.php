@@ -14,364 +14,311 @@
     </style>
 
     <div>
-
-        <div class="address-card mt-0 h-100">
+        <div class="address-card mt-0 h-100 mb-3">
             <div class="top-sec d-flex justify-content-between mb-4">
-                <h2 class="mb-0">Address Book</h2>
+                <h2 class="mb-0">Địa chỉ nhận hàng</h2>
                 <a type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addNewModal">
                     <i class="icon anm anm-plus-r me-1"></i> Thêm mới
                 </a>
-
-                <!-- New Address Modal -->
-                <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title" id="addNewModalLabel">Chi tiết địa chỉ</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="addAddressForm" method="post" action="{{ route('addresses.store') }}">
-                                    @csrf
-                                    <div class="form-row row">
-                                        <!-- Customer Name -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="customer-name">Họ và Tên Khách Hàng</label>
-                                            <input name="customer_name" id="customer-name" type="text" class="form-control" placeholder="Họ và Tên Khách Hàng" required />
-                                        </div>
-
-                                        <!-- Phone Number -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="customer-phone">Số điện thoại <span class="required">*</span></label>
-                                            <input name="customer_phone" id="customer-phone" type="tel" class="form-control" placeholder="Số điện thoại" required />
-                                        </div>
-
-                                        <!-- Address Line 1 -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="address-line1">Địa chỉ chính <span class="required">*</span></label>
-                                            <input name="address_line1" id="address-line1" type="text" class="form-control" placeholder="Địa chỉ chính (Số nhà, tên đường)" required />
-                                        </div>
-
-                                        <!-- Address Line 2 -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="address-line2">Địa chỉ phụ</label>
-                                            <input name="address_line2" id="address-line2" type="text" class="form-control" placeholder="Địa chỉ phụ (nếu có)" />
-                                        </div>
-
-                                        <!-- City Selector -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="citis">Tỉnh/Thành phố <span class="required">*</span></label>
-                                            <select name="city" id="citis" class="form-control" required>
-                                                <option value="">Chọn Tỉnh/Thành phố</option>
-                                                <!-- Cities will be dynamically added here -->
-                                            </select>
-                                        </div>
-
-                                        <!-- District Selector -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="districts">Quận/Huyện <span class="required">*</span></label>
-                                            <select name="district" id="districts" class="form-control" required>
-                                                <option value="">Chọn Quận/Huyện</option>
-                                                <!-- Districts will be dynamically added here -->
-                                            </select>
-                                        </div>
-
-                                        <!-- Ward Selector -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="wards">Phường/Xã <span class="required">*</span></label>
-                                            <select name="ward" id="wards" class="form-control" required>
-                                                <option value="">Chọn Phường/Xã</option>
-                                                <!-- Wards will be dynamically added here -->
-                                            </select>
-                                        </div>
-
-                                        <!-- Address Type -->
-                                        <div class="form-group col-lg-6">
-                                            <label for="type">Loại địa chỉ <span class="required">*</span></label>
-                                            <select name="type" id="type" class="form-control" required>
-                                                <option value="">Chọn loại địa chỉ</option>
-                                                <option value="home">Nhà riêng</option>
-                                                <option value="office">Cơ quan</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- Form Submission -->
-                                    <div class="modal-footer justify-content-center">
-                                        <button type="submit" class="btn btn-primary m-0">Thêm địa chỉ</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- End New Address Modal -->
             </div>
+            <div>
+                <div class="address-book-section">
+                    <div class="row g-4">
+                        @php
+                            // Kiểm tra xem có địa chỉ nào không bị xóa không
+                            $activeAddresses = $addresses->filter(function ($address) {
+                                return $address->deleted_at === null;
+                            });
+                        @endphp
 
-            <div class="address-book-section">
-                <div class="row g-4">
-                    @foreach ($addresses as $address)
-                        <div class="address-select-box" data-id="{{ $address->id }}">
-                            <div class="address-box bg-block">
-                                <div class="top d-flex justify-content-between mb-3">
-                                    <h5 class="m-0">{{ $address->customer_name }}</h5>
-                                    <div class="product-labels start-auto end-0 d-flex flex-wrap">
-                                        @if ($address->is_default)
-                                            <span class="lbl pr-label-default me-2">Mặc định</span>
-                                        @endif
-                                        <span class="lbl {{ $address->type == 'home' ? 'pr-label1' : 'pr-label4' }}">
-                                            {{ $address->type == 'home' ? 'Home' : 'Office' }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="middle">
-                                    <div class="address mb-2 text-muted">
-                                        <address class="m-0">
-                                            {{ $address->address_line1 }}<br />
-                                            {{ $address->address_line2 }}<br />
-                                            {{ $address->ward }}, {{ $address->district }}, {{ $address->city }}.
-                                        </address>
-                                    </div>
-                                    <div class="number">
-                                        <p>Mobile: <a
-                                                href="tel:{{ $address->customer_phone }}">{{ $address->customer_phone }}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="bottom d-flex justify-content-start gap-2">
-                                    <button type="button" class="bottom-btn btn btn-gray btn-sm"
-                                        onclick="editAddress({{ $address->id }})">Sửa Địa Chỉ</button>
-
-                                    <button type="button" class="bottom-btn btn btn-gray btn-sm"
-                                        onclick="removeAddress({{ $address->id }})">Xóa Địa Chỉ</button>
-                                    @if (!$address->is_default)
-                                        <button type="button" class="bottom-btn btn btn-gray btn-sm"
-                                            onclick="setDefaultAddress({{ $address->id }})">Cài làm địa chỉ mặc
-                                            định</button>
-                                    @endif
-
-                                </div>
-
+                        @if ($activeAddresses->isEmpty())
+                            {{-- Hiển thị ảnh khi không có địa chỉ nào --}}
+                            <div class="text-center" id="empty-address" style="margin: auto;">
+                                <img src="{{ asset('client/images/empty-address.png') }}" alt="No address available">
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-
-
-                <!-- Edit Address Modal -->
-
-                <div class="modal fade" id="addEditModal" tabindex="-1" aria-labelledby="addEditModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title" id="addEditModalLabel">Sửa Địa Chỉ</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            {{-- <div class="modal-body">
-                                <form id="editAddressForm" method="post"
-                                    action="{{ route('addresses.update', $address->id) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="id" id="edit-address-id" value="">
-
-                                    <div class="form-row row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-customer-name">Họ và Tên Khách Hàng</label>
-                                            <input name="customer_name" id="edit-customer-name" type="text"
-                                                class="form-control" placeholder="Họ và Tên Khách Hàng" required />
+                        @else
+                            {{-- Hiển thị các địa chỉ không bị xóa --}}
+                            @foreach ($activeAddresses as $address)
+                                <div class="address-select-box" data-id="{{ $address->id }}">
+                                    <div class="address-box bg-block">
+                                        <div class="top d-flex justify-content-between mb-3">
+                                            <h5 class="m-0">{{ $address->customer_name }}</h5>
+                                            <div class="product-labels start-auto end-0 d-flex flex-wrap">
+                                                @if ($address->is_default)
+                                                    <span class="lbl pr-label-default me-2">Mặc định</span>
+                                                @endif
+                                                <span class="lbl {{ $address->type == 'home' ? 'pr-label1' : 'pr-label4' }}">
+                                                    {{ $address->type == 'home' ? 'Home' : 'Office' }}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-customer-phone">Số điện thoại <span
-                                                    class="required">*</span></label>
-                                            <input name="customer_phone" id="edit-customer-phone" type="tel"
-                                                class="form-control" placeholder="Số điện thoại" required />
+                                        <div class="middle">
+                                            <div class="address mb-2 text-muted">
+                                                <address class="m-0">
+                                                    {{ $address->address_line1 }}<br />
+                                                    {{ $address->address_line2 }}<br />
+                                                    {{ $address->ward }}, {{ $address->district }}, {{ $address->city }}.
+                                                </address>
+                                            </div>
+                                            <div class="number">
+                                                <p>Mobile: <a href="tel:{{ $address->customer_phone }}">{{ $address->customer_phone }}</a></p>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-address-line1">Địa chỉ chính <span
-                                                    class="required">*</span></label>
-                                            <input name="address_line1" id="edit-address-line1" type="text"
-                                                class="form-control" placeholder="Địa chỉ chính (Số nhà, tên đường)"
-                                                required />
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-address-line2">Địa chỉ phụ</label>
-                                            <input name="address_line2" id="edit-address-line2" type="text"
-                                                class="form-control" placeholder="Địa chỉ phụ (nếu có)" />
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-ward">Phường/Xã <span class="required">*</span></label>
-                                            <input name="ward" id="edit-ward" type="text" class="form-control"
-                                                placeholder="Phường/Xã" required />
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-district">Quận/Huyện <span class="required">*</span></label>
-                                            <input name="district" id="edit-district" type="text"
-                                                class="form-control" placeholder="Quận/Huyện" required />
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-city">Tỉnh/Thành phố <span class="required">*</span></label>
-                                            <input name="city" id="edit-city" type="text" class="form-control"
-                                                placeholder="Tỉnh/Thành phố" required />
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="edit-type">Loại địa chỉ <span class="required">*</span></label>
-                                            <select name="type" id="edit-type" class="form-control" required>
-                                                <option value="">Chọn loại địa chỉ</option>
-                                                <option value="home">Nhà riêng</option>
-                                                <option value="office">Cơ quan</option>
-                                            </select>
+                                        <div class="bottom d-flex justify-content-start gap-2">
+                                            <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="editAddress({{ $address->id }})">Sửa Địa Chỉ</button>
+                                            <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="removeAddress({{ $address->id }})">Xóa Địa Chỉ</button>
+                                            @if (!$address->is_default)
+                                                <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="setDefaultAddress({{ $address->id }})">Cài làm địa chỉ mặc định</button>
+                                            @endif
                                         </div>
                                     </div>
-
-                                    <div class="modal-footer justify-content-center">
-                                        <button type="submit" class="btn btn-primary m-0">Lưu địa chỉ</button>
-                                    </div>
-                                </form>
-                            </div> --}}
-
-
-                        </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
-                <!-- End Edit Address Modal -->
             </div>
         </div>
     </div>
+        <!-- Edit Address Modal -->
+        <div class="modal fade" id="addEditModal" tabindex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="addEditModalLabel">Sửa Địa Chỉ</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    {{-- <div class="modal-body">
+                        <form id="editAddressForm" method="post"
+                            action="{{ route('addresses.update', $address->id) }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="id" id="edit-address-id" value="">
+
+                            <div class="form-row row">
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-customer-name">Họ và Tên Khách Hàng</label>
+                                    <input name="customer_name" id="edit-customer-name" type="text"
+                                        class="form-control" placeholder="Họ và Tên Khách Hàng" required />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-customer-phone">Số điện thoại <span
+                                            class="required">*</span></label>
+                                    <input name="customer_phone" id="edit-customer-phone" type="tel"
+                                        class="form-control" placeholder="Số điện thoại" required />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-address-line1">Địa chỉ chính <span
+                                            class="required">*</span></label>
+                                    <input name="address_line1" id="edit-address-line1" type="text"
+                                        class="form-control" placeholder="Địa chỉ chính (Số nhà, tên đường)"
+                                        required />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-address-line2">Địa chỉ phụ</label>
+                                    <input name="address_line2" id="edit-address-line2" type="text"
+                                        class="form-control" placeholder="Địa chỉ phụ (nếu có)" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-ward">Phường/Xã <span class="required">*</span></label>
+                                    <input name="ward" id="edit-ward" type="text" class="form-control"
+                                        placeholder="Phường/Xã" required />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-district">Quận/Huyện <span class="required">*</span></label>
+                                    <input name="district" id="edit-district" type="text"
+                                        class="form-control" placeholder="Quận/Huyện" required />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-city">Tỉnh/Thành phố <span class="required">*</span></label>
+                                    <input name="city" id="edit-city" type="text" class="form-control"
+                                        placeholder="Tỉnh/Thành phố" required />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="edit-type">Loại địa chỉ <span class="required">*</span></label>
+                                    <select name="type" id="edit-type" class="form-control" required>
+                                        <option value="">Chọn loại địa chỉ</option>
+                                        <option value="home">Nhà riêng</option>
+                                        <option value="office">Cơ quan</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer justify-content-center">
+                                <button type="submit" class="btn btn-primary m-0">Lưu địa chỉ</button>
+                            </div>
+                        </form>
+                    </div> --}}
+
+
+                </div>
+            </div>
+        </div>
+        <!-- End Edit Address Modal -->
+        <!-- New Address Modal -->
+        <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="addNewModalLabel">Chi tiết địa chỉ</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addAddressForm" method="POST" action="{{ route('addresses.store') }}">
+                            @csrf
+                            <div class="form-row row">
+                                <!-- Customer Name -->
+                                <div class="form-group col-lg-6">
+                                    <label for="customer-name">Họ và Tên Khách Hàng</label>
+                                    <input name="customer_name" id="customer-name" type="text" class="form-control" placeholder="Họ và Tên Khách Hàng" required />
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="form-group col-lg-6">
+                                    <label for="customer-phone">Số điện thoại <span class="required">*</span></label>
+                                    <input name="customer_phone" id="customer-phone" type="tel" class="form-control" placeholder="Số điện thoại" required />
+                                </div>
+
+                                <!-- Address Line 1 -->
+                                <div class="form-group col-lg-6">
+                                    <label for="address-line1">Địa chỉ chính <span class="required">*</span></label>
+                                    <input name="address_line1" id="address-line1" type="text" class="form-control" placeholder="Địa chỉ chính (Số nhà, tên đường)" required />
+                                </div>
+
+                                <!-- Address Line 2 -->
+                                <div class="form-group col-lg-6">
+                                    <label for="address-line2">Địa chỉ phụ</label>
+                                    <input name="address_line2" id="address-line2" type="text" class="form-control" placeholder="Địa chỉ phụ (nếu có)" />
+                                </div>
+
+                                <!-- City Selector -->
+                                <div class="form-group col-lg-6">
+                                    <label for="citis">Tỉnh/Thành phố <span class="required">*</span></label>
+                                    <select name="city" id="citis" class="form-control" required>
+                                        <option value="">Chọn Tỉnh/Thành phố</option>
+                                        <!-- Cities will be dynamically added here -->
+                                    </select>
+                                </div>
+
+                                <!-- District Selector -->
+                                <div class="form-group col-lg-6">
+                                    <label for="districts">Quận/Huyện <span class="required">*</span></label>
+                                    <select name="district" id="districts" class="form-control" required>
+                                        <option value="">Chọn Quận/Huyện</option>
+                                        <!-- Districts will be dynamically added here -->
+                                    </select>
+                                </div>
+
+                                <!-- Ward Selector -->
+                                <div class="form-group col-lg-6">
+                                    <label for="wards">Phường/Xã <span class="required">*</span></label>
+                                    <select name="ward" id="wards" class="form-control" required>
+                                        <option value="">Chọn Phường/Xã</option>
+                                        <!-- Wards will be dynamically added here -->
+                                    </select>
+                                </div>
+
+                                <!-- Address Type -->
+                                <div class="form-group col-lg-6">
+                                    <label for="type">Loại địa chỉ <span class="required">*</span></label>
+                                    <select name="type" id="type" class="form-control" required>
+                                        <option value="">Chọn loại địa chỉ</option>
+                                        <option value="home">Nhà riêng</option>
+                                        <option value="office">Cơ quan</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Form Submission -->
+                            <div class="modal-footer justify-content-center">
+                                <button type="submit" class="btn btn-primary m-0">Thêm địa chỉ</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End New Address Modal -->
 
     <script>
         // Set Default Address
         function setDefaultAddress(addressId) {
             fetch(`/addresses/${addressId}/default`, {
-                    method: 'POST',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Hàm xóa địa chỉ
+        function removeAddress(addressId) {
+            if (confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
+                fetch(`/addresses/${addressId}`, {
+                    method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Content-Type': 'application/json'
                     },
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        alert('Có lỗi xảy ra!');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Add Address
-        document.getElementById('addAddressForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            let formData = new FormData(this);
-            fetch('{{ route('addresses.store') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Tạo HTML cho địa chỉ mới
-                        let addressHtml = `
-                    <div class="address-select-box">
-                        <div class="address-box bg-block">
-                            <div class="top d-flex justify-content-between mb-3">
-                                <h5 class="m-0">${data.address.customer_name}</h5>
-                                <span class="product-labels start-auto end-0">
-                                    <span class="lbl ${data.address.type == 'home' ? 'pr-label1' : 'pr-label4'}">
-                                        ${data.address.type == 'home' ? 'Home' : 'Office'}
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="middle">
-                                <div class="address mb-2 text-muted">
-                                    <address class="m-0">
-                                        ${data.address.address_line1}<br/>
-                                        ${data.address.address_line2 ? data.address.address_line2 + '<br/>' : ''}
-                                        ${data.address.ward}, ${data.address.district}, ${data.address.city}.
-                                    </address>
-                                </div>
-                                <div class="number">
-                                    <p>Mobile: <a href="tel:${data.address.customer_phone}">${data.address.customer_phone}</a></p>
-                                </div>
-                            </div>
-                            <div class="bottom d-flex justify-content-start gap-2">
-                                 <button type="button" class="bottom-btn btn btn-gray btn-sm" data-bs-toggle="modal" data-bs-target="#addEditModal">Sửa Địa Chỉ</button>
-                                 <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="removeAddress(${data.address.id})">Xóa Địa Chỉ</button>
-                                 <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="setDefaultAddress(${data.address.id})">Cài làm địa chỉ mặc đinh</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                        document.querySelector('.address-book-section .row').innerHTML += addressHtml;
-                        let modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
-                        modal.hide();
-                    } else {
-                        alert('Có lỗi xảy ra!');
-                    }
-                })
-                .catch(error => {
-                    console.error('Có lỗi xảy ra:', error);
-                    alert('Có lỗi xảy ra!');
-                });
-        });
-
-        // Remove Address
-        function removeAddress(addressId) {
-            if (confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
-                fetch(`/addresses/${addressId}`, { // Đảm bảo rằng đường dẫn là chính xác
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Content-Type': 'application/json'
-                        },
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            // Xóa địa chỉ khỏi DOM mà không reload
-                            document.querySelector(`.address-select-box[data-id="${addressId}"]`).remove();
-                            alert(data.message);
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Có lỗi xảy ra!'); // Thông báo lỗi cho người dùng
-                    });
-            }
-        }
-        // Hiện dữ liệu cũ trong modal khi nhấn nút Sửa Địa Chỉ
-        function editAddress(addressId) {
-            // Fetch the address data for editing
-            fetch(`/address/${addressId}/edit`)
                 .then(response => {
-                    console.log('Response status:', response.status); // Kiểm tra trạng thái phản hồi
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Data received:', data); // Kiểm tra dữ liệu nhận được
                     if (data.success) {
-                        // Cập nhật giá trị vào các trường trong modal
+                        let addressElement = document.querySelector(`.address-select-box[data-id="${addressId}"]`);
+                        if (addressElement) {
+                            addressElement.remove();
+                        }
+                        alert(data.message);
+
+                        if (document.querySelectorAll('.address-select-box').length === 0) {
+                            let emptyHtml = `
+                                <div id="empty-address" class="text-center" style="margin: auto;">
+                                    <img src="{{ asset('client/images/empty-address.png') }}" alt="No address available">
+                                </div>
+                            `;
+                            document.querySelector('.address-book-section .row').innerHTML = emptyHtml;
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra!');
+                });
+            }
+        }
+
+        // Hàm sửa địa chỉ
+        function editAddress(addressId) {
+            fetch(`/address/${addressId}/edit`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
                         document.getElementById('edit-address-id').value = addressId;
                         document.getElementById('edit-customer-name').value = data.address.customer_name;
                         document.getElementById('edit-customer-phone').value = data.address.customer_phone;
@@ -382,11 +329,9 @@
                         document.getElementById('edit-city').value = data.address.city;
                         document.getElementById('edit-type').value = data.address.type;
 
-                        // Cập nhật action cho form
                         const form = document.getElementById('editAddressForm');
                         form.action = form.action.replace(/\/\d+$/, `/${addressId}`);
 
-                        // Mở modal để chỉnh sửa địa chỉ
                         let modal = new bootstrap.Modal(document.getElementById('addEditModal'));
                         modal.show();
                     } else {
@@ -394,27 +339,99 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Có lỗi xảy ra:', error);
+                    console.error('Có lỗi xảy ra:', error.message);
                     alert('Có lỗi xảy ra!');
                 });
         }
-        @if (session('success'))
-            swal({
-                title: "Thành công!",
-                text: "{{ session('success') }}",
-                type: "success",
-                timer: 3000,
-                showConfirmButton: false
+
+        // Xử lý khi DOM đã tải xong
+        document.addEventListener("DOMContentLoaded", function() {
+            // Xử lý thêm địa chỉ mới
+            document.getElementById('addAddressForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                let formData = new FormData(this);
+                fetch('{{ route('addresses.store') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Ẩn ảnh "empty" nếu tồn tại
+                        let emptyAddress = document.getElementById('empty-address');
+                        if (emptyAddress) {
+                            emptyAddress.style.display = 'none';
+                        }
+
+                        // Thêm địa chỉ mới vào danh sách
+                        let addressHtml = `
+                            <div class="address-select-box" data-id="${data.address.id}">
+                                <div class="address-box bg-block">
+                                    <div class="top d-flex justify-content-between mb-3">
+                                        <h5 class="m-0">${data.address.customer_name}</h5>
+                                        <span class="product-labels start-auto end-0">
+                                            <span class="lbl ${data.address.type == 'home' ? 'pr-label1' : 'pr-label4'}">
+                                                ${data.address.type == 'home' ? 'Home' : 'Office'}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="address mb-2 text-muted">
+                                            <address class="m-0">
+                                                ${data.address.address_line1}<br/>
+                                                ${data.address.address_line2 ? data.address.address_line2 + '<br/>' : ''}
+                                                ${data.address.ward}, ${data.address.district}, ${data.address.city}.
+                                            </address>
+                                        </div>
+                                        <div class="number">
+                                            <p>Số điện thoại: <a href="tel:${data.address.customer_phone}">${data.address.customer_phone}</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="bottom d-flex justify-content-start gap-2">
+                                        <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="editAddress(${data.address.id})">Sửa Địa Chỉ</button>
+                                        <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="removeAddress(${data.address.id})">Xóa Địa Chỉ</button>
+                                        <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="setDefaultAddress(${data.address.id})">Cài làm địa chỉ mặc định</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        document.querySelector('.address-book-section .row').innerHTML += addressHtml;
+
+                        let modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
+                        modal.hide();
+                        document.getElementById('addAddressForm').reset();
+                    } else {
+                        alert('Có lỗi xảy ra!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    alert('Có lỗi xảy ra!');
+                });
             });
-        @elseif (session('error'))
-            swal({
-                title: "Lỗi!",
-                text: "{{ session('error') }}",
-                type: "error",
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
+
+            @if (session('success'))
+                swal({
+                    title: "Thành công!",
+                    text: "{{ session('success') }}",
+                    type: "success",
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @elseif (session('error'))
+                swal({
+                    title: "Lỗi!",
+                    text: "{{ session('error') }}",
+                    type: "error",
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @endif
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
