@@ -115,6 +115,15 @@ class ProductController extends Controller
                 'price_regular' => 'required|numeric',
                 'price_sale' => 'required|numeric|lt:price_regular',
                 'stock' => 'required|integer|min:0',
+            ],[
+                'price_regular.required' => 'Giá bán là bắt buộc.',
+                'price_regular.numeric' => 'Giá bán phải là một số.',
+                'price_sale.required' => 'Giá khuyến mãi là bắt buộc.',
+                'price_sale.numeric' => 'Giá khuyến mãi phải là một số.',
+                'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá bán.',
+                'stock.required' => 'Số lượng là bắt buộc.',
+                'stock.integer' => 'Số lượng phải là một số nguyên.',
+                'stock.min' => 'Số lượng phải lớn hơn hoặc bằng 0.',
             ]);
 
             if ($validator->fails()) {

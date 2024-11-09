@@ -30,21 +30,13 @@ class AttributeValueService
         }
     }
     
-
-
-
-    public function updateAttributeValue(AttributeValue $attributeValue, array $data)
+    public function updateAttributeValue(array $validatedData, AttributeValue $attributeValue)
     {
-        // Nếu có mã màu trong dữ liệu, thêm nó vào mảng cập nhật
-        $updateData = [
-            'value' => $data['value'],
-        ];
-
-        if (isset($data['color_code'])) {
-            $updateData['color_code'] = $data['color_code'];
-        }
-
-        return $attributeValue->update($updateData);
+        $attributeValue -> update([
+            'attribute_id' => $validatedData['attribute_id'],
+            'value' => $validatedData['value'],
+            'color_code' => $validatedData['color_code'] ?? $attributeValue->color_code
+        ]);
     }
 
 

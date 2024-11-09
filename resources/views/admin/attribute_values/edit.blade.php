@@ -3,6 +3,27 @@
 @section('title')
 Cập nhật giá trị
 @endsection
+@section('css')
+    <style>
+    .input-color {
+        -webkit-appearance: none !important; 
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50px !important;
+        padding: 0 !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+
+    .input-color::-webkit-color-swatch {
+        border-radius: 50%; 
+        width: 40px;
+        height: 40px;
+    }
+
+    </style>
+   
+@endsection
 
 @section('content')
 <!-- Hero -->
@@ -13,7 +34,7 @@ Cập nhật giá trị
             <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.attributes.index') }}" style="color: inherit;">Giá trị thuộc tính</a>
+                        <a href="{{ route('admin.attribute_values.index') }}" style="color: inherit;">Giá trị thuộc tính</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Cập nhật giá trị</li>
                 </ol>
@@ -49,14 +70,24 @@ Cập nhật giá trị
                         </div>
 
                         <!-- Giá Trị -->
-                        <div class="mb-4">
-                            <label class="form-label" for="value">Giá Trị</label>
-                            <input type="text" id="value" name="value" class="form-control @error('value') is-invalid @enderror" value="{{ old('value', $attributeValue->value) }}" placeholder="Nhập giá trị" required>
-                            @error('value')
-                                <div class="text-danger mt-2" id="value-error">{{ $message }}</div>
-                            @enderror
+                        <div class="row mb-4">
+                            <div class="col">
+                                <label class="form-label" for="value">Giá Trị</label>
+                                <input type="text" id="value" name="value" class="form-control @error('value') is-invalid @enderror" value="{{ old('value', $attributeValue->value) }}" placeholder="Nhập giá trị" required>
+                                @error('value')
+                                    <div class="text-danger mt-2" id="value-error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            @if(!empty($attributeValue->color_code))
+                                <div class="col-2">
+                                    <label for="" class="form-label">Mã màu</label>
+                                    <input type="color" name="color_code" class="form-control input-color"  required 
+                                        value="{{ $attributeValue->color_code }}">
+                                </div>
+                            @endif
                         </div>
-
+                       
                         <!-- Nút Cập Nhật -->
                         <div class="block-options mb-5">
                             <button type="submit" class="btn btn-outline-primary me-2">Cập Nhật</button>
@@ -71,7 +102,8 @@ Cập nhật giá trị
         </div>
     </div>
 </div>
-@section('js')
-<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
+
 @endsection
+@section('js')
+{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
 @endsection
