@@ -6,7 +6,7 @@ Cập nhật giá trị
 @section('css')
     <style>
     .input-color {
-        -webkit-appearance: none !important; 
+        -webkit-appearance: none !important;
         width: 40px !important;
         height: 40px !important;
         border-radius: 50px !important;
@@ -16,13 +16,13 @@ Cập nhật giá trị
     }
 
     .input-color::-webkit-color-swatch {
-        border-radius: 50%; 
+        border-radius: 50%;
         width: 40px;
         height: 40px;
     }
 
     </style>
-   
+
 @endsection
 
 @section('content')
@@ -78,16 +78,16 @@ Cập nhật giá trị
                                     <div class="text-danger mt-2" id="value-error">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
+
                             @if(!empty($attributeValue->color_code))
                                 <div class="col-2">
                                     <label for="" class="form-label">Mã màu</label>
-                                    <input type="color" name="color_code" class="form-control input-color"  required 
+                                    <input type="color" name="color_code" class="form-control input-color"  required
                                         value="{{ $attributeValue->color_code }}">
                                 </div>
                             @endif
                         </div>
-                       
+
                         <!-- Nút Cập Nhật -->
                         <div class="block-options mb-5">
                             <button type="submit" class="btn btn-outline-primary me-2">Cập Nhật</button>
@@ -104,6 +104,4 @@ Cập nhật giá trị
 </div>
 
 @endsection
-@section('js')
-{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
-@endsection
+
