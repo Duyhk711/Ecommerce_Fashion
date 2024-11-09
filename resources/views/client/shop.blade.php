@@ -300,32 +300,34 @@
                                             <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
                                             <!-- End Product label -->
                                             <!--Product Button-->
-                                            {{-- <div class="button-set style1">
+                                             <div class="button-set style1">
                                                 <!--Cart Button-->
-                                                <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                    data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
-                                                            class="text">Add to Cart</span></span>
-                                                </a>
+                                                <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                    @csrf 
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <button type="submit" class="btn-icon addtocart">
+                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="Add to Cart">
+                                                            <i class="icon anm anm-cart-l"></i>
+                                                            <span class="text">Add to Cart</span>
+                                                        </span>
+                                                    </button>
+                                                </form>
                                                 <!--End Cart Button-->
-                                                <!--Quick View Button-->
-                                                <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
-                                                    data-bs-toggle="modal" data-bs-target="#quickview_modal">
-                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
-                                                            class="text">Quick View</span></span>
-                                                </a>
-                                                <!--End Quick View Button-->
+
                                                 <!--Wishlist Button-->
-                                                <a href="wishlist-style2.html" class="btn-icon wishlist"
+                                                <a class="btn-icon wishlist text-link wishlist {{ $product->isFavorite ? 'active' : '' }}"
+                                                    href="#" data-product-id="{{ $product->id }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                        class="text">Add To Wishlist</span></a>
+                                                    title="{{ $product->isFavorite ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích' }}">
+                                                    <i style="font-size:15px"
+                                                        class="icon anm anm-heart-l  favorite {{ $product->isFavorite ? 'd-none' : '' }}"></i>
+                                                    <i style="color: #e96f84;font-size:15px"
+                                                        class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
+                                                </a>
                                                 <!--End Wishlist Button-->
-                                            </div> --}}
+                                            </div> 
                                             <!--End Product Button-->
                                         </div>
                                         <!-- End Product Image -->
@@ -997,4 +999,132 @@
             window.location.href = '/filterproduct?' + params.toString();
         }
     </script>
+
+<script>
+    var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const wishlistLinks = document.querySelectorAll('.wishlist');
+        const wishlistCountElement = document.getElementById('wishlist-count');
+
+        wishlistLinks.forEach(wishlistLink => {
+            const productId = wishlistLink.getAttribute('data-product-id');
+            let isFavorite = wishlistLink.classList.contains('active');
+
+            // Thêm sự kiện click vào wishlist link
+            wishlistLink.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (!isLoggedIn) {
+                    // Chuyển hướng sang trang đăng nhập nếu chưa đăng nhập
+                    window.location.href = '/login';
+                    return;
+                }
+                const url = isFavorite ? `/wishlist/remove/${productId}` :
+                    `/wishlist/add/${productId}`;
+                const method = isFavorite ? 'DELETE' : 'POST';
+
+                fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector(
+                                'meta[name="csrf-token"]').getAttribute('content'),
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            isFavorite = !isFavorite; // Đổi trạng thái yêu thích
+
+                            // Toggle giữa biểu tượng viền và đổ đầy
+                            const heartOutline = wishlistLink.querySelector('.anm-heart-l');
+                            const heartFill = wishlistLink.querySelector('.bi-heart-fill');
+
+                            if (isFavorite) {
+                                wishlistLink.classList.add('active');
+                                heartOutline.classList.add('d-none');
+                                heartFill.classList.remove('d-none');
+                                updateWishlistCount(1);
+                            } else {
+                                wishlistLink.classList.remove('active');
+                                heartOutline.classList.remove('d-none');
+                                heartFill.classList.add('d-none');
+                                updateWishlistCount(-1);
+                            }
+                        } else {
+                            alert('Lỗi: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                    });
+            });
+        });
+
+        function updateWishlistCount(change) {
+            let currentCount = parseInt(wishlistCountElement.textContent) || 0;
+            currentCount += change;
+            wishlistCountElement.textContent = currentCount;
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function() {
+    $('.add-to-cart-form').on('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn tải lại trang
+
+        const form = $(this); // Lấy form hiện tại đang được submit
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    updateCartCount();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Có lỗi xảy ra!',
+                        text: response.message || 'Xin vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Có lỗi xảy ra!',
+                    text: 'Xin vui lòng thử lại!',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+
+function updateCartCount() {
+      $.ajax({
+          url: '/cart/count', // Thay đổi đường dẫn này
+          type: 'GET',
+          success: function(data) {
+              $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+          },
+          error: function(xhr) {
+              console.error('Error:', xhr);
+          }
+      });
+  }
+});
+
+
+
+</script>
 @endsection
