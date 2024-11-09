@@ -581,7 +581,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
-
+ {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
     <script>
         $(document).ready(function() {
             $('#productTable').DataTable();
