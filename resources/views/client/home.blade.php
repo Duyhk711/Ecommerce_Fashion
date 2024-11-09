@@ -1143,6 +1143,7 @@
 
         <!--Parallax Banner-->
         <div class="section parallax-banner-style1 py-0">
+            @if (!empty($banners['middleBanners']) && $banners['middleBanners']->isNotEmpty())
             <div class="hero hero-large hero-overlay bg-size">
                 @foreach ($banners['middleBanners'] as $banner)
                     @php
@@ -1150,7 +1151,7 @@
                     @endphp
                     @foreach ($bannerImages as $bannerImage)
                         <img class="bg-img" src="{{ Storage::url($bannerImage->image) }}"
-                            alt="Clearance Sale - Flat 50% Off" width="1920" height="645" />
+                             alt="Clearance Sale - Flat 50% Off" width="1920" height="645" />
                     @endforeach
                 @endforeach
                 <div class="hero-inner d-flex-justify-center">
@@ -1164,7 +1165,7 @@
                             </p>
                             <!--Countdown Timer-->
                             <div class="hero-saleTime d-flex-center text-center justify-content-center"
-                                data-countdown="2028/10/01"></div>
+                                 data-countdown="2028/10/01"></div>
                             <!--End Countdown Timer-->
                             <p class="hero-details">
                                 Hema Multipurpose Template that will give you and your
@@ -1175,8 +1176,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+        @endif
+        
         </div>
         <!--End Parallax Banner-->
 
@@ -2084,44 +2086,44 @@ title="Product" width="625" height="808" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
-    $('.add-to-cart-form').on('submit', function(event) {
-        event.preventDefault(); // Ngăn chặn tải lại trang
+        $('.add-to-cart-form').on('submit', function(event) {
+            event.preventDefault(); // Ngăn chặn tải lại trang
 
-        const form = $(this); // Lấy form hiện tại đang được submit
+            const form = $(this); // Lấy form hiện tại đang được submit
 
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            success: function(response) {
-                if (response.success) {
-                    updateCartCount();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công!',
-                        text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
-                        confirmButtonText: 'OK'
-                    });
-                } else {
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        updateCartCount();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Có lỗi xảy ra!',
+                            text: response.message || 'Xin vui lòng thử lại!',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error:', xhr);
                     Swal.fire({
                         icon: 'error',
                         title: 'Có lỗi xảy ra!',
-                        text: response.message || 'Xin vui lòng thử lại!',
+                        text: 'Xin vui lòng thử lại!',
                         confirmButtonText: 'OK'
                     });
                 }
-            },
-            error: function(xhr) {
-                console.error('Error:', xhr);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Có lỗi xảy ra!',
-                    text: 'Xin vui lòng thử lại!',
-                    confirmButtonText: 'OK'
-                });
-            }
+            });
         });
-    });
 
     function updateCartCount() {
           $.ajax({

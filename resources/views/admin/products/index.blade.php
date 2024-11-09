@@ -138,7 +138,7 @@
                                         <td class="fs-sm">
                                             <div class="d-flex align-items-center">
                                                 <!-- Hình ảnh -->
-                                                <div class="image-container" style="width: 60px; height: 60px; position: relative;">
+                                                <div class="image-container" style="width: 60px; height: height: 100%;; position: relative;">
                                                     <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm" class="img-thumbnail">
                                                     <div class="overlay">
                                                         <i class="fa fa-eye eye-icon"></i>
@@ -370,7 +370,7 @@
                                         <td class="fs-sm">
                                             <div class="d-flex align-items-center">
                                                 <!-- Hình ảnh -->
-                                                <div style="width: 60px; height: 60px;">
+                                                <div style="width: 60px; height: 100%;">
                                                     <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm"
                                                         style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid">
                                                 </div>
@@ -745,35 +745,38 @@
                         if (response.status === 'success') {
                             toastr.success(response.message);
 
-
-                            $form.closest('.content2').find('.save-all-btn, .cancel-btn')
-                                .addClass('d-none');
-                            // $('.total-stock').text(response.total_stock);
+                            $form.closest('.content2').find('.save-all-btn, .cancel-btn').addClass('d-none');
 
                             var $totalStockElement = $('td.total-stock[data-id="' + productId + '"]');
 
-                            // Kiểm tra xem phần tử có tồn tại không
                             if ($totalStockElement.length) {
-                                // Cập nhật nội dung text mới cho tổng số lượng
                                 $totalStockElement.text(response.total_stock);
-
-                                // Buộc trình duyệt cập nhật lại (reflow)
-                                $totalStockElement.hide().show(0);
+                                $totalStockElement.hide().show(0); // Buộc trình duyệt cập nhật lại (reflow)
                             } else {
                                 console.error("Không tìm thấy phần tử total-stock với product_id: " + productId);
                             }
                             console.log(response);
                         } else {
-                            toastr.success(response.message);
+                            toastr.error(response.message); // Hiển thị lỗi nếu status không phải là "success"
                         }
                     },
                     error: function(xhr) {
-                        toastr.success('Có lỗi xảy ra trong quá trình cập nhật: ' + xhr.status + ' - ' +
-                            xhr.responseText);
+                        // Kiểm tra và hiển thị thông báo lỗi chi tiết từ phản hồi của server
+                        if (xhr.status === 422) { // Lỗi xác thực
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    toastr.error(errors[key][0]); // Hiển thị từng lỗi xác thực với màu đỏ
+                                }
+                            }
+                        } else {
+                            toastr.error('Có lỗi xảy ra trong quá trình cập nhật: ' + xhr.status + ' - ' + xhr.responseText);
+                        }
                     }
                 });
             });
         });
+
     </script>
 
     {{-- VALIDATE VARIANT APPLY ALL --}}
@@ -872,33 +875,32 @@
     </script>
 
     <script>
-   $(document).ready(function() {
-    // Mở popup khi click vào ảnh
-    $('.image-container').on('click', function() {
-        const imageUrl = $(this).find('img').attr('src');
-        $('#popupImage').attr('src', imageUrl);
-        $('#imagePopup').fadeIn();
-    });
+        $(document).ready(function() {
+            // Mở popup khi click vào ảnh
+            $('.image-container').on('click', function() {
+                const imageUrl = $(this).find('img').attr('src');
+                $('#popupImage').attr('src', imageUrl);
+                $('#imagePopup').fadeIn();
+            });
 
-    // Đóng popup khi click vào biểu tượng đóng
-    $('.close').on('click', function() {
-        $('#imagePopup').fadeOut();
-    });
+            // Đóng popup khi click vào biểu tượng đóng
+            $('.close').on('click', function() {
+                $('#imagePopup').fadeOut();
+            });
 
-    // Đóng popup khi nhấn vào khoảng trống ngoài ảnh
-    $('#imagePopup').on('click', function(e) {
-        if (e.target === this) {  // Kiểm tra nếu click vào vùng popup mà không phải ảnh
-            $(this).fadeOut();
-        }
-    });
+            // Đóng popup khi nhấn vào khoảng trống ngoài ảnh
+            $('#imagePopup').on('click', function(e) {
+                if (e.target === this) {  // Kiểm tra nếu click vào vùng popup mà không phải ảnh
+                    $(this).fadeOut();
+                }
+            });
 
-    // Đóng popup khi nhấn phím ESC
-    $(document).on('keyup', function(e) {
-        if (e.key === "Escape") {
-            $('#imagePopup').fadeOut();
-        }
-    });
-});
+            // Đóng popup khi nhấn phím ESC
+            $(document).on('keyup', function(e) {
+                if (e.key === "Escape") {
+                    $('#imagePopup').fadeOut();
+                }
+            });
+        });
     </script>
-    <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
 @endsection
