@@ -33,7 +33,7 @@ class CartController extends Controller
                       'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
                   ]);
               }
-               return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.')
+               return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
           } catch (\Exception $e) {
               if ($request->ajax()) {
                   return response()->json([

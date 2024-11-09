@@ -37,6 +37,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
+Route::get('/san-pham/{slug}/comment', 'ProductController@loadComments')->name('productDetail.comments');
 Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
 
 // order
@@ -64,36 +65,36 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-wishlist', [UserController::class, 'myWishlist'])->name('my.wishlist');
     Route::post('/wishlist/add/{product_id}', [UserController::class, 'add'])->name('wishlist.add');
     Route::delete('/wishlist/remove/{product_id}', [UserController::class, 'remove'])->name('wishlist.remove');
-  
+
     //profile
     Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
-  
+
     // chat
     Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
     Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
     Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
     Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
-  
+
     // save vouchers
     Route::post('/save-voucher', [VouchersController::class, 'save'])->name('save-voucher');
-  
+
     //đổi mật khẩu
     Route::post('/my-account/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
-  
+
     // account
     Route::get('/my-account', [UserController::class, 'info'])->name('myaccount');
     Route::get('/my-order', [MyOrderController::class, 'myOrders'])->name('my.order');
     Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::get('/voucher', [VouchersController::class, 'voucher'])->name('voucher');
-  
+
     // Route xem chi tiết đơn hàng
     Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
 
     Route::get('/my-order/{id}', [MyOrderController::class, 'showOne'])->name('orderOneDetail');
     //Route hủy đơn hàng
     Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
-  
+
     // address
     Route::get('/address', [UserController::class, 'address'])->name('address');
     Route::post('/address', [UserController::class, 'storeAddress'])->name('addresses.store');
@@ -103,7 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/address/{id}', [UserController::class, 'updateAddress'])->name('addresses.update');
     // Lấy dữ liệu địa chỉ để chỉnh sửa
     Route::get('/address/{id}/edit', [UserController::class, 'editAddress'])->name('addresses.edit');
-  
+
     // them binh luan
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
@@ -122,5 +123,6 @@ Route::get('/api/vouchers/all', [VouchersController::class, 'loadAllVouchers'])-
 Route::get('/api/vouchers', [VouchersController::class, 'getAllVouchers']);
 Route::get('/check-voucher/{code}', [VouchersController::class, 'checkVoucher']);
 
-
-
+Route::get('/not-found', function () {
+    return view('client.not-found');
+})->name('not-found');

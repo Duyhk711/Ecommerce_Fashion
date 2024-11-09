@@ -3,9 +3,9 @@
     <div>
         <div class="profile-card mt-0 h-100">
             <div class="top-sec d-flex-justify-center justify-content-between mb-4">
-                <h2 class="mb-0">Profile</h2>
+                <h2 class="mb-0">Thông tin cá nhân</h2>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#editProfileModal"><i class="icon anm anm-plus-r me-1"></i> Edit</button>
+                    data-bs-target="#editProfileModal"><i class="icon anm anm-plus-r me-1"></i> Chỉnh sửa</button>
             </div>
             <div class="profile-book-section mb-4">
                 <div class="details d-flex align-items-center mb-2">
@@ -85,7 +85,7 @@
                                         <div
                                             class="profileImg img-thumbnail shadow bg-white rounded-circle position-relative mx-auto">
                                             <img id="avatarPreview"
-                                                src="{{ !empty($currentUser->avatar) ? asset('storage/' . $currentUser->avatar) : asset('client/images/users/default-avatar.jpg') }}"
+                                                src="{{ !empty($currentUser->avatar_url) ? $currentUser->avatar_url : asset('client/images/users/default-avatar.jpg') }}"
                                                 class="rounded-circle" alt="profile"
                                                 style="width: 130px; height: 130px; object-fit: cover;" />
                                             <div class="thumb-edit">
