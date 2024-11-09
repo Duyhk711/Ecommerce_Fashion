@@ -59,34 +59,40 @@ class HomeController extends Controller
     // Tìm kiếm sản phẩm theo tên
     public function search(Request $request)
     {
+        $user = auth()->user();
         $query    = $request->get('query', '');
         $products = $this->homeService->searchProducts($query);
+        foreach ($products as $product) {
+            $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                                                 ->where('product_id', $product->id)
+                                                 ->exists() : false;
+        }
         return view('client.search', compact('products', 'query'));
     }
 
 
-    public function showQuickView($id)
-    {
-        // Tìm sản phẩm theo ID
-        $product = Product::find($id);
+    // public function showQuickView($id)
+    // {
+    //     // Tìm sản phẩm theo ID
+    //     $product = Product::find($id);
 
-        // Lấy tất cả biến thể của sản phẩm
-        $product_variants = $product->variants;
+    //     // Lấy tất cả biến thể của sản phẩm
+    //     $product_variants = $product->variants;
 
-        // Lấy màu sắc từ biến thể của sản phẩm
-        $colors = $product->colors;
+    //     // Lấy màu sắc từ biến thể của sản phẩm
+    //     $colors = $product->colors;
 
-        // Lấy kích thước từ biến thể của sản phẩm
-        $sizes = $product->sizes;
+    //     // Lấy kích thước từ biến thể của sản phẩm
+    //     $sizes = $product->sizes;
 
-        // Trả về dữ liệu JSON để sử dụng trong AJAX
-        return response()->json([
-            'product' => $product,
-            'product_variants' => $product_variants,
-            'colors' => $colors,
-            'sizes' => $sizes,
-        ]);
-    }
+    //     // Trả về dữ liệu JSON để sử dụng trong AJAX
+    //     return response()->json([
+    //         'product' => $product,
+    //         'product_variants' => $product_variants,
+    //         'colors' => $colors,
+    //         'sizes' => $sizes,
+    //     ]);
+    // }
 
 
 }
