@@ -851,7 +851,7 @@
 @endsection
 @section('js')
 
-<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>
+{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> --}}
 <!-- jQuery (required for Easy Pie Chart + jQuery Sparkline plugin) -->
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 

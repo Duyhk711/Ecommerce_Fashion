@@ -223,7 +223,7 @@
                     </div>
                 </div>
             @endforeach
-            <div class="pagination mt-4 text-center">
+            <div class="pagination mt-4 text-center mb-2 d-flex justify-content-end">
                 {{ $orders->links() }}
             </div>
         </div>

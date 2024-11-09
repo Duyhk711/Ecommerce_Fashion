@@ -50,28 +50,28 @@ class UserController extends Controller
 
     // favorite
     public function add($productId)
-{
-    if (!Auth::check()) {
-        return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
+    {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
+        }
+
+        $userId = Auth::id();
+
+        $favorite = Favorite::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($favorite) {
+            return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
+        }
+
+        Favorite::create([
+            'user_id' => $userId,
+            'product_id' => $productId,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
     }
-
-    $userId = Auth::id();
-
-    $favorite = Favorite::where('user_id', $userId)
-        ->where('product_id', $productId)
-        ->first();
-
-    if ($favorite) {
-        return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
-    }
-
-    Favorite::create([
-        'user_id' => $userId,
-        'product_id' => $productId,
-    ]);
-
-    return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
-}
 
     // Phương thức xóa sản phẩm khỏi danh sách yêu thích
     public function remove($productId)
@@ -131,6 +131,7 @@ class UserController extends Controller
         // Lưu địa chỉ và nhận thông tin địa chỉ đã lưu
         $address = $this->userService->storeAddress($data);
 
+        // return view('client.my-account.address', compact('address'));
         return response()->json([
             'success' => true,
             'address' => $address
