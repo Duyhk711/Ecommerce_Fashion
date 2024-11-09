@@ -71,12 +71,14 @@
                         id="order-list">
                         <thead>
                             <tr>
-                                <th class="text-center " style="width: 100px;">Mã đơn</th>
-                                <th class="d-none d-sm-table-cell text-center">Ngày đặt</th>
-                                <th class="d-sm-table-cell">Trạng thái</th>
-                                <th class="d-none d-xl-table-cell">Khách hàng</th>
-                                <th class="d-none d-xl-table-cell text-center">Số lượng</th>
-                                <th class="d-none d-sm-table-cell text-end">Tổng</th>
+                                <th class="text-center fs-sm" style="width: 100px;">Mã đơn</th>
+                                <th class="d-none d-xl-table-cell fs-sm">Khách hàng</th>
+                                <th class="d-none d-sm-table-cell fs-sm text-center">Ngày đặt</th>
+                                <th class="d-sm-table-cell fs-sm">Trạng thái</th>
+                                <th class="d-sm-table-cell fs-sm">Thanh toán</th>
+                                <th class="d-sm-table-cell fs-sm">PTTT</th>
+                                <th class="d-none d-xl-table-cell fs-sm text-center">Số lượng</th>
+                                <th class="d-none d-sm-table-cell fs-sm text-end">Tổng</th>
                                 <th class="text-center">#</th>
                             </tr>
                         </thead>
@@ -89,12 +91,13 @@
                             @foreach ($orders as $order)
                                 <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}" data-order-id="{{$order->id}}">
                                     <td class="text-center fs-sm">
-                                        <a class="fw-semibold" href="be_pages_ecom_order.html">
-                                            <strong>{{ $order->sku }}</strong>
-                                        </a>
+                                        <strong>{{ $order->sku }}</strong>
+                                    </td>
+                                    <td class="d-none d-xl-table-cell fs-sm">
+                                        <a class="fs-sm">{{ $order->customer_name }}</a>
                                     </td>
                                     <td class="d-none d-sm-table-cell text-center fs-sm">
-                                        {{ $order->created_at->format('d-m-Y H:i') }}</td>
+                                        {{ $order->created_at->format('d-m-Y ') }}</td>
                                     <td class="fs-base">
                                         @php
                                             $statusMapping = [
@@ -117,13 +120,38 @@
                                             {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                         </span>
                                     </td>
-                                    <td class="d-none d-xl-table-cell fs-sm">
-                                        <a class="fw-semibold">{{ $order->customer_name }}</a>
+                                    <td class="fs-base">
+                                        @php
+                                            $statusMapping = [
+                                                'cho_thanh_toan' => 'Chờ thanh toán',
+                                                'da_thanh_toan' => 'Đã thanh toán',
+                                            ];
+                                            $badgeColor = [
+                                                'cho_thanh_toan' => 'bg-warning',
+                                                'da_thanh_toan' => 'bg-success',
+                                            ];
+                                            $currentStatus = $order->payment_status;
+                                        @endphp
+                                         <span id="orderStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
+                                            {{ $statusMapping[$currentStatus] ?? $currentStatus }}
+                                        </span>
                                     </td>
-                                    <td class="d-none d-xl-table-cell text-center fs-sm">
-                                        <a class="fw-semibold">{{ $order->items->count() }}</a>
+                                    <td class="fs-base">
+                                        @php
+                                            $statusMapping = [
+                                                'COD' => 'COD',
+                                                'THANH_TOAN_ONLINE' => 'ONLINE',
+                                            ];
+                                            $currentStatus = $order->payment_method;
+                                        @endphp
+                                         <span>
+                                            {{$currentStatus}}
+                                        </span>
                                     </td>
-                                    <td class="d-none d-sm-table-cell text-end fs-sm">
+                                    <td class=" text-center fs-sm">
+                                        <a class="fs-sm">{{ $order->items->count() }}</a>
+                                    </td>
+                                    <td class=" text-end fs-sm">
                                         <strong>{{ number_format($order->total_price, 3, '.', 0) }} đ</strong>
                                     </td>
                                     <td class="text-center fs-base fs-sm">
@@ -211,7 +239,7 @@
   <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script
   {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
   <script>
       document.addEventListener('DOMContentLoaded', function() {

@@ -61,7 +61,9 @@ class ShopController extends Controller
         // dd($categories);
         $products = $this->shopService->getFilteredProducts($request, session('perPage'), session('sortBy'));
         $filter = 'filter';
+        $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
+        $ratings = $this->homeService->getRatingsForRelatedProducts($products);
 
-        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'filter'));
+        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'filter', 'ratings'));
     }
 }
