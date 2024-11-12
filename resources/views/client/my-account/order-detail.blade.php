@@ -251,7 +251,7 @@
                         @if ($order->status == '4')
                             @if ($commentDataArray[$item->productVariant->product->id]['status'] == "not_comment")
                                 <div class="review-button-container" style="text-align: right;">
-                                    <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"
+                                    <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal"
                                         data-bs-toggle="modal"
                                         data-bs-target="#reviewModal"
                                         data-product-id="{{ $item->productVariant->product->id }}"
@@ -263,7 +263,7 @@
                                 </div>
                             @elseif($commentDataArray[$item->productVariant->product->id]['status'] == "commented")
                             <div class="review-button-container" style="text-align: right;">
-                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"
+                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editModal"
                                     data-product-id="{{ $item->productVariant->product->id }}"
@@ -279,7 +279,7 @@
                             </div>
                             @elseif($commentDataArray[$item->productVariant->product->id]['status'] == "updated")
                             <div class="review-button-container" style="text-align: right;">
-                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal text-capitalize"
+                                <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal"
                                     data-bs-toggle="modal"
                                     data-bs-target="#getModal"
                                     data-product-id="{{ $item->productVariant->product->id }}"
@@ -325,7 +325,7 @@
                     </td>
                 </tr>
             </table>
-             <a href="{{ route('my.order') }}" class="btn btn-sm mb-2 fw-normal text-capitalize" style="height: 30px"> Quay lại</a>
+             <a href="{{ route('my.order') }}" class="btn btn-sm mb-2 fw-normal" style="height: 30px"> Quay lại</a>
         </div>
     </div>
 @endsection

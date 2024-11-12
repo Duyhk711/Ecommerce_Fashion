@@ -14,8 +14,8 @@
                         <div class="profile-top text-center mb-4 px-3">
                             <div class="profile-image mb-3">
                                 <img class="rounded-circle blur-up lazyload"
-                                     data-src="{{ !empty($currentUser->avatar) ? asset('storage/' . $currentUser->avatar) : asset('client/images/users/default-avatar.jpg') }}"
-                                     src="{{ !empty($currentUser->avatar) ? asset('storage/' . $currentUser->avatar) : asset('client/images/users/default-avatar.jpg') }}"
+                                     data-src="{{ $currentUser->avatar_url }}"
+                                     src="{{ $currentUser->avatar_url}}"
                                      alt="user" style="width: 130px; height: 130px; object-fit: cover;" />
                             </div>
                             <div class="profile-detail">

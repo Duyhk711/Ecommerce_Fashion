@@ -331,7 +331,7 @@
             });
             let messageHtml = `
                 <div class="message received">
-                    <div class="message-text">${data.user.name}: ${data.message}</div>
+                    <div class="message-text">${data.message}</div>
                     <div class="message-time">${messageTime}</div>
                 </div>`;
 
