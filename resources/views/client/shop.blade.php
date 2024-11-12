@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="details text-center">
                                     <h4 class="category-title mb-0">{{ $catalogue->name }}</h4>
-                                    <p class="counts">{{ $catalogue->children->count() }} Items</p>
+                                    <p class="counts">{{ $catalogue->children->count() }} Sản phẩm</p>
                                 </div>
                             </a>
                         </div>
@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="col-6 text-right">
                                         <button class="btn btn-sm" type="submit"
-                                            onclick="filterProducts();">Filter</button>
+                                            onclick="filterProducts();">Lọc</button>
                                     </div>
                                 </div>
                             </form>
@@ -178,7 +178,7 @@
                                     class="btn btn-filter icon anm anm-sliders-hr d-inline-flex d-lg-none me-2"><span
                                         class="d-none">Filter</span></button>
                                 <div class="filters-item d-flex align-items-center">
-                                    <label class="mb-0 me-2 d-none d-lg-inline-block">View as:</label>
+                                    <label class="mb-0 me-2 d-none d-lg-inline-block">Xem dưới dạng:</label>
                                     <div class="grid-options view-mode d-flex">
                                         <a class="icon-mode mode-list d-block" data-col="1"></a>
                                         <a class="icon-mode mode-grid grid-2 d-block" data-col="2"></a>
@@ -189,7 +189,7 @@
                             </div>
                             <div
                                 class="col-12 col-sm-4 col-md-4 col-lg-4 text-center product-count order-0 order-md-1 mb-3 mb-sm-0">
-                                <span class="toolbar-product-count">Showing: {{ session('perPage') }} products</span>
+                                <span class="toolbar-product-count">Đang xem: {{ session('perPage') }} sản phẩm</span>
                             </div>
                             @php
                                 $page = 'shop';
@@ -201,7 +201,7 @@
                                 class="col-8 col-sm-6 col-md-4 col-lg-4 text-right filters-toolbar-item d-flex justify-content-end order-2 order-sm-2">
                                 <div class="filters-item d-flex align-items-center">
                                     <label for="ShowBy"
-                                        class="mb-0 me-2 text-nowrap d-none d-sm-inline-flex">Show:</label>
+                                        class="mb-0 me-2 text-nowrap d-none d-sm-inline-flex">Hiển thị:</label>
                                     <select name="ShowBy" id="ShowBy" class="filters-toolbar-show"
                                         onchange="this.form.submit()">
                                         <option value="10" {{ request('ShowBy') == '10' ? 'selected' : '' }}>
@@ -338,14 +338,23 @@
                                             <!--End Product Vendor-->
                                             <!-- Product Name -->
                                             <div class="product-name">
-                                                <a
-                                                    href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
+                                                <a href="{{ route('productDetail', $product->slug) }}" data-bs-toggle="tooltip" title="{{$product->name}}">
+                                                    {{ $product->name }}
+                                                </a>
                                             </div>
-                                            <!-- End Product Name -->
-                                            <!-- Product Price -->
+                                            {{-- <!-- End Product Name -->
+                                            <!-- Product Price --> --}}
                                             <div class="product-price">
-                                                <span
-                                                    class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                @if ($product->price_sale == 0 || $product->price_sale == $product->price_regular || $product->price_sale == null)
+                                                    <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                @else
+                                                    <span
+                                                        class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                    <span
+                                                        class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span>
+                                                @endif
+
+                                                {{-- <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span> --}}
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
@@ -427,7 +436,7 @@
                         </div>
                         @if ($products->lastPage() > 1)
                             <!-- Pagination -->
-                            <nav class="clearfix pagination-bottom">
+                            <nav class="clearfix pagination-bottom mb-2">
                                 <ul class="pagination justify-content-center">
                                     @if (!$products->onFirstPage())
                                         <li class="page-item">

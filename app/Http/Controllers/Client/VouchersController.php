@@ -33,10 +33,10 @@ class VouchersController extends Controller
     public function loadAllVouchers()
     {
         $userId = Auth::id();
-        $currentDate = now(); 
+        $currentDate = now();
 
-        $vouchers = Voucher::where('is_active', 1) 
-            ->where('end_date', '>', $currentDate) 
+        $vouchers = Voucher::where('is_active', 1)
+            ->where('end_date', '>', $currentDate)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -53,10 +53,10 @@ class VouchersController extends Controller
     public function getAllVouchers()
     {
         $userId = Auth::id();
-        $currentDate = now(); 
+        $currentDate = now();
 
-        $vouchers = Voucher::where('is_active', 1) 
-            ->where('end_date', '>', $currentDate) 
+        $vouchers = Voucher::where('is_active', 1)
+            ->where('end_date', '>', $currentDate)
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
@@ -107,7 +107,6 @@ class VouchersController extends Controller
           UserVoucher::create([
               'user_id' => $user->id,
               'voucher_id' => $voucher->id,
-              'saved_at' => now(),
               'is_used' => false
           ]);
 
