@@ -68,13 +68,13 @@ class VoucherService
     }
     public function toggleActiveStatus(Voucher $voucher)
     {
-        $voucher->is_active = 0; // Kích hoạt voucher
+        $voucher->is_active = 1; // Kích hoạt voucher
         $voucher->save();
     }
 
     public function toggleDeactiveStatus(Voucher $voucher)
     {
-        $voucher->is_active = 1; // Hủy kích hoạt voucher
+        $voucher->is_active = 0; // Hủy kích hoạt voucher
         $voucher->save();
     }
 

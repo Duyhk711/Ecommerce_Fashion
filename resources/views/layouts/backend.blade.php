@@ -11,11 +11,6 @@
   <meta name="author" content="pixelcave">
   <meta name="robots" content="noindex, nofollow">
 
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css"> -->
-  {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.css"> --}}
-  {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-  {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-knob/1.2.2/jquery.knob.min.js"></script> --}}
-
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
@@ -24,11 +19,7 @@
   <!-- Modules -->
 
   @yield('css')
-  {{-- @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js']) --}}
   @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
-
-  <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
-  {{-- @vite(['resources/sass/main.scss', 'resources/sass/dashmix/themes/xwork.scss', 'resources/js/dashmix/app.js']) --}}
 
 </head>
 
@@ -143,17 +134,6 @@
     <!-- END Side Overlay -->
 
     <!-- Sidebar -->
-    <!--
-      Sidebar Mini Mode - Display Helper classes
-
-      Adding 'smini-hide' class to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
-      Adding 'smini-show' class to an element will make it visible (opacity: 1) when the sidebar is in mini mode
-          If you would like to disable the transition animation, make sure to also add the 'no-transition' class to your element
-
-      Adding 'smini-hidden' to an element will hide it when the sidebar is in mini mode
-      Adding 'smini-visible' to an element will show it (display: inline-block) only when the sidebar is in mini mode
-      Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
-    -->
     <nav id="sidebar" aria-label="Main Navigation">
       <!-- Side Header -->
       <div class="bg-header-dark">
@@ -204,7 +184,7 @@
         <div class="content-side content-side-full">
           <ul class="nav-main">
             <li class="nav-main-item">
-              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="/dashboard">
+              <a class="nav-main-link{{ request()->is('admin/dashboard') ? ' active' : '' }}" href="/admin/dashboard">
                 <i class="nav-main-link-icon fa fa-location-arrow"></i>
                 <span class="nav-main-link-name">Dashboard</span>
                 <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span>
@@ -578,7 +558,6 @@
   </div>
   @yield('modal')
   <!-- END Page Container -->
-  {{-- <!-- <script src=" {{ asset('admin/js/dashmix.app.min.js') }}"></script> --> --}}
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -609,54 +588,6 @@
       @endif
     });
   </script>
-
-  {{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const ctx = document.getElementById('revenueChart').getContext('2d');
-      const revenueChart = new Chart(ctx, {
-        type: 'line', // kiểu biểu đồ (line, bar, pie, ...)
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // nhãn cho trục X
-          datasets: [{
-            label: 'Doanh thu (VNĐ)', // tiêu đề cho chuỗi dữ liệu
-            data: [12000, 15000, 10000, 17000, 20000, 25000, 23000, 30000, 28000, 32000, 35000, 40000], // dữ liệu doanh thu
-            borderColor: 'rgba(75, 192, 192, 1)', // màu đường
-            backgroundColor: 'rgba(75, 192, 192, 0.2)', // màu nền dưới đường
-            borderWidth: 2,
-            fill: true, // điền màu dưới đường
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true // bắt đầu trục Y từ 0
-            }
-          }
-        }
-      });
-    });
-  </script>
-
-  <script>
-    $(function() {
-      $('.js-pie-chart').knob({
-        readOnly: true,
-        'fgColor': '#e04f1a',
-        'bgColor': '#e9e9e9'
-      });
-
-      // Khởi động biểu đồ sau khi tải trang
-      $('.js-pie-chart').each(function() {
-        var $this = $(this);
-        var percent = $this.data('percent');
-        $this.knob({
-          'fgColor': $this.data('bar-color')
-        });
-        $this.val(percent).trigger('change');
-      });
-    });
-  </script> --}}
 
 </body>
 @yield('js')
