@@ -99,4 +99,16 @@ class MyOrderController extends Controller
             return redirect()->back()->with('error', $result['message']);
         }
     }
+    public function removeOrder(Request $request, $order_id)
+    {
+        // Gọi service để hủy đơn hàng
+        $result = $this->myOrderService->cancelOrder($order_id);
+
+        // Kiểm tra kết quả
+        if ($result['success']) {
+            return redirect()->back()->with('success', $result['message']);
+        } else {
+            return redirect()->back()->with('error', $result['message']);
+        }
+    }
 }

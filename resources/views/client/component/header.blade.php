@@ -69,7 +69,7 @@
                                                          @foreach ($category->children as $child)
                                                              @if ($child->is_active)
                                                                  <li class="lvl-2">
-                                                                     <a href="{{ url('/filterproduct?categories=' . $child->id) }}"
+                                                                     <a href="{{ url('filterproduct') . '?danhmuc=' . $child->slug }}"
                                                                          class="site-nav lvl-2">{{ $child->name }}</a>
                                                                  </li>
                                                              @endif
@@ -152,16 +152,19 @@
                          <div class="customer-links">
                              <ul class="m-0">
                                  @if (!Auth::check())
-                                     <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Đăng nhập</a></li>
-                                     <li><a href="{{ route('register') }}"><i
-                                                 class="icon anm anm-user-al"></i>Đăng kí</a></li>
+                                     <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Đăng
+                                             nhập</a></li>
+                                     <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Đăng
+                                             kí</a></li>
                                  @endif
 
                                  @if (Auth::check())
-                                     <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>Tài khoản</a></li>
-                                     <li><a href="{{ route('my.wishlist') }}"><i
-                                                 class="icon anm anm-heart-l"></i>Yêu thích</a></li>
-                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Đăng kí</a></li>
+                                     <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>Tài
+                                             khoản</a></li>
+                                     <li><a href="{{ route('my.wishlist') }}"><i class="icon anm anm-heart-l"></i>Yêu
+                                             thích</a></li>
+                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Đăng
+                                             kí</a></li>
                                  @endif
                              </ul>
                          </div>
@@ -173,19 +176,19 @@
                      <a href="{{ route('my.wishlist') }}">
                          <i class="hdr-icon icon anm anm-heart-l"></i>
                          <span class="wishlist-count" id="wishlist-count">
-                            @auth
-                                {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
-                            @else
-                                0
-                            @endauth
-                        </span>
+                             @auth
+                                 {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
+                             @else
+                                 0
+                             @endauth
+                         </span>
                      </a>
                  </div>
                  <!--End Wishlist-->
                  <!--Minicart-->
                  <div class="header-cart iconset" title="Cart">
-                     <a href="{{ route('cart.show') }}" class="header-cart btn-minicart clr-none"
-                         ><i class="hdr-icon icon anm anm-cart-l"></i>
+                     <a href="{{ route('cart.show') }}" class="header-cart btn-minicart clr-none"><i
+                             class="hdr-icon icon anm anm-cart-l"></i>
                          <span class="cart-count">
                              {{ app(App\Services\Client\CartService::class)->getCartItemCount() }}
                          </span>
