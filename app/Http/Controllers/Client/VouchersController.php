@@ -36,7 +36,7 @@ class VouchersController extends Controller
         $currentDate = now();
 
         $vouchers = Voucher::where('is_active', 1)
-        // ->where('end_date', '>', $currentDate)
+            ->where('end_date', '>', $currentDate)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -105,7 +105,6 @@ class VouchersController extends Controller
             UserVoucher::create([
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
-                'saved_at' => now(),
                 'is_used' => false,
             ]);
 

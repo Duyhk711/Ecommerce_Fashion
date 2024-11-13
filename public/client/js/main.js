@@ -378,14 +378,14 @@
     var LiN = $(this).find(".more-item").length;
     if (LiN > 3) {
       $(".more-item", this).eq(2).nextAll().hide().addClass("toggleable");
-      $(this).append('<li class="more">Hiển thị thêm</li>');
+      $(this).append('<li class="more">Xem thêm</li>');
     }
   });
   $(".morelist").on("click", ".more", function () {
     if ($(this).hasClass("less")) {
-      $(this).text("Hiển thị thêm").removeClass("less");
+      $(this).text("Xem thêm").removeClass("less");
     } else {
-      $(this).text("Ẩn bớt").addClass("less");
+      $(this).text("Ẩn").addClass("less");
     }
     $(this).siblings("li.toggleable").slideToggle();
   });

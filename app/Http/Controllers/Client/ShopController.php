@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use App\Services\Client\HomeService;
 use App\Services\Client\ShopService;
 use Illuminate\Http\Request;
@@ -19,7 +20,9 @@ class ShopController extends Controller
     }
 
     public function index(Request $request)
-    {$pageTitle = 'Cửa Hàng';
+    {
+        $user = auth()->user();
+        $pageTitle = 'Cửa Hàng';
         $categories = $this->shopService->getCategories();
         $colorValues = $this->shopService->getColorValues();
         $sizeValues = $this->shopService->getSizeValues();
@@ -33,7 +36,15 @@ class ShopController extends Controller
         // Lấy sản phẩm từ database
         $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
         $ratings = $this->homeService->getRatingsForRelatedProducts($products);
-        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'ratings'));}
+
+        // sp yeu thich
+        foreach ($products as $product) {
+            $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                ->where('product_id', $product->id)
+                ->exists() : false;
+        }
+        return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'ratings'));
+    }
     public function filterShop(Request $request)
     {
         $categories = $this->shopService->getCategories();
@@ -49,7 +60,7 @@ class ShopController extends Controller
         // dd($categories);
         $products = $this->shopService->getFilteredProducts($request, session('perPage'), session('sortBy'));
         $filter = 'filter';
-
+        $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
         $ratings = $this->homeService->getRatingsForRelatedProducts($products);
 
         return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'filter', 'ratings'));
