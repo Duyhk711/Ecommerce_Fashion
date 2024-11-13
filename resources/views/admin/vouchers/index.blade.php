@@ -91,7 +91,7 @@
                                 <td>{{ $voucher->quantity }}</td>
                                 <td>{{ $voucher->description }}</td>
                                 <td>
-                                    @if (!$voucher->is_active)
+                                    @if ($voucher->is_active)
                                     <span class="text-success">
                                         <i class="fa fa-check-circle" data-bs-toggle="tooltip" title="Hoạt động"></i>
                                     </span>
@@ -103,7 +103,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        @if ($voucher->is_active)
+                                        @if (!$voucher->is_active)
                                             <form action="{{ route('admin.vouchers.activate', $voucher->id) }}" method="POST" style="display:inline;" class="form-activate">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-alt-success" data-bs-toggle="tooltip" title="Kích hoạt">

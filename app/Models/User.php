@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -72,5 +73,18 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Voucher::class, 'user_voucher')
                     ->withPivot('saved_at', 'is_used');
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar && Storage::exists($this->avatar)) {
+            return Storage::url($this->avatar); // Đường dẫn ảnh từ storage
+        }
+        return $this->avatar ?? $this->google_avatar ?? asset('client/images/users/default-avatar.jpg');
+    }
+
+    public function setAvatarAttribute($value)
+    {
+        $this->attributes['avatar'] = $value ? $value : $this->google_avatar;
     }
 }

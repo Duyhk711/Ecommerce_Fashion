@@ -161,7 +161,7 @@
                                      <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>Tài khoản</a></li>
                                      <li><a href="{{ route('my.wishlist') }}"><i
                                                  class="icon anm anm-heart-l"></i>Yêu thích</a></li>
-                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Đăng kí</a></li>
+                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Đăng xuất</a></li>
                                  @endif
                              </ul>
                          </div>
