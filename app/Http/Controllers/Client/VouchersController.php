@@ -105,7 +105,7 @@ class VouchersController extends Controller
             UserVoucher::create([
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
-                'is_used' => false,
+                'is_used' => false
             ]);
 
             $voucher->decrement('quantity');
@@ -117,8 +117,36 @@ class VouchersController extends Controller
             return response()->json(['success' => true, 'message' => 'Lưu thành công!']);
         });
     }
+    public function getMyVoucher()
+    {
+        $userId = Auth::id();
 
-    public function getAvailableVouchers()
+        $userVouchers = UserVoucher::where('user_id', $userId)
+            ->with('voucher')
+            ->get();
+
+        if ($userVouchers->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Không có voucher nào đã lưu.']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'vouchers' => $userVouchers->map(function ($userVoucher) {
+                return [
+                    'id' => $userVoucher->voucher->id,
+                    'code' => $userVoucher->voucher->code,
+                    'description' => $userVoucher->voucher->description,
+                    'discount_type' => $userVoucher->voucher->discount_type,
+                    'discount_value' => $userVoucher->voucher->discount_value,
+                    'minimum_order_value' => $userVoucher->voucher->minimum_order_value,
+                    'expiry_date' => $userVoucher->voucher->end_date,
+                    'is_used' => $userVoucher->is_used,
+                ];
+            })
+        ]);
+    }
+  
+  public function getAvailableVouchers()
     {
         $user = Auth::user();
 
