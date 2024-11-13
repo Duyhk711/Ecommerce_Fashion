@@ -353,7 +353,7 @@ class ProductService
                 'price_sale' => $newVariantSalePrices[$index],
                 'stock' => $newVariantStocks[$index],
                 'sku' => $newVariantSkus[$index],
-                'image' => isset($newVariantImages[$index]) ? $this->uploadImage($newVariantImages[$index]) : null,
+                'image' => isset($newVariantImages[$index]) ? $this->uploadImageVariant($newVariantImages[$index]) : null,
             ]);
 
             if (isset($newValues[$index])) {
