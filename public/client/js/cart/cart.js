@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Xử lý nút xóa sản phẩm
-  const removeButtons = document.querySelectorAll(".cart-remove");
+  
 
   // removeButtons.forEach((button) => {
   //   button.addEventListener("click", function (event) {
@@ -277,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //       });
   //   });
   // });
+  const removeButtons = document.querySelectorAll(".cart-remove");
   removeButtons.forEach((button) => {
     button.addEventListener("click", function (event) {
       event.preventDefault();

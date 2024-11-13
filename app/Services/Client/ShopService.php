@@ -24,21 +24,23 @@ class ShopService
 
     public function getFilteredProducts($request, $perPage, $sortBy)
     {
-        $products = Product::with(['variants.variantAttributes.attributeValue'])
+        $products = Product::with(['variants.variantAttributes.attributeValue', 'catalogue'])
             ->where('is_active', 1); // Chỉ lấy sản phẩm đang hoạt động
 
         // dd($products);
 
         // Kiểm tra xem có bộ lọc nào được áp dụng hay không
-        if ($request->has('categories')) {
-            $products->filterByCategory($request->input('categories'));
+        if ($request->has('danhmuc')) {
+            $cate = Catalogue::where('slug', $request->input('danhmuc'))->first();
+            // dd($request->has('categories'));
+            $products->filterByCategory($cate->id);
         } else if ($request->has('price_text')) {
             // dd('ok');
             $products->filterByPrice($request->input('price_text'));
-        } else if ($request->has('colors')) {
-            $products->filterByAttributes($request->input('colors'));
-        } else if ($request->has('size')) {
-            $products->filterByAttributes($request->input('size'));
+        } else if ($request->has('mau')) {
+            $products->filterByAttributes($request->input('mau'));
+        } else if ($request->has('kichco')) {
+            $products->filterByAttributes($request->input('kichco'));
         }
         // dd($products->toSql(), $products->getBindings());
         // Gọi hàm sắp xếp
