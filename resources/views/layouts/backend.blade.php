@@ -25,7 +25,7 @@
 
 <body>
 
-  <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow fs-sm">
+  <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-fixed main-content-narrow fs-sm side-trans-enabled page-header-dark">
     <!-- Side Overlay-->
     <aside id="side-overlay">
       <!-- Side Header -->
@@ -155,7 +155,7 @@
             <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
             <!-- Class Toggle, functionality initialized in Helpers.dmToggleClass() -->
             <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="class-toggle" data-target="#sidebar-style-toggler" data-class="fa-toggle-off fa-toggle-on" onclick="Dashmix.layout('sidebar_style_toggle');Dashmix.layout('header_style_toggle');">
-              <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
+              <i class="fa fa-toggle-on" id="sidebar-style-toggler"></i>
             </button>
             <!-- END Toggle Sidebar Style -->
 
