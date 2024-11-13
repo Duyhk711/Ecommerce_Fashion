@@ -285,12 +285,10 @@
                                                                         $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
-                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', 0) }}₫</strong>
+                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', '.') }}₫</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
-
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -341,16 +339,15 @@
                                                 <div class="row g-0 border-bottom pb-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
                                                             cộng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}₫</span></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }} ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
-                                                            giá</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money discount">-0</span>₫</span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm giá</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                      <span class="money discount">0 ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
@@ -362,9 +359,9 @@
                                                 <div class="row g-0 pt-2">
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money total_price">{{ number_format($total, 3, '.', 0) }}</b></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                        <b class="money total_price">{{ number_format($total, 3, '.', '.') }}  ₫</b>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -419,16 +416,16 @@
                                                 <div class="row g-0 border-bottom pb-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
                                                             cộng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}</span>₫</span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }}₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
                                                             giá</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money discount">-0</span>₫</span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money discount">0 ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
@@ -440,9 +437,9 @@
                                                 <div class="row g-0 pt-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng phải
                                                             trả</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money total_price">{{ number_format($total, 3, '.', 0) }}</b></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                      <b class="money total_price">{{ number_format($total, 3, '.', '.') }} ₫</b>
+                                                    </span>
                                                 </div>
                                                 <input type="hidden" value="{{ $total }}" id="total_price"
                                                     name="total_price">
