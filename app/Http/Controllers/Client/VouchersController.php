@@ -21,9 +21,9 @@ class VouchersController extends Controller
     }
     public function voucher()
     {
-        $pageTitle='Mã ưu đãi';
+        $pageTitle = 'Mã ưu đãi';
         $currentUser = $this->userService->getCurrentUser();
-        return view('client.my-account.vouchers', compact( 'currentUser', ));
+        return view('client.my-account.vouchers', compact('currentUser', ));
     }
     public function index()
     {
@@ -73,50 +73,80 @@ class VouchersController extends Controller
 
 
 
-  public function save(Request $request)
-  {
-      $request->validate([
-          'code' => 'required|string|max:255',
-          'discount_type' => 'required|in:percentage,fixed',
-          'discount_value' => 'required|numeric',
-          'start_date' => 'required|date',
-          'end_date' => 'required|date',
-      ]);
+    public function save(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:255',
+            'discount_type' => 'required|in:percentage,fixed',
+            'discount_value' => 'required|numeric',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
 
-      $user = Auth::user();
+        $user = Auth::user();
 
-      return DB::transaction(function () use ($request, $user) {
-          $voucher = Voucher::where('code', $request->input('code'))->lockForUpdate()->first();
+        return DB::transaction(function () use ($request, $user) {
+            $voucher = Voucher::where('code', $request->input('code'))->lockForUpdate()->first();
 
-          if (!$voucher) {
-              return response()->json(['success' => false, 'message' => 'Voucher không tồn tại.']);
-          }
+            if (!$voucher) {
+                return response()->json(['success' => false, 'message' => 'Voucher không tồn tại.']);
+            }
 
-          if ($voucher->quantity <= 0) {
-              return response()->json(['success' => false, 'message' => 'Voucher đã hết số lượng.']);
-          }
+            if ($voucher->quantity <= 0) {
+                return response()->json(['success' => false, 'message' => 'Voucher đã hết số lượng.']);
+            }
 
-          $existingVoucher = UserVoucher::where('user_id', $user->id)
-              ->where('voucher_id', $voucher->id)
-              ->first();
+            $existingVoucher = UserVoucher::where('user_id', $user->id)
+                ->where('voucher_id', $voucher->id)
+                ->first();
 
-          if ($existingVoucher) {
-              return response()->json(['success' => false, 'message' => 'Voucher này đã được lưu.']);
-          }
+            if ($existingVoucher) {
+                return response()->json(['success' => false, 'message' => 'Voucher này đã được lưu.']);
+            }
 
-          UserVoucher::create([
-              'user_id' => $user->id,
-              'voucher_id' => $voucher->id,
-              'is_used' => false
-          ]);
+            UserVoucher::create([
+                'user_id' => $user->id,
+                'voucher_id' => $voucher->id,
+                'is_used' => false
+            ]);
 
-          $voucher->decrement('quantity');
+            $voucher->decrement('quantity');
 
-          if ($voucher->quantity == 0) {
-              broadcast(new VoucherOutOfStock($voucher));
-          }
-          broadcast(new VoucherSaved($voucher->id));
-          return response()->json(['success' => true, 'message' => 'Lưu thành công!']);
-      });
-  }
+            if ($voucher->quantity == 0) {
+                broadcast(new VoucherOutOfStock($voucher));
+            }
+            broadcast(new VoucherSaved($voucher->id));
+            return response()->json(['success' => true, 'message' => 'Lưu thành công!']);
+        });
+    }
+    public function getMyVoucher()
+    {
+        $userId = Auth::id();
+
+        $userVouchers = UserVoucher::where('user_id', $userId)
+            ->with('voucher')
+            ->get();
+
+        if ($userVouchers->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Không có voucher nào đã lưu.']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'vouchers' => $userVouchers->map(function ($userVoucher) {
+                return [
+                    'id' => $userVoucher->voucher->id,
+                    'code' => $userVoucher->voucher->code,
+                    'description' => $userVoucher->voucher->description,
+                    'discount_type' => $userVoucher->voucher->discount_type,
+                    'discount_value' => $userVoucher->voucher->discount_value,
+                    'minimum_order_value' => $userVoucher->voucher->minimum_order_value,
+                    'expiry_date' => $userVoucher->voucher->end_date,
+                    'is_used' => $userVoucher->is_used,
+                ];
+            })
+        ]);
+    }
+
+
 }

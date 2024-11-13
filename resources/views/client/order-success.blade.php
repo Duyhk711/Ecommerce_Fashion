@@ -87,7 +87,7 @@
                             <div class="row g-0 border-bottom py-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm giá</strong></span>
                                 <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                        class="money">-0 VND</span></span>
+                                        class="money">0 VND</span></span>
                             </div>
                             <div class="row g-0 border-bottom py-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao hàng</strong></span>
