@@ -79,7 +79,7 @@
         border-radius: 5px;
         margin: 0 10px;
         max-width: 70%;
-        
+
     }
 
     .chat-message.sender .message-content {
@@ -121,23 +121,23 @@
         background-color: #ff0000;
         color: #fff;
         border-radius: 50%;
-        min-width: 24px; 
-        min-height: 24px; 
-        padding: 3px; 
+        min-width: 24px;
+        min-height: 24px;
+        padding: 3px;
         margin-left: 10px;
         font-size: 0.8em;
-        display: inline-flex; 
-        align-items: center; 
-        justify-content: center; 
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         line-height: 1;
     }
     .profile_info {
         display: flex;
         justify-content: space-between;
-        width: 100%; 
+        width: 100%;
     }
     .chat-list::-webkit-scrollbar {
-        width: 10px; 
+        width: 10px;
     }
 
     .chat-list::-webkit-scrollbar-thumb {
@@ -145,20 +145,20 @@
         border-radius: 10px;
     }
     .chat-list::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+        background: #f1f1f1;
     }
 
     .chat-window::-webkit-scrollbar {
-        width: 10px; 
+        width: 10px;
     }
 
     .chat-window::-webkit-scrollbar-thumb {
-        background-color: #7c848d; 
-        border-radius: 10px; 
+        background-color: #7c848d;
+        border-radius: 10px;
     }
 
     .chat-window::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+        background: #f1f1f1;
     }
     .chat-message .message-content p {
     line-height: 2; /* Điều chỉnh khoảng cách giãn dòng, giảm giá trị để thu nhỏ */
@@ -182,7 +182,7 @@
 <div class="row">
     <div class="col-md-12 mt-4 mb-4 grid-margin">
         <div class="row">
- 
+
             <div class="col-md-4 col-lg-3">
                 <div class="card shadow-sm">
                     <div class="card-header text-white">
@@ -190,18 +190,18 @@
                     </div>
                     <div class="list-group chat-list" id="chatList">
                         <ul class="list-group list-group-flush">
-                            
+
                         </ul>
-                        
+
                     </div>
                 </div>
             </div>
 
- 
+
             <div class="col-md-8 col-lg-9">
                 <div id="welcomeMessage" class="welcome-message">
-                    <h5>Chào mừng đến với Zalo PC!</h5>
-                    <p>Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.</p>
+                    <h5><img src="https://cdn-icons-png.flaticon.com/512/8744/8744028.png" width="80px" alt="" srcset=""> Trang hỗ trợ khách hàng trực tuyến cửa hàng Poly Fashion</h5>
+                    {{-- <p>Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.</p> --}}
                 </div>
                 <div class="card shadow-sm" id="chatContainer" style="display: none;">
                     <div class="card-header text-white">
@@ -210,7 +210,7 @@
 
                     <div class="card-body chat-window">
                         <div class="chat-message-container" id="chatMessageContainer">
-                            
+
                         </div>
                     </div>
 
@@ -233,7 +233,7 @@
 @endsection
 
 @section('js')
-@vite(['resources/js/chat.js']) 
+@vite(['resources/js/chat.js'])
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 
 <script>
@@ -243,18 +243,18 @@
             encrypted: true
         });
 
-        var userId = {{ Auth::id() }}; 
-        
-        var currentChatUserId = null; 
+        var userId = {{ Auth::id() }};
 
-        var channel = pusher.subscribe('chat.' + userId); 
-        loadUsers(); 
+        var currentChatUserId = null;
+
+        var channel = pusher.subscribe('chat.' + userId);
+        loadUsers();
         channel.bind('user-message', function(data) {
     if (data && data.message) {
-        let senderId = data.sender_id; 
-        let receiverId = data.receiver_id; 
+        let senderId = data.sender_id;
+        let receiverId = data.receiver_id;
         let messageText = data.message;
-        let senderName = data.user.name; 
+        let senderName = data.user.name;
         let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         if (receiverId == userId && senderId == currentChatUserId) {
             let messageHtml = `
@@ -284,19 +284,19 @@
 
         } else if (receiverId == userId) {
             let $chatItem = $('.chat-item').filter(function() {
-                return $(this).data('user-id') == senderId; 
+                return $(this).data('user-id') == senderId;
             });
             if ($chatItem.length > 0) {
                 let $unreadCount = $chatItem.find('.unread-count');
                 if ($unreadCount.length > 0) {
-                    $unreadCount.text(parseInt($unreadCount.text()) + 1); 
+                    $unreadCount.text(parseInt($unreadCount.text()) + 1);
                 } else {
-                    $chatItem.append('<span class="unread-count">1</span>'); 
+                    $chatItem.append('<span class="unread-count">1</span>');
                 }
             }
         }
         scrollToBottom();
-        loadUsers(); 
+        loadUsers();
     } else {
         console.error('Dữ liệu tin nhắn không hợp lệ.');
     }
@@ -304,7 +304,7 @@
 
         $(document).on('click', '.chat-item', function() {
             let profileName = $(this).find('.profile_name').text();
-            let profileImage = $(this).find('img').attr('src'); 
+            let profileImage = $(this).find('img').attr('src');
             currentChatUserId = $(this).data('user-id');
             $('#receiver_id').val(currentChatUserId);
             $('#chat_name').html(`<img src="${profileImage}" class="avatar" alt="${profileName}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${profileName}`);
@@ -317,7 +317,7 @@
                 method: 'POST',
                 data: {
                     receiver_id: currentChatUserId,
-                    _token: '{{ csrf_token() }}' 
+                    _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     console.log('Tin nhắn đã được đánh dấu là đã đọc');
@@ -331,14 +331,14 @@
                 url: '{{ route('admin.fetchMessages') }}',
                 method: 'GET',
                 data: {
-                    receiver_id: currentChatUserId 
+                    receiver_id: currentChatUserId
                 },
                 success: function(response) {
-                    $('#chatMessageContainer').empty(); 
+                    $('#chatMessageContainer').empty();
 
                     response.messages.forEach(function(message) {
-                        let isSender = message.sender_id == userId; 
-                        let userName = isSender ? '{{ Auth::user()->name }}' : profileName; 
+                        let isSender = message.sender_id == userId;
+                        let userName = isSender ? '{{ Auth::user()->name }}' : profileName;
 
                         let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -402,14 +402,14 @@
                 method: 'GET',
                 success: function(response) {
                     let chatList = $('#chatList ul');
-                    chatList.empty(); 
+                    chatList.empty();
 
                     response.users.forEach(function(user) {
                         let unreadCountHtml = user.unread_count > 0 ? `<span class="unread-count">${user.unread_count}</span>` : '';
                         let userHtml = `
                             <li class="list-group-item d-flex align-items-center chat-item" data-user-id="${user.id}">
                                 <img src="${user.avatar_url}" class="profile_img rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
-                                <div class="profile_info d-flex justify-content-between w-100"> 
+                                <div class="profile_info d-flex justify-content-between w-100">
                                     <span class="profile_name font-weight-bold">${user.name}</span>
                                     ${unreadCountHtml}
                                 </div>
@@ -424,5 +424,5 @@
         }
     });
 </script>
-<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
+{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
 @endsection

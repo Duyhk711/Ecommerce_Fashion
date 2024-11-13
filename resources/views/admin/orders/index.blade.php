@@ -239,8 +239,9 @@
   <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script
+  <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
   {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
+
   <script>
       document.addEventListener('DOMContentLoaded', function() {
           var updateStatusModal = document.getElementById('updateStatusModal');
