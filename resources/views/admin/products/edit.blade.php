@@ -40,6 +40,15 @@ Cập nhật sản phẩm
             <div class="block block-rounded">
                 <div class="block-content">
                     <h2 class="content-heading pt-0">Cập nhật sản phẩm</h2>
+                    {{-- @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif  --}}
                     <div class="row">
                         <!-- Cột bên trái -->
                         <div class="col-8">
@@ -340,7 +349,7 @@ Cập nhật sản phẩm
             </div>
 
             <div class="btn">
-                <button type="submit" class="btn btn-outline-primary">Cập nhật sản phẩm</button>
+                <button type="submit" class="btn btn-outline-primary mb-3">Cập nhật sản phẩm</button>
             </div>
         </form>
     </div>
@@ -627,7 +636,7 @@ Cập nhật sản phẩm
                     <td><input type="text" name="new_variant_skus[]" class="form-control variant-input" value="${sku}" readonly></td>
                     <td>
                         <div class="custom-file">
-                            <input type="file" name="variant_images[]" class="form-control-file variant-image-input" id="variant-image-input">
+                            <input type="file" name="new_variant_images[]" class="form-control-file variant-image-input" id="variant-image-input">
                             <label class="custom-file-label" for="variant-image-input"></label>
                         </div>
                         <div id="variant-image-container">
@@ -689,7 +698,7 @@ Cập nhật sản phẩm
 
 
             // Hiển thị preview ảnh khi người dùng chọn ảnh
-            $(document).on('change', 'input[name="variant_images[]"]', function(e) {
+            $(document).on('change', 'input[name="new_variant_images[]"]', function(e) {
                 const reader = new FileReader();
                 const imgPreview = $(this).closest('td').find('.img-preview');
 
@@ -868,5 +877,4 @@ Cập nhật sản phẩm
 
 {{-- validate variant --}}
 <script src="{{asset('admin/js/ui/validations/product-edit.js')}}"></script>
-<script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
 @endsection

@@ -25,6 +25,7 @@ class MyOrderController extends Controller
         $status = $request->query('status');
         $searchTerm = $request->input('search');
         $orders = $this->myOrderService->getOrder($status, $searchTerm);
+        // dd($orders);
         return view('client.my-account.my-order', compact('orders', 'currentUser', 'status', 'pageTitle'));
     }
 

@@ -164,7 +164,7 @@
                                      <li><a href="{{ route('my.wishlist') }}"><i class="icon anm anm-heart-l"></i>Yêu
                                              thích</a></li>
                                      <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Đăng
-                                             kí</a></li>
+                                             xuất</a></li>
                                  @endif
                              </ul>
                          </div>

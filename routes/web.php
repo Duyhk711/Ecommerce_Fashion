@@ -37,6 +37,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
+Route::get('/san-pham/{slug}/comment', 'ProductController@loadComments')->name('productDetail.comments');
 Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
 
 // order
@@ -122,3 +123,7 @@ Route::post('/apply-coupon', [VouchersController::class, 'applyCoupon'])->name('
 Route::get('/api/vouchers/all', [VouchersController::class, 'loadAllVouchers'])->name('vouchers.load.all');
 Route::get('/api/vouchers', [VouchersController::class, 'getAllVouchers']);
 Route::get('/check-voucher/{code}', [VouchersController::class, 'checkVoucher']);
+
+Route::get('/not-found', function () {
+    return view('client.not-found');
+})->name('not-found');

@@ -68,12 +68,21 @@ class CartService
 
     protected function addItemToCart($cartId, $productVariantId, $quantity, $price)
     {
+        $productVariant = ProductVariant::find($productVariantId);
+        $maxQuantity = $productVariant->stock;
         $cartItem = CartItem::where('cart_id', $cartId)
             ->where('product_variant_id', $productVariantId)
             ->first();
 
         if ($cartItem) {
-            $cartItem->quantity += $quantity;
+            $newQuantity = $cartItem->quantity + $quantity;
+
+            if ($newQuantity > $maxQuantity) {
+                $cartItem->quantity = $maxQuantity;
+            } else {
+                // Nếu không vượt quá, cộng thêm số lượng
+                $cartItem->quantity += $quantity;
+            }
             $cartItem->save();
         } else {
             CartItem::create([
