@@ -26,23 +26,23 @@ class CartController extends Controller
         $urlWithoutParams = url()->previous();
         $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
-              $this->cartService->addToCart($productId, $productVariantId, $quantity);
-              if ($request->ajax()) {
-                  return response()->json([
-                      'success' => true,
-                      'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
-                  ]);
-              }
-               return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
-          } catch (\Exception $e) {
-              if ($request->ajax()) {
-                  return response()->json([
-                      'success' => false,
-                      'message' => $e->getMessage()
-                  ], 500);
-              }
-              return redirect($urlWithoutParams)->with('error', $e->getMessage());
-          }
+            $this->cartService->addToCart($productId, $productVariantId, $quantity);
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được thêm vào giỏ hàng!',
+                ]);
+            }
+            return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+            return redirect($urlWithoutParams)->with('error', $e->getMessage());
+        }
     }
 
     public function getCartCount()
@@ -58,7 +58,7 @@ class CartController extends Controller
         $cartItems = $this->cartService->getCartItems();
         // dd($cartItems);
         // dd(session('cart'));
-        return view('client.cart', compact('cartItems','pageTitle'));
+        return view('client.cart', compact('cartItems', 'pageTitle'));
     }
 
     public function updateCart(Request $request)

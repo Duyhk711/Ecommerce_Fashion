@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\CartItem;
 use App\Models\Favorite;
 use App\Services\Client\HomeService;
 use App\Services\Client\ShopService;
@@ -41,8 +40,8 @@ class ShopController extends Controller
         // sp yeu thich
         foreach ($products as $product) {
             $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                 ->where('product_id', $product->id)
-                                                 ->exists() : false;
+                ->where('product_id', $product->id)
+                ->exists() : false;
         }
         return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'ratings'));
     }

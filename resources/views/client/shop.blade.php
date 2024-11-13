@@ -29,16 +29,25 @@
 @endsection
 @section('content')
     @include('client.component.page_header')
-    <div class="container" style="max-width: 80%;">
+    <div class="container mb-5" style="max-width: 80%;">
         <!--Main Content-->
         <div class="container">
 
             <!--Category Slider-->
             <div class="collection-slider-6items gp10 slick-arrow-dots sub-collection section pt-0">
-                @foreach ($categories as $catalogue)
-                    @if ($catalogue->is_active)
+                @php
+                    use App\Models\Catalogue;
+                    $catalogues = Catalogue::where('parent_id', '<>', null)->get();
+
+                    foreach ($catalogues as $category) {
+                        $category->products_count = $category->products()->count();
+                    }
+                @endphp
+                @foreach ($catalogues as $catalogue)
+                    @if ($catalogue->is_active && $catalogue->products_count > 0)
                         <div class="category-item zoomscal-hov">
-                            <a href="{{ route('shop', ['slug' => $catalogue->slug]) }}" class="category-link clr-none">
+                            <a href="{{ url('filterproduct') . '?danhmuc=' . $catalogue->slug }}"
+                                class="category-link clr-none">
                                 <div class="zoom-scal zoom-scal-nopb rounded-0">
                                     <img class="rounded-0 blur-up lazyload"
                                         data-src="{{ asset('storage/' . $catalogue->cover) }}"
@@ -47,7 +56,7 @@
                                 </div>
                                 <div class="details text-center">
                                     <h4 class="category-title mb-0">{{ $catalogue->name }}</h4>
-                                    <p class="counts">{{ $catalogue->children->count() }} Sản phẩm</p>
+                                    <p class="counts">{{ $catalogue->products_count }} Sản phẩm</p>
                                 </div>
                             </a>
                         </div>
@@ -77,7 +86,7 @@
                                                     @foreach ($category->children as $subcategory)
                                                         <li class="lvl2">
                                                             <a href="javascript:void(0);" class="site-nav category-filter"
-                                                                data-id="{{ $subcategory->id }}"
+                                                                data-id="{{ $subcategory->slug }}"
                                                                 onclick="toggleCategory(this); filterProducts();">{{ $subcategory->name }}
                                                                 <span
                                                                     class="count">({{ $subcategory->products_count }})</span>
@@ -106,8 +115,7 @@
                                         <input id="amount" type="text" name="price_text" readonly />
                                     </div>
                                     <div class="col-6 text-right">
-                                        <button class="btn btn-sm" type="submit"
-                                            onclick="filterProducts();">Lọc</button>
+                                        <button class="btn btn-sm" type="submit" onclick="filterProducts();">Lọc</button>
                                     </div>
                                 </div>
                             </form>
@@ -115,7 +123,7 @@
                         <!--End Price Filter-->
 
                         <!--Color Swatches-->
-                        {{-- <div class="sidebar-widget filterBox filter-widget">
+                        <div class="sidebar-widget filterBox filter-widget">
                             <div class="widget-title">
                                 <h2>Màu</h2>
                             </div>
@@ -132,7 +140,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        </div> --}}
+                        </div>
                         <!--End Color Swatches-->
 
                         <!--Size Swatches-->
@@ -171,12 +179,12 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-9 main-col">
                     <!--Toolbar-->
                     <div class="toolbar toolbar-wrapper shop-toolbar">
-                        <div class="row align-items-center">
+                        <div class="row align-items-center justify-content-between">
                             <div
                                 class="col-4 col-sm-2 col-md-4 col-lg-4 text-left filters-toolbar-item d-flex order-1 order-sm-0">
                                 <button type="button"
                                     class="btn btn-filter icon anm anm-sliders-hr d-inline-flex d-lg-none me-2"><span
-                                        class="d-none">Filter</span></button>
+                                        class="d-none">Lọc</span></button>
                                 <div class="filters-item d-flex align-items-center">
                                     <label class="mb-0 me-2 d-none d-lg-inline-block">Xem dưới dạng:</label>
                                     <div class="grid-options view-mode d-flex">
@@ -187,10 +195,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
+                            {{-- <div
                                 class="col-12 col-sm-4 col-md-4 col-lg-4 text-center product-count order-0 order-md-1 mb-3 mb-sm-0">
-                                <span class="toolbar-product-count">Đang xem: {{ session('perPage') }} sản phẩm</span>
-                            </div>
+                                <span class="toolbar-product-count">Hiển thị: {{ session('perPage') }} sản phẩm</span>
+                            </div> --}}
                             @php
                                 $page = 'shop';
                                 if (isset($filter) && $filter == 'filter') {
@@ -204,8 +212,8 @@
                                         class="mb-0 me-2 text-nowrap d-none d-sm-inline-flex">Hiển thị:</label>
                                     <select name="ShowBy" id="ShowBy" class="filters-toolbar-show"
                                         onchange="this.form.submit()">
-                                        <option value="10" {{ request('ShowBy') == '10' ? 'selected' : '' }}>
-                                            10
+                                        <option value="12" {{ request('ShowBy') == '12' ? 'selected' : '' }}>
+                                            12
                                         </option>
                                         <option value="15" {{ request('ShowBy') == '15' ? 'selected' : '' }}>
                                             15
@@ -361,10 +369,7 @@
                                             <div class="product-review">
                                                 @php
                                                     // Lấy đánh giá tương ứng cho sản phẩm hiện tại
-                                                    $rating = $ratings->firstWhere(
-                                                        'product_id',
-                                                        $product->id,
-                                                    );
+                                                    $rating = $ratings->firstWhere('product_id', $product->id);
                                                     // Nếu không có đánh giá thì thiết lập mặc định là 0
                                                     $averageRating = $rating['average_rating'] ?? 0;
                                                 @endphp
@@ -986,13 +991,13 @@
 
             let params = new URLSearchParams();
             if (selectedCategories.length) {
-                params.append('categories', selectedCategories);
+                params.append('danhmuc', selectedCategories);
             } else if (priceRange) {
-                params.append('price', priceRange);
+                params.append('gia', priceRange);
             } else if (selectedColors.length) {
-                params.append('colors', selectedColors);
+                params.append('mau', selectedColors);
             } else if (selectedSizes.length) {
-                params.append('size', selectedSizes);
+                params.append('kickco', selectedSizes);
             }
 
             // Điều hướng đến URL mới với các tham số

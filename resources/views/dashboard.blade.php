@@ -16,6 +16,26 @@
     font-size: 16px;
     text-align: center;
   }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .legend-color {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    display: inline-block;
+  }
+
+  .block-content-full .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
 @endsection
 @section('content')
@@ -177,46 +197,45 @@
   </div>
   <!-- END Store Growth -->
 
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-xl-12">
-      <!-- Simple -->
       <div class="block block-rounded">
         <div class="block-header block-header-default">
-          <h3 class="block-title">Biểu đồ thống kế theo đơn hàng</h3>
-          <div class="block-options">
-            <button type="button" class="js-pie-randomize btn-block-option" data-bs-toggle="tooltip" title="Randomize">
-              <!-- <i class="fa fa-random"></i> -->
-            </button>
-          </div>
+          <h3 class="block-title">Biểu đồ hệ thống theo đơn hàng</h3>
         </div>
         <div class="block-content block-content-full">
-          <div class="row text-center">
-            <div class="col-6 col-md-4 py-3">
-              <div class="js-pie-chart pie-chart" data-percent="25" data-line-width="2" data-size="150" data-bar-color="#e04f1a" data-track-color="#e9e9e9">
-                <span>25%<br><small class="text-muted">tỉ lệ hủy</small></span>
+          <div class="row text-center justify-content-center">
+            <!-- Biểu đồ chỉ số hủy -->
+            <div class="col-6 col-md-4 d-flex flex-column align-items-center py-3">
+              <canvas id="cancelRateChart" width="200" height="200"></canvas>
+              <br>
+              <div class="legend">
+                <div class="legend-color" style="background-color: #e04f1a;"></div>
+                <span>Tỉ lệ hủy</span>
               </div>
             </div>
-
             <!-- Biểu đồ tỷ lệ hoàn thành -->
-            <div class="col-6 col-md-4 py-3">
-              <div class="js-pie-chart pie-chart" data-percent="90" data-line-width="2" data-size="150" data-bar-color="#8dc451" data-track-color="#e9e9e9">
-                <span>90%<br><small class="text-muted">tỉ lệ hoàn thành</small></span>
+            <div class="col-6 col-md-4 d-flex flex-column align-items-center py-3">
+              <canvas id="completionRateChart" width="200" height="200"></canvas>
+              <br>
+              <div class="legend">
+                <div class="legend-color" style="background-color: #8dc451;"></div>
+                <span>Tỷ lệ hoàn thành</span>
               </div>
             </div>
-
             <!-- Biểu đồ trạng thái đơn hàng -->
-            <div class="col-6 col-md-4 py-3">
-              <div class="js-pie-chart pie-chart" data-percent="50" data-line-width="2" data-size="150" data-bar-color="#ffb119" data-track-color="#e9e9e9">
-                <span>50%<br><small class="text-muted">trạng thái đơn hàng</small></span>
+            <div class="col-6 col-md-4 d-flex flex-column align-items-center py-3">
+              <canvas id="orderStatusChart" width="200" height="200"></canvas>
+              <br>
+              <div class="legend">
+                <div class="legend-color" style="background-color: #4a90e2;"></div>
+                <span>Trạng thái đơn hàng</span>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-      <!-- END Simple -->
     </div>
-
   </div>
   <!-- Latest Orders + Stats -->
   <h2 class="content-heading">TOP SẢN PHẨM</h2>
@@ -540,7 +559,73 @@
 @endsection
 @section('js')
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+      type: 'line', // kiểu biểu đồ (line, bar, pie, ...)
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // nhãn cho trục X
+        datasets: [{
+          label: 'Doanh thu (VNĐ)', // tiêu đề cho chuỗi dữ liệu
+          data: [12000, 15000, 10000, 17000, 20000, 25000, 23000, 30000, 28000, 32000, 35000, 40000], // dữ liệu doanh thu
+          borderColor: 'rgba(75, 192, 192, 1)', // màu đường
+          backgroundColor: 'rgba(75, 192, 192, 0.2)', // màu nền dưới đường
+          borderWidth: 2,
+          fill: true, // điền màu dưới đường
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true // bắt đầu trục Y từ 0
+          }
+        }
+      }
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Function để tạo biểu đồ tròn
+  function createPieChart(ctx, percent, color) {
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [percent, 100 - percent],
+          backgroundColor: [color, '#e9e9e9']
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return percent + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Khởi tạo các biểu đồ
+  window.onload = function() {
+    createPieChart(document.getElementById('cancelRateChart').getContext('2d'), 25, '#e04f1a'); // Chỉ số hủy
+    createPieChart(document.getElementById('completionRateChart').getContext('2d'), 90, '#8dc451'); // Tỷ lệ hoàn thành
+    createPieChart(document.getElementById('orderStatusChart').getContext('2d'), 50, '#4a90e2'); // Trạng thái đơn hàng
+  };
+</script>
 {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> --}}
+
 <!-- jQuery (required for Easy Pie Chart + jQuery Sparkline plugin) -->
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 
