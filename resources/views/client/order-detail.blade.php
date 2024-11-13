@@ -153,7 +153,7 @@
                     </span>
                     @if ($order->status == '1')
                         <div class="cancel-item" style="display: inline-block; margin-left: 10px;">
-                            <form action="{{ route('order.cancel', ['order_id' => $order->id]) }}" method="POST"
+                            <form action="{{ route('order.remove', ['order_id' => $order->id]) }}" method="POST"
                                 id="cancelOrderForm-{{ $order->id }}">
                                 @csrf
                                 <button type="button" class="btn btn-outline-danger btn-sm"
