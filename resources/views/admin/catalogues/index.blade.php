@@ -233,6 +233,6 @@
     <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
+    {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
     @vite(['resources/js/pages/datatables.js'])
 @endsection
