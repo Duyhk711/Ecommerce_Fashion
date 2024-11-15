@@ -1007,9 +1007,9 @@
         <!--End Parallax Banner-->
     </div>
 @endsection
-
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/chat.js']);
     <script>
         $(document).ready(function() {
             var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
