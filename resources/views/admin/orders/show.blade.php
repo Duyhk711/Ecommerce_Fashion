@@ -186,13 +186,13 @@
                 <h3 class="block-title ">Người đặt</h3>
               </div>
               <div class="block-content">
-                <div class="fs-4 mb-1">{{$user->name}}</div>
+                <div class="fs-4 mb-1">{{$user ? $user->name : $orderDetail->customer_name}}</div>
                 <address class="fs-sm">
                   {{-- Sunset Str 598<br>
                   Melbourne<br>
                   Australia, 11-671<br><br> --}}
-                  <i class="fa fa-phone"></i> {{$user->phone}}<br>
-                  <i class="fa-regular fa-envelope"></i> <a href="javascript:void(0)">{{$user->email}}</a> <br><br> <br>
+                  <i class="fa fa-phone"></i> {{$user ? $user->phone : $orderDetail->customer_phone}}<br>
+                  <i class="fa-regular fa-envelope"></i> <a href="javascript:void(0)">{{$user ? $user->email : $orderDetail->customer_email}}</a> <br><br> <br>
                 </address>
               </div>
             </div>
@@ -362,7 +362,7 @@
                                       <span class="fw-semibold">{{ $orderDetail->updated_at->format('d-m-Y H:i') }}</span>
                                   </td>
                                   <td>
-                                      <a href="javascript:void(0)">{{ $user->name}}</a>
+                                      <a href="javascript:void(0)">{{ $user ? $user->name : $orderDetail->customer_name}}</a>
                                   </td>
                                   <td class="text-success">
 
