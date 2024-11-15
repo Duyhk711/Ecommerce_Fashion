@@ -62,24 +62,6 @@
             background-color: #e64a19;
 
         }
-
-        /* .voucher-copy {
-                
-                color: #ffffff;
-                border: none;
-                padding: 4px 8px;
-                height: 30px;
-                width: 80px;
-                border-radius: 4px;
-                font-size: 12px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            } */
-
-        /* .voucher-copy:hover {
-                background-color: #2f415d;
-            } */
-
         .xt {
             display: flex;
             justify-content: space-between;
@@ -1091,7 +1073,7 @@
                                 Giảm ${discountDisplay} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${new Date(voucher.end_date).toLocaleDateString()}</div>
                                 <div>
                                     <button class="voucher-copy ${buttonClass}"
                                             data-code="${voucher.code}"
