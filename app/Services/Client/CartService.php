@@ -4,20 +4,32 @@ namespace App\Services\Client;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
 use App\Models\ProductVariant;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Http\Request;
+
 // use Illuminate\Support\Facades\Log;
 
 class CartService
 {
     public function addToCart($productId, $productVariantId, $quantity)
     {
-        $price = $this->getProductVariantPrice($productVariantId);
-
-        if ($price === null) {
-            throw new \Exception('Giá của biến thể sản phẩm không hợp lệ.');
+        $product = Product::with('variants')->findOrFail($productId);
+        $price = null;
+        // Nếu không có biến thể được chỉ định, chọn ngẫu nhiên một biến thể từ sản phẩm
+        if (is_null($productVariantId) && $product->variants->isNotEmpty()) {
+            $variant = $product->variants->random();
+            $productVariantId = $variant->id;
+            $quantity = 1;
+            $price = $this->getProductVariantPrice($productVariantId);
+        } else {
+            // Nếu biến thể đã được chỉ định, kiểm tra giá của biến thể đó
+            $price = $this->getProductVariantPrice($productVariantId);
+            if ($price === null) {
+                throw new \Exception('Giá của biến thể sản phẩm không hợp lệ.');
+            }
         }
 
         $variant = ProductVariant::with(['product', 'variantAttributes.attribute', 'variantAttributes.attributeValue'])
@@ -29,7 +41,7 @@ class CartService
 
         if (Auth::check()) {
             $userId = Auth::id();
-            $cart   = Cart::firstOrCreate(['user_id' => $userId]);
+            $cart = Cart::firstOrCreate(['user_id' => $userId]);
 
             $this->addItemToCart($cart->id, $productVariantId, $quantity, $price);
         } else {
@@ -39,14 +51,14 @@ class CartService
                 $cart[$productVariantId]['quantity'] += $quantity;
             } else {
                 $cart[$productVariantId] = [
-                    'product_id'            => $productId,
-                    'product_variant_id'    => $productVariantId,
-                    'product_name'          => $variant->product->name,
-                    'variant_attributes'    => $attributes,
-                    'image'                 => $variant->image ?: $variant->product->img_thumbnail,
-                    'quantity'              => $quantity,
-                    'stock'                 => $variant->stock,
-                    'price'                 => $price,
+                    'product_id' => $productId,
+                    'product_variant_id' => $productVariantId,
+                    'product_name' => $variant->product->name,
+                    'variant_attributes' => $attributes,
+                    'image' => $variant->image ?: $variant->product->img_thumbnail,
+                    'quantity' => $quantity,
+                    'stock' => $variant->stock,
+                    'price' => $price,
                 ];
             }
 
@@ -54,22 +66,30 @@ class CartService
         }
     }
 
-
     protected function addItemToCart($cartId, $productVariantId, $quantity, $price)
     {
+        $productVariant = ProductVariant::find($productVariantId);
+        $maxQuantity = $productVariant->stock;
         $cartItem = CartItem::where('cart_id', $cartId)
             ->where('product_variant_id', $productVariantId)
             ->first();
 
         if ($cartItem) {
-            $cartItem->quantity += $quantity;
+            $newQuantity = $cartItem->quantity + $quantity;
+
+            if ($newQuantity > $maxQuantity) {
+                $cartItem->quantity = $maxQuantity;
+            } else {
+                // Nếu không vượt quá, cộng thêm số lượng
+                $cartItem->quantity += $quantity;
+            }
             $cartItem->save();
         } else {
             CartItem::create([
-                'cart_id'               => $cartId,
-                'product_variant_id'    => $productVariantId,
-                'quantity'              => $quantity,
-                'price'                 => $price,
+                'cart_id' => $cartId,
+                'product_variant_id' => $productVariantId,
+                'quantity' => $quantity,
+                'price' => $price,
             ]);
         }
     }
@@ -104,7 +124,7 @@ class CartService
             $cartItems = CartItem::with([
                 'productVariant.product',
                 'productVariant.variantAttributes.attribute',
-                'productVariant.variantAttributes.attributeValue'
+                'productVariant.variantAttributes.attributeValue',
             ])
                 ->where('cart_id', $cart->id)
                 ->orderBy('created_at', 'desc')
@@ -121,15 +141,15 @@ class CartService
                 })->implode(', ');
 
                 return [
-                    'cart_item_id'          => $cartItem->id,
-                    'product_name'          => $product->name,
-                    'product_variant_id'    => $variant->id,
-                    'variant_attributes'    => $attributes,
-                    'image'                 => $variant->image ?: $product->img_thumbnail,
-                    'price'                 => $variant->price_sale ?: $variant->price_regular,
-                    'quantity'              => $cartItem->quantity,
-                    'stock'                 => $variant->stock,
-                    'created_at'            => $cartItem->created_at
+                    'cart_item_id' => $cartItem->id,
+                    'product_name' => $product->name,
+                    'product_variant_id' => $variant->id,
+                    'variant_attributes' => $attributes,
+                    'image' => $variant->image ?: $product->img_thumbnail,
+                    'price' => $variant->price_sale ?: $variant->price_regular,
+                    'quantity' => $cartItem->quantity,
+                    'stock' => $variant->stock,
+                    'created_at' => $cartItem->created_at,
                 ];
             });
         }
@@ -144,19 +164,18 @@ class CartService
         // Trả về giỏ hàng từ session và sắp xếp dựa trên `created_at` nếu có
         return collect($cartItems)->map(function ($cartItem) {
             return [
-                'id'                    => $cartItem['variant_id'] ?? null,
-                'product_name'          => $cartItem['product_name'] ?? 'Unknown Product',
-                'product_variant_id'    => $cartItem['product_variant_id'] ?? 'Unknown id',
-                'variant_attributes'    => $cartItem['variant_attributes'] ?? 'No Attributes',
-                'image'                 => $cartItem['image'] ?? 'default_image.jpg',
-                'price'                 => $cartItem['price'] ?? 0,
-                'quantity'              => $cartItem['quantity'] ?? 1,
-                'stock'                 => $cartItem['stock'],
-                'created_at'            => $cartItem['created_at'] ?? now()
+                'id' => $cartItem['variant_id'] ?? null,
+                'product_name' => $cartItem['product_name'] ?? 'Unknown Product',
+                'product_variant_id' => $cartItem['product_variant_id'] ?? 'Unknown id',
+                'variant_attributes' => $cartItem['variant_attributes'] ?? 'No Attributes',
+                'image' => $cartItem['image'] ?? 'default_image.jpg',
+                'price' => $cartItem['price'] ?? 0,
+                'quantity' => $cartItem['quantity'] ?? 1,
+                'stock' => $cartItem['stock'],
+                'created_at' => $cartItem['created_at'] ?? now(),
             ];
         })->sortByDesc('created_at');
     }
-
 
     /**
      * Cập nhật giỏ hàng.
@@ -215,9 +234,6 @@ class CartService
         }
     }
 
-
-
-
     /**
      * Cập nhật giỏ hàng trong session cho người dùng chưa đăng nhập.
      *
@@ -261,8 +277,6 @@ class CartService
         }
     }
 
-
-
     public function removeFromLoggedInUserCart(Request $request)
     {
         $cartItemId = $request->input('cart_item_id');
@@ -304,5 +318,23 @@ class CartService
         }
 
         return ['success' => true, 'message' => 'Sản phẩm đã được xóa khỏi giỏ hàng'];
+    }
+
+    public function getCartItemCount()
+    {
+        if (Auth::check()) {
+            // Đã đăng nhập, lấy số lượng sản phẩm trong giỏ hàng từ cơ sở dữ liệu
+            $cart = Cart::where('user_id', Auth::id())->first();
+
+            if ($cart) {
+                // Lấy tổng số item chưa bị xóa
+                return $cart->items()->whereNull('deleted_at')->count(); // Đếm số lượng item
+            }
+            return 0; // Không có giỏ hàng
+        } else {
+            // Chưa đăng nhập, lấy số lượng sản phẩm trong giỏ hàng từ session
+            $cart = Session::get('cart', []);
+            return count($cart); // Đếm số lượng sản phẩm trong session cart
+        }
     }
 }

@@ -93,7 +93,7 @@
             position: relative;
             width: 100%;
             height: 45px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .custom-file input[type="file"] {
@@ -160,6 +160,13 @@
             text-align: center;
             line-height: 10px;
         }
+
+        .invalid-feedback {
+            display: block !important;
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
     </style>
 @endsection
 @section('content')
@@ -201,7 +208,8 @@
                         <div class="col-8">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
-                                <label for="name" class="form-label">Tên sản phẩm:</label>
+                                <label for="name" class="form-label">Tên sản phẩm<span
+                                        class="text-danger">*</span>:</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
                                     name="name" id="name" value="{{ old('name') }}"
                                     placeholder="Nhập tên sản phẩm">
@@ -221,7 +229,8 @@
                             <div class="row">
                                 <!-- Giá gốc -->
                                 <div class="col-6 mb-3">
-                                    <label for="price_regular" class="form-label">Giá gốc:</label>
+                                    <label for="price_regular" class="form-label">Giá gốc<span
+                                            class="text-danger">*</span>:</label>
                                     <input type="number" class="form-control @error('price_regular') is-invalid @enderror"
                                         name="price_regular" id="price_regular" value="{{ old('price_regular') }}"
                                         placeholder="Nhập giá sản phẩm">
@@ -278,7 +287,8 @@
 
                             <!-- Danh mục -->
                             <div class="row form-group mb-3">
-                                <label class="form-label" for="catalogue-select">Danh mục:</label>
+                                <label class="form-label" for="catalogue-select">Danh mục<span
+                                        class="text-danger">*</span>:</label>
                                 <select class="form-select @error('catalogue-select') is-invalid @enderror"
                                     id="catalogue-select" name="catalogue_id">
                                     <option value="">Chọn danh mục</option>
@@ -295,7 +305,7 @@
 
                             <!-- Các thuộc tính sản phẩm -->
                             <div class="mb-4">
-                                <label class="form-label">Thuộc tính sản phẩm</label>
+                                <label class="form-label">Trạng thái sản phẩm</label>
                                 <div class="row">
                                     <!-- Dòng 1 -->
                                     <div class="d-flex justify-content-between">
@@ -341,7 +351,10 @@
 
                             <!-- Nút tải ảnh chính -->
                             <div class="form-group image-preview" id="main-image-preview">
-                                <label class="form-label">Tải lên ảnh chính:</label>
+                                <label class="form-label">Tải lên ảnh chính<span class="text-danger">*</span>:</label>
+                                @error('img_thumbnail')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                                 <div class="custom-file">
                                     <input type="file" name="img_thumbnail" class="form-control-file"
                                         id="main-image-input">
@@ -352,7 +365,10 @@
 
                             <!-- Tải lên ảnh phụ -->
                             <div class="form-group image-preview" id="sub-images-preview">
-                                <label class="form-label">Tải lên ảnh phụ:</label>
+                                <label class="form-label">Tải lên ảnh phụ<span class="text-danger">*</span>:</label>
+                                @error('images')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                                 <div class="custom-file">
                                     <input type="file" name="images[]" class="form-control-file"
                                         id="sub-images-input" multiple>
@@ -371,7 +387,7 @@
                 <div class="block-content">
                     <div class="row">
                         <div class="col-12">
-                            <h5>Thuộc tính sản phẩm</h5>
+                            <h5>Thuộc tính sản phẩm<span class="text-danger">*</span></h5>
                             <div id="attributes-section" class="mb-3"></div>
 
                             <button type="button" id="add-attribute-btn" class="btn btn-sm btn-alt button-css mb-3"><i
@@ -407,14 +423,17 @@
                                     <div class="col-md-2">
                                         <input type="number" id="bulk_price" class="form-control input-hover"
                                             placeholder="Giá bán lẻ">
+                                        <span class="error-message text-danger" id="error-bulk-price"></span>
                                     </div>
                                     <div class="col-md-2">
                                         <input type="number" id="bulk_price_sale" class="form-control input-hover"
                                             placeholder="Giá khuyến mãi">
+                                        <span class="error-message text-danger" id="error-bulk-price-sale"></span>
                                     </div>
                                     <div class="col-md-2">
                                         <input type="number" id="bulk_stock" class="form-control input-hover"
                                             placeholder="Số lượng">
+                                        <span class="error-message text-danger" id="error-bulk-stock"></span>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end">
                                         <button type="button" id="apply-bulk-edit"
@@ -510,279 +529,352 @@
 
     <script>
         $(document).ready(function() {
-            const attributes = @json($attributes); // Danh sách thuộc tính từ server
+                    const attributes = @json($attributes); // Danh sách thuộc tính từ server
 
-            // Khởi tạo Select2 cho các thuộc tính
-            function initSelect2() {
-                $('.select2-tags').select2({
-                    tags: true,
-                    placeholder: 'Chọn hoặc nhập giá trị',
-                    allowClear: true,
-                    tokenSeparators: [',', ' ']
-                });
-            }
-
-            let selectedAttributes = new Set();
-
-            // Thêm thuộc tính động
-            let clickCount = 0;
-            $('#add-attribute-btn').on('click', function() {
-                const attributeSection = $('#attributes-section');
-                const attributeCount = $('.attribute-select').length;
-
-                if (attributeCount >= 50) {
-                    alert('Bạn không thể tạo quá 50 biến thể.');
-                    return;
-                }
-
-                const attributeOptions = attributes; // Danh sách thuộc tính từ server
-
-                let attributeSelect = `
-                <div class="row form-group attribute-group position-relative mt-3 p-3" style="background-color: #f5f5f5">
-                    <!-- Label và Select cho Thuộc tính -->
-                    <div class="col-12">
-                        <label for="attributes_${attributeCount}">Thuộc tính</label>
-                        <select class="form-control attribute-select" name="attribute_ids[]" data-index="${attributeCount}" required>
-                            <option value="">Chọn thuộc tính</option>
-                            ${attributeOptions.map(attr => {
-                                return selectedAttributes.has(attr.id) ? '' : `<option value="${attr.id}">${attr.name}</option>`;
-                            }).join('')}
-                        </select>
-                    </div>
-
-                    <!-- Label và Select cho Giá trị -->
-                    <div class="col-12 form-group mt-2 value-section">
-                        <label for="values_${attributeCount}">Giá trị</label>
-                        <select name="values[${attributeCount}][]" class="form-control select2-tags" multiple="multiple"></select>
-                    </div>
-
-                    <!-- Nút xóa được đặt lên góc phải -->
-                    <span class="remove-attribute-btn position-absolute" style="top: 0; right: 0 !important; cursor: pointer; font-size: 20px; color: red;">&times;</span>
-                </div>
-            `;
-
-                attributeSection.append(attributeSelect);
-                initSelect2(); // Khởi tạo lại Select2 cho các ô mới
-                clickCount++;
-
-                // Nếu click lần thứ 2 thì ẩn nút
-                if (clickCount >= 2) {
-                    $(this).hide();
-                }
-            });
-
-            // Khi chọn thuộc tính, hiển thị các giá trị thuộc tính
-            $(document).on('change', '.attribute-select', function() {
-                const attributeId = $(this).val();
-                const index = $(this).data('index');
-                const valueSection = $(this).closest('.attribute-group').find('.value-section select');
-
-                if (!attributeId) {
-                    return;
-                }
-
-                const attribute = attributes.find(attr => attr.id == attributeId);
-                const valueOptions = attribute.values.map(val =>
-                    `<option value="${val.id}">${val.value}</option>`).join('');
-                valueSection.html(valueOptions);
-
-                // Thêm thuộc tính đã chọn vào tập hợp để không thể chọn lại
-                selectedAttributes.add(parseInt(attributeId));
-
-                // Disable attribute select after selection
-                $(this).prop('disabled', true);
-            });
-
-            // Xóa thuộc tính
-            $(document).on('click', '.remove-attribute-btn', function() {
-                const attributeGroup = $(this).closest('.attribute-group');
-                const attributeId = attributeGroup.find('.attribute-select').val();
-
-                // Loại bỏ thuộc tính khỏi danh sách các thuộc tính đã chọn
-                selectedAttributes.delete(parseInt(attributeId));
-
-                // Xóa nhóm thuộc tính
-                attributeGroup.remove();
-                clickCount--;
-
-                // Hiển thị lại nút thêm nếu số lần click nhỏ hơn 2
-                if (clickCount < 2) {
-                    $('#add-attribute-btn').show();
-                }
-            });
-
-            // Tạo tổ hợp biến thể
-            $('#generate-variants-btn').on('click', function() {
-                const variantsContainer = $('#variant-container');
-                variantsContainer.html(''); // Xóa các biến thể cũ
-
-                let attributesData = [];
-
-                $('.attribute-group').each(function() {
-                    const attributeId = $(this).find('.attribute-select').val();
-                    const values = $(this).find('.select2-tags').val();
-                    if (values.length > 0) {
-                        attributesData.push({
-                            attributeId,
-                            values
+                    // Khởi tạo Select2 cho các thuộc tính
+                    function initSelect2() {
+                        $('.select2-tags').select2({
+                            tags: true,
+                            placeholder: 'Chọn hoặc nhập giá trị',
+                            allowClear: true,
+                            tokenSeparators: [',', ' ']
                         });
                     }
-                });
 
-                if (attributesData.length === 0) {
-                    alert('Vui lòng chọn ít nhất một thuộc tính và giá trị.');
-                    return;
-                }
-                // Tính toán tổng số tổ hợp
-                let totalCombinations = attributesData.reduce((total, attr) => total * attr.values.length,
-                    1);
+                    let selectedAttributes = new Set();
 
-                // Kiểm tra giới hạn 50 biến thể
-                if (totalCombinations > 50) {
-                    const confirmContinue = confirm(
-                        'Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?'
-                        );
-                    if (!confirmContinue) {
-                        return; // Hủy tạo biến thể nếu người dùng không đồng ý
-                    }
-                }
+                    // Thêm thuộc tính động
+                    let clickCount = 0;
+                    $('#add-attribute-btn').on('click', function() {
+                        const attributeSection = $('#attributes-section');
+                        const attributeCount = $('.attribute-select').length;
 
-                let combinations = generateCombinations(attributesData.map(attr => attr.values));
-
-                // Tạo biến thể từ tổ hợp giá trị
-                combinations.forEach((combination, index) => {
-                    if (index >= 50) {
-                        return; // Giới hạn 50 biến thể
-                    }
-
-                    // const sku = 'SKU-prdas' + combination.join('-');
-                    const sku = `PRD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
-
-                    // Lấy tên của giá trị thuộc tính thay vì ID
-                    let attributeNames = combination.map((valueId, i) => {
-                        const attributeId = attributesData[i].attributeId;
-                        return {
-                            attribute_id: attributeId,
-                            attribute_value_id: valueId
-                        }; // Tạo object attribute_id và attribute_value_id
-                    });
-
-                    // Hiển thị các giá trị thuộc tính đã được chọn (kích cỡ và màu sắc)
-                    // <td>${index + 1}</td>
-                    let variantHtml = `
-                    <tr class="variant">
-                        <td>${getAttributeValueName(attributeNames[0].attribute_id, attributeNames[0].attribute_value_id)}</td>
-                        <td>${getAttributeValueName(attributeNames[1].attribute_id, attributeNames[1].attribute_value_id)}</td>
-                        <td><input type="number" name="variant_prices[]" class="form-control variant-input" required></td>
-                        <td><input type="number" name="variant_sale_prices[]" class="form-control variant-input"></td>
-                        <td><input type="number" name="variant_stocks[]" class="form-control variant-input" required></td>
-                        <td><input type="text" name="variant_skus[]" class="form-control variant-input" value="${sku}" readonly></td>
-                        <td>
-                            <div class="custom-file">
-                                <input type="file" name="variant_images[]" class="form-control-file variant-image-input" id="variant-image-input">
-                                <label class="custom-file-label" for="variant-image-input"></label>
-                            </div>
-                            <div id="variant-image-container">
-                                <img src="" class="img-preview" alt="" style="width: 50px; height: 50px; object-fit: cover;">
-                            </div>
-                        </td>
-                        <td class="variant-actions">
-                            <button type="button" class="delete-variant"> <i class="fa fa-fw fa-times text-danger"></i></button>
-                        </td>
-                    </tr>
-                `;
-
-                    variantsContainer.append(variantHtml);
-
-                    // Lưu thông tin thuộc tính của từng biến thể
-                    attributeNames.forEach((attrName, attrIndex) => {
-                        $(`<input type="hidden" name="values[${index}][${attrIndex}][attribute_id]" value="${attrName.attribute_id}">`)
-                            .appendTo(variantsContainer);
-                        $(`<input type="hidden" name="values[${index}][${attrIndex}][attribute_value_id]" value="${attrName.attribute_value_id}">`)
-                            .appendTo(variantsContainer);
-                    });
-                });
-            });
-
-            // Hiển thị preview ảnh khi người dùng chọn ảnh
-            $(document).on('change', 'input[name="variant_images[]"]', function(e) {
-                const reader = new FileReader();
-                const imgPreview = $(this).closest('td').find('.img-preview');
-
-                reader.onload = function(e) {
-                    imgPreview.attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            });
-
-
-            // Xóa biến thể
-            $(document).on('click', '.delete-variant', function() {
-                $(this).closest('tr').remove();
-            });
-
-            // Sự kiện khi nhấn vào nút để mở dropdown
-            $('.toggle-dropdown').on('click', function() {
-                // Hiển thị hoặc ẩn nội dung bên dưới
-                $('.dropdown-content').slideToggle();
-            });
-
-            // Chỉnh sửa hàng loạt giá và số lượng
-            $('#apply-bulk-edit').on('click', function() {
-                const bulkPrice = $('#bulk_price').val();
-                const bulkPriceSale = $('#bulk_price_sale').val();
-                const bulkStock = $('#bulk_stock').val();
-                // const bulkSku = $('#bulk_sku').val();
-                const applyTo = $('#apply_to').val(); // Lấy giá trị của tùy chọn áp dụng
-
-                if (applyTo === 'all') {
-                    // Áp dụng cho tất cả các biến thể
-                    $('.variant').each(function() {
-                        if (bulkPrice) {
-                            $(this).find('input[name="variant_prices[]"]').val(bulkPrice);
-                        }
-                        if (bulkPriceSale) {
-                            $(this).find('input[name="variant_sale_prices[]"]').val(bulkPriceSale);
+                        if (attributeCount >= 50) {
+                            alert('Bạn không thể tạo quá 50 biến thể.');
+                            return;
                         }
 
-                        if (bulkStock) {
-                            $(this).find('input[name="variant_stocks[]"]').val(bulkStock);
+                        const attributeOptions = attributes; // Danh sách thuộc tính từ server
+
+                        let attributeSelect = `
+                                <div class="row form-group attribute-group position-relative mt-3 p-3" style="background-color: #f5f5f5">
+                                    <!-- Label và Select cho Thuộc tính -->
+                                    <div class="col-12">
+                                        <label for="attributes_${attributeCount}">Thuộc tính</label>
+                                        <select class="form-control attribute-select" name="attribute_ids[]" data-index="${attributeCount}" required>
+                                            <option value="">Chọn thuộc tính</option>
+                                            ${attributeOptions.map(attr => {
+                                                return selectedAttributes.has(attr.id) ? '' : `<option value="${attr.id}">${attr.name}</option>`;
+                                            }).join('')}
+                                        </select>
+                                    </div>
+
+                                    <!-- Label và Select cho Giá trị -->
+                                    <div class="col-12 form-group mt-2 value-section">
+                                        <label for="values_${attributeCount}">Giá trị</label>
+                                        <select name="values[${attributeCount}][]" class="form-control select2-tags" multiple="multiple"></select>
+                                    </div>
+
+                                    <!-- Nút xóa được đặt lên góc phải -->
+                                    <span class="remove-attribute-btn position-absolute" style="top: 0; right: 0 !important; cursor: pointer; font-size: 20px; color: red;">&times;</span>
+                                </div>
+                            `;
+
+                        attributeSection.append(attributeSelect);
+                        initSelect2(); // Khởi tạo lại Select2 cho các ô mới
+                        clickCount++;
+
+                        // Nếu click lần thứ 2 thì ẩn nút
+                        if (clickCount >= 2) {
+                            $(this).hide();
+                        }
+                    });
+
+                    // Khi chọn thuộc tính, hiển thị các giá trị thuộc tính
+                    $(document).on('change', '.attribute-select', function() {
+                        const attributeId = $(this).val();
+                        const index = $(this).data('index');
+                        const valueSection = $(this).closest('.attribute-group').find('.value-section select');
+
+                        if (!attributeId) {
+                            return;
                         }
 
+                        const attribute = attributes.find(attr => attr.id == attributeId);
+                        const valueOptions = attribute.values.map(val =>
+                            `<option value="${val.id}">${val.value}</option>`).join('');
+                        valueSection.html(valueOptions);
+
+                        // Thêm thuộc tính đã chọn vào tập hợp để không thể chọn lại
+                        selectedAttributes.add(parseInt(attributeId));
+
+                        // Disable attribute select after selection
+                        $(this).prop('disabled', true);
                     });
-                }
-            });
 
-            // Tạo tổ hợp các giá trị thuộc tính
-            function generateCombinations(valuesArray, prefix = []) {
-                if (!valuesArray.length) {
-                    return [prefix];
-                }
+                    // Xóa thuộc tính
+                    $(document).on('click', '.remove-attribute-btn', function() {
+                        const attributeGroup = $(this).closest('.attribute-group');
+                        const attributeId = attributeGroup.find('.attribute-select').val();
 
-                let combinations = [];
-                let firstArray = valuesArray[0];
-                let restArrays = valuesArray.slice(1);
+                        // Loại bỏ thuộc tính khỏi danh sách các thuộc tính đã chọn
+                        selectedAttributes.delete(parseInt(attributeId));
 
-                firstArray.forEach(value => {
-                    combinations = combinations.concat(generateCombinations(restArrays, [...prefix,
-                        value
-                    ]));
-                });
+                        // Xóa nhóm thuộc tính
+                        attributeGroup.remove();
+                        clickCount--;
 
-                return combinations;
-            }
+                        // Hiển thị lại nút thêm nếu số lần click nhỏ hơn 2
+                        if (clickCount < 2) {
+                            $('#add-attribute-btn').show();
+                        }
+                    });
 
-            // Lấy tên giá trị thuộc tính
-            function getAttributeValueName(attributeId, valueId) {
-                const attribute = attributes.find(attr => attr.id == attributeId);
-                if (attribute) {
-                    const value = attribute.values.find(val => val.id == valueId);
-                    return value ? value.value : '';
-                }
-                return '';
-            }
-        });
+                    // Tạo tổ hợp biến thể
+                    $('#generate-variants-btn').on('click', function() {
+                        const variantsContainer = $('#variant-container');
+                        variantsContainer.html(''); // Xóa các biến thể cũ
+
+                        let attributesData = [];
+
+                        $('.attribute-group').each(function() {
+                            const attributeId = $(this).find('.attribute-select').val();
+                            const values = $(this).find('.select2-tags').val();
+                            if (values.length > 0) {
+                                attributesData.push({
+                                    attributeId,
+                                    values
+                                });
+                            }
+                        });
+
+                        if (attributesData.length === 0) {
+                            alert('Vui lòng chọn ít nhất một thuộc tính và giá trị.');
+                            return;
+                        }
+                        // Tính toán tổng số tổ hợp
+                        let totalCombinations = attributesData.reduce((total, attr) => total * attr.values.length,
+                            1);
+
+                        // Kiểm tra giới hạn 50 biến thể
+                        if (totalCombinations > 50) {
+                            const confirmContinue = confirm(
+                                'Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?'
+                            );
+                            if (!confirmContinue) {
+                                return; // Hủy tạo biến thể nếu người dùng không đồng ý
+                            }
+                        }
+
+                        let combinations = generateCombinations(attributesData.map(attr => attr.values));
+
+                        // Tạo biến thể từ tổ hợp giá trị
+                        combinations.forEach((combination, index) => {
+                            if (index >= 50) {
+                                return; // Giới hạn 50 biến thể
+                            }
+
+                            // const sku = 'SKU-prdas' + combination.join('-');
+                            const sku = `PRD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+
+                            // Lấy tên của giá trị thuộc tính thay vì ID
+                            let attributeNames = combination.map((valueId, i) => {
+                                const attributeId = attributesData[i].attributeId;
+                                return {
+                                    attribute_id: attributeId,
+                                    attribute_value_id: valueId
+                                }; // Tạo object attribute_id và attribute_value_id
+                            });
+
+                            // Hiển thị các giá trị thuộc tính đã được chọn (kích cỡ và màu sắc)
+                            // <td>${index + 1}</td>
+                            let variantHtml = `
+                                <tr class="variant">
+                                    <td>${getAttributeValueName(attributeNames[0].attribute_id, attributeNames[0].attribute_value_id)}</td>
+                                    <td>${getAttributeValueName(attributeNames[1].attribute_id, attributeNames[1].attribute_value_id)}</td>
+                                   <td>
+                                    <input type="number" id="variant-prices-input" name="variant_prices[]" class="form-control variant-input" required>
+                                   <span class="error-message text-danger"></span>
+                                </td>
+                                <td>
+                                    <input type="number" id="variant-sale-prices-input" name="variant_sale_prices[]" class="form-control variant-input">
+                                    <span class="error-message text-danger"></span>
+                                </td>
+                                <td>
+                                    <input type="number" id="variant-stocks-input" name="variant_stocks[]" class="form-control variant-input" required>
+                                    <span class="error-message text-danger"></span>
+                                </td>
+                                    <td><input type="text" name="variant_skus[]" class="form-control variant-input" value="${sku}" readonly></td>
+                                    <td>
+                                        <div class="custom-file">
+                                            <input type="file" name="variant_images[]" class="form-control-file variant-image-input" id="variant-image-input">
+                                            <label class="custom-file-label" for="variant-image-input"></label>
+                                        </div>
+                                        <div id="variant-image-container">
+                                            <img src="" class="img-preview" alt="" style="width: 50px; height: 50px; object-fit: cover;">
+                                        </div>
+                                    </td>
+                                    <td class="variant-actions">
+                                        <button type="button" class="delete-variant"> <i class="fa fa-fw fa-times text-danger"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+
+                            variantsContainer.append(variantHtml);
+
+                            // Lưu thông tin thuộc tính của từng biến thể
+                            attributeNames.forEach((attrName, attrIndex) => {
+                                $(`<input type="hidden" name="values[${index}][${attrIndex}][attribute_id]" value="${attrName.attribute_id}">`)
+                                    .appendTo(variantsContainer);
+                                $(`<input type="hidden" name="values[${index}][${attrIndex}][attribute_value_id]" value="${attrName.attribute_value_id}">`)
+                                    .appendTo(variantsContainer);
+                            });
+                        });
+                    });
+
+                    // Hiển thị preview ảnh khi người dùng chọn ảnh
+                    $(document).on('change', 'input[name="variant_images[]"]', function(e) {
+                        const reader = new FileReader();
+                        const imgPreview = $(this).closest('td').find('.img-preview');
+
+                        reader.onload = function(e) {
+                            imgPreview.attr('src', e.target.result);
+                        }
+
+                        reader.readAsDataURL(this.files[0]);
+                    });
+
+
+                    // Xóa biến thể
+                    $(document).on('click', '.delete-variant', function() {
+                        $(this).closest('tr').remove();
+                    });
+
+                    // Sự kiện khi nhấn vào nút để mở dropdown
+                    $('.toggle-dropdown').on('click', function() {
+                        // Hiển thị hoặc ẩn nội dung bên dưới
+                        $('.dropdown-content').slideToggle();
+                    });
+
+                    $(document).ready(function() {
+                            // Kiểm tra và hiển thị thông báo lỗi khi người dùng nhập vào các trường
+                            function validateFields() {
+                                const bulkPrice = $("#bulk_price").val();
+                                const bulkPriceSale = $("#bulk_price_sale").val();
+                                const bulkStock = $("#bulk_stock").val();
+                                let isValid = true; // Biến kiểm tra tính hợp lệ
+
+                                // Reset lại thông báo lỗi và trạng thái input
+                                $("#bulk_price, #bulk_price_sale, #bulk_stock").removeClass("is-invalid");
+                                $("#error-bulk-price, #error-bulk-price-sale, #error-bulk-stock").text("");
+
+                                // Kiểm tra "Giá bán lẻ" nếu có nhập
+                                if (bulkPrice !== "") {
+                                    if (isNaN(bulkPrice) || parseFloat(bulkPrice) <= 0) {
+                                        $("#bulk_price").addClass("is-invalid");
+                                        $("#error-bulk-price").text("Giá bán lẻ phải lớn hơn 0");
+                                        isValid = false;
+                                    }
+                                }
+
+                                // Kiểm tra "Giá khuyến mãi" nếu có nhập
+                                if (bulkPriceSale !== "") {
+                                    if (isNaN(bulkPriceSale) || parseFloat(bulkPriceSale) <= 0) {
+                                        $("#bulk_price_sale").addClass("is-invalid");
+                                        $("#error-bulk-price-sale").text("Giá khuyến mãi phải lớn hơn 0");
+                                        isValid = false;
+                                    } else if (bulkPrice !== "" && parseFloat(bulkPriceSale) >= parseFloat(bulkPrice)) {
+                                        $("#bulk_price_sale").addClass("is-invalid");
+                                        $("#error-bulk-price-sale").text("Giá khuyến mãi phải nhỏ hơn giá bán lẻ");
+                                        isValid = false;
+                                    }
+                                }
+
+                                // Kiểm tra "Số lượng" nếu có nhập
+                                if (bulkStock !== "") {
+                                    if (isNaN(bulkStock) || parseFloat(bulkStock) <= 0) {
+                                        $("#bulk_stock").addClass("is-invalid");
+                                        $("#error-bulk-stock").text("Số lượng phải lớn hơn 0");
+                                        isValid = false;
+                                    }
+                                }
+
+                                // Nếu không có lỗi, bật nút "Áp dụng"
+                                if (isValid) {
+                                    $("#apply-bulk-edit").prop("disabled", false);
+                                } else {
+                                    $("#apply-bulk-edit").prop("disabled", true);
+                                }
+
+                                return isValid; // Trả về trạng thái hợp lệ
+                            }
+
+                            // Lắng nghe sự kiện input trên các trường để kiểm tra ngay khi nhập
+                            $("#bulk_price, #bulk_price_sale, #bulk_stock").on("input", function() {
+                                validateFields(); // Kiểm tra lại tất cả các trường khi người dùng nhập
+                            });
+
+                            $("#apply-bulk-edit").on("click", function() {
+                                    if (validateFields()) {
+                                        const bulkPrice = $('#bulk_price').val();
+                                        const bulkPriceSale = $('#bulk_price_sale').val();
+                                        const bulkStock = $('#bulk_stock').val();
+                                        // const bulkSku = $('#bulk_sku').val();
+                                        const applyTo = $('#apply_to').val(); // Lấy giá trị của tùy chọn áp dụng
+
+                                        if (applyTo === 'all') {
+                                            // Áp dụng cho tất cả các biến thể
+                                            $('.variant').each(function() {
+                                                if (bulkPrice) {
+                                                    $(this).find('input[name="variant_prices[]"]').val(
+                                                        bulkPrice);
+                                                }
+                                                if (bulkPriceSale) {
+                                                    $(this).find('input[name="variant_sale_prices[]"]').val(
+                                                        bulkPriceSale);
+                                                }
+
+                                                if (bulkStock) {
+                                                    $(this).find('input[name="variant_stocks[]"]').val(
+                                                        bulkStock);
+                                                }
+
+                                            });
+                                        }
+                                    }
+                                });
+                                    
+                            });
+
+                        // Tạo tổ hợp các giá trị thuộc tính
+                        function generateCombinations(valuesArray, prefix = []) {
+                            if (!valuesArray.length) {
+                                return [prefix];
+                            }
+
+                            let combinations = [];
+                            let firstArray = valuesArray[0];
+                            let restArrays = valuesArray.slice(1);
+
+                            firstArray.forEach(value => {
+                                combinations = combinations.concat(generateCombinations(restArrays, [...prefix,
+                                    value
+                                ]));
+                            });
+
+                            return combinations;
+                        }
+
+                        // Lấy tên giá trị thuộc tính
+                        function getAttributeValueName(attributeId, valueId) {
+                            const attribute = attributes.find(attr => attr.id == attributeId);
+                            if (attribute) {
+                                const value = attribute.values.find(val => val.id == valueId);
+                                return value ? value.value : '';
+                            }
+                            return '';
+                        }
+                    });
     </script>
 
 
@@ -818,6 +910,15 @@
                 validateCatalogue();
             });
 
+            document.getElementById('main-image-input').addEventListener('change', function() {
+                validateMainImage();
+            });
+
+            document.getElementById('sub-images-input').addEventListener('change', function() {
+                validateSubImages();
+            });
+
+
             // Hàm kiểm tra toàn bộ form
             function validateForm() {
                 let isValid = true;
@@ -827,12 +928,13 @@
                 if (!validatePriceSale()) isValid = false;
                 if (!validateDescription()) isValid = false;
                 if (!validateCatalogue()) isValid = false;
+                if (!validateMainImage()) isValid = false;
+                if (!validateSubImages()) isValid = false;
 
                 return isValid;
             }
 
             // Các hàm kiểm tra từng trường
-
             function validateName() {
                 const name = document.getElementById('name');
                 clearError(name);
@@ -845,13 +947,29 @@
 
             function validatePriceRegular() {
                 const priceRegular = document.getElementById('price_regular');
-                clearError(priceRegular);
-                if (!priceRegular.value.trim() || isNaN(priceRegular.value) || Number(priceRegular.value) <= 0) {
-                    showError(priceRegular, 'Giá gốc phải là số và lớn hơn 0');
+                clearError(priceRegular); // Xóa thông báo lỗi cũ (nếu có)
+
+                // Kiểm tra xem trường có trống hay không
+                if (!priceRegular.value.trim()) {
+                    showError(priceRegular, 'Giá gốc không được để trống');
                     return false;
                 }
+
+                // Kiểm tra xem giá trị có phải là số không
+                if (isNaN(priceRegular.value)) {
+                    showError(priceRegular, 'Giá gốc phải là số');
+                    return false;
+                }
+
+                // Kiểm tra xem giá trị có lớn hơn 0 không
+                if (Number(priceRegular.value) <= 0) {
+                    showError(priceRegular, 'Giá gốc phải lớn hơn 0');
+                    return false;
+                }
+
                 return true;
             }
+
 
             function validatePriceSale() {
                 const priceRegular = document.getElementById('price_regular');
@@ -866,25 +984,17 @@
                 return true;
             }
 
-            function validateDescription() {
-                const description = document.getElementById('description');
-                clearError(description);
-                if (!description.value.trim()) {
-                    showError(description, 'Mô tả không được để trống');
-                    return false;
-                }
-                return true;
-            }
 
             function validateCatalogue() {
                 const catalogueSelect = document.getElementById('catalogue-select');
                 clearError(catalogueSelect);
-                if (catalogueSelect.value === 'Chọn danh mục') {
+                if (catalogueSelect.value === '') {
                     showError(catalogueSelect, 'Vui lòng chọn danh mục');
                     return false;
                 }
                 return true;
             }
+
 
             // Hàm hiển thị lỗi
             function showError(input, message) {
@@ -906,11 +1016,11 @@
             }
         });
     </script>
-    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script> --}}
+
     <script>
         $(document).ready(function() {
             $('#editor').summernote({
-                height: 300 // Chiều cao của trình soạn thảo
+                height: 300
             });
         });
     </script>
@@ -941,7 +1051,7 @@
                     reader.onload = function(e) {
                         const imgElement = document.createElement('img');
                         imgElement.src = e.target.result;
-                        imgElement.style.maxWidth = '200px'; // Kích thước ảnh
+                        imgElement.style.maxWidth = '200px';
                         container.appendChild(imgElement);
                     };
                     reader.readAsDataURL(input.files[0]);
@@ -963,9 +1073,9 @@
                         // Nút xóa
                         const deleteBtn = document.createElement('button');
                         deleteBtn.classList.add('delete-btn');
-                        deleteBtn.textContent = 'X';
+                        deleteBtn.textContent = 'x';
                         deleteBtn.addEventListener('click', function() {
-                            imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
+                            imgWrapper.remove();
                         });
 
                         imgWrapper.appendChild(imgElement);
@@ -977,4 +1087,79 @@
             }
         });
     </script>
+
+  <script>
+    $(document).ready(function() {
+    // Hàm kiểm tra tính hợp lệ của từng trường
+    function validateField(field) {
+        const fieldName = $(field).attr('name');
+        
+        // Kiểm tra giá bán lẻ (new_variant_prices[])
+        if (fieldName === 'variant_prices[]') {
+            const price = $(field).val();
+            if (price === '' || isNaN(price) || parseFloat(price) <= 0) {
+                $(field).addClass('is-invalid');
+                $(field).siblings('.error-message').text('Giá bán lẻ phải lớn hơn 0');
+            } else {
+                $(field).removeClass('is-invalid');
+                $(field).siblings('.error-message').text('');
+            }
+        }
+
+        // Kiểm tra giá khuyến mãi (new_variant_sale_prices[])
+        if (fieldName === 'variant_sale_prices[]') {
+            const salePrice = $(field).val();
+            const regularPrice = $(field).closest('tr').find('input[name="variant_prices[]"]').val();
+            if (salePrice === '') {
+                $(field).addClass('is-invalid');
+                $(field).siblings('.error-message').text('Giá khuyến mãi không được để trống');
+            } else if (isNaN(salePrice) || parseFloat(salePrice) <= 0) {
+                $(field).addClass('is-invalid');
+                $(field).siblings('.error-message').text('Giá khuyến mãi phải lớn hơn 0');
+            } else if (parseFloat(salePrice) >= parseFloat(regularPrice)) {
+                $(field).addClass('is-invalid');
+                $(field).siblings('.error-message').text('Giá khuyến mãi phải nhỏ hơn giá bán lẻ');
+            } else {
+                $(field).removeClass('is-invalid');
+                $(field).siblings('.error-message').text('');
+            }
+        }
+
+        // Kiểm tra số lượng (new_variant_stocks[])
+        if (fieldName === 'variant_stocks[]') {
+            const stock = $(field).val();
+            if (stock === '' || isNaN(stock) || parseFloat(stock) <= 0) {
+                $(field).addClass('is-invalid');
+                $(field).siblings('.error-message').text('Số lượng phải lớn hơn 0');
+            } else {
+                $(field).removeClass('is-invalid');
+                $(field).siblings('.error-message').text('');
+            }
+        }
+    }
+
+    // Lắng nghe sự kiện input cho các trường biến thể mới và kiểm tra ngay lập tức khi người dùng nhập
+    $(document).on('input', 'input[name="variant_prices[]"], input[name="variant_sale_prices[]"], input[name="variant_stocks[]"]', function() {
+        validateField(this); // Kiểm tra trường đang nhập ngay lập tức
+    });
+
+    // Kiểm tra toàn bộ khi submit form
+    $('#myForm').on('submit', function(event) {
+        let isValid = true;
+
+        // Kiểm tra tất cả các trường biến thể mới
+        $('input[name="variant_prices[]"], input[name="variant_sale_prices[]"], input[name="variant_stocks[]"]').each(function() {
+            validateField(this); // Kiểm tra từng trường
+            if ($(this).hasClass('is-invalid')) {
+                isValid = false; // Nếu có lỗi, ngăn không cho submit
+            }
+        });
+
+        // Ngăn chặn submit nếu có lỗi
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+});
+  </script>
 @endsection

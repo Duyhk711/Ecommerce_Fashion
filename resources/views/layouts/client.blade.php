@@ -28,40 +28,6 @@
 <body class="template-index index-demo1">
     <!--Page Wrapper-->
     <div class="page-wrapper">
-        <!--Marquee Text-->
-        {{-- <div class="topbar-slider clearfix">
-            <div class="container-fluid">
-                <div class="marquee-text">
-                    <div class="top-info-bar d-flex">
-                        <div class="flex-item center">
-                            <a href="#">
-                                <span> <i class="anm anm-worldwide"></i> BUY ONLINE PICK UP IN STORE</span>
-                                <span> <i class="anm anm-truck-l"></i> FREE WORLDWIDE SHIPPING ON ALL ORDERS ABOVE
-                                    $100</span>
-                                <span> <i class="anm anm-redo-ar"></i> EXTENDED RETURN UNTIL 30 DAYS</span>
-                            </a>
-                        </div>
-                        <div class="flex-item center">
-                            <a href="#">
-                                <span> <i class="anm anm-worldwide"></i> BUY ONLINE PICK UP IN STORE</span>
-                                <span> <i class="anm anm-truck-l"></i> FREE WORLDWIDE SHIPPING ON ALL ORDERS ABOVE
-                                    $100</span>
-                                <span> <i class="anm anm-redo-ar"></i> EXTENDED RETURN UNTIL 30 DAYS</span>
-                            </a>
-                        </div>
-                        <div class="flex-item center">
-                            <a href="#">
-                                <span> <i class="anm anm-worldwide"></i> BUY ONLINE PICK UP IN STORE</span>
-                                <span> <i class="anm anm-truck-l"></i> FREE WORLDWIDE SHIPPING ON ALL ORDERS ABOVE
-                                    $100</span>
-                                <span> <i class="anm anm-redo-ar"></i> EXTENDED RETURN UNTIL 30 DAYS</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        <!--End Marquee Text-->
 
         @include('client.component.header')
 
@@ -84,7 +50,7 @@
         <div id="site-scroll"><i class="icon anm anm-arw-up"></i></div>
         <!--End Scoll Top-->
 
-        @include('client.component.mini_cart')
+        {{-- @include('client.component.mini_cart') --}}
 
         @yield('modal')
 

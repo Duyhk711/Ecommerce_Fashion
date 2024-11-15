@@ -88,21 +88,44 @@ class VNPayController extends Controller
         // dd($request->except('vnp_SecureHash'), $inputData, $hashdata);
         $vnp_HashSecret = "3UVBW2SNJWID1RC0L2FKA8UR5YGAM0VV";
         $secureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+
+        $order = Order::where('session_id', $request->get('vnp_TxnRef'))->first();
+        $orderItems = OrderItem::with([
+            'productVariant.variantAttributes.attribute',
+            'productVariant.variantAttributes.attributeValue',
+        ])->where('order_id', $order->id)
+            ->get();
+
+        $orderItems = $orderItems->map(function ($orderItem) {
+            $variant = $orderItem->productVariant;
+
+            // Xử lý thuộc tính biến thể sản phẩm
+            $attributes = $variant->variantAttributes->map(function ($variantAttribute) {
+                return $variantAttribute->attribute->name . ': ' . $variantAttribute->attributeValue->value;
+            })->implode(', ');
+
+            return [
+                'product_name' => $orderItem->product_name,
+                'product_variant_id' => $orderItem->product_variant_id,
+                'variant_attributes' => $attributes,
+                'image' => $orderItem->variant_image,
+                'price' => $orderItem->variant_price_sale,
+                'quantity' => $orderItem->quantity,
+            ];
+        });
         // dd($request->except('vnp_SecureHash'), $inputData, $vnp_SecureHash, $secureHash);
         if ($request->get('vnp_ResponseCode') == '00') {
             // dd('ok');
             // Thanh toán thành công, cập nhật trạng thái đơn hàng
-            $order = Order::where('session_id', $request->get('vnp_TxnRef'))->first();
             $order->payment_status = 'da_thanh_toan';
             $order->status = '1';
             $order->save();
-            $orderItems = OrderItem::where('order_id', $order->id)->get();
 
             return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Giao dịch thành công!');
         } else {
             // dd('ko ok');
             // Thanh toán thất bại
-            return view('client.order-success')->with('error', 'Giao dịch không thành công!');
+            return view('client.order-success', compact('orderItems', 'order'))->with('error', 'Giao dịch không thành công!');
         }
 
     }

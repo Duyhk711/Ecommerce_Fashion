@@ -6,22 +6,22 @@
                  <div class="flex-item center">
                      <a href="#">
                          <span> <i class="anm anm-worldwide"></i> BUY ONLINE PICK UP IN STORE</span>
-                         <span> <i class="anm anm-truck-l"></i> FREE WORLDWIDE SHIPPING ON ALL ORDERS ABOVE $100</span>
-                         <span> <i class="anm anm-redo-ar"></i> EXTENDED RETURN UNTIL 30 DAYS</span>
+                         <span> <i class="anm anm-truck-l"></i> MIỄN PHÍ VẬN CHUYỂN</span>
+                         <span> <i class="anm anm-redo-ar"></i> THỜI GIAN HOÀN TRẢ KÉO DÀI ĐẾN 30 NGÀY</span>
                      </a>
                  </div>
                  <div class="flex-item center">
                      <a href="#">
-                         <span> <i class="anm anm-worldwide"></i> BUY ONLINE PICK UP IN STORE</span>
-                         <span> <i class="anm anm-truck-l"></i> FREE WORLDWIDE SHIPPING ON ALL ORDERS ABOVE $100</span>
-                         <span> <i class="anm anm-redo-ar"></i> EXTENDED RETURN UNTIL 30 DAYS</span>
+                         <span> <i class="anm anm-worldwide"></i> MUA HÀNG TRỰC TUYẾN, NHẬN TẠI CỬA HÀNG</span>
+                         <span> <i class="anm anm-truck-l"></i> MIỄN PHÍ VẬN CHUYỂN</span>
+                         <span> <i class="anm anm-redo-ar"></i> THỜI GIAN HOÀN TRẢ KÉO DÀI ĐẾN 30 NGÀY</span>
                      </a>
                  </div>
                  <div class="flex-item center">
                      <a href="#">
-                         <span> <i class="anm anm-worldwide"></i> BUY ONLINE PICK UP IN STORE</span>
-                         <span> <i class="anm anm-truck-l"></i> FREE WORLDWIDE SHIPPING ON ALL ORDERS ABOVE $100</span>
-                         <span> <i class="anm anm-redo-ar"></i> EXTENDED RETURN UNTIL 30 DAYS</span>
+                         <span> <i class="anm anm-worldwide"></i> MUA HÀNG TRỰC TUYẾN, NHẬN TẠI CỬA HÀNG</span>
+                         <span> <i class="anm anm-truck-l"></i> MIỄN PHÍ VẬN CHUYỂN</span>
+                         <span> <i class="anm anm-redo-ar"></i> THỜI GIAN HOÀN TRẢ KÉO DÀI ĐẾN 30 NGÀY</span>
                      </a>
                  </div>
              </div>
@@ -69,7 +69,7 @@
                                                          @foreach ($category->children as $child)
                                                              @if ($child->is_active)
                                                                  <li class="lvl-2">
-                                                                     <a href="{{ url('/filterproduct?categories=' . $child->id) }}"
+                                                                     <a href="{{ url('filterproduct') . '?danhmuc=' . $child->slug }}"
                                                                          class="site-nav lvl-2">{{ $child->name }}</a>
                                                                  </li>
                                                              @endif
@@ -152,19 +152,19 @@
                          <div class="customer-links">
                              <ul class="m-0">
                                  @if (!Auth::check())
-                                     <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Sign
-                                             In</a></li>
-                                     <li><a href="{{ route('register') }}"><i
-                                                 class="icon anm anm-user-al"></i>Register</a></li>
+                                     <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Đăng
+                                             nhập</a></li>
+                                     <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Đăng
+                                             kí</a></li>
                                  @endif
 
                                  @if (Auth::check())
-                                     <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>My
-                                             Account</a></li>
-                                     <li><a href="{{ route('my.wishlist') }}"><i
-                                                 class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Sign
-                                             out</a></li>
+                                     <li><a href="{{ route('myaccount') }}"><i class="icon anm anm-user-cil"></i>Tài
+                                             khoản</a></li>
+                                     <li><a href="{{ route('my.wishlist') }}"><i class="icon anm anm-heart-l"></i>Yêu
+                                             thích</a></li>
+                                     <li><a href="{{ route('logout') }}"><i class="icon anm anm-sign-out-al"></i>Đăng
+                                             xuất</a></li>
                                  @endif
                              </ul>
                          </div>
@@ -176,29 +176,21 @@
                      <a href="{{ route('my.wishlist') }}">
                          <i class="hdr-icon icon anm anm-heart-l"></i>
                          <span class="wishlist-count" id="wishlist-count">
-                            @auth
-                                {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
-                            @else
-                                0
-                            @endauth
-                        </span>
+                             @auth
+                                 {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
+                             @else
+                                 0
+                             @endauth
+                         </span>
                      </a>
                  </div>
                  <!--End Wishlist-->
                  <!--Minicart-->
                  <div class="header-cart iconset" title="Cart">
-                     <a href="#;" class="header-cart btn-minicart clr-none" data-bs-toggle="offcanvas"
-                         data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i>
+                     <a href="{{ route('cart.show') }}" class="header-cart btn-minicart clr-none"><i
+                             class="hdr-icon icon anm anm-cart-l"></i>
                          <span class="cart-count">
-                             @auth
-                                 @php
-                                     $cart = \App\Models\Cart::where('user_id', auth()->id())->first();
-                                     $count = $cart ? $cart->items()->count() : 0;
-                                 @endphp
-                                 {{ $count }}
-                             @else
-                                 {{ session()->has('cart') ? count(session('cart')) : 0 }}
-                             @endauth
+                             {{ app(App\Services\Client\CartService::class)->getCartItemCount() }}
                          </span>
                      </a>
                  </div>

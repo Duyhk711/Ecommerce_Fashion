@@ -90,7 +90,7 @@
         <form id="cart-form" class="cart-table table-bottom-brd" method="GET" action="{{ route('checkout') }}">
             @csrf
             @if (count($cartItems) == 0)
-                <div class="cart-empty">
+                <div class="cart-empty mb-3">
                     <div class="text-center">
                         <!-- Hình ảnh giỏ hàng trống -->
                         <img src="{{ asset('client/images/empty-cart.png') }}" alt="Giỏ hàng trống" class="img-fluid"
@@ -197,7 +197,7 @@
                                                     </button>
                                                 </form>
                                             </td>
-                                            </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>

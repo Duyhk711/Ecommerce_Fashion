@@ -3,109 +3,67 @@
     Cửa hàng
 @endsection
 @section('css')
-<style>
-    .product-name a {
-    display: inline-block;
-    width: 100%; /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
-    white-space: nowrap; /* Không cho phép xuống dòng */
-    overflow: hidden; /* Ẩn văn bản thừa */
-    text-overflow: ellipsis; /* Thêm dấu "..." vào phần cuối nếu vượt quá */
-    max-width: 20ch; /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
-}
-</style>
+    <style>
+        .product-name a {
+            display: inline-block;
+            width: 100%;
+            /* Đảm bảo phần tử chiếm toàn bộ chiều rộng */
+            white-space: nowrap;
+            /* Không cho phép xuống dòng */
+            overflow: hidden;
+            /* Ẩn văn bản thừa */
+            text-overflow: ellipsis;
+            /* Thêm dấu "..." vào phần cuối nếu vượt quá */
+            max-width: 20ch;
+            /* Giới hạn tối đa 5 từ, với mỗi từ khoảng 4 ký tự */
+        }
+
+        .price-filter input[type="text"] {
+            height: 34px;
+            padding: 0 10px;
+            text-align: center;
+            font-size: 13px;
+            width: 140px;
+        }
+    </style>
 @endsection
 @section('content')
     @include('client.component.page_header')
-    <div class="container" style="max-width: 80%;">
+    <div class="container mb-5" style="max-width: 80%;">
         <!--Main Content-->
         <div class="container">
+
             <!--Category Slider-->
             <div class="collection-slider-6items gp10 slick-arrow-dots sub-collection section pt-0">
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection1.jpg') }}"
-                                src="assets/images/collection/sub-collection1.jpg" alt="Men's" title="Men's"
-                                width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Men's</h4>
-                            <p class="counts">20 Items</p>
+                @php
+                    use App\Models\Catalogue;
+                    $catalogues = Catalogue::where('parent_id', '<>', null)->get();
+
+                    foreach ($catalogues as $category) {
+                        $category->products_count = $category->products()->count();
+                    }
+                @endphp
+                @foreach ($catalogues as $catalogue)
+                    @if ($catalogue->is_active && $catalogue->products_count > 0)
+                        <div class="category-item zoomscal-hov">
+                            <a href="{{ url('filterproduct') . '?danhmuc=' . $catalogue->slug }}"
+                                class="category-link clr-none">
+                                <div class="zoom-scal zoom-scal-nopb rounded-0">
+                                    <img class="rounded-0 blur-up lazyload"
+                                        data-src="{{ asset('storage/' . $catalogue->cover) }}"
+                                        src="{{ asset('storage/' . $catalogue->cover) }}" alt="{{ $catalogue->name }}"
+                                        title="{{ $catalogue->name }}" width="365" height="365" />
+                                </div>
+                                <div class="details text-center">
+                                    <h4 class="category-title mb-0">{{ $catalogue->name }}</h4>
+                                    <p class="counts">{{ $catalogue->products_count }} Sản phẩm</p>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="{{ route('shop') }}" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection2.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection2.jpg') }}" alt="Women's"
-                                title="Women's" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Women's</h4>
-                            <p class="counts">24 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection3.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection3.jpg') }}" alt="Top"
-                                title="Top" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Top</h4>
-                            <p class="counts">13 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection4.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection4.jpg') }}" alt="Bottom"
-                                title="Bottom" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Bottom</h4>
-                            <p class="counts">26 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection5.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection5.jpg') }}" alt="T-Shirts"
-                                title="T-Shirts" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">T-Shirts</h4>
-                            <p class="counts">18 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection6.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection6.jpg') }}" alt="Shirts"
-                                title="Shirts" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Shirts</h4>
-                            <p class="counts">11 Items</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="category-item zoomscal-hov">
-                    <a href="shop-left-sidebar.html" class="category-link clr-none">
-                        <div class="zoom-scal zoom-scal-nopb rounded-0"><img class="rounded-0 blur-up lazyload"
-                                data-src="{{ asset('client/images/collection/sub-collection24.jpg') }}"
-                                src="{{ asset('client/images/collection/sub-collection24.jpg') }}" alt="Jeans"
-                                title="Jeans" width="365" height="365" /></div>
-                        <div class="details text-center">
-                            <h4 class="category-title mb-0">Jeans</h4>
-                            <p class="counts">28 Items</p>
-                        </div>
-                    </a>
-                </div>
+                    @endif
+                @endforeach
             </div>
+
             <!--End Category Slider-->
             <div class="row">
                 <!--Sidebar-->
@@ -128,7 +86,7 @@
                                                     @foreach ($category->children as $subcategory)
                                                         <li class="lvl2">
                                                             <a href="javascript:void(0);" class="site-nav category-filter"
-                                                                data-id="{{ $subcategory->id }}"
+                                                                data-id="{{ $subcategory->slug }}"
                                                                 onclick="toggleCategory(this); filterProducts();">{{ $subcategory->name }}
                                                                 <span
                                                                     class="count">({{ $subcategory->products_count }})</span>
@@ -147,19 +105,17 @@
                         <!--Price Filter-->
                         <div class="sidebar-widget filterBox filter-widget">
                             <div class="widget-title">
-                                <h2>Price</h2>
+                                <h2>Lọc theo giá</h2>
                             </div>
                             <form class="widget-content price-filter filterDD" id="priceFilter" method="GET">
                                 <div id="slider-range" class="mt-2"></div>
                                 <input type="hidden" name="price" id="priceRange" />
                                 <div class="row">
                                     <div class="col-6">
-                                        <input id="amount" type="text" name="price_text" readonly
-                                            style="font-size: 10px" />
+                                        <input id="amount" type="text" name="price_text" readonly />
                                     </div>
                                     <div class="col-6 text-right">
-                                        <button class="btn btn-sm" type="submit"
-                                            onclick="filterProducts();">Filter</button>
+                                        <button class="btn btn-sm" type="submit" onclick="filterProducts();">Lọc</button>
                                     </div>
                                 </div>
                             </form>
@@ -223,14 +179,14 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-9 main-col">
                     <!--Toolbar-->
                     <div class="toolbar toolbar-wrapper shop-toolbar">
-                        <div class="row align-items-center">
+                        <div class="row align-items-center justify-content-between">
                             <div
                                 class="col-4 col-sm-2 col-md-4 col-lg-4 text-left filters-toolbar-item d-flex order-1 order-sm-0">
                                 <button type="button"
                                     class="btn btn-filter icon anm anm-sliders-hr d-inline-flex d-lg-none me-2"><span
-                                        class="d-none">Filter</span></button>
+                                        class="d-none">Lọc</span></button>
                                 <div class="filters-item d-flex align-items-center">
-                                    <label class="mb-0 me-2 d-none d-lg-inline-block">View as:</label>
+                                    <label class="mb-0 me-2 d-none d-lg-inline-block">Xem dưới dạng:</label>
                                     <div class="grid-options view-mode d-flex">
                                         <a class="icon-mode mode-list d-block" data-col="1"></a>
                                         <a class="icon-mode mode-grid grid-2 d-block" data-col="2"></a>
@@ -239,10 +195,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
+                            {{-- <div
                                 class="col-12 col-sm-4 col-md-4 col-lg-4 text-center product-count order-0 order-md-1 mb-3 mb-sm-0">
-                                <span class="toolbar-product-count">Showing: {{ session('perPage') }} products</span>
-                            </div>
+                                <span class="toolbar-product-count">Hiển thị: {{ session('perPage') }} sản phẩm</span>
+                            </div> --}}
                             @php
                                 $page = 'shop';
                                 if (isset($filter) && $filter == 'filter') {
@@ -253,11 +209,11 @@
                                 class="col-8 col-sm-6 col-md-4 col-lg-4 text-right filters-toolbar-item d-flex justify-content-end order-2 order-sm-2">
                                 <div class="filters-item d-flex align-items-center">
                                     <label for="ShowBy"
-                                        class="mb-0 me-2 text-nowrap d-none d-sm-inline-flex">Show:</label>
+                                        class="mb-0 me-2 text-nowrap d-none d-sm-inline-flex">Hiển thị:</label>
                                     <select name="ShowBy" id="ShowBy" class="filters-toolbar-show"
                                         onchange="this.form.submit()">
-                                        <option value="10" {{ request('ShowBy') == '10' ? 'selected' : '' }}>
-                                            10
+                                        <option value="12" {{ request('ShowBy') == '12' ? 'selected' : '' }}>
+                                            12
                                         </option>
                                         <option value="15" {{ request('ShowBy') == '15' ? 'selected' : '' }}>
                                             15
@@ -337,14 +293,14 @@
                                                 <!-- Image -->
                                                 <img class="primary rounded-0 blur-up lazyload"
                                                     data-src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product" title="Product"
-                                                    width="625" height="808" />
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product"
+                                                    title="Product" width="625" height="808" />
                                                 <!-- End Image -->
                                                 <!-- Hover Image -->
                                                 <img class="hover rounded-0 blur-up lazyload"
                                                     data-src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    src="{{ Storage::url($product->img_thumbnail) }}"
-                                                    alt="Product" title="Product" width="625" height="808" />
+                                                    src="{{ Storage::url($product->img_thumbnail) }}" alt="Product"
+                                                    title="Product" width="625" height="808" />
                                                 <!-- End Hover Image -->
                                             </a>
                                             <!-- End Product Image -->
@@ -352,32 +308,34 @@
                                             <div class="product-labels"><span class="lbl pr-label2">Hot</span></div>
                                             <!-- End Product label -->
                                             <!--Product Button-->
-                                            {{-- <div class="button-set style1">
+                                             <div class="button-set style1">
                                                 <!--Cart Button-->
-                                                <a href="#addtocart-modal" class="btn-icon addtocart add-to-cart-modal"
-                                                    data-bs-toggle="modal" data-bs-target="#addtocart_modal">
-                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Add to Cart"><i class="icon anm anm-cart-l"></i><span
-                                                            class="text">Add to Cart</span></span>
-                                                </a>
+                                                <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                    @csrf 
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <button type="submit" class="btn-icon addtocart">
+                                                        <span class="icon-wrap d-flex-justify-center h-100 w-100"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="Add to Cart">
+                                                            <i class="icon anm anm-cart-l"></i>
+                                                            <span class="text">Add to Cart</span>
+                                                        </span>
+                                                    </button>
+                                                </form>
                                                 <!--End Cart Button-->
-                                                <!--Quick View Button-->
-                                                <a href="#quickview-modal" class="btn-icon quickview quick-view-modal"
-                                                    data-bs-toggle="modal" data-bs-target="#quickview_modal">
-                                                    <span class="icon-wrap d-flex-justify-center h-100 w-100"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="Quick View"><i class="icon anm anm-search-plus-l"></i><span
-                                                            class="text">Quick View</span></span>
-                                                </a>
-                                                <!--End Quick View Button-->
+
                                                 <!--Wishlist Button-->
-                                                <a href="wishlist-style2.html" class="btn-icon wishlist"
+                                                <a class="btn-icon wishlist text-link wishlist {{ $product->isFavorite ? 'active' : '' }}"
+                                                    href="#" data-product-id="{{ $product->id }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span
-                                                        class="text">Add To Wishlist</span></a>
+                                                    title="{{ $product->isFavorite ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích' }}">
+                                                    <i style="font-size:15px"
+                                                        class="icon anm anm-heart-l  favorite {{ $product->isFavorite ? 'd-none' : '' }}"></i>
+                                                    <i style="color: #e96f84;font-size:15px"
+                                                        class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
+                                                </a>
                                                 <!--End Wishlist Button-->
-                                            </div> --}}
+                                            </div> 
                                             <!--End Product Button-->
                                         </div>
                                         <!-- End Product Image -->
@@ -388,23 +346,30 @@
                                             <!--End Product Vendor-->
                                             <!-- Product Name -->
                                             <div class="product-name">
-                                                <a
-                                                    href="{{ route('productDetail', $product->slug) }}">{{ $product->name }}</a>
+                                                <a href="{{ route('productDetail', $product->slug) }}" data-bs-toggle="tooltip" title="{{$product->name}}">
+                                                    {{ $product->name }}
+                                                </a>
                                             </div>
-                                            <!-- End Product Name -->
-                                            <!-- Product Price -->
+                                            {{-- <!-- End Product Name -->
+                                            <!-- Product Price --> --}}
                                             <div class="product-price">
-                                                <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}đ</span>
+                                                @if ($product->price_sale == 0 || $product->price_sale == $product->price_regular || $product->price_sale == null)
+                                                    <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                @else
+                                                    <span
+                                                        class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
+                                                    <span
+                                                        class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span>
+                                                @endif
+
+                                                {{-- <span class="price">{{ number_format($product->price_sale, 3, '.', 0) }}₫</span> --}}
                                             </div>
                                             <!-- End Product Price -->
                                             <!-- Product Review -->
                                             <div class="product-review">
                                                 @php
                                                     // Lấy đánh giá tương ứng cho sản phẩm hiện tại
-                                                    $rating = $ratings->firstWhere(
-                                                        'product_id',
-                                                        $product->id,
-                                                    );
+                                                    $rating = $ratings->firstWhere('product_id', $product->id);
                                                     // Nếu không có đánh giá thì thiết lập mặc định là 0
                                                     $averageRating = $rating['average_rating'] ?? 0;
                                                 @endphp
@@ -476,7 +441,7 @@
                         </div>
                         @if ($products->lastPage() > 1)
                             <!-- Pagination -->
-                            <nav class="clearfix pagination-bottom">
+                            <nav class="clearfix pagination-bottom mb-2">
                                 <ul class="pagination justify-content-center">
                                     @if (!$products->onFirstPage())
                                         <li class="page-item">
@@ -1012,7 +977,7 @@
                 selectedCategories.push(item.getAttribute('data-id'));
             });
 
-            let priceRange = document.getElementById('amount').value;
+            let priceRange = document.getElementById('priceRange').value;
 
             let selectedColors = [];
             document.querySelectorAll('.filter-color .swatch.selected').forEach(color => {
@@ -1026,17 +991,145 @@
 
             let params = new URLSearchParams();
             if (selectedCategories.length) {
-                params.append('categories', selectedCategories);
+                params.append('danhmuc', selectedCategories);
             } else if (priceRange) {
-                params.append('price', priceRange);
+                params.append('gia', priceRange);
             } else if (selectedColors.length) {
-                params.append('colors', selectedColors);
+                params.append('mau', selectedColors);
             } else if (selectedSizes.length) {
-                params.append('size', selectedSizes);
+                params.append('kickco', selectedSizes);
             }
 
             // Điều hướng đến URL mới với các tham số
             window.location.href = '/filterproduct?' + params.toString();
         }
     </script>
+
+<script>
+    var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const wishlistLinks = document.querySelectorAll('.wishlist');
+        const wishlistCountElement = document.getElementById('wishlist-count');
+
+        wishlistLinks.forEach(wishlistLink => {
+            const productId = wishlistLink.getAttribute('data-product-id');
+            let isFavorite = wishlistLink.classList.contains('active');
+
+            // Thêm sự kiện click vào wishlist link
+            wishlistLink.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (!isLoggedIn) {
+                    // Chuyển hướng sang trang đăng nhập nếu chưa đăng nhập
+                    window.location.href = '/login';
+                    return;
+                }
+                const url = isFavorite ? `/wishlist/remove/${productId}` :
+                    `/wishlist/add/${productId}`;
+                const method = isFavorite ? 'DELETE' : 'POST';
+
+                fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector(
+                                'meta[name="csrf-token"]').getAttribute('content'),
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            isFavorite = !isFavorite; // Đổi trạng thái yêu thích
+
+                            // Toggle giữa biểu tượng viền và đổ đầy
+                            const heartOutline = wishlistLink.querySelector('.anm-heart-l');
+                            const heartFill = wishlistLink.querySelector('.bi-heart-fill');
+
+                            if (isFavorite) {
+                                wishlistLink.classList.add('active');
+                                heartOutline.classList.add('d-none');
+                                heartFill.classList.remove('d-none');
+                                updateWishlistCount(1);
+                            } else {
+                                wishlistLink.classList.remove('active');
+                                heartOutline.classList.remove('d-none');
+                                heartFill.classList.add('d-none');
+                                updateWishlistCount(-1);
+                            }
+                        } else {
+                            alert('Lỗi: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                    });
+            });
+        });
+
+        function updateWishlistCount(change) {
+            let currentCount = parseInt(wishlistCountElement.textContent) || 0;
+            currentCount += change;
+            wishlistCountElement.textContent = currentCount;
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function() {
+    $('.add-to-cart-form').on('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn tải lại trang
+
+        const form = $(this); // Lấy form hiện tại đang được submit
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    updateCartCount();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Có lỗi xảy ra!',
+                        text: response.message || 'Xin vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Có lỗi xảy ra!',
+                    text: 'Xin vui lòng thử lại!',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+
+function updateCartCount() {
+      $.ajax({
+          url: '/cart/count', // Thay đổi đường dẫn này
+          type: 'GET',
+          success: function(data) {
+              $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+          },
+          error: function(xhr) {
+              console.error('Error:', xhr);
+          }
+      });
+  }
+});
+
+
+
+</script>
 @endsection

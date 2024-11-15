@@ -82,8 +82,11 @@ class Product extends Model
     {
         // dd($categories);
         if (!empty($categories)) {
-            // dd([(int) $categories]);
+            // dd($categories);
             return $query->where('catalogue_id', $categories);
+            // return $query->whereHas('catalogue', function ($query) use ($categories) {
+            //     $query->where('slug', $categories)->distinct();
+            // });
         }
         // dd($categories);
 

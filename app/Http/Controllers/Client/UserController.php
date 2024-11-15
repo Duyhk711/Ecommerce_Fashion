@@ -24,6 +24,7 @@ class UserController extends Controller
     }
     public function info()
     {
+        $pageTitle = 'Tài khoản';
         $userId = auth()->id();
         $currentUser = $this->userService->getCurrentUser();
         $totalOrder = $this->userService->getTotalOrders();
@@ -31,13 +32,14 @@ class UserController extends Controller
         $getTotalOrdersSucess = $this->userService->getTotalOrdersSucess();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
 
-        return view('client.my-account.account-info', compact('currentUser', 'totalOrder', 'defaultAddress', 'getTotalOrdersPending', 'getTotalOrdersSucess'));
+        return view('client.my-account.account-info', compact('currentUser', 'totalOrder', 'defaultAddress', 'getTotalOrdersPending', 'getTotalOrdersSucess', 'pageTitle'));
     }
     public function address()
     {
+        $pageTitle = 'Địa Chỉ Của Tôi';
         $currentUser = $this->userService->getCurrentUser();
         $addresses = $this->userService->getAllAddresses();
-        return view('client.my-account.address', compact('addresses','currentUser'));
+        return view('client.my-account.address', compact('addresses','currentUser', 'pageTitle'));
     }
        public function orderTracking()
     {
@@ -48,28 +50,28 @@ class UserController extends Controller
 
     // favorite
     public function add($productId)
-{
-    if (!Auth::check()) {
-        return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
+    {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.'], 403);
+        }
+
+        $userId = Auth::id();
+
+        $favorite = Favorite::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($favorite) {
+            return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
+        }
+
+        Favorite::create([
+            'user_id' => $userId,
+            'product_id' => $productId,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
     }
-
-    $userId = Auth::id();
-
-    $favorite = Favorite::where('user_id', $userId)
-        ->where('product_id', $productId)
-        ->first();
-
-    if ($favorite) {
-        return response()->json(['success' => false, 'message' => 'Sản phẩm này đã có trong danh sách yêu thích.']);
-    }
-
-    Favorite::create([
-        'user_id' => $userId,
-        'product_id' => $productId,
-    ]);
-
-    return response()->json(['success' => true, 'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích.']);
-}
 
     // Phương thức xóa sản phẩm khỏi danh sách yêu thích
     public function remove($productId)
@@ -97,18 +99,19 @@ class UserController extends Controller
     // Phương thức hiển thị danh sách yêu thích
     public function myWishlist()
     {
+        $pageTitle='Yêu thích';
         $currentUser = $this->userService->getCurrentUser();
         $favorites = $this->favoriteService->getFavorites();
-        return view('client.my-account.my-wishlist', compact('favorites','currentUser'));
+        return view('client.my-account.my-wishlist', compact('favorites','currentUser', 'pageTitle'));
     }
 
     public function profile()
     {
-
+        $pageTitle='Hồ sơ';
         $userId = auth()->id();
         $defaultAddress = $this->userService->getDefaultAddress($userId);
         $currentUser = $this->userService->getCurrentUser();
-        return view('client.my-account.profile', compact('currentUser', 'defaultAddress'));
+        return view('client.my-account.profile', compact('currentUser', 'defaultAddress', 'pageTitle'));
     }
 
     //lưu địa chỉ
@@ -128,6 +131,7 @@ class UserController extends Controller
         // Lưu địa chỉ và nhận thông tin địa chỉ đã lưu
         $address = $this->userService->storeAddress($data);
 
+        // return view('client.my-account.address', compact('address'));
         return response()->json([
             'success' => true,
             'address' => $address

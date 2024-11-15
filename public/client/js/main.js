@@ -378,14 +378,14 @@
     var LiN = $(this).find(".more-item").length;
     if (LiN > 3) {
       $(".more-item", this).eq(2).nextAll().hide().addClass("toggleable");
-      $(this).append('<li class="more">Show More</li>');
+      $(this).append('<li class="more">Xem thêm</li>');
     }
   });
   $(".morelist").on("click", ".more", function () {
     if ($(this).hasClass("less")) {
-      $(this).text("Show More").removeClass("less");
+      $(this).text("Xem thêm").removeClass("less");
     } else {
-      $(this).text("Show Less").addClass("less");
+      $(this).text("Ẩn").addClass("less");
     }
     $(this).siblings("li.toggleable").slideToggle();
   });
@@ -1192,17 +1192,16 @@
     $("#slider-range").slider({
       range: true,
       min: 10000,
-      max: 3000000,
-      values: [0, 3000000],
+      max: 500000,
+      values: [0, 500000],
       slide: function (event, ui) {
-        $("#amount").val(ui.values[0] + "đ-" + ui.values[1]) + "đ";
+        $("#amount").val(ui.values[0] + "-" + ui.values[1]);
       },
     });
     $("#amount").val(
       $("#slider-range").slider("values", 0) +
-        "đ-" +
-        $("#slider-range").slider("values", 1) +
-        "đ"
+        " - " +
+        $("#slider-range").slider("values", 1)
     );
   }
   price_slider();

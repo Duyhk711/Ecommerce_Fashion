@@ -60,6 +60,22 @@
         .btn-red {
             color: red !important;
         }
+
+        .input-color {
+        -webkit-appearance: none !important; 
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50px !important;
+        padding: 0 !important;
+        border: none !important;
+        cursor: pointer !important;
+        }
+
+        .input-color::-webkit-color-swatch {
+            border-radius: 50%; 
+            width: 40px;
+            height: 40px;
+        }
     </style>
 @endsection
 
@@ -72,7 +88,7 @@
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.attributes.index') }}" style="color: inherit;">Giá trị thuộc tính</a>
+                            <a href="{{ route('admin.attribute_values.index') }}" style="color: inherit;">Giá trị thuộc tính</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Thêm giá trị</li>
                     </ol>
@@ -163,7 +179,7 @@
                 </div>
                 <div class="col-2">
                      <label for="" class="form-label">Chọn mã màu</label>
-                    <input type="color" name="color_code[]" class="form-control" style="width: 60px;" required>
+                    <input type="color" name="color_code[]" class="form-control input-color" style="width: 60px;" required>
                 </div>
                 <div class="col-1  text-center">
                     <button type="button" class="btn btn-alt btn-red mt-2" onclick="removeValue(this)">x</button>
@@ -230,7 +246,7 @@
                     <input type="text" name="value[]" class="form-control" placeholder="Nhập giá trị" required>
                 </div>
                 <div class="col-2">
-                    <input type="color" name="color_code[]" class="form-control" style="width: 60px;" required>
+                    <input type="color" name="color_code[]" class="form-control input-color" style="width: 60px;" required>
                 </div>
                 <input type="hidden" name="attribute_id[]" value="${attributeId}"> <!-- Gán attribute_id -->
                 <div class="col-1 text-center">

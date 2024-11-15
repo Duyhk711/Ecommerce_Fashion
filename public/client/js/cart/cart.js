@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         totalPrice += price * quantity;
       }
     });
-    totalPriceElement.textContent = numberFormat(totalPrice * 1000, 0, '.', ',') + " đ";
+    totalPriceElement.textContent = numberFormat(totalPrice * 1000, 0, '.', ',') + " ₫";
   }
 
   // Chức năng chọn tất cả
@@ -231,15 +231,60 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Xử lý nút xóa sản phẩm
-  const removeButtons = document.querySelectorAll(".cart-remove");
+  
 
+  // removeButtons.forEach((button) => {
+  //   button.addEventListener("click", function (event) {
+  //     event.preventDefault();
+
+  //     const form = this.closest("form");
+  //     const formData = new FormData(form);
+
+  //     fetch(form.action, {
+  //       method: "POST",
+  //       headers: {
+  //         "X-CSRF-TOKEN": csrfToken,
+  //       },
+  //       body: formData,
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data.success) {
+  //           // Xóa hàng sản phẩm đã xóa
+  //           form.closest("tr").remove();
+  //           updateTotalPrice2(); // Cập nhật lại tổng tiền
+
+  //           // Kiểm tra nếu giỏ hàng trống
+  //           if (cartTable.children.length === 0) {
+  //             cartContainer.innerHTML = `
+  //               <div class="cart-empty">
+  //                   <div class="text-center">
+  //                       <!-- Hình ảnh giỏ hàng trống -->
+  //                       <img src="/client/images/empty-cart.png" alt="Giỏ hàng trống" class="img-fluid" style="max-width: 300px;">
+  //                       <h3 class="mt-3">Giỏ hàng của bạn đang trống!</h3>
+  //                       <p>Hãy tiếp tục mua sắm và thêm sản phẩm vào giỏ hàng của bạn.</p>
+  //                       <!-- Nút tiếp tục mua sắm -->
+  //                       <a href="/shop" class="btn btn-primary mt-4">Tiếp tục mua sắm</a>
+  //                   </div>
+  //               </div>`;
+  //           }
+  //         } else {
+  //           alert("Lỗi: " + data.message);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Lỗi:", error);
+  //       });
+  //   });
+  // });
+  const removeButtons = document.querySelectorAll(".cart-remove");
   removeButtons.forEach((button) => {
     button.addEventListener("click", function (event) {
       event.preventDefault();
-
+  
       const form = this.closest("form");
       const formData = new FormData(form);
-
+  
       fetch(form.action, {
         method: "POST",
         headers: {
@@ -252,8 +297,8 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.success) {
             // Xóa hàng sản phẩm đã xóa
             form.closest("tr").remove();
-            updateTotalPrice2(); // Cập nhật lại tổng tiền
-
+            updateTotalPrice2(); // Cập nhật lại tổng tiền sau khi xóa sản phẩm
+  
             // Kiểm tra nếu giỏ hàng trống
             if (cartTable.children.length === 0) {
               cartContainer.innerHTML = `
@@ -277,24 +322,45 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   });
+  
 });
 
 // Cập nhật lại tổng tiền khi xóa sản phẩm
+// function updateTotalPrice2() {
+//   const checkboxes = document.querySelectorAll(".cart-checkbox");
+//   let totalPrice = 0;
+
+//   checkboxes.forEach((checkbox) => {
+//     const price = parseFloat(checkbox.getAttribute("data-price"));
+//     const quantity = parseInt(
+//       checkbox.closest("tr").querySelector(".quantity-input").value
+//     );
+//     totalPrice += price * quantity;
+//   });
+
+//   document.getElementById("totalPrice").textContent =
+//     totalPrice.toLocaleString("vi-VN") + " đ";
+// }
 function updateTotalPrice2() {
   const checkboxes = document.querySelectorAll(".cart-checkbox");
   let totalPrice = 0;
 
   checkboxes.forEach((checkbox) => {
-    const price = parseFloat(checkbox.getAttribute("data-price"));
-    const quantity = parseInt(
-      checkbox.closest("tr").querySelector(".quantity-input").value
-    );
-    totalPrice += price * quantity;
+    // Chỉ tính vào tổng giá nếu checkbox được chọn
+    if (checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+      const quantity = parseInt(
+        checkbox.closest("tr").querySelector(".quantity-input").value
+      ) || 1;
+      totalPrice += price * quantity;
+    }
   });
 
-  document.getElementById("totalPrice").textContent =
-    totalPrice.toLocaleString("vi-VN") + " đ";
+  // Hiển thị tổng tiền đã định dạng
+  document.getElementById("totalPrice").textContent = 
+    totalPrice.toLocaleString("vi-VN") + "₫";
 }
+
 
 function numberFormat(number, decimals, dec_point, thousands_sep) {
   // Chuyển đổi số thành chuỗi với số thập phân

@@ -27,18 +27,38 @@ class CartController extends Controller
         $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
             $this->cartService->addToCart($productId, $productVariantId, $quantity);
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được thêm vào giỏ hàng!',
+                ]);
+            }
             return redirect($urlWithoutParams)->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
         } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
             return redirect($urlWithoutParams)->with('error', $e->getMessage());
         }
     }
 
+    public function getCartCount()
+    {
+        $cartCount = $this->cartService->getCartItemCount();
+
+        return response()->json(['count' => $cartCount]);
+    }
+
     public function viewCart()
     {
+        $pageTitle = 'Giỏ hàng';
         $cartItems = $this->cartService->getCartItems();
         // dd($cartItems);
         // dd(session('cart'));
-        return view('client.cart', compact('cartItems'));
+        return view('client.cart', compact('cartItems', 'pageTitle'));
     }
 
     public function updateCart(Request $request)

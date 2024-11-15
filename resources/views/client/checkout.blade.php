@@ -164,7 +164,7 @@
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="email" class="form-label">E-Mail <span
                                                             class="required">*</span></label>
-                                                    <input name="email"
+                                                    <input name="customer_email"
                                                         value="{{ Auth::check() ? Auth::user()->email : '' }}"
                                                         id="email" type="email" required="" class="form-control">
                                                 </div>
@@ -262,10 +262,10 @@
                                                                             href="{{ route('productDetail', $item['product_variant_id']) }}"
                                                                             class="thumb"><img
                                                                                 class="rounded-0 blur-up lazyload"
-                                                                                data-src="{{ Storage::url($item['image'])  }}"
-                                                                                src="{{ Storage::url($item['image']) }}" alt="product"
-                                                                                title="product" width="120"
-                                                                                height="170" /></a></td>
+                                                                                data-src="{{ Storage::url($item['image']) }}"
+                                                                                src="{{ Storage::url($item['image']) }}"
+                                                                                alt="product" title="product"
+                                                                                width="120" height="170" /></a></td>
                                                                     <td class="text-start proName">
                                                                         <div class="list-view-item-title">
                                                                             <a href="product-layout1.html">
@@ -279,19 +279,16 @@
                                                                     <td class="text-center">{{ $item['quantity'] }}</td>
                                                                     <td class="text-center">
 
-                                                                        {{ isset($item['price']) ? number_format($item['price'], 3, '.', 0) . ' đ' : 'Giá không xác định' }}
+                                                                        {{ isset($item['price']) ? number_format($item['price'], 3, '.', 0) . '₫' : 'Giá không xác định' }}
                                                                     </td>
                                                                     @php
                                                                         $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
-                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', 0) }}
-                                                                            đ</strong>
+                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', '.') }}₫</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
-
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -323,8 +320,13 @@
                                                         kết hợp ngẫu nhiên để có được khoản tiết kiệm đáng kể!</p>
                                                     <div class="input-group mb-0 d-flex">
                                                         <input id="coupon-code" required="" type="text"
-                                                            class="form-control" placeholder="Promotion/Discount Code">
-                                                        <button class="coupon-btn btn btn-primary" type="button">Áp
+                                                            class="form-control" placeholder="Mã giảm giá"
+                                                            list="voucher-list">
+                                                        <datalist id="voucher-list">
+                                                            <!-- Options sẽ được thêm bằng JavaScript -->
+                                                        </datalist>
+                                                        <button class="coupon-btn btn btn-primary" type="button"
+                                                            onclick="applyCoupon()">Áp
                                                             dụng</button>
                                                     </div>
                                                 </div>
@@ -337,17 +339,15 @@
                                                 <div class="row g-0 border-bottom pb-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
                                                             cộng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            đ</span></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }} ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
-                                                            giá</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-0 đ</span></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm giá</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                      <span class="money discount">0 ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
@@ -359,10 +359,9 @@
                                                 <div class="row g-0 pt-2">
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            đ</b></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                        <b class="money total_price">{{ number_format($total, 3, '.', '.') }}  ₫</b>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -417,17 +416,16 @@
                                                 <div class="row g-0 border-bottom pb-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
                                                             cộng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            đ</span></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }}₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
                                                             giá</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">-0 đ</span></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money discount">0 ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
                                                     <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
@@ -437,14 +435,17 @@
                                                             class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}
-                                                            đ</b></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng phải
+                                                            trả</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                      <b class="money total_price">{{ number_format($total, 3, '.', '.') }} ₫</b>
+                                                    </span>
                                                 </div>
-                                                <input type="hidden" value="{{ $total }}" name="total_price">
+                                                <input type="hidden" value="{{ $total }}" id="total_price"
+                                                    name="total_price">
+                                                <input type="hidden" value="{{ $total }}" id="total_price_old">
+                                                <input type="hidden" value="0" id="discount" name="discount">
+                                                <input type="hidden" value="" id="voucher_id" name="voucher_id">
 
                                                 <button type="submit" id="cartCheckout"
                                                     class="btn btn-lg my-4 checkout w-100">Đặt hàng</button>
@@ -864,5 +865,74 @@
             }
             return true;
         }
+    </script>
+
+    {{-- Voucher --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let priceOrder = document.getElementById('total_price').value;
+            console.log(priceOrder);
+
+            fetch('/api/available-vouchers')
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    const datalist = document.getElementById('voucher-list');
+                    data.forEach(voucher => {
+                        if (voucher.minimum_order_value <= priceOrder) {
+                            const option = document.createElement('option');
+                            option.value = voucher.code;
+                            option.text =
+                                `Giảm (${voucher.discount_type === 'percentage' ? voucher.discount_value + '%' : voucher.discount_value*1000 + 'đ'})`;
+                            datalist.appendChild(option);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error loading vouchers:', error));
+        });
+
+        document.querySelector('.coupon-btn').addEventListener('click', function() {
+            const code = document.getElementById('coupon-code').value;
+            let priceOrder = document.getElementById('total_price_old').value;
+
+            fetch('/apply-coupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        order_total: priceOrder
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let discountItem = document.querySelectorAll('.discount');
+                        let totalPriceItem = document.querySelectorAll('.total_price');
+                        let totalPrice = document.getElementById('total_price_old').value;
+                        // console.log(discount);
+                        discountItem.forEach((item) => {
+                            let dis = data.discount * 1000
+                            item.textContent = `-${dis.toLocaleString('de-DE')}`
+                        });
+                        totalPriceItem.forEach((item) => {
+                            let dis = (totalPrice - data.discount) * 1000
+                            item.textContent = `${dis.toLocaleString('de-DE')}₫`
+                        });
+
+                        document.getElementById('discount').value = data.discount;
+                        document.getElementById('voucher_id').value = data.voucher_id;
+                        document.getElementById('total_price').value = totalPrice - data.discount;
+                        // discount.innerHTML = data.discount;
+                        // console.log(`Giảm giá: ${data.voucher}`);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
     </script>
 @endsection

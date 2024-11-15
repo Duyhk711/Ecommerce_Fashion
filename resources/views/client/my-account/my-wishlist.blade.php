@@ -31,7 +31,7 @@
     <div class="">
         <div class="orders-card mt-0 h-100">
             <div class="top-sec d-flex-justify-center justify-content-between mb-4">
-                <h2 class="mb-0">My Wishlist</h2>
+                <h2 class="mb-0">Sản phẩm yêu thích</h2>
             </div>
 
             <div class="table-bottom-brd table-responsive">
@@ -50,17 +50,24 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    <img class="blur-up lazyload me-2"
-                                        data-src="{{ $favorite->productVariant->image ?? $favorite->product->img_thumbnail }}"
-                                        src="{{ $favorite->productVariant->image ?? $favorite->product->img_thumbnail }}"
-                                        width="50" alt="{{ $favorite->product->name }}"
-                                        title="{{ $favorite->product->name }}" />
-                                    <a href="{{route('productDetail', $favorite->product->id)}}" style="font-weight: 500;">{{ $favorite->product->name }}</a>
+                                    <div class="d-flex align-items-center">
+                                        <div class="">
+                                            <img class="blur-up lazyload me-2"
+                                            data-src="{{Storage::url($favorite->product->img_thumbnail) }}"
+                                            src="{{Storage::url($favorite->product->img_thumbnail) }}"
+                                            width="50" alt="{{ $favorite->product->name }}"
+                                            title="{{ $favorite->product->name }}" />
+                                        </div>
+
+                                        <div>
+                                            <a href="{{route('productDetail', $favorite->product->slug)}}" style="font-weight: 500;">{{ $favorite->product->name }}</a>
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <!-- Hiển thị giá sản phẩm -->
                                 <td>
-                                    <span class="price-sale">{{ number_format($favorite->product->price_sale) }}đ</span>
+                                    <span class="price-sale">{{ number_format($favorite->product->price_sale, 3, '.', 0) }}₫</span>
                                 </td>
 
                                 <!-- Nút xóa sản phẩm yêu thích -->
@@ -83,6 +90,7 @@
                     </tbody>
                 </table>
             </div>
+            {{ $favorites->links() }}
         </div>
     </div>
 @endsection

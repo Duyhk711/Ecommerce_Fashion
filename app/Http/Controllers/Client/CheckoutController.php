@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Models\UserVoucher;
 use App\Services\Client\CartService;
 use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
@@ -25,7 +26,6 @@ class CheckoutController extends Controller
 
     public function renderCheckout(Request $request)
     {
-
         if (Auth::check()) {
             $dataAddress = $this->checkoutService->getAddresses();
             if ($request->has('address')) {
@@ -74,7 +74,6 @@ class CheckoutController extends Controller
 
     public function storeCheckout(Request $request)
     {
-
         $products = json_decode($request->input('cartItem'));
 
         // dd($request->all());
@@ -93,7 +92,22 @@ class CheckoutController extends Controller
         $order->address_line1 = $request->input('address_line1');
         $order->total_price = $request->input('total_price');
         $order->payment_method = $request->input('payment_method');
+        $order->discount = $request->input('discount');
+        $order->voucher_id = $request->input('voucher_id');
         $order->save();
+        if (Auth::check()) {
+            $userVoucher = UserVoucher::where('user_id', auth()->id())
+                ->where('voucher_id', $request->input('voucher_id'))
+                ->first(); // Lấy bản ghi đầu tiên (chỉ có một)
+
+            if ($userVoucher) {
+                $userVoucher->is_used = 1; // Cập nhật giá trị
+                $userVoucher->save(); // Lưu vào cơ sở dữ liệu
+            }
+        }
+        // dd($order->customer_email);
+        $this->checkoutService->sendOrderConfirmationNotification($order);
+        // Mail::to($order->customer_email)->send(new OrderConfirmation($order));
 
         // dd($request->input('cartItem'));
         // Lưu các sản phẩm vào bảng 'order_items'
@@ -127,7 +141,29 @@ class CheckoutController extends Controller
                 session()->put('cart', $cartItems);
             }
 
-            $orderItems = OrderItem::where('order_id', $order->id)->get();
+            $orderItems = OrderItem::with([
+                'productVariant.variantAttributes.attribute',
+                'productVariant.variantAttributes.attributeValue',
+            ])->where('order_id', $order->id)
+                ->get();
+
+            $orderItems = $orderItems->map(function ($orderItem) {
+                $variant = $orderItem->productVariant;
+
+                // Xử lý thuộc tính biến thể sản phẩm
+                $attributes = $variant->variantAttributes->map(function ($variantAttribute) {
+                    return $variantAttribute->attribute->name . ': ' . $variantAttribute->attributeValue->value;
+                })->implode(', ');
+
+                return [
+                    'product_name' => $orderItem->product_name,
+                    'product_variant_id' => $orderItem->product_variant_id,
+                    'variant_attributes' => $attributes,
+                    'image' => $orderItem->variant_image,
+                    'price' => $orderItem->variant_price_sale,
+                    'quantity' => $orderItem->quantity,
+                ];
+            });
         } else {
             // Trường hợp biến không phải là mảng hoặc đối tượng, xử lý lỗi hoặc thông báo
             echo "Dữ liệu không hợp lệ";
@@ -135,9 +171,16 @@ class CheckoutController extends Controller
 
         // Kiểm tra phương thức thanh toán
         if ($request->payment_method == 'COD') {
+            // dd($product);
             return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
         } else {
-            return redirect()->route('vnpay.payment', ['order_id' => $order->id, 'products' => $products]);
+            return redirect()->route('vnpay.payment', ['order_id' => $order->id]);
         }
     }
+
+    public function orderPayment($id)
+    {
+        return redirect()->route('vnpay.payment', ['order_id' => $id]);
+    }
+
 }

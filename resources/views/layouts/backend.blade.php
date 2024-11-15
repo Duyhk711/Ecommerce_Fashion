@@ -15,47 +15,17 @@
   <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
-   
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <!-- Modules -->
-  
+
   @yield('css')
-  {{-- @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js', 'resources/js/app.js']) --}}
   @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
-  <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
-  {{-- @vite(['resources/sass/main.scss', 'resources/sass/dashmix/themes/xwork.scss', 'resources/js/dashmix/app.js']) --}}
-
 </head>
+
 <body>
-  {{-- @if (session('success'))
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          $.notify({
-              message: '{{ session('success') }}'
-          },{
-              type: 'success',
-              icon: 'fa fa-check me-1',
-              delay: 3000
-          });
-      });
-  </script>
-@endif
 
-@if (session('error'))
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          $.notify({
-              message: '{{ session('error') }}'
-          },{
-              type: 'danger',
-              icon: 'fa fa-times me-1',
-              delay: 3000
-          });
-      });
-  </script>
-@endif --}}
-
-  <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow fs-sm">
+  <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-fixed main-content-narrow fs-sm side-trans-enabled page-header-dark">
     <!-- Side Overlay-->
     <aside id="side-overlay">
       <!-- Side Header -->
@@ -164,17 +134,6 @@
     <!-- END Side Overlay -->
 
     <!-- Sidebar -->
-    <!--
-      Sidebar Mini Mode - Display Helper classes
-
-      Adding 'smini-hide' class to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
-      Adding 'smini-show' class to an element will make it visible (opacity: 1) when the sidebar is in mini mode
-          If you would like to disable the transition animation, make sure to also add the 'no-transition' class to your element
-
-      Adding 'smini-hidden' to an element will hide it when the sidebar is in mini mode
-      Adding 'smini-visible' to an element will show it (display: inline-block) only when the sidebar is in mini mode
-      Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
-    -->
     <nav id="sidebar" aria-label="Main Navigation">
       <!-- Side Header -->
       <div class="bg-header-dark">
@@ -196,7 +155,7 @@
             <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
             <!-- Class Toggle, functionality initialized in Helpers.dmToggleClass() -->
             <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="class-toggle" data-target="#sidebar-style-toggler" data-class="fa-toggle-off fa-toggle-on" onclick="Dashmix.layout('sidebar_style_toggle');Dashmix.layout('header_style_toggle');">
-              <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
+              <i class="fa fa-toggle-on" id="sidebar-style-toggler"></i>
             </button>
             <!-- END Toggle Sidebar Style -->
 
@@ -225,15 +184,14 @@
         <div class="content-side content-side-full">
           <ul class="nav-main">
             <li class="nav-main-item">
-              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="/dashboard">
+              <a class="nav-main-link{{ request()->is('admin/dashboard') ? ' active' : '' }}" href="/admin/dashboard">
                 <i class="nav-main-link-icon fa fa-location-arrow"></i>
                 <span class="nav-main-link-name">Dashboard</span>
                 <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span>
               </a>
             </li>
             <li class="nav-main-heading">Various</li>
-            
-           {{-- SAN PHAM --}}
+            {{-- SAN PHAM --}}
             <li class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/products*') || request()->is('admin/products') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-box"></i>
@@ -274,7 +232,7 @@
             </li>
 
             {{-- USER --}}
-            <li class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-users"></i>
                 <span class="nav-main-link-name">Quản lý Khách hàng</span>
@@ -286,6 +244,13 @@
                   </a>
                 </li>
               </ul>
+            </li> --}}
+            {{-- User --}}
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}" href="{{ route('admin.users.index') }}">
+                <i class="nav-main-link-icon fa fa-users"></i>
+                <span class="nav-main-link-name">Quản lý khách hàng</span>
+              </a>
             </li>
 
             {{-- DON HANG --}}
@@ -300,26 +265,40 @@
                     <span class="nav-main-link-name">Đơn hàng</span>
                   </a>
                 </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                    <span class="nav-main-link-name">Voucher</span>
+                  </a>
+                </li>
               </ul>
             </li>
 
+            {{-- <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/orders') ? ' active' : '' }}" href="{{ route('admin.orders.index') }}">
+                <i class="nav-main-link-icon fa fa-receipt"></i>
+                <span class="nav-main-link-name">Quản lý đơn hàng</span>
+              </a>
+            </li> --}}
             {{-- VOUCHER --}}
-            {{-- <li class="nav-main-item{{ request()->is('admin/promotions*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/promotions*') ? 'true' : 'false' }}" href="#">
+
+            {{-- <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/vouchers*') ? 'true' : 'false' }}" href="{{ route('admin.vouchers.index') }}">
                 <i class="nav-main-link-icon fa fa-gift"></i>
                 <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('admin/promotions*') ? ' show' : '' }}">
+              <ul class="nav-main-submenu{{ request()->is('admin/vouchers*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('admin/promotions') ? ' active' : '' }}" href="{{ route('promotions.index') }}">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
                     <span class="nav-main-link-name">Voucher</span>
                   </a>
                 </li>
               </ul>
             </li> --}}
 
+
+
             {{-- BANNER --}}
-            <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-image"></i>
                 <span class="nav-main-link-name">Quản lý Banner</span>
@@ -331,10 +310,17 @@
                   </a>
                 </li>
               </ul>
+            </li> --}}
+
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('admin.banners.index') }}">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý banner</span>
+              </a>
             </li>
 
             {{--COMMENT--}}
-            <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/comments*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-comments"></i>
                 <span class="nav-main-link-name">Quản lý Bình luận</span>
@@ -346,22 +332,38 @@
                   </a>
                 </li>
               </ul>
+            </li> --}}
+
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/comments') ? ' active' : '' }}" href="{{ route('admin.comments.index') }}">
+                <i class="nav-main-link-icon fa fa-comments"></i>
+                <span class="nav-main-link-name">Quản lý bình luận</span>
+              </a>
             </li>
 
             {{-- MESSAGE --}}
-            <li class="nav-main-item{{ request()->is('admin/chats*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/chats*') ? 'true' : 'false' }}" href="#">
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
                 <i class="nav-main-link-icon fa fa-envelope"></i>
-                <span class="nav-main-link-name">Quản lý tin nhắn</span>
+                <span class="nav-main-link-name">Tin nhắn</span>
               </a>
-              <ul class="nav-main-submenu{{ request()->is('/admin/chats*') ? ' show' : '' }}">
+            </li>
+            {{-- THONGKE --}}
+            <li class="nav-main-item{{ request()->is('admin/thongkes*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/thongkes*') ? 'true' : 'false' }}" href="#">
+                <i class="nav-main-link-icon fa fa-keyboard"></i>
+                <span class="nav-main-link-name">Quản lý Thống kê</span>
+              </a>
+              <ul class="nav-main-submenu{{ request()->is('admin/thongkes*') ? ' show' : '' }}">
                 <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('/admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
-                    <span class="nav-main-link-name">Tin nhắn</span>
+                  <a class="nav-main-link{{ request()->is('admin/thongkes') ? ' active' : '' }}" href="{{ route('admin.thongkes.index') }}">
+                    <span class="nav-main-link-name">Thống kê</span>
                   </a>
                 </li>
               </ul>
             </li>
+
+
 
             <li class="nav-main-heading">More</li>
             <li class="nav-main-item">
@@ -407,11 +409,11 @@
             <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-fw fa-user d-sm-none"></i>
               @if(Auth::check())
-                  <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
+              <span class="d-none d-sm-inline-block">Xin chào: {{ Auth::user()->name }}</span>
               @else
               <span class="d-none d-sm-inline-block">Admin</span>
               @endif
-              
+
               <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
@@ -422,7 +424,7 @@
                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                   <i class="far fa-fw fa-user me-1"></i> Profile
                 </a>
-                
+
                 <a class="dropdown-item" href="javascript:void(0)">
                   <i class="far fa-fw fa-file-alt me-1"></i> Invoices
                 </a>
@@ -436,13 +438,13 @@
                 <!-- END Side Overlay -->
 
                 <div role="separator" class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
-                  </a>
-                  <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
-                    @csrf
-                  </form>
-                </div>
+                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Đăng xuất
+                </a>
+                <form id="logout-form" action="{{ route('admin.logoutAdmin') }}" method="POST" style="display: none;">
+                  @csrf
+                </form>
+              </div>
             </div>
           </div>
           <!-- END User Dropdown -->
@@ -578,10 +580,10 @@
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">
-            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold"  target="_blank">pixelcave</a>
+            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold" target="_blank">pixelcave</a>
           </div>
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold"  target="_blank">Dashmix</a> &copy;
+            <a class="fw-semibold" target="_blank">Dashmix</a> &copy;
             <span data-toggle="year-copy"></span>
           </div>
         </div>
@@ -601,26 +603,29 @@
   <!-- toastr JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          @if (session('success'))
-              toastr.success('{{ session('success') }}', 'Thành công', {
-                  positionClass: 'toast-top-right',
-                  timeOut: 3000
-              });
-          @endif
 
-          @if (session('error'))
-              toastr.error('{{ session('error') }}', 'Lỗi', {
-                  positionClass: 'toast-top-right',
-                  timeOut: 3000
-              });
-          @endif
-      });
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      @if(session('success'))
+      toastr.success('{{ session('
+        success ') }}', 'Thành công', {
+          positionClass: 'toast-top-right',
+          timeOut: 3000
+        });
+      @endif
+
+      @if(session('error'))
+      toastr.error('{{ session('
+        error ') }}', 'Lỗi', {
+          positionClass: 'toast-top-right',
+          timeOut: 3000
+        });
+      @endif
+    });
   </script>
-  
+
 </body>
 @yield('js')
 
+
 </html>
-  
