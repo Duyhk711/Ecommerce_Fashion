@@ -145,14 +145,14 @@
                                             $currentStatus = $order->payment_method;
                                         @endphp
                                          <span>
-                                            {{$currentStatus}}
+                                            {{$statusMapping[$currentStatus] ?? $currentStatus}}
                                         </span>
                                     </td>
                                     <td class=" text-center fs-sm">
                                         <a class="fs-sm">{{ $order->items->count() }}</a>
                                     </td>
                                     <td class=" text-end fs-sm">
-                                        <strong>{{ number_format($order->total_price, 3, '.', 0) }} đ</strong>
+                                        <strong>{{ number_format($order->total_price *1000, 0, ',', '.') }} ₫</strong>
                                     </td>
                                     <td class="text-center fs-base fs-sm">
                                         <div class="btn-group">

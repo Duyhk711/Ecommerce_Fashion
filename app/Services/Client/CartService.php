@@ -150,6 +150,7 @@ class CartService
                     'quantity' => $cartItem->quantity,
                     'stock' => $variant->stock,
                     'created_at' => $cartItem->created_at,
+                    'slug' => $product->slug
                 ];
             });
         }
@@ -173,6 +174,7 @@ class CartService
                 'quantity' => $cartItem['quantity'] ?? 1,
                 'stock' => $cartItem['stock'],
                 'created_at' => $cartItem['created_at'] ?? now(),
+                'slug' => $cartItem['product_slug'],
             ];
         })->sortByDesc('created_at');
     }
