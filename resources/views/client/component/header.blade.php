@@ -61,7 +61,7 @@
                                      @foreach ($catalogues as $category)
                                          @if (!$category->parent_id && $category->is_active)
                                              <li class="lvl-1 col-md-3 col-lg-3 w-22">
-                                                 <a href="{{ url('/filterproduct?categories=' . $category->id) }}"
+                                                 <a href="#"
                                                      class="site-nav lvl-1 menu-title">{{ $category->name }}</a>
 
                                                  @if ($category->children->isNotEmpty())
