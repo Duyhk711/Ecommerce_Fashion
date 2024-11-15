@@ -14,7 +14,7 @@
                         <div class="profile-top text-center mb-4 px-3">
                             <div class="profile-image mb-3">
                                 <img class="rounded-circle blur-up lazyload"
-                                     data-src="{{ $currentUser->avatar_url }}"
+                                     data-src="{{ $currentUser->avatar_url}}"
                                      src="{{ $currentUser->avatar_url}}"
                                      alt="user" style="width: 130px; height: 130px; object-fit: cover;" />
                             </div>
