@@ -311,7 +311,7 @@
                                              <div class="button-set style1">
                                                 <!--Cart Button-->
                                                 <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
-                                                    @csrf 
+                                                    @csrf
                                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                                     <button type="submit" class="btn-icon addtocart">
                                                         <span class="icon-wrap d-flex-justify-center h-100 w-100"
@@ -335,7 +335,7 @@
                                                         class="bi bi-heart-fill  favorite {{ $product->isFavorite ? '' : 'd-none' }}"></i>
                                                 </a>
                                                 <!--End Wishlist Button-->
-                                            </div> 
+                                            </div>
                                             <!--End Product Button-->
                                         </div>
                                         <!-- End Product Image -->
@@ -354,7 +354,7 @@
                                             <!-- Product Price --> --}}
                                             <div class="product-price">
                                                 @if ($product->price_sale == 0 || $product->price_sale == $product->price_regular || $product->price_sale == null)
-                                                    <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}đ</span>
+                                                    <span class="price"> {{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
                                                 @else
                                                     <span
                                                         class="price old-price">{{ number_format($product->price_regular, 3, '.', 0) }}₫</span>

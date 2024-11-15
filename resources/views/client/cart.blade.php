@@ -6,6 +6,9 @@
     <!-- Đặt CSS tùy chỉnh nếu cần -->
     <!-- CSS cho Modal Popup -->
     <style>
+        .font-uppercase{
+            font-family: 'Quicksand', sans-serif;
+        }
         .btn-delete {
             background: none;
             border: none;
@@ -135,7 +138,7 @@
                                             </td>
                                             <td class="cart-meta small-text-left cart-flex-item">
                                                 <div class="list-view-item-title">
-                                                    <a href="#"
+                                                    <a href="{{route('productDetail', $item['slug'])}}"
                                                         style="font-weight: 500;">{{ $item['product_name'] ?? 'Sản phẩm không xác định' }}</a>
                                                 </div>
                                                 <div class="cart-meta-text">
@@ -229,7 +232,7 @@
                                             hàng</span></span>
                                 </div>
                                 <div class="row g-0 pt-2">
-                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng tiền</strong></span>
+                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-6 font-uppercase"><strong>Tổng tiền</strong></span>
                                     <span
                                         class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
                                             class="money" id="totalPrice"
@@ -237,7 +240,7 @@
                                 </div>
 
                                 <p class="cart-shipping mt-3"></p>
-                                <p class="cart-shipping fst-normal freeShipclaim"><i
+                                <p class="cart-shipping fst-normal freeShipclaim font-uppercase"><i
                                         class="me-2 align-middle icon anm anm-truck-l"></i><b>ĐỦ ĐIỀU KIỆN</b> MIỄN PHÍ VẬN
                                     CHUYỂN
                                 </p>
