@@ -82,6 +82,7 @@ class HomeService
         $saleProduct = Product::with(['variants.variantAttributes.attributeValue'])
             ->where('price_regular', '>', 'price_sale')
             ->where('is_active', 1)
+            ->where('is_hot_deal', 1)
             ->orderBy('created_at', 'desc')
             ->take(8)
             ->get();
