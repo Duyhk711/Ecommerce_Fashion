@@ -43,7 +43,7 @@
         @include('client.component.footer')
 
 
-        @include('client.component.menubar_mobile')
+        {{-- @include('client.component.menubar_mobile') --}}
 
 
         <!--Scoll Top-->

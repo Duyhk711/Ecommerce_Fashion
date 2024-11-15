@@ -65,32 +65,32 @@
                 <table class="table table-hover align-middle table-striped js-dataTable-full">
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Mã</th>
-                            <th>Giá trị</th>
-                            <th>Giá trị đơn hàng tối thiểu</th>
-                            <th>Số lượng</th>
-                            <th>Mô tả</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Mã</th>
+                            <th class="text-center">Giá trị</th>
+                            <th class="text-center">Giá trị đơn hàng tối thiểu</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-center">Mô tả</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($vouchers as $voucher)
                             <tr>
-                                <td class="fs-sm">{{ $loop->iteration }}</td>
-                                <td>{{ $voucher->code }}</td>
-                                <td>
+                                <td class="fs-sm text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $voucher->code }}</td>
+                                <td class="text-center">
                                     @if($voucher->discount_type == 'fixed')
                                         {{ number_format($voucher->discount_value, 3, '.') }} ₫
                                     @else
                                         {{ $voucher->discount_value }} %
                                     @endif
                                 </td>
-                                <td>{{ number_format($voucher->minimum_order_value * 1000, 0, '.', ',') }} ₫</td>
-                                <td>{{ $voucher->quantity }}</td>
-                                <td>{{ $voucher->description }}</td>
-                                <td>
+                                <td class="text-center">{{ number_format($voucher->minimum_order_value * 1000, 0, '.', ',') }} ₫</td>
+                                <td class="text-center">{{ $voucher->quantity }}</td>
+                                <td class="text-center">{{ $voucher->description }}</td>
+                                <td class="text-center">
                                     @if ($voucher->is_active)
                                     <span class="text-success">
                                         <i class="fa fa-check-circle" data-bs-toggle="tooltip" title="Hoạt động"></i>

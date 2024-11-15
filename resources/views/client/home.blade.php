@@ -62,24 +62,6 @@
             background-color: #e64a19;
 
         }
-
-        /* .voucher-copy {
-            
-            color: #ffffff;
-            border: none;
-            padding: 4px 8px;
-            height: 30px;
-            width: 80px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        } */
-
-        /* .voucher-copy:hover {
-            background-color: #2f415d;
-        } */
-
         .xt {
             display: flex;
             justify-content: space-between;
@@ -105,63 +87,40 @@
             max-width: 20ch;
         }
 
-        /* Nút Lưu */
-        .voucher-button-save {
-            background-color: #0084ff;
-            color: #ffffff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            line-height: 1;
+        .voucher-button-save,
+        .voucher-button-saved,
+        .voucher-button-out-of-stock {
+            width: 100px;
             height: 40px;
-            display: flex;
-            text-align: center;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            line-height: 1;
-            height: 40px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+        }
+
+        .voucher-button-save {
+            background-color: #0d6efd;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
         }
 
         .voucher-button-save:hover {
-            background-color: #e64a19;
+            background-color: #e0e7ff;
+            color: #4c6ef5;
         }
 
-        /* Nút Đã Lưu */
         .voucher-button-saved {
-            background-color: none;
-            color: #000000;
-            border: 1px solid #0084ff;
-            padding: 10px 16px;
-            border-radius: 8px;
+            background-color: #e0e7ff;
+            color: #4c6ef5;
+
             cursor: not-allowed;
-            text-align: center;
-            font-weight: bold;
-            line-height: 1;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Nút Đã Hết */
         .voucher-button-out-of-stock {
-            background-color: #bdbdbd;
+            background-color: #cccccc;
             color: #ffffff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
+
             cursor: not-allowed;
-            text-align: center;
-            font-weight: bold;
-            line-height: 1;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
     </style>
     <section class="slideshow slideshow-wrapper">
@@ -1048,9 +1007,9 @@
         <!--End Parallax Banner-->
     </div>
 @endsection
-
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/chat.js']);
     <script>
         $(document).ready(function() {
             var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
@@ -1114,7 +1073,7 @@
                                 Giảm ${discountDisplay} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${new Date(voucher.end_date).toLocaleDateString()}</div>
                                 <div>
                                     <button class="voucher-copy ${buttonClass}"
                                             data-code="${voucher.code}"

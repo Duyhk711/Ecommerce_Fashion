@@ -41,7 +41,7 @@
 
             <div class="block-content">
                 {{-- Main Catalogues --}}
-                <table class="table table-hover align-middle table-striped js-catalogue-table">
+                <table class="table table-hover align-middle  js-catalogue-table">
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 80px;">STT</th>
@@ -87,7 +87,7 @@
                                                 method="POST" style="display:inline;" class="form-activate">
                                                 @csrf
 
-                                                <button type="submit" class="btn btn-sm btn-alt-danger"
+                                                <button type="submit" class="btn  btn-sm btn-alt-danger" style="height: 30px"
                                                     data-bs-toggle="tooltip" title="Activate">
                                                     <i class="fa-solid fa-power-off"></i>
                                                 </button>
@@ -97,27 +97,27 @@
                                                 method="POST" style="display:inline;" class="form-activate">
                                                 @csrf
 
-                                                <button type="submit" class="btn btn-sm btn-alt-success"
+                                                <button type="submit" class="btn btn-sm btn-alt-success" style="height: 30px"
                                                     data-bs-toggle="tooltip" title="Activate">
                                                     <i class="fa fa-fw fa-check"></i>
                                                 </button>
                                             </form>
                                         @endif
 
-                                        <a href="{{ route('admin.catalogues.edit', $catalogue->id) }}"class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Edit">
-                                            <i class="fa fa-pencil-alt"></i>
+                                        <a href="{{ route('admin.catalogues.edit', $catalogue->id) }}"class="btn mx-1 rounded-1 me-1 btn-sm btn-alt-secondary" style="height: 30px" data-bs-toggle="tooltip" title="Edit">
+                                            <i class="fa fa-pencil-alt mt-1"></i>
                                         </a>
 
-                                            <form action="{{ route('admin.catalogues.destroy', $catalogue->id) }}"
+                                            {{-- <form action="{{ route('admin.catalogues.destroy', $catalogue->id) }}"
                                             method="POST" style="display:inline;" class="form-delete"
                                             onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-alt-secondary"
+                                            <button type="submit" class="btn btn-sm btn-alt-secondary" style="height: 30px"
                                                 data-bs-toggle="tooltip" title="Delete">
-                                                <i class="fa fa-fw fa-times text-danger"></i>
+                                                <i class="fa fa-fw fa-times text-danger rounded-1"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -168,11 +168,11 @@
                                                 @endif
 
                                                 <a href="{{ route('admin.catalogues.edit', $child) }}"
-                                                    class="btn btn-sm btn-alt-secondary">
-                                                    <i class="fa fa-pencil-alt"></i>
+                                                    class="btn btn-sm btn-alt-secondary mx-1 " style="height: 30px">
+                                                    <i class="fa fa-pencil-alt mt-1"></i>
                                                 </a>
 
-                                                <form action="{{ route('admin.catalogues.destroy', $child->id) }}"
+                                                {{-- <form action="{{ route('admin.catalogues.destroy', $child->id) }}"
                                                     method="POST" class="d-inline"
                                                     onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?');">
                                                     @csrf
@@ -180,7 +180,7 @@
                                                     <button type="submit" class="btn btn-sm btn-alt-secondary">
                                                         <i class="fa fa-fw fa-times text-danger"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>

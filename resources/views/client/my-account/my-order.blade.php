@@ -185,14 +185,14 @@
                                                 <p class="m-0">{{ $orderItem->product_name }}</p>
                                                 <p class="m-0">Số lượng: {{ $orderItem->quantity }}</p>
                                                 <p class="m-0">Giá:
-                                                    {{ number_format($orderItem->variant_price_sale, 3, '.', 0) }}đ
+                                                    {{ number_format($orderItem->variant_price_sale, 3, '.', 0) }}₫
                                                 </p>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
-                            <p class="total-price">Tổng giá: {{ number_format($item->total_price, 3, '.') }}đ</p>
+                            <p class="total-price">Tổng giá: {{ number_format($item->total_price, 3, '.') }}₫</p>
                             <hr class="my-3">
                             <div class="bottom d-flex justify-content-start gap-2">
 
