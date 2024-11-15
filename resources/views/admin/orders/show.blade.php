@@ -279,26 +279,26 @@
                           </div>
                       </td>
                       <td class="text-center"><strong>{{$item->quantity}}</strong></td>
-                      <td class="text-end">{{ number_format(($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} đ</td>
-                      <td class="text-end">{{number_format($item->quantity * ($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} đ</td>
+                      <td class="text-end">{{ number_format(($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} ₫</td>
+                      <td class="text-end">{{number_format($item->quantity * ($item->variant_price_sale  == 0? $item->variant_price_regular :  $item->variant_price_sale) * 1000, 0, ',', '.')}} ₫</td>
                     </tr>
                   @endforeach
                   <tr>
                     <td colspan="3" class="text-end"><strong>Tổng đơn hàng:</strong></td>
-                    <td class="text-end">{{number_format(($orderDetail->total_price + $orderDetail->discount) *1000, 0, ',', '.')}}đ</td>
+                    <td class="text-end">{{number_format(($orderDetail->total_price + $orderDetail->discount) *1000, 0, ',', '.')}}₫</td>
                   </tr>
                   <tr>
                     <td colspan="3" class="text-end"><strong>Giảm giá:</strong></td>
-                    <td class="text-end">{{number_format(($orderDetail->discount) *1000, 0, ',', '.')}}đ</td>
+                    <td class="text-end">{{number_format(($orderDetail->discount) *1000, 0, ',', '.')}}₫</td>
                   </tr>
                   <tr class="table-active">
                     <td colspan="3" class="text-end"><strong>Tổng đã trả:</strong></td>
                     <td class="text-end">
                       <strong>
                           @if (!empty($paymentStatusMessage))
-                            {{number_format(($orderDetail->total_price) *1000, 0, ',', '.')}} đ
+                            {{number_format(($orderDetail->total_price) *1000, 0, ',', '.')}} ₫
                           @else
-                            0 đ
+                            0 ₫
                           @endif
                       </strong>
                     </td>

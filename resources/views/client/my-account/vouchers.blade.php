@@ -43,27 +43,20 @@
         }
 
         .voucher-copy {
-            background-color: #0084ff;
-            color: #ffffff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            line-height: 1;
-            height: 40px;
-            display: flex;
-            text-align: center;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            line-height: 1;
-            height: 40px;
-            display: flex;
+            width: 100px; 
+            height: 40px; 
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            background-color: #0d6efd;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
         }
 
         .voucher-copy:hover {
-            background-color: #e64a19;
+            background-color: #e0e7ff;
+            color: #4c6ef5;
         }
     </style>
 @endsection
