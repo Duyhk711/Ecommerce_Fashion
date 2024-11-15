@@ -64,7 +64,7 @@
         }
 
         /* .voucher-copy {
-            
+
             color: #ffffff;
             border: none;
             padding: 4px 8px;
@@ -1114,7 +1114,7 @@
                                 Giảm ${discountDisplay} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${new Date(voucher.end_date).toLocaleDateString()}</div>
                                 <div>
                                     <button class="voucher-copy ${buttonClass}"
                                             data-code="${voucher.code}"

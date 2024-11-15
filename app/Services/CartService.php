@@ -14,7 +14,7 @@ class CartService
     public function addToCart($productVariantId, $quantity, $colorId, $sizeId)
     {
         $productVariant = ProductVariant::find($productVariantId);
-
+        $product_slug = $productVariant->product->slug;
         if (!$productVariant) {
             return false;
         }
@@ -37,6 +37,7 @@ class CartService
                     'cart_id' => $cart->id,
                     'product_variant_id' => $productVariantId,
                     'quantity' => $quantity,
+                    'slug' => $product_slug,
                     'price' => $price,
                     'color_id' => $colorId,
                     'size_id' => $sizeId,
@@ -57,6 +58,7 @@ class CartService
             if (!$itemExists) {
                 $cartItems[] = [
                     'product_variant_id' => $productVariantId,
+                    'slug' => $product_slug,
                     'quantity' => $quantity,
                     'price' => $price,
                     'color_id' => $colorId,
@@ -114,6 +116,7 @@ class CartService
 
                     $item['product_image'] = $productVariant->product->image;
                     $item['product_name'] = $productVariant->product->name;
+                    $item['product_slug'] = $productVariant->product->slug;
                     // dd($item['product_name']);
                     // set lại thuộc tính
                     $item['color'] = $color;

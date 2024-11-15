@@ -229,19 +229,19 @@
                                     $price_regular = $item->variant_price_regular;
                                 @endphp
                                 @if ($price_regular == $price_sale )
-                                    <span style="">{{ number_format(($price_regular * 1000), 0, '.', ',') }} đ</span>
+                                    <span style="">{{ number_format(($price_regular * 1000), 0, '.', ',') }} ₫</span>
                                 @else
-                                    <span style="text-decoration: line-through;">{{ number_format(($price_regular * 1000), 0, '.', ',') }} đ</span>
-                                    <span style="color: red; font-weight: bold;">{{ number_format($price_sale * 1000, 0, '.', ',') }} đ</span>
+                                    <span style="text-decoration: line-through;">{{ number_format(($price_regular * 1000), 0, '.', ',') }} ₫</span>
+                                    <span style="color: red; font-weight: bold;">{{ number_format($price_sale * 1000, 0, '.', ',') }} ₫</span>
                                 @endif
                             </p>
                         </div>
                     </td>
                     <td class="text-end">
                         @if ($price_regular == $price_sale )
-                            <strong style="">{{ number_format(($price_regular * $item->quantity * 1000), 0, '.', ',') }} đ</strong>
+                            <strong style="">{{ number_format(($price_regular * $item->quantity * 1000), 0, '.', ',') }} ₫</strong>
                         @else
-                            <strong style="">{{ number_format(($price_sale * $item->quantity * 1000), 0, '.', ',') }} đ</strong>
+                            <strong style="">{{ number_format(($price_sale * $item->quantity * 1000), 0, '.', ',') }} ₫</strong>
                         @endif
 
                     </td>
@@ -303,15 +303,15 @@
             <table>
                 <tr>
                     <td class="text-end" style="width: 75%" colspan="2">Tổng cộng:</td>
-                    <td class="text-end">{{ number_format(($order->total_price + $item->discount) * 1000, 0, '.', ',') }} đ</td>
+                    <td class="text-end">{{ number_format(($order->total_price + $item->discount) * 1000, 0, '.', ',') }} ₫</td>
                 </tr>
                 <tr>
                     <td class="text-end" style="width: 75%" colspan="2">Giảm giá:</td>
                     <td class="text-end">
                         @if ($order->voucher)
-                            {{ number_format($item->discount * 1000, 0, '.', ',') }} đ
+                            {{ number_format($item->discount * 1000, 0, '.', ',') }} ₫
                         @else
-                            0 đ
+                            0 ₫
                         @endif
                     </td>
                 </tr>
@@ -320,7 +320,7 @@
                     <td class="text-end">
                         <strong class="total-amount" style="font-weight: normal;">
 
-                            <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }} đ</strong>
+                            <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }} ₫</strong>
                         </strong>
                     </td>
                 </tr>
