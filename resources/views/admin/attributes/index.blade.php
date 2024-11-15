@@ -48,14 +48,12 @@ Danh sách thuộc tính
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="fw-semibold"><a href="{{route('admin.attributes.edit', $attribute->id)}}">{{ $attribute->name }}</a></td>
                             <td class="d-none d-sm-table-cell">{{ $attribute->slug }}</td>
-                            <td class="text-center">
+                            {{-- <td class="text-center">
                                 <div class="btn-group">
-                                    {{-- EDIT --}}
                                     <a href="{{ route('admin.attributes.edit', $attribute) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Edit">
                                         <i class="fa fa-pencil-alt"></i>
                                     </a>
 
-                                    {{-- DELETE  --}}
                                     <form action="{{ route('admin.attributes.destroy', $attribute) }}" method="POST" style="display:inline;" class="form-delete">
                                       @csrf
                                       @method('DELETE')
@@ -64,7 +62,7 @@ Danh sách thuộc tính
                                       </button>
                                     </form>
                                 </div>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>

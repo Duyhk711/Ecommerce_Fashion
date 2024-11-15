@@ -25,7 +25,7 @@ class OrderController extends Controller
     {
         $status = $request->get('status');
         $payment_status = $request->get('payment_status');
-        $orders = $this->orderService->getOrder($status, 6, $payment_status);
+        $orders = $this->orderService->getOrder($status, 10, $payment_status);
         // dd($orders);
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }

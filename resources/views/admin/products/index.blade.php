@@ -47,7 +47,7 @@
                 </div>
 
             </div>
-            <ul class="nav nav-tabs mb-3">
+            <ul class="nav nav-tabs mb-3 mt-3">
                 <li class="nav-item">
                     <a class="nav-link active" id="products-tab" data-bs-toggle="tab" href="#products" role="tab">Danh sách</a>
                 </li>
