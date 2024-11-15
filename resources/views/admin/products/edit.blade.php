@@ -54,7 +54,7 @@ Cập nhật sản phẩm
                         <div class="col-8">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
-                                <label for="name" class="form-label">Tên sản phẩm:</label>
+                                <label for="name" class="form-label">Tên sản phẩm<span class="text-danger">*</span>:</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
                                     name="name" id="name" value="{{ old('name', $product->name) }}"
                                     placeholder="Nhập tên sản phẩm">
@@ -74,7 +74,7 @@ Cập nhật sản phẩm
                             <div class="row">
                                 <!-- Giá gốc -->
                                 <div class="col-6 mb-3">
-                                    <label for="price_regular" class="form-label">Giá gốc:</label>
+                                    <label for="price_regular" class="form-label">Giá gốc<span class="text-danger">*</span>:</label>
                                     <input type="number" class="form-control @error('price_regular') is-invalid @enderror"
                                         name="price_regular" id="price_regular"
                                         value="{{ old('price_regular', $product->price_regular) }}"
@@ -133,7 +133,7 @@ Cập nhật sản phẩm
 
                             <!-- Danh mục -->
                             <div class="row form-group mb-3">
-                                <label class="form-label" for="catalogue-select">Danh mục:</label>
+                                <label class="form-label" for="catalogue-select">Danh mục<span class="text-danger">*</span>:</label>
                                 <select class="form-select @error('catalogue-select') is-invalid @enderror"
                                     id="catalogue-select" name="catalogue_id">
                                     <option value="">Chọn danh mục</option>
@@ -150,7 +150,7 @@ Cập nhật sản phẩm
 
                             <!-- Các thuộc tính sản phẩm -->
                             <div class="mb-4">
-                                <label class="form-label">Thuộc tính sản phẩm</label>
+                                <label class="form-label">Trạng thái sản phẩm</label>
                                 <div class="row">
                                     <!-- Dòng 1 -->
                                     <div class="d-flex justify-content-between">
@@ -197,7 +197,7 @@ Cập nhật sản phẩm
 
                              <!-- Nút tải ảnh chính -->
                              <div class="form-group image-preview" id="main-image-preview">
-                                <label class="form-label">Tải lên ảnh chính:</label>
+                                <label class="form-label">Tải lên ảnh chính<span class="text-danger">*</span>:</label>
                                 <div class="custom-file">
                                     <input type="file" name="img_thumbnail" class="form-control-file" id="main-image-input">
                                     <label class="custom-file-label" for="main-image-input"></label>
@@ -207,7 +207,7 @@ Cập nhật sản phẩm
 
                             <!-- Tải lên ảnh phụ -->
                             <div class="form-group image-preview" id="sub-images-preview">
-                                <label class="form-label">Tải lên ảnh phụ:</label>
+                                <label class="form-label">Tải lên ảnh phụ<span class="text-danger">*</span>:</label>
                                 <div class="custom-file">
                                     <input type="file" name="images[]" class="form-control-file" id="sub-images-input" >
                                     <label class="custom-file-label" for="sub-images-input"></label>
@@ -227,7 +227,7 @@ Cập nhật sản phẩm
                 <div class="block-content">
                     <div class="row">
                         <div class="col-12">
-                            <h5>Thuộc tính sản phẩm</h5>
+                            <h5>Thuộc tính sản phẩm<span class="text-danger">*</span></h5>
                             <div id="attributes-section" class="mb-3"></div>
 
                             <button type="button" id="add-attribute-btn" class="btn btn-sm btn-alt button-css mb-3"><i

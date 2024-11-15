@@ -305,7 +305,7 @@
 
                             <!-- Các thuộc tính sản phẩm -->
                             <div class="mb-4">
-                                <label class="form-label">Thuộc tính sản phẩm</label>
+                                <label class="form-label">Trạng thái sản phẩm</label>
                                 <div class="row">
                                     <!-- Dòng 1 -->
                                     <div class="d-flex justify-content-between">

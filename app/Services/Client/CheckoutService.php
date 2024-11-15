@@ -2,12 +2,14 @@
 
 namespace App\Services\Client;
 
+use App\Mail\OrderConfirmation;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutService
 {
@@ -151,6 +153,12 @@ class CheckoutService
         } else {
             throw new \Exception('Biến thể sản phẩm không tồn tại.');
         }
+    }
+
+    public function sendOrderConfirmationNotification($order)
+    {
+        Mail::to($order->customer_email)->queue(new OrderConfirmation($order));
+
     }
 
     public function store(Request $request)
