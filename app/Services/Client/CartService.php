@@ -14,10 +14,11 @@ use Illuminate\Support\Facades\Session;
 
 class CartService
 {
-    public function addToCart($productId, $productVariantId, $quantity)
+    public function addToCart($productId, $productVariantId, $quantity,$slug)
     {
         $product = Product::with('variants')->findOrFail($productId);
         $price = null;
+        $slug = $product->slug;
         // Nếu không có biến thể được chỉ định, chọn ngẫu nhiên một biến thể từ sản phẩm
         if (is_null($productVariantId) && $product->variants->isNotEmpty()) {
             $variant = $product->variants->random();
@@ -59,6 +60,7 @@ class CartService
                     'quantity' => $quantity,
                     'stock' => $variant->stock,
                     'price' => $price,
+                    'slug' => $slug,
                 ];
             }
 
@@ -174,7 +176,7 @@ class CartService
                 'quantity' => $cartItem['quantity'] ?? 1,
                 'stock' => $cartItem['stock'],
                 'created_at' => $cartItem['created_at'] ?? now(),
-                'slug' => $cartItem['product_slug'],
+                'slug' => $cartItem['slug'],
             ];
         })->sortByDesc('created_at');
     }
