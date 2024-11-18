@@ -1,14 +1,11 @@
 <?php
 
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VoucherRequest;
 use App\Models\Voucher;
 use App\Services\VoucherService;
-
-use Illuminate\Http\Request;
 
 class VoucherController extends Controller
 {
@@ -44,11 +41,10 @@ class VoucherController extends Controller
         if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
             return redirect()->back()->withErrors(['end_date' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.'])->withInput();
         }
-        $voucher= $this->voucherService->storeVoucher($data);
+        $voucher = $this->voucherService->storeVoucher($data);
         $this->voucherService->sendNewVoucherNotification($voucher);
         return redirect()->route('admin.vouchers.create')->with('success', 'Voucher mới đã được tạo thành công.');
     }
-
 
     public function edit(Voucher $voucher)
     {
@@ -75,15 +71,15 @@ class VoucherController extends Controller
         }
     }
     public function toggleActive(Voucher $voucher)
-{
-    $this->voucherService->toggleActiveStatus($voucher);
-    return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
-}
+    {
+        $this->voucherService->toggleActiveStatus($voucher);
+        return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
+    }
 
-public function toggleDeactive(Voucher $voucher)
-{
-    $this->voucherService->toggleDeactiveStatus($voucher);
-    return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
-}
+    public function toggleDeactive(Voucher $voucher)
+    {
+        $this->voucherService->toggleDeactiveStatus($voucher);
+        return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
+    }
 
 }

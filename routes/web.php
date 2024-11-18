@@ -52,7 +52,6 @@ Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.u
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/count', [CartController::class, 'getCartCount']);
 
-
 // page
 Route::view('/contact', 'client.contact')->name('contact');
 Route::view('/support', 'client.support')->name('support');
@@ -87,6 +86,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::get('/voucher', [VouchersController::class, 'voucher'])->name('voucher');
+    Route::get('/user/vouchers', [VouchersController::class, 'getMyVoucher'])->name('user.vouchers');
 
     // Route xem chi tiết đơn hàng
     Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-order/{id}', [MyOrderController::class, 'showOne'])->name('orderOneDetail');
     //Route hủy đơn hàng
     Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+    Route::post('/order/{order_id}/remove', [MyOrderController::class, 'removeOrder'])->name('order.remove');
 
     // address
     Route::get('/address', [UserController::class, 'address'])->name('address');
@@ -111,13 +112,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
 });
 
-
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
 Route::get('/order-payment', [CheckoutController::class, 'orderPayment'])->name('checkout.payment');
 Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
 Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
+Route::get('/api/available-vouchers', [VouchersController::class, 'getAvailableVouchers'])->name('vouchers.available');
+Route::post('/apply-coupon', [VouchersController::class, 'applyCoupon'])->name('apply.coupon');
 
 Route::get('/api/vouchers/all', [VouchersController::class, 'loadAllVouchers'])->name('vouchers.load.all');
 Route::get('/api/vouchers', [VouchersController::class, 'getAllVouchers']);

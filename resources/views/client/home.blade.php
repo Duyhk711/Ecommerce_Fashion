@@ -62,24 +62,6 @@
             background-color: #e64a19;
 
         }
-
-        .voucher-copy {
-            background-color: #2f415d;
-            color: #ffffff;
-            border: none;
-            padding: 4px 8px;
-            height: 30px;
-            width: 80px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .voucher-copy:hover {
-            background-color: #2f415d;
-        }
-
         .xt {
             display: flex;
             justify-content: space-between;
@@ -104,62 +86,42 @@
             text-overflow: ellipsis;
             max-width: 20ch;
         }
-        /* Nút Lưu */
-.voucher-button-save {
-    background-color: #0084ff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    line-height: 1; /* Căn chỉnh dòng */
-    height: 40px; /* Đảm bảo chiều cao nút nhất quán */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.voucher-button-save:hover {
-    background-color: #e64a19;
-}
+        .voucher-button-save,
+        .voucher-button-saved,
+        .voucher-button-out-of-stock {
+            width: 100px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
 
-/* Nút Đã Lưu */
-.voucher-button-saved {
-    background-color: #0084ff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: not-allowed;
-    text-align: center;
-    font-weight: bold;
-    line-height: 1;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .voucher-button-save {
+            background-color: #0d6efd;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
 
-/* Nút Đã Hết */
-.voucher-button-out-of-stock {
-    background-color: #bdbdbd;
-    color: #ffffff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: not-allowed;
-    text-align: center;
-    font-weight: bold;
-    line-height: 1;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .voucher-button-save:hover {
+            background-color: #e0e7ff;
+            color: #4c6ef5;
+        }
 
+        .voucher-button-saved {
+            background-color: #e0e7ff;
+            color: #4c6ef5;
+
+            cursor: not-allowed;
+        }
+
+        .voucher-button-out-of-stock {
+            background-color: #cccccc;
+            color: #ffffff;
+
+            cursor: not-allowed;
+        }
     </style>
     <section class="slideshow slideshow-wrapper">
 
@@ -194,7 +156,7 @@
 
                                             <div class="ss-btnWrap">
                                                 {{-- <a class="btn btn-primary" href="{{$selectedImage->link}}">Shop Women</a> --}}
-                                                <a class="btn btn-secondary" href="{{$selectedImage->link}}">Xem ngay</a>
+                                                <a class="btn btn-secondary" href="{{ $selectedImage->link }}">Xem ngay</a>
                                             </div>
                                         </div>
                                     </div>
@@ -230,7 +192,7 @@
                                             </p>
 
                                             <div class="ss-btnWrap d-flex-justify-start">
-                                                <a class="btn btn-primary" href="{{$selectedImage->link}}">Xem ngay</a>
+                                                <a class="btn btn-primary" href="{{ $selectedImage->link }}">Xem ngay</a>
                                             </div>
                                         </div>
                                     </div>
@@ -251,8 +213,8 @@
                             <picture>
                                 <source media="(max-width:767px)" srcset="{{ Storage::url($selectedImage->image) }}"
                                     width="1150" height="800" />
-                                <img class="blur-up lazyload" src="{{ Storage::url($selectedImage->image) }}" alt="slideshow"
-                                    title="" width="1920" height="795" />
+                                <img class="blur-up lazyload" src="{{ Storage::url($selectedImage->image) }}"
+                                    alt="slideshow" title="" width="1920" height="795" />
                             </picture>
                             <div class="container">
                                 <div class="slideshow-content slideshow-overlay middle-right">
@@ -262,10 +224,12 @@
                                                 Thiết Kế Trang Phục Yêu Thích Tiếp Theo Của Bạn <br />
                                             </h2>
                                             <p class="ss-sub-title xs-hide">
-                                                Bộ trang phục kết hợp sự thanh lịch và phong cách cho trang phục thường ngày của bạn
+                                                Bộ trang phục kết hợp sự thanh lịch và phong cách cho trang phục thường ngày
+                                                của bạn
                                             </p>
                                             <div class="ss-btnWrap">
-                                                <a class="btn btn-primary" href="{{$selectedImage->link}}">Mua sắm ngay bây giờ</a>
+                                                <a class="btn btn-primary" href="{{ $selectedImage->link }}">Mua sắm ngay
+                                                    bây giờ</a>
                                             </div>
                                         </div>
                                     </div>
@@ -501,15 +465,19 @@
                                                     </a>
                                                     <!-- End Product Image -->
                                                     <!-- Product label -->
-                                                    <div class="product-labels"><span class="lbl pr-label3">New</span>
-                                                    </div>
+                                                    <div class="product-labels"><span class="lbl pr-label3">New</span></div>
+                                                    @if ($product->is_hot_deal == 1)
+                                                        <div class="product-labels"><span class="lbl on-sale">Sale</span></div>
+                                                    @endif
                                                     <!-- End Product label -->
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}"
+                                                            method="POST" class="add-to-cart-form">
                                                             @csrf
-                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
                                                             <button type="submit" class="btn-icon addtocart">
                                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                                     data-bs-toggle="tooltip" data-bs-placement="left"
@@ -543,12 +511,14 @@
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
-                                                        <a href="{{route('productDetail', $product->slug)}}" data-bs-toggle="tooltip" title="{{$product->name}}">{{ $product->name }}</a>
+                                                        <a href="{{ route('productDetail', $product->slug) }}"
+                                                            data-bs-toggle="tooltip"
+                                                            title="{{ $product->name }}">{{ $product->name }}</a>
                                                     </div>
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
                                                     <div class="product-price">
-                                                        @if ($product->price_sale == $product->price_regular || $product->price_sale == 0 || $product->price_sale == null )
+                                                        @if ($product->price_sale == $product->price_regular || $product->price_sale == 0 || $product->price_sale == null)
                                                             <span class="price">
                                                                 {{ number_format($product->price_regular, 3, '.', 0) }}₫</span>
                                                         @else
@@ -685,14 +655,19 @@
                                                     <!-- Product label -->
                                                     <div class="product-labels"><span class="lbl pr-label1">Best
                                                             seller</span></div>
+                                                    @if ($product->is_new == 1)
+                                                        <div class="product-labels"><span class="lbl pr-label3">new</span></div>
+                                                    @endif
                                                     <!-- End Product label -->
 
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}"
+                                                            method="POST" class="add-to-cart-form">
                                                             @csrf
-                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
                                                             <button type="submit" class="btn-icon addtocart">
                                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                                     data-bs-toggle="tooltip" data-bs-placement="left"
@@ -727,7 +702,9 @@
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
-                                                        <a href="{{route('productDetail', $product->slug)}}" data-bs-toggle="tooltip" title="{{$product->name}}">{{ $product->name }}</a>
+                                                        <a href="{{ route('productDetail', $product->slug) }}"
+                                                            data-bs-toggle="tooltip"
+                                                            title="{{ $product->name }}">{{ $product->name }}</a>
                                                     </div>
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
@@ -853,16 +830,26 @@
                                                     </a>
                                                     <!-- End Product Image -->
                                                     <!-- Product label -->
-                                                    <div class="product-labels"><span class="lbl on-sale">50% Off</span>
+                                                    {{-- @if ()
+
+                                                    @else
+
+                                                    @endif --}}
+                                                    <div class="product-labels"><span class="lbl on-sale">Sale</span>
                                                     </div>
+                                                    @if ($product->is_new == 1)
+                                                        <div class="product-labels"><span class="lbl pr-label3">new</span></div>
+                                                    @endif
                                                     <!-- End Product label -->
 
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
                                                         <!--Cart Button-->
-                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                        <form id="add-to-cart-form" action="{{ route('cart.add') }}"
+                                                            method="POST" class="add-to-cart-form">
                                                             @csrf
-                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
                                                             <button type="submit" class="btn-icon addtocart">
                                                                 <span class="icon-wrap d-flex-justify-center h-100 w-100"
                                                                     data-bs-toggle="tooltip" data-bs-placement="left"
@@ -895,7 +882,9 @@
                                                     <!--End Product Vendor-->
                                                     <!-- Product Name -->
                                                     <div class="product-name">
-                                                        <a href="{{route('productDetail', $product->slug)}}" data-bs-toggle="tooltip" title="{{$product->name}}">{{ $product->name }}</a>
+                                                        <a href="{{ route('productDetail', $product->slug) }}"
+                                                            data-bs-toggle="tooltip"
+                                                            title="{{ $product->name }}">{{ $product->name }}</a>
                                                     </div>
                                                     <!-- End Product Name -->
                                                     <!-- Product Price -->
@@ -992,102 +981,103 @@
         <!--Parallax Banner-->
         <div class="section parallax-banner-style1 py-0">
             @if (!empty($banners['middleBanners']) && $banners['middleBanners']->isNotEmpty())
-            <div class="hero hero-large hero-overlay bg-size">
-                @foreach ($banners['middleBanners'] as $banner)
-                    @php
-                        $bannerImages = $banner->images;
-                    @endphp
-                    @foreach ($bannerImages as $bannerImage)
-                        <img class="bg-img" src="{{ Storage::url($bannerImage->image) }}"
-                             alt="Clearance Sale - Flat 50% Off" width="1920" height="645" />
+                <div class="hero hero-large hero-overlay bg-size">
+                    @foreach ($banners['middleBanners'] as $banner)
+                        @php
+                            $bannerImages = $banner->images;
+                        @endphp
+                        @foreach ($bannerImages as $bannerImage)
+                            <img class="bg-img" src="{{ Storage::url($bannerImage->image) }}"
+                                alt="Clearance Sale - Flat 50% Off" width="1920" height="645" />
+                        @endforeach
                     @endforeach
-                @endforeach
-                <div class="hero-inner d-flex-justify-center">
-                    <div class="container">
-                        <div class="wrap-text center text-white">
-                            <h1 class="hero-title text-white">
-                                Clearance Sale - Flat 50% Off
-                            </h1>
-                            <p class="hero-subtitle h3 text-white">
-                                Sale will end soon in
-                            </p>
-                            <!--Countdown Timer-->
-                            <div class="hero-saleTime d-flex-center text-center justify-content-center"
-                                 data-countdown="2028/10/01"></div>
-                            <!--End Countdown Timer-->
-                            <p class="hero-details">
-                                Hema Multipurpose Template that will give you and your
-                                customers a smooth shopping experience which can be used for
-                                various kinds of stores such as fashion.
-                            </p>
-                            <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Shop now</a>
+                    <div class="hero-inner d-flex-justify-center">
+                        <div class="container">
+                            <div class="wrap-text center text-white">
+                                <h1 class="hero-title text-white">
+                                    Clearance Sale - Flat 50% Off
+                                </h1>
+                                <p class="hero-subtitle h3 text-white">
+                                    Sale will end soon in
+                                </p>
+                                <!--Countdown Timer-->
+                                <div class="hero-saleTime d-flex-center text-center justify-content-center"
+                                    data-countdown="2028/10/01"></div>
+                                <!--End Countdown Timer-->
+                                <p class="hero-details">
+                                    Hema Multipurpose Template that will give you and your
+                                    customers a smooth shopping experience which can be used for
+                                    various kinds of stores such as fashion.
+                                </p>
+                                <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Shop now</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
         </div>
         <!--End Parallax Banner-->
     </div>
 @endsection
-
 @section('js')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
-        loadVouchers();
-        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-            encrypted: true
-        });
-        const channel = pusher.subscribe('vouchers');
-        channel.bind('voucher-out-of-stock', function(data) {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/chat.js']);
+    <script>
+        $(document).ready(function() {
+            var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
             loadVouchers();
-        });
-        channel.bind('voucher-saved', function(data) {
-            loadVouchers();
-        });
-        function loadVouchers() {
-            $.ajax({
-                url: '/api/vouchers',
-                method: 'GET',
-                success: function(data) {
-                    renderVouchers(data);
-                },
-                error: function(xhr) {
-                    console.log('Có lỗi xảy ra:', xhr);
-                }
+            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+                encrypted: true
             });
-        }
+            const channel = pusher.subscribe('vouchers');
+            channel.bind('voucher-out-of-stock', function(data) {
+                loadVouchers();
+            });
+            channel.bind('voucher-saved', function(data) {
+                loadVouchers();
+            });
 
-        function renderVouchers(vouchers) {
-            const voucherContainer = $('.vouchers');
-            voucherContainer.empty();
+            function loadVouchers() {
+                $.ajax({
+                    url: '/api/vouchers',
+                    method: 'GET',
+                    success: function(data) {
+                        renderVouchers(data);
+                    },
+                    error: function(xhr) {
+                        console.log('Có lỗi xảy ra:', xhr);
+                    }
+                });
+            }
 
-            vouchers.forEach(voucher => {
-                const isOutOfStock = voucher.quantity === 0;
-                const isSaved = voucher.is_saved;
+            function renderVouchers(vouchers) {
+                const voucherContainer = $('.vouchers');
+                voucherContainer.empty();
 
-                // Xác định trạng thái của nút
-                let buttonClass = 'voucher-button-save';
-                let buttonText = 'Lưu';
-                let isButtonDisabled = false;
+                vouchers.forEach(voucher => {
+                    const isOutOfStock = voucher.quantity === 0;
+                    const isSaved = voucher.is_saved;
 
-                if (isSaved) {
-                    buttonClass = 'voucher-button-saved';
-                    buttonText = 'Đã lưu';
-                    isButtonDisabled = true;
-                } else if (isOutOfStock) {
-                    buttonClass = 'voucher-button-out-of-stock';
-                    buttonText = 'Đã hết';
-                    isButtonDisabled = true;
-                }
-                const discountDisplay = voucher.discount_type === 'percentage'
-                ? `${voucher.discount_value}%`
-                : `${voucher.discount_value}K`;
-                const voucherCard = `
+                    // Xác định trạng thái của nút
+                    let buttonClass = 'voucher-button-save';
+                    let buttonText = 'Lưu';
+                    let isButtonDisabled = false;
+
+                    if (isSaved) {
+                        buttonClass = 'voucher-button-saved';
+                        buttonText = 'Đã lưu';
+                        isButtonDisabled = true;
+                    } else if (isOutOfStock) {
+                        buttonClass = 'voucher-button-out-of-stock';
+                        buttonText = 'Đã hết';
+                        isButtonDisabled = true;
+                    }
+                    const discountDisplay = voucher.discount_type === 'percentage' ?
+                        `${voucher.discount_value}%` :
+                        `${voucher.discount_value}K`;
+                    const voucherCard = `
                     <div class="col-md-4 mb-4">
                         <div class="voucher-card">
                             <div class="voucher-header">Voucher ${voucher.discount_value}K</div>
@@ -1096,7 +1086,7 @@
                                 Giảm ${discountDisplay} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${new Date(voucher.end_date).toLocaleDateString()}</div>
                                 <div>
                                     <button class="voucher-copy ${buttonClass}"
                                             data-code="${voucher.code}"
@@ -1112,48 +1102,48 @@
                         </div>
                     </div>
                 `;
-                voucherContainer.append(voucherCard);
-            });
-
-            $('.voucher-copy').on('click', function() {
-                if (!isAuthenticated) {
-                            alert('Vui lòng đăng nhập để lưu voucher!');
-                            return;
-                        }
-                const code = $(this).data('code');
-                const discountType = $(this).data('discount-type');
-                const discountValue = $(this).data('discount-value');
-                const startDate = $(this).data('start-date');
-                const endDate = $(this).data('end-date');
-
-                $.ajax({
-                    url: '{{ route('save-voucher') }}',
-                    method: 'POST',
-                    data: {
-                        code: code,
-                        discount_type: discountType,
-                        discount_value: discountValue,
-                        start_date: startDate,
-                        end_date: endDate,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            loadVouchers(); // Tải lại các voucher để cập nhật trạng thái
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        console.log('Có lỗi xảy ra khi lưu voucher:', xhr);
-                    }
+                    voucherContainer.append(voucherCard);
                 });
-            });
-        }
-    });
-</script>
 
-<script>
+                $('.voucher-copy').on('click', function() {
+                    if (!isAuthenticated) {
+                        alert('Vui lòng đăng nhập để lưu voucher!');
+                        return;
+                    }
+                    const code = $(this).data('code');
+                    const discountType = $(this).data('discount-type');
+                    const discountValue = $(this).data('discount-value');
+                    const startDate = $(this).data('start-date');
+                    const endDate = $(this).data('end-date');
+
+                    $.ajax({
+                        url: '{{ route('save-voucher') }}',
+                        method: 'POST',
+                        data: {
+                            code: code,
+                            discount_type: discountType,
+                            discount_value: discountValue,
+                            start_date: startDate,
+                            end_date: endDate,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                loadVouchers(); // Tải lại các voucher để cập nhật trạng thái
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.log('Có lỗi xảy ra khi lưu voucher:', xhr);
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
+    <script>
         var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
         document.addEventListener('DOMContentLoaded', function() {
             const wishlistLinks = document.querySelectorAll('.wishlist');
@@ -1239,7 +1229,8 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Thành công!',
-                                text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                                text: response.message ||
+                                    'Sản phẩm đã được thêm vào giỏ hàng!',
                                 confirmButtonText: 'OK'
                             });
                         } else {

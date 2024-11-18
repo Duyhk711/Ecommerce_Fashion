@@ -34,9 +34,9 @@
           <div class="block-options">
               <div class="block-options-item">
 
-                  <a href="{{route('admin.comments.create')}}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
+                  {{-- <a href="{{route('admin.comments.create')}}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add">
                       <i class="fa fa-plus"></i>
-                  </a>
+                  </a> --}}
               </div>
           </div>
       </div>
@@ -45,21 +45,21 @@
           <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
                   <tr >
-                      <th style="text-align: center;" class="text-center" style="width: 100px;">ID</th>
+                      <th style="text-align: center;" class="text-center" style="width: 100px;">STT</th>
                       <th style="text-align: center;" class="d-none d-sm-table-cell text-center">Người dùng</th>
                       <th style="text-align: center;" class="d-none d-md-table-cell">Sản phẩm</th>
                       <!-- <th style="text-align: center;" class="d-none d-md-table-cell">Tiêu đề</th> -->
                       <th style="text-align: center;" class="d-none d-md-table-cell">Bình luận</th>
                       <th style="text-align: center;">Đánh giá</th>
                       <!-- <th class="d-none d-sm-table-cell text-end">Value</th> -->
-                      <th style="text-align: center;" class="text-center">Actions</th>
+                      {{-- <th style="text-align: center;" class="text-center">Actions</th> --}}
                   </tr>
               </thead>
               <tbody>
                 @foreach( $comments as $comment)
                   <tr>
                       <td class="text-center fs-sm">
-                         {{$comment->id}}
+                        {{ $loop->iteration }}
                       </td>
                       <td class="d-none d-sm-table-cell text-center fs-sm">{{$comment->user->name}}</td>
                       <td class="d-none d-md-table-cell fs-sm" style="text-align: center;">
@@ -74,7 +74,7 @@
                        <td  style="text-align: center;">
                           <strong>{{$comment->rating}}</strong>
                       </td>
-                      <td class="text-center fs-sm">
+                      {{-- <td class="text-center fs-sm">
                           <div class="btn-group">
                               <!-- VIEW -->
                               <!-- <a href="{{ route('admin.comments.edit', $comment->id) }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="View">
@@ -90,7 +90,7 @@
                                </form>
 
                           </div>
-                      </td>
+                      </td> --}}
                   </tr>
                   @endforeach
               </tbody>
@@ -115,7 +115,7 @@
   <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
-  <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> 
+  {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
 
   <!-- Page JS Code -->
   @vite(['resources/js/pages/datatables.js'])
