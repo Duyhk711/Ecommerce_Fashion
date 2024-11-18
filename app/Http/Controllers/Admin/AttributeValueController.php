@@ -63,7 +63,6 @@ class AttributeValueController extends Controller
     {
         $deleted = $this->attributeValueService->deleteAttributeValue($attributeValue);
 
-        // Kiểm tra kết quả từ service
         if (!$deleted) {
             return redirect()->route('admin.attribute_values.index')
                 ->with('error', 'Không thể xóa vì đã có sản phẩm sử dụng giá trị và thuộc tính này.');

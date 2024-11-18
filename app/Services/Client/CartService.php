@@ -6,9 +6,10 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Http\Request;
+
 // use Illuminate\Support\Facades\Log;
 
 class CartService
@@ -40,7 +41,7 @@ class CartService
 
         if (Auth::check()) {
             $userId = Auth::id();
-            $cart   = Cart::firstOrCreate(['user_id' => $userId]);
+            $cart = Cart::firstOrCreate(['user_id' => $userId]);
 
             $this->addItemToCart($cart->id, $productVariantId, $quantity, $price);
         } else {
@@ -50,21 +51,20 @@ class CartService
                 $cart[$productVariantId]['quantity'] += $quantity;
             } else {
                 $cart[$productVariantId] = [
-                    'product_id'            => $productId,
-                    'product_variant_id'    => $productVariantId,
-                    'product_name'          => $variant->product->name,
-                    'variant_attributes'    => $attributes,
-                    'image'                 => $variant->image ?: $variant->product->img_thumbnail,
-                    'quantity'              => $quantity,
-                    'stock'                 => $variant->stock,
-                    'price'                 => $price,
+                    'product_id' => $productId,
+                    'product_variant_id' => $productVariantId,
+                    'product_name' => $variant->product->name,
+                    'variant_attributes' => $attributes,
+                    'image' => $variant->image ?: $variant->product->img_thumbnail,
+                    'quantity' => $quantity,
+                    'stock' => $variant->stock,
+                    'price' => $price,
                 ];
             }
 
             Session::put('cart', $cart);
         }
     }
-
 
     protected function addItemToCart($cartId, $productVariantId, $quantity, $price)
     {
@@ -86,10 +86,10 @@ class CartService
             $cartItem->save();
         } else {
             CartItem::create([
-                'cart_id'               => $cartId,
-                'product_variant_id'    => $productVariantId,
-                'quantity'              => $quantity,
-                'price'                 => $price,
+                'cart_id' => $cartId,
+                'product_variant_id' => $productVariantId,
+                'quantity' => $quantity,
+                'price' => $price,
             ]);
         }
     }
@@ -124,7 +124,7 @@ class CartService
             $cartItems = CartItem::with([
                 'productVariant.product',
                 'productVariant.variantAttributes.attribute',
-                'productVariant.variantAttributes.attributeValue'
+                'productVariant.variantAttributes.attributeValue',
             ])
                 ->where('cart_id', $cart->id)
                 ->orderBy('created_at', 'desc')
@@ -141,15 +141,16 @@ class CartService
                 })->implode(', ');
 
                 return [
-                    'cart_item_id'          => $cartItem->id,
-                    'product_name'          => $product->name,
-                    'product_variant_id'    => $variant->id,
-                    'variant_attributes'    => $attributes,
-                    'image'                 => $variant->image ?: $product->img_thumbnail,
-                    'price'                 => $variant->price_sale ?: $variant->price_regular,
-                    'quantity'              => $cartItem->quantity,
-                    'stock'                 => $variant->stock,
-                    'created_at'            => $cartItem->created_at
+                    'cart_item_id' => $cartItem->id,
+                    'product_name' => $product->name,
+                    'product_variant_id' => $variant->id,
+                    'variant_attributes' => $attributes,
+                    'image' => $variant->image ?: $product->img_thumbnail,
+                    'price' => $variant->price_sale ?: $variant->price_regular,
+                    'quantity' => $cartItem->quantity,
+                    'stock' => $variant->stock,
+                    'created_at' => $cartItem->created_at,
+                    'slug' => $product->slug
                 ];
             });
         }
@@ -164,19 +165,19 @@ class CartService
         // Trả về giỏ hàng từ session và sắp xếp dựa trên `created_at` nếu có
         return collect($cartItems)->map(function ($cartItem) {
             return [
-                'id'                    => $cartItem['variant_id'] ?? null,
-                'product_name'          => $cartItem['product_name'] ?? 'Unknown Product',
-                'product_variant_id'    => $cartItem['product_variant_id'] ?? 'Unknown id',
-                'variant_attributes'    => $cartItem['variant_attributes'] ?? 'No Attributes',
-                'image'                 => $cartItem['image'] ?? 'default_image.jpg',
-                'price'                 => $cartItem['price'] ?? 0,
-                'quantity'              => $cartItem['quantity'] ?? 1,
-                'stock'                 => $cartItem['stock'],
-                'created_at'            => $cartItem['created_at'] ?? now()
+                'id' => $cartItem['variant_id'] ?? null,
+                'product_name' => $cartItem['product_name'] ?? 'Unknown Product',
+                'product_variant_id' => $cartItem['product_variant_id'] ?? 'Unknown id',
+                'variant_attributes' => $cartItem['variant_attributes'] ?? 'No Attributes',
+                'image' => $cartItem['image'] ?? 'default_image.jpg',
+                'price' => $cartItem['price'] ?? 0,
+                'quantity' => $cartItem['quantity'] ?? 1,
+                'stock' => $cartItem['stock'],
+                'created_at' => $cartItem['created_at'] ?? now(),
+                'slug' => $cartItem['product_slug'],
             ];
         })->sortByDesc('created_at');
     }
-
 
     /**
      * Cập nhật giỏ hàng.
@@ -235,9 +236,6 @@ class CartService
         }
     }
 
-
-
-
     /**
      * Cập nhật giỏ hàng trong session cho người dùng chưa đăng nhập.
      *
@@ -280,8 +278,6 @@ class CartService
             return ['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng'];
         }
     }
-
-
 
     public function removeFromLoggedInUserCart(Request $request)
     {

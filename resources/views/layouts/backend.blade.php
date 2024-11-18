@@ -232,7 +232,7 @@
             </li>
 
             {{-- USER --}}
-            <li class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-users"></i>
                 <span class="nav-main-link-name">Quản lý Khách hàng</span>
@@ -244,6 +244,13 @@
                   </a>
                 </li>
               </ul>
+            </li> --}}
+            {{-- User --}}
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}" href="{{ route('admin.users.index') }}">
+                <i class="nav-main-link-icon fa fa-users"></i>
+                <span class="nav-main-link-name">Quản lý khách hàng</span>
+              </a>
             </li>
 
             {{-- DON HANG --}}
@@ -258,12 +265,23 @@
                     <span class="nav-main-link-name">Đơn hàng</span>
                   </a>
                 </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                    <span class="nav-main-link-name">Voucher</span>
+                  </a>
+                </li>
               </ul>
             </li>
 
+            {{-- <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/orders') ? ' active' : '' }}" href="{{ route('admin.orders.index') }}">
+                <i class="nav-main-link-icon fa fa-receipt"></i>
+                <span class="nav-main-link-name">Quản lý đơn hàng</span>
+              </a>
+            </li> --}}
             {{-- VOUCHER --}}
 
-            <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/vouchers*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/vouchers*') ? 'true' : 'false' }}" href="{{ route('admin.vouchers.index') }}">
                 <i class="nav-main-link-icon fa fa-gift"></i>
                 <span class="nav-main-link-name">Quản lý Khuyến mãi</span>
@@ -275,9 +293,12 @@
                   </a>
                 </li>
               </ul>
-            </li>
+            </li> --}}
+
+
+
             {{-- BANNER --}}
-            <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/banners*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/banners*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-image"></i>
                 <span class="nav-main-link-name">Quản lý Banner</span>
@@ -289,10 +310,17 @@
                   </a>
                 </li>
               </ul>
+            </li> --}}
+
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/banners') ? ' active' : '' }}" href="{{ route('admin.banners.index') }}">
+                <i class="nav-main-link-icon fa fa-image"></i>
+                <span class="nav-main-link-name">Quản lý banner</span>
+              </a>
             </li>
 
             {{--COMMENT--}}
-            <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
+            {{-- <li class="nav-main-item{{ request()->is('admin/comments*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="{{ request()->is('admin/comments*') ? 'true' : 'false' }}" href="#">
                 <i class="nav-main-link-icon fa fa-comments"></i>
                 <span class="nav-main-link-name">Quản lý Bình luận</span>
@@ -304,11 +332,18 @@
                   </a>
                 </li>
               </ul>
+            </li> --}}
+
+            <li class="nav-main-item">
+              <a class="nav-main-link{{ request()->is('admin/comments') ? ' active' : '' }}" href="{{ route('admin.comments.index') }}">
+                <i class="nav-main-link-icon fa fa-comments"></i>
+                <span class="nav-main-link-name">Quản lý bình luận</span>
+              </a>
             </li>
 
             {{-- MESSAGE --}}
             <li class="nav-main-item">
-              <a class="nav-main-link" href="{{ route('admin.admin.chats') }}">
+              <a class="nav-main-link{{ request()->is('admin/chats') ? ' active' : '' }}" href="{{ route('admin.admin.chats') }}">
                 <i class="nav-main-link-icon fa fa-envelope"></i>
                 <span class="nav-main-link-name">Tin nhắn</span>
               </a>

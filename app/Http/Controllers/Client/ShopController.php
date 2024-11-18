@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\CartItem;
 use App\Models\Favorite;
 use App\Services\Client\HomeService;
 use App\Services\Client\ShopService;
@@ -41,8 +40,8 @@ class ShopController extends Controller
         // sp yeu thich
         foreach ($products as $product) {
             $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                 ->where('product_id', $product->id)
-                                                 ->exists() : false;
+                ->where('product_id', $product->id)
+                ->exists() : false;
         }
         return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'ratings'));
     }
@@ -61,7 +60,7 @@ class ShopController extends Controller
         // dd($categories);
         $products = $this->shopService->getFilteredProducts($request, session('perPage'), session('sortBy'));
         $filter = 'filter';
-        $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
+        // $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));
         $ratings = $this->homeService->getRatingsForRelatedProducts($products);
 
         return view('client.shop', compact('products', 'categories', 'colorValues', 'sizeValues', 'filter', 'ratings'));
