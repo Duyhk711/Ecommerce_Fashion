@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ChartController;
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\AttributeValueController;
 // use App\Http\Controllers\Client\CartController;
@@ -22,4 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Route::apiResource('attributes', AttributeController::class);
 // Route::apiResource('attribute-values', AttributeValueController::class);
+Route::get('/revenue-data', [ChartController::class, 'getRevenueData']);
+
 
