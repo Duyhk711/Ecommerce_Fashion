@@ -1,6 +1,6 @@
 <!--Footer-->
 @include('client.component.chat')
-<div class="footer mt-4">
+<div class="footer mt-2">
     <div class="newsletterbg clearfix">
         <div class="container">
             <form action="#" method="post" class="footer-newsletter">

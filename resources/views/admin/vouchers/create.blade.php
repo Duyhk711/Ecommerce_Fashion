@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="block-content d-flex justify-content-center">
-                <form action="{{ route('admin.vouchers.store') }}" method="POST" class="w-75 mb-2" id="voucherForm">
+                <form action="{{ route('admin.vouchers.store') }}" method="POST" class="w-75" id="voucherForm">
                     @csrf
                     @if($errors->any())
                         <div class="alert alert-danger">

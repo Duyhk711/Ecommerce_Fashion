@@ -25,9 +25,7 @@ class OrderController extends Controller
     {
         $status = $request->get('status');
         $payment_status = $request->get('payment_status');
-        $order_date = $request->get('created_at');
-        $order_code = $request->get('sku');
-        $orders = $this->orderService->getOrder($status, 6, $payment_status, $order_date, $order_code);
+        $orders = $this->orderService->getOrder($status, 6, $payment_status);
         // dd($orders);
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
@@ -53,11 +51,11 @@ class OrderController extends Controller
      */
     public function show(String $id)
     {
-
+        
         $orderDetail = $this->orderService->getOrderDetail($id);
-        $user = $orderDetail->user;
-        $voucher = $orderDetail->voucher;
-        $address = $orderDetail->address;
+        $user = $orderDetail->user; 
+        $voucher = $orderDetail->voucher; 
+        $address = $orderDetail->address; 
         $items = $orderDetail->items;
         $statusChanges = $orderDetail->statusChanges;
         $paymentStatusMessage = '';
@@ -83,9 +81,9 @@ class OrderController extends Controller
     {
        try {
         $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
-
+       
         broadcast(new OrderUpdated($order))->toOthers();
-
+        
         return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
        } catch (\Exception $e) {
         return redirect()->back()->with('error', $e->getMessage());

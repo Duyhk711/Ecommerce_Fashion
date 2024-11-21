@@ -171,7 +171,6 @@
                     ];
                 @endphp
                 <p><b class="fw-bolder">Trạng thái thanh toán:</b> {{ $paymentText[$order->payment_status] ?? $order->payment_status }}</p>
-                <p><b class="fw-bolder">Hình thức thanh toán:</b> {{ $order->payment_method }}</p>
             </div>
         </div> <br>
 
@@ -304,13 +303,13 @@
             <table>
                 <tr>
                     <td class="text-end" style="width: 75%" colspan="2">Tổng cộng:</td>
-                    <td class="text-end">{{ number_format(($order->total_price + $order->discount) * 1000, 0, '.', ',') }} ₫</td>
+                    <td class="text-end">{{ number_format(($order->total_price + $item->discount) * 1000, 0, '.', ',') }} ₫</td>
                 </tr>
                 <tr>
                     <td class="text-end" style="width: 75%" colspan="2">Giảm giá:</td>
                     <td class="text-end">
                         @if ($order->voucher)
-                            {{ number_format($order->discount * 1000, 0, '.', ',') }} ₫
+                            {{ number_format($item->discount * 1000, 0, '.', ',') }} ₫
                         @else
                             0 ₫
                         @endif
@@ -320,11 +319,8 @@
                     <td class="text-end" style="width: 75%" colspan="2"><strong>Tổng đã trả:</strong></td>
                     <td class="text-end">
                         <strong class="total-amount" style="font-weight: normal;">
-                            @if ($order->payment_status == "da_thanh_toan")
-                                <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }} ₫</strong>
-                            @else
-                                0₫
-                            @endif
+
+                            <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }} ₫</strong>
                         </strong>
                     </td>
                 </tr>
