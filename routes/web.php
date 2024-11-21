@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order-tracking', [UserController::class, 'orderTracking'])->name('order.tracking');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::get('/voucher', [VouchersController::class, 'voucher'])->name('voucher');
+    Route::get('/user/vouchers', [VouchersController::class, 'getMyVoucher'])->name('user.vouchers');
 
     // Route xem chi tiết đơn hàng
     Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');

@@ -2,6 +2,13 @@
 @section('title')
     Hoàn thành đơn hàng
 @endsection
+@section('css')
+    <style>
+        .font-uppercase{
+            font-family: 'Quicksand', sans-serif;
+        }
+    </style>
+@endsection
 @section('content')
     @include('client.component.page_header')
     <div class="container" style="max-width: 90%;">
@@ -27,7 +34,7 @@
                             <div class="table-responsive-sm table-bottom-brd order-table">
                                 <table class="table table-hover align-middle mb-0">
                                     <thead>
-                                        <tr>
+                                        <tr class="font-uppercase">
                                             <th class="text-start">Ảnh</th>
                                             <th class="text-start proName">Sản phẩm</th>
                                             <th class="text-center">SL</th>
@@ -80,7 +87,7 @@
                     <!--End Order Summary-->
 
                     <!--Cart Summary-->
-                    <div class="cart-info mt-4 mb-4 mb-lg-0">
+                    <div class="cart-info mt-4 mb-4 mb-lg-0 font-uppercase">
                         <div class="cart-order-detail cart-col">
                             <div class="row g-0 border-bottom pb-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng cộng</strong></span>
@@ -89,13 +96,14 @@
                             </div>
                             <div class="row g-0 border-bottom py-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm giá</strong></span>
-                                <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                        class="money">-{{ number_format($order->discount * 1000, 0, ',', '.') }}₫</span></span>
+                                <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                    <span class="money">{{ number_format($order->discount * 1000, 0, ',', '.') }}₫</span>
+                                </span>
                             </div>
                             <div class="row g-0 border-bottom py-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao hàng</strong></span>
                                 <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                        class="money">Miễn phí giao hàng</span></span>
+                                        class="money font-uppercase">Miễn phí giao hàng</span></span>
                             </div>
                             <div class="row g-0 pt-2">
                                 <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>

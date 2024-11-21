@@ -4,6 +4,9 @@
 @endsection
 @section('css')
     <style>
+        .font-uppercase{
+            font-family: 'Quicksand', sans-serif;
+        }
         .offcanvas-body {
             padding: 20px;
             padding-top: 0;
@@ -242,7 +245,7 @@
                                                 <div class="table-responsive table-bottom-brd order-table">
                                                     <table class="table table-hover align-middle mb-0">
                                                         <thead>
-                                                            <tr>
+                                                            <tr style="font-family: 'Quicksand', sans-serif">
                                                                 <th class="text-start">Ảnh</th>
                                                                 <th class="text-start proName">Sản phẩm</th>
                                                                 <th class="text-center">SL</th>
@@ -285,12 +288,10 @@
                                                                         $total += $item['price'] * $item['quantity'];
                                                                     @endphp
                                                                     <td class="text-center">
-                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', 0) }}₫</strong>
+                                                                        <strong>{{ number_format($item['price'] * $item['quantity'], 3, '.', '.') }}₫</strong>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
-
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -339,32 +340,31 @@
                                         <div class="cart-info mb-4">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong class="font-uppercase">Tổng
                                                             cộng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}₫</span></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }} ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
-                                                            giá</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money discount">-0</span>₫</span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong class="font-uppercase">Phiếu giảm giá</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                      <span class="money discount">0 ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong class="font-uppercase">Giao
                                                             hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">Miễn phí giao hàng</span></span>
+                                                            class="money font-uppercase">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
                                                     <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money total_price">{{ number_format($total, 3, '.', 0) }}</b></span>
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6 font-uppercase"><strong>Tổng</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                        <b class="money total_price">{{ number_format($total, 3, '.', '.') }}  ₫</b>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -383,7 +383,7 @@
                                         <!--Payment Methods-->
                                         <div class="block mb-3 payment-methods mb-4">
                                             <div class="block-content">
-                                                <h3 class="title mb-3">Phương thức thanh toán</h3>
+                                                <h3 class="title mb-3 font-uppercase">Phương thức thanh toán</h3>
                                                 <div class="payment-accordion-radio">
                                                     <div class="accordion mb-3" id="accordionExample">
                                                         <div class="accordion-item card mb-0">
@@ -391,7 +391,7 @@
                                                                 <input id="paymentRadio4" value="COD"
                                                                     name="payment_method" type="radio" class="radio"
                                                                     checked="checked" />
-                                                                <label for="paymentRadio4" class="mb-0">Thanh
+                                                                <label for="paymentRadio4 font-uppercase" class="mb-0">Thanh
                                                                     toán khi nhận hàng</label>
                                                             </span>
                                                         </div>
@@ -417,32 +417,32 @@
                                         <div class="cart-info">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Tổng
                                                             cộng</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money">{{ number_format($total, 3, '.', 0) }}</span>₫</span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }}₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phiếu giảm
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Phiếu giảm
                                                             giá</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
-                                                            class="money discount">-0</span>₫</span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span class="money discount">0 ₫</span>
+                                                    </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Giao
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Giao
                                                             hàng</strong></span>
                                                     <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
+                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end font-uppercase"><span
                                                             class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng phải
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-6 font-uppercase"><strong>Tổng phải
                                                             trả</strong></span>
-                                                    <span
-                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b
-                                                            class="money total_price">{{ number_format($total, 3, '.', 0) }}</b></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                      <b class="money total_price">{{ number_format($total, 3, '.', '.') }} ₫</b>
+                                                    </span>
                                                 </div>
                                                 <input type="hidden" value="{{ $total }}" id="total_price"
                                                     name="total_price">
