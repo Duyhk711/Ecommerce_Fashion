@@ -17,7 +17,7 @@
     <div class="content">
         <div class="block-content block-content-full">
             <div class="d-flex justify-content-start align-items-center mb-3">
-               
+
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-6">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-3 col-md-6">
                     <div class="card card-animate">
                         <div class="card-body">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                
+
 
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
@@ -182,7 +182,7 @@
             </div>
 
 
-           
+
             <div class="row">
                 <div class="col-xl-6">
                     <div class="card">
@@ -774,8 +774,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('admin/js/ui/charts/widgets.js') }}"></script>
     <script src="{{ asset('admin/js/ui/charts/revenue.js') }}"></script>
-    {{-- <script src="{{ asset('admin/js/ui/charts/order-status.js') }}"></script> --}}
+    <script src="{{ asset('admin/js/ui/charts/order-status.js') }}"></script>
     <script>
-        
+
     </script>
 @endsection
