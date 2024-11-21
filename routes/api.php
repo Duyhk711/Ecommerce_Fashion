@@ -23,6 +23,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Route::apiResource('attributes', AttributeController::class);
 // Route::apiResource('attribute-values', AttributeValueController::class);
+Route::get('/total-income', [ChartController::class, 'getTotalIncome'])->name('api.total-income');
+
+// Route API để lấy tổng số đơn hàng
+Route::get('/total-orders', [ChartController::class, 'getTotalOrders'])->name('api.total-orders');
+
 Route::get('/revenue-data', [ChartController::class, 'getRevenueData']);
+Route::get('revenue/monthly/{year}', [ChartController::class, 'getMonthlyRevenue']);
+Route::get('revenue/daily/{year}/{month}', [ChartController::class, 'getDailyRevenue']);
+Route::get('/revenue/daily-range/{startDate}/{endDate}', [ChartController::class, 'getRevenueByDateRange']);
+
+
 
 
