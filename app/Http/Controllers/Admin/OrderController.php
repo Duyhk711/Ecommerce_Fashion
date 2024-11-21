@@ -51,11 +51,11 @@ class OrderController extends Controller
      */
     public function show(String $id)
     {
-        
+
         $orderDetail = $this->orderService->getOrderDetail($id);
-        $user = $orderDetail->user; 
-        $voucher = $orderDetail->voucher; 
-        $address = $orderDetail->address; 
+        $user = $orderDetail->user;
+        $voucher = $orderDetail->voucher;
+        $address = $orderDetail->address;
         $items = $orderDetail->items;
         $statusChanges = $orderDetail->statusChanges;
         $paymentStatusMessage = '';
@@ -81,9 +81,9 @@ class OrderController extends Controller
     {
        try {
         $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
-       
+
         broadcast(new OrderUpdated($order))->toOthers();
-        
+
         return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
        } catch (\Exception $e) {
         return redirect()->back()->with('error', $e->getMessage());
