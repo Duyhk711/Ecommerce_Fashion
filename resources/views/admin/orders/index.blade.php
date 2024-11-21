@@ -53,7 +53,7 @@
                                 <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                             </select>
                         </div>
-                        <div>
+                        <div class="ms-2">
                             <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
                                 <option value="">Thanh toán</option>
                                 <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
@@ -71,6 +71,7 @@
                         id="order-list">
                         <thead>
                             <tr>
+                                <th class="text-center fs-sm" >STT</th>
                                 <th class="text-center fs-sm" style="width: 100px;">Mã đơn</th>
                                 <th class="d-none d-xl-table-cell fs-sm">Khách hàng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-center">Ngày đặt</th>
@@ -79,7 +80,7 @@
                                 <th class="d-sm-table-cell fs-sm">PTTT</th>
                                 <th class="d-none d-xl-table-cell fs-sm text-center">Số lượng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-end">Tổng</th>
-                                <th class="text-center">#</th>
+                                <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,6 +91,9 @@
                           @else
                             @foreach ($orders as $order)
                                 <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}" data-order-id="{{$order->id}}">
+                                    <td class="text-center fs-sm">
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td class="text-center fs-sm">
                                         <strong>{{ $order->sku }}</strong>
                                     </td>

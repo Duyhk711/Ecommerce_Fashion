@@ -1,645 +1,781 @@
 @extends('layouts.backend')
 @section('css')
 <style>
-  .pie-chart {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto;
-  }
 
-  .pie-chart span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    text-align: center;
-  }
+/* Điều chỉnh kích thước của select */
+.custom {
+  font-size: 0.875rem; /* Kích thước chữ trong select nhỏ hơn */
+  padding: 0.375rem 0.75rem; /* Điều chỉnh padding cho select */
+  height: 38px; /* Đảm bảo chiều cao không quá lớn */
+  width: 30px; /* Giữ chiều rộng đầy đủ nhưng có thể điều chỉnh */
+}
 
-  .legend {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-  }
-
-  .legend-color {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-    display: inline-block;
-  }
-
-  .block-content-full .row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 </style>
 @endsection
 @section('content')
-<!-- Hero -->
-<div class="content">
-  <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
-    <div>
-      <h1 class="h3 mb-1">
-        Thống Kê
-      </h1>
-      <p class="fw-medium mb-0 text-muted">
-        <!-- Welcome, admin! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>. -->
-      </p>
-    </div>
-    <div class="mt-4 mt-md-0">
-      <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
-        <i class="fa fa-cog"></i>
-      </a>
-      <div class="dropdown d-inline-block">
-        <button type="button" class="btn btn-sm btn-alt-primary px-3" id="dropdown-analytics-overview" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Last 30 days <i class="fa fa-fw fa-angle-down"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
-          <a class="dropdown-item" href="javascript:void(0)">This Week</a>
-          <a class="dropdown-item" href="javascript:void(0)">Previous Week</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)">This Month</a>
-          <a class="dropdown-item" href="javascript:void(0)">Previous Month</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- END Hero -->
-
-<!-- Page Content -->
-<div class="content">
-  <!-- Overview -->
-
-
-  <div class="row items-push">
-    <div class="col-sm-6 col-xl-3">
-      <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
-        <div class="block-content block-content-full flex-grow-1">
-          <div class="item rounded-3 bg-body mx-auto my-3">
-            <i class="fa fa-users fa-lg text-primary"></i>
-          </div>
-          <div class="fs-1 fw-bold">423</div>
-          <div class="text-muted mb-3"> Người dùng đã đăng kí</div>
-          <!-- <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
-                <i class="fa fa-caret-up me-1"></i>
-                19.2%
-              </div> -->
-        </div>
-        <!-- <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-              <a class="fw-medium" href="javascript:void(0)">
-                Xem chi tiết
-                <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-              </a>
-            </div> -->
-      </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-      <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
-        <div class="block-content block-content-full flex-grow-1">
-          <div class="item rounded-3 bg-body mx-auto my-3">
-            <i class="nav-main-link-icon fa fa-box text-primary"></i>
-          </div>
-          <div class="fs-1 fw-bold">15</div>
-          <div class="text-muted mb-3">Sản phẩm mới</div>
-          <!-- <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
-                <i class="fa fa-caret-down me-1"></i>
-                2.3%
-              </div> -->
-        </div>
-        <!-- <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-              <a class="fw-medium" href="javascript:void(0)">
-                Xem chi tiết
-                <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-              </a>
-            </div> -->
-      </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-      <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
-        <div class="block-content block-content-full flex-grow-1">
-          <div class="item rounded-3 bg-body mx-auto my-3">
-            <i class="fa fa-cart-shopping fa-lg text-primary"></i>
-          </div>
-          <div class="fs-1 fw-bold">386</div>
-          <div class="text-muted mb-3">Đơn hàng</div>
-          <!-- <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
-                <i class="fa fa-caret-up me-1"></i>
-                7.9%
-              </div> -->
-        </div>
-        <!-- <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-              <a class="fw-medium" href="javascript:void(0)">
-                Xem chi tiết
-                <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-              </a>
-            </div> -->
-      </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-      <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+    <!-- Hero -->
+    <div class="content">
         <div class="block-content block-content-full">
-          <div class="item rounded-3 bg-body mx-auto my-3">
-            <i class="nav-main-link-icon fa fa-comments text-primary"></i>
-          </div>
-          <div class="fs-1 fw-bold">1203</div>
-          <div class="text-muted mb-3">Bình luận</div>
-          <!-- <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
-                <i class="fa fa-caret-down me-1"></i>
-                0.3%
-              </div> -->
-        </div>
-        <!-- <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-              <a class="fw-medium" href="javascript:void(0)">
-                Xem chi tiết
-                <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-              </a>
-            </div> -->
-      </div>
-    </div>
-  </div>
-
-
-  <!-- END Overview -->
-
-  <!-- Store Growth -->
-  <div class="block block-rounded">
-    <div class="block-header block-header-default">
-      <h3 class="block-title">
-        Biểu đồ doanh thu trong tháng
-      </h3>
-      <div class="block-options">
-        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-          <!-- <i class="si si-refresh"></i> -->
-        </button>
-        <button type="button" class="btn-block-option">
-          <!-- <i class="si si-wrench"></i> -->
-        </button>
-      </div>
-    </div>
-    <div class="block-content block-content-full">
-      <div class="">
-
-        <div class="col-12 d-md-flex align-items-md-center">
-          <div class="p-md-2 p-lg-3 w-100" style="height: 600px;">
-            <!-- Bars Chart Container -->
-            <!-- Chart.js Chart is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _js/pages/be_pages_dashboard.js -->
-            <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
-            <canvas style="height: 100%;width: 100%;" id="revenueChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- END Store Growth -->
-
-  <div class="row justify-content-center">
-    <div class="col-xl-12">
-      <div class="block block-rounded">
-        <div class="block-header block-header-default">
-          <h3 class="block-title">Biểu đồ hệ thống theo đơn hàng</h3>
-        </div>
-        <div class="block-content block-content-full">
-          <div class="row text-center justify-content-center">
-            <!-- Biểu đồ chỉ số hủy -->
-            <div class="col-6 col-md-4 d-flex flex-column align-items-center py-3">
-              <canvas id="cancelRateChart" width="200" height="200"></canvas>
-              <br>
-              <div class="legend">
-                <div class="legend-color" style="background-color: #e04f1a;"></div>
-                <span>Tỉ lệ hủy</span>
-              </div>
+            <div class="d-flex justify-content-start align-items-center mb-3">
+               
             </div>
-            <!-- Biểu đồ tỷ lệ hoàn thành -->
-            <div class="col-6 col-md-4 d-flex flex-column align-items-center py-3">
-              <canvas id="completionRateChart" width="200" height="200"></canvas>
-              <br>
-              <div class="legend">
-                <div class="legend-color" style="background-color: #8dc451;"></div>
-                <span>Tỷ lệ hoàn thành</span>
-              </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Tổng thu nhập</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-sm mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +16.24 %
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-income">0</span>₫</h4>
+                                    <a href="" class="text-decoration-underline">View net earnings</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-success-subtle rounded fs-3">
+                                        <i class="bx bx-dollar-circle text-success"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Đơn hàng</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-sm mb-0">
+                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i> -3.57 %
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-orders">0</span></h4>
+                                    <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-info-subtle rounded fs-3">
+                                        <i class="bx bx-shopping-bag text-info"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-xl-3 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Customers</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-sm mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +29.08 %
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                            data-target="183.35">0</span>M </h4>
+                                    <a href="" class="text-decoration-underline">See details</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-warning-subtle rounded fs-3">
+                                        <i class="bx bx-user-circle text-warning"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> My Balance</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-muted fs-sm mb-0">
+                                        +0.00 %
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
+                                            data-target="165.89">0</span>k </h4>
+                                    <a href="" class="text-decoration-underline">Withdraw money</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-primary-subtle rounded fs-3">
+                                        <i class="bx bx-wallet text-primary"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+            </div> <!-- end row-->
+
+            <div class="row mt-4">
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Tổng doanh thu</h4>
+                            <div>
+                                <div class="row d-flex justify-content-end">
+                                    <div class="col-4">
+                                        <select id="yearSelector" class="form-select custom">
+                                            <option value="2024" selected>2024</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2022">2022</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-sm btn-alt" id="resetButton">Đặt lại</button>
+                                    </div>
+                                </div>
+                                <div class="row d-flex justify-content-end">
+                                    <div class="col">
+                                        <label for="startDate" class="form-label">Từ ngày:</label>
+                                        <input type="date" class="form-control" id="startDate">
+                                    </div>
+                                    <div class="col">
+                                        <label for="endDate" class="form-label">Đến ngày:</label>
+                                        <input type="date" class="form-control" id="endDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end card header -->
+
+
+
+                        <div class="card-body p-0 pb-2">
+                            <canvas id="revenueChart" width="800" height="400"></canvas>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                    <!-- Biểu đồ -->
+
+
+                </div>
             </div>
-            <!-- Biểu đồ trạng thái đơn hàng -->
-            <div class="col-6 col-md-4 d-flex flex-column align-items-center py-3">
-              <canvas id="orderStatusChart" width="200" height="200"></canvas>
-              <br>
-              <div class="legend">
-                <div class="legend-color" style="background-color: #4a90e2;"></div>
-                <span>Trạng thái đơn hàng</span>
-              </div>
+
+
+           
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Best Selling Products</h4>
+                            <div class="flex-shrink-0">
+                                <div class="dropdown card-header-dropdown">
+                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="fw-semibold text-uppercase fs-12">Sort by:
+                                        </span><span class="text-muted">Today<i class="mdi mdi-chevron-down ms-1"></i></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">Today</a>
+                                        <a class="dropdown-item" href="#">Yesterday</a>
+                                        <a class="dropdown-item" href="#">Last 7 Days</a>
+                                        <a class="dropdown-item" href="#">Last 30 Days</a>
+                                        <a class="dropdown-item" href="#">This Month</a>
+                                        <a class="dropdown-item" href="#">Last Month</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                        <img src="assets/images/products/img-1.png" alt="" class="img-fluid d-block" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Branded T-Shirts</a></h5>
+                                                        <span class="text-muted">24 Apr 2021</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$29.00</h5>
+                                                <span class="text-muted">Price</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">62</h5>
+                                                <span class="text-muted">Orders</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">510</h5>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$1,798</h5>
+                                                <span class="text-muted">Amount</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                        <img src="assets/images/products/img-2.png" alt="" class="img-fluid d-block" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Bentwood Chair</a></h5>
+                                                        <span class="text-muted">19 Mar 2021</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$85.20</h5>
+                                                <span class="text-muted">Price</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">35</h5>
+                                                <span class="text-muted">Orders</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">Out of stock</span> </h5>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$2982</h5>
+                                                <span class="text-muted">Amount</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                        <img src="assets/images/products/img-3.png" alt="" class="img-fluid d-block" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Borosil Paper Cup</a></h5>
+                                                        <span class="text-muted">01 Mar 2021</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$14.00</h5>
+                                                <span class="text-muted">Price</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">80</h5>
+                                                <span class="text-muted">Orders</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">749</h5>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$1120</h5>
+                                                <span class="text-muted">Amount</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                        <img src="assets/images/products/img-4.png" alt="" class="img-fluid d-block" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">One Seater Sofa</a></h5>
+                                                        <span class="text-muted">11 Feb 2021</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$127.50</h5>
+                                                <span class="text-muted">Price</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">56</h5>
+                                                <span class="text-muted">Orders</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">Out of stock</span></h5>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$7140</h5>
+                                                <span class="text-muted">Amount</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                        <img src="assets/images/products/img-5.png" alt="" class="img-fluid d-block" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Stillbird Helmet</a></h5>
+                                                        <span class="text-muted">17 Jan 2021</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$54</h5>
+                                                <span class="text-muted">Price</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">74</h5>
+                                                <span class="text-muted">Orders</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">805</h5>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm my-1 fw-normal">$3996</h5>
+                                                <span class="text-muted">Amount</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
+                                <div class="col-sm">
+                                    <div class="text-muted">
+                                        Showing <span class="fw-semibold">5</span> of <span class="fw-semibold">25</span> Results
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto  mt-3 mt-sm-0">
+                                    <ul class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
+                                        <li class="page-item disabled">
+                                            <a href="#" class="page-link">←</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link">1</a>
+                                        </li>
+                                        <li class="page-item active">
+                                            <a href="#" class="page-link">2</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link">3</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link">→</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Top Sellers</h4>
+                            <div class="flex-shrink-0">
+                                <div class="dropdown card-header-dropdown">
+                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">Download Report</a>
+                                        <a class="dropdown-item" href="#">Export</a>
+                                        <a class="dropdown-item" href="#">Import</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table table-centered table-hover align-middle table-nowrap mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="fs-sm my-1 fw-medium">
+                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">iTest Factory</a>
+                                                        </h5>
+                                                        <span class="text-muted">Oliver Tyler</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">Bags and Wallets</span>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">8547</p>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">$541200</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm mb-0">32%<i class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i></h5>
+                                            </td>
+                                        </tr><!-- end -->
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/companies/img-2.png" alt="" class="avatar-sm p-2" />
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="fs-sm my-1 fw-medium"><a href="apps-ecommerce-seller-details.html" class="text-reset">Digitech Galaxy</a></h5>
+                                                        <span class="text-muted">John Roberts</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">Watches</span>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">895</p>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">$75030</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm mb-0">79%<i class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i></h5>
+                                            </td>
+                                        </tr><!-- end -->
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/companies/img-3.png" alt="" class="avatar-sm p-2" />
+                                                    </div>
+                                                    <div class="flex-gow-1">
+                                                        <h5 class="fs-sm my-1 fw-medium"><a href="apps-ecommerce-seller-details.html" class="text-reset">Nesta Technologies</a></h5>
+                                                        <span class="text-muted">Harley Fuller</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">Bike Accessories</span>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">3470</p>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">$45600</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm mb-0">90%<i class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i></h5>
+                                            </td>
+                                        </tr><!-- end -->
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/companies/img-8.png" alt="" class="avatar-sm p-2" />
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="fs-sm my-1 fw-medium"><a href="apps-ecommerce-seller-details.html" class="text-reset">Zoetic Fashion</a></h5>
+                                                        <span class="text-muted">James Bowen</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">Clothes</span>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">5488</p>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">$29456</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm mb-0">40%<i class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i></h5>
+                                            </td>
+                                        </tr><!-- end -->
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/companies/img-5.png" alt="" class="avatar-sm p-2" />
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="fs-sm my-1 fw-medium">
+                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">Meta4Systems</a>
+                                                        </h5>
+                                                        <span class="text-muted">Zoe Dennis</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">Furniture</span>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">4100</p>
+                                                <span class="text-muted">Stock</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">$11260</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm mb-0">57%<i class="ri-bar-chart-fill text-success fs-16 align-middle ms-2"></i></h5>
+                                            </td>
+                                        </tr><!-- end -->
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div>
+
+                            <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
+                                <div class="col-sm">
+                                    <div class="text-muted">
+                                        Showing <span class="fw-semibold">5</span> of <span class="fw-semibold">25</span> Results
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto  mt-3 mt-sm-0">
+                                    <ul class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
+                                        <li class="page-item disabled">
+                                            <a href="#" class="page-link">←</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link">1</a>
+                                        </li>
+                                        <li class="page-item active">
+                                            <a href="#" class="page-link">2</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link">3</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link">→</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div> <!-- .card-body-->
+                    </div> <!-- .card-->
+                </div> <!-- .col-->
+            </div> <!-- end row-->
+
+            <div class="row mt-4">
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Order Status Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="orderStatusPieChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-soft-info btn-sm">
+                                    <i class="ri-file-list-3-line align-middle"></i> Generate Report
+                                </button>
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                                    <thead class="text-muted table-light">
+                                        <tr>
+                                            <th scope="col">Order ID</th>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">Vendor</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details.html"
+                                                    class="fw-medium link-primary">#VZ2112</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/users/avatar-1.jpg" alt=""
+                                                            class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">Alex Smith</div>
+                                                </div>
+                                            </td>
+                                            <td>Clothes</td>
+                                            <td>
+                                                <span class="text-success">$109.00</span>
+                                            </td>
+                                            <td>Zoetic Fashion</td>
+                                            <td>
+                                                <span class="badge bg-success-subtle text-success">Paid</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm fw-medium mb-0">5.0<span
+                                                        class="text-muted fs-11 ms-1">(61
+                                                        votes)</span></h5>
+                                            </td>
+                                        </tr><!-- end tr -->
+                                        <tr>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details.html"
+                                                    class="fw-medium link-primary">#VZ2111</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/users/avatar-2.jpg" alt=""
+                                                            class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">Jansh Brown</div>
+                                                </div>
+                                            </td>
+                                            <td>Kitchen Storage</td>
+                                            <td>
+                                                <span class="text-success">$149.00</span>
+                                            </td>
+                                            <td>Micro Design</td>
+                                            <td>
+                                                <span class="badge bg-warning-subtle text-warning">Pending</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm fw-medium mb-0">4.5<span
+                                                        class="text-muted fs-11 ms-1">(61
+                                                        votes)</span></h5>
+                                            </td>
+                                        </tr><!-- end tr -->
+                                        <tr>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details.html"
+                                                    class="fw-medium link-primary">#VZ2109</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/users/avatar-3.jpg" alt=""
+                                                            class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">Ayaan Bowen</div>
+                                                </div>
+                                            </td>
+                                            <td>Bike Accessories</td>
+                                            <td>
+                                                <span class="text-success">$215.00</span>
+                                            </td>
+                                            <td>Nesta Technologies</td>
+                                            <td>
+                                                <span class="badge bg-success-subtle text-success">Paid</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm fw-medium mb-0">4.9<span
+                                                        class="text-muted fs-11 ms-1">(89
+                                                        votes)</span></h5>
+                                            </td>
+                                        </tr><!-- end tr -->
+                                        <tr>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details.html"
+                                                    class="fw-medium link-primary">#VZ2108</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/users/avatar-4.jpg" alt=""
+                                                            class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">Prezy Mark</div>
+                                                </div>
+                                            </td>
+                                            <td>Furniture</td>
+                                            <td>
+                                                <span class="text-success">$199.00</span>
+                                            </td>
+                                            <td>Syntyce Solutions</td>
+                                            <td>
+                                                <span class="badge bg-danger-subtle text-danger">Unpaid</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm fw-medium mb-0">4.3<span
+                                                        class="text-muted fs-11 ms-1">(47
+                                                        votes)</span></h5>
+                                            </td>
+                                        </tr><!-- end tr -->
+                                        <tr>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details.html"
+                                                    class="fw-medium link-primary">#VZ2107</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="assets/images/users/avatar-6.jpg" alt=""
+                                                            class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">Vihan Hudda</div>
+                                                </div>
+                                            </td>
+                                            <td>Bags and Wallets</td>
+                                            <td>
+                                                <span class="text-success">$330.00</span>
+                                            </td>
+                                            <td>iTest Factory</td>
+                                            <td>
+                                                <span class="badge bg-success-subtle text-success">Paid</span>
+                                            </td>
+                                            <td>
+                                                <h5 class="fs-sm fw-medium mb-0">4.7<span
+                                                        class="text-muted fs-11 ms-1">(161
+                                                        votes)</span></h5>
+                                            </td>
+                                        </tr><!-- end tr -->
+                                    </tbody><!-- end tbody -->
+                                </table><!-- end table -->
+                            </div>
+                        </div>
+                    </div> <!-- .card-->
+                </div> <!-- .col-->
             </div>
-          </div>
+
         </div>
-      </div>
     </div>
-  </div>
-  <!-- Latest Orders + Stats -->
-  <h2 class="content-heading">TOP SẢN PHẨM</h2>
-  <div class="row">
-    <div class="col-md-6">
-      <!--  Latest Orders -->
-      <div class="block block-rounded block-mode-loading-refresh">
-        <div class="block-header block-header-default">
-          <h3 class="block-title">
-            Danh sách sản phẩm bán chạy
-          </h3>
-          <div class="block-options">
-            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-              <!-- <i class="si si-refresh"></i> -->
-            </button>
-            <div class="dropdown">
-              <button type="button" class="btn-block-option" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <!-- <i class="si si-chemistry"></i> -->
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-dot-circle opacity-50 me-1"></i> Pending
-                </a>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-times-circle opacity-50 me-1"></i> Canceled
-                </a>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-check-circle opacity-50 me-1"></i> Completed
-                </a>
-                <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="fa fa-fw fa-eye opacity-50 me-1"></i> View All
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="block-content">
-          <table class="table table-striped table-hover table-borderless table-vcenter fs-sm">
-            <thead>
-              <tr class="text-uppercase">
-                <th>Product</th>
-                <th class="d-none d-xl-table-cell">Date</th>
-                <th>Status</th>
-                <th class="d-none d-sm-table-cell text-end" style="width: 120px;">Price</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-        <!-- <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
-              <a class="fw-medium" href="javascript:void(0)">
-                Xem tất cả đơn hàng
-                <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-              </a>
-            </div> -->
-      </div>
-      <!-- END Latest Orders -->
-    </div>
-    <div class="col-md-6">
-      <!--  Latest Orders -->
-      <div class="block block-rounded block-mode-loading-refresh">
-        <div class="block-header block-header-default">
-          <h3 class="block-title">
-            Danh sách sản phẩm có lượt đánh giá cao
-          </h3>
-          <div class="block-options">
-            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-              <!-- <i class="si si-refresh"></i> -->
-            </button>
-            <div class="dropdown">
-              <button type="button" class="btn-block-option" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <!-- <i class="si si-chemistry"></i> -->
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-dot-circle opacity-50 me-1"></i> Pending
-                </a>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-times-circle opacity-50 me-1"></i> Canceled
-                </a>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="far fa-fw fa-check-circle opacity-50 me-1"></i> Completed
-                </a>
-                <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void(0)">
-                  <i class="fa fa-fw fa-eye opacity-50 me-1"></i> View All
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="block-content">
-          <table class="table table-striped table-hover table-borderless table-vcenter fs-sm">
-            <thead>
-              <tr class="text-uppercase">
-                <th>Product</th>
-                <th class="d-none d-xl-table-cell">Date</th>
-                <th>Status</th>
-                <th class="d-none d-sm-table-cell text-end" style="width: 120px;">Price</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fw-semibold">iPhone 11 Pro</span>
-                </td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="fs-sm text-muted">today</span>
-                </td>
-                <td>
-                  <span class="fw-semibold text-warning">Pending..</span>
-                </td>
-                <td class="d-none d-sm-table-cell text-end fw-medium">
-                  $1199,99
-                </td>
-                <td class="text-center text-nowrap fw-medium">
-                  <a href="javascript:void(0)">
-                    View
-                  </a>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-        <!-- <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
-              <a class="fw-medium" href="javascript:void(0)">
-                Xem tất cả đơn hàng
-                <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-              </a>
-            </div> -->
-      </div>
-      <!-- END Latest Orders -->
-    </div>
-
-
-  </div>
-
-
-  <!-- END Latest Orders + Stats -->
-</div>
-<!-- END Page Content -->
-
-<!-- END Main Container -->
 @endsection
 @section('js')
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    const revenueChart = new Chart(ctx, {
-      type: 'line', // kiểu biểu đồ (line, bar, pie, ...)
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // nhãn cho trục X
-        datasets: [{
-          label: 'Doanh thu (VNĐ)', // tiêu đề cho chuỗi dữ liệu
-          data: [12000, 15000, 10000, 17000, 20000, 25000, 23000, 30000, 28000, 32000, 35000, 40000], // dữ liệu doanh thu
-          borderColor: 'rgba(75, 192, 192, 1)', // màu đường
-          backgroundColor: 'rgba(75, 192, 192, 0.2)', // màu nền dưới đường
-          borderWidth: 2,
-          fill: true, // điền màu dưới đường
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true // bắt đầu trục Y từ 0
-          }
-        }
-      }
-    });
-  });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Function để tạo biểu đồ tròn
-  function createPieChart(ctx, percent, color) {
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        datasets: [{
-          data: [percent, 100 - percent],
-          backgroundColor: [color, '#e9e9e9']
-        }]
-      },
-      options: {
-        responsive: false,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            callbacks: {
-              label: function(tooltipItem) {
-                return percent + '%';
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-
-  // Khởi tạo các biểu đồ
-  window.onload = function() {
-    createPieChart(document.getElementById('cancelRateChart').getContext('2d'), 25, '#e04f1a'); // Chỉ số hủy
-    createPieChart(document.getElementById('completionRateChart').getContext('2d'), 90, '#8dc451'); // Tỷ lệ hoàn thành
-    createPieChart(document.getElementById('orderStatusChart').getContext('2d'), 50, '#4a90e2'); // Trạng thái đơn hàng
-  };
-</script>
-{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> --}}
-
-<!-- jQuery (required for Easy Pie Chart + jQuery Sparkline plugin) -->
-<script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-
-<!-- Page JS Plugins -->
-<script src="{{ asset('admin/js/plugins/easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/chart.js/chart.umd.js') }}"></script>
-
-<!-- Page JS Code -->
-<script src="{{asset('admin/js/pages/be_comp_charts.min.js') }}"></script>
-
-<!-- Page JS Helpers (Easy Pie Chart + jQuery Sparkline Plugins) -->
-<script>
-  Dashmix.helpersOnLoad(['jq-easy-pie-chart', 'jq-sparkline']);
-</script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('admin/js/ui/charts/widgets.js') }}"></script>
+    <script src="{{ asset('admin/js/ui/charts/revenue.js') }}"></script>
+    {{-- <script src="{{ asset('admin/js/ui/charts/order-status.js') }}"></script> --}}
+    <script>
+        
+    </script>
 @endsection
