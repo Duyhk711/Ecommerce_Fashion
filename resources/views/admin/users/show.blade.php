@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-6 col-md-6">
                         <div class="fw-semibold text-dark mb-1">Tổng giá trị các đơn hàng</div>
-                        <a class="link-fx fs-3" href="javascript:void(0)">{{ number_format($totalOrderValue, 3, '.', 0) }}
+                        <a class="link-fx fs-3" href="javascript:void(0)">{{ number_format($totalOrderValue *1000, 0, ',', '.') }}
                             VND</a>
                     </div>
                     {{-- <div class="col-6 col-md-3">

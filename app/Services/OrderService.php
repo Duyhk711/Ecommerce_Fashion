@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderStatusChange;
 
 class OrderService{
-    public function getOrder($status = null, $perPage = 6, $payment_status = null){
+    public function getOrder($status = null, $perPage = 6, $payment_status = null, $order_date = null, $order_code = null){
         $query = Order::with('items');
 
         if ($status) {
@@ -16,6 +16,16 @@ class OrderService{
         if ($payment_status) {
             $query->where('payment_status', $payment_status);
         }
+
+        if ($order_code) {
+            $query->where('sku', 'like', '%' . $order_code . '%');
+        }
+
+
+        if ($order_date && $order_date !== '') {
+            $query->whereDate('created_at', $order_date);
+        }
+
         $query->orderBy('created_at', 'desc');
         return $query->paginate($perPage);
     }

@@ -359,15 +359,13 @@
                                       <span class="badge bg-success">Thanh toán</span>
                                   </td>
                                   <td style="width: 220px;">
-                                      <span class="fw-semibold">{{ $orderDetail->updated_at->format('d-m-Y H:i') }}</span>
+                                      <span class="fw-semibold">{{ $orderDetail->updated_at->format('F d, Y - H:i') }}</span>
                                   </td>
                                   <td>
                                       <a href="javascript:void(0)">{{ $user ? $user->name : $orderDetail->customer_name}}</a>
                                   </td>
                                   <td class="text-success">
-
-                                      <strong>{{ $paymentStatusMessage }}</strong>
-
+                                    <strong>{{ $paymentStatusMessage }}</strong>
                                   </td>
                                 </tr>
                             @endif

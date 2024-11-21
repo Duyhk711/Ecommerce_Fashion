@@ -465,10 +465,13 @@
                                                     </a>
                                                     <!-- End Product Image -->
                                                     <!-- Product label -->
-                                                    <div class="product-labels"><span class="lbl pr-label3">New</span></div>
-                                                    @if ($product->is_hot_deal == 1)
-                                                        <div class="product-labels"><span class="lbl on-sale">Sale</span></div>
-                                                    @endif
+                                                    <div class="product-labels">
+                                                        <span class="lbl pr-label3">New</span>
+                                                        @if ($product->is_hot_deal == 1)
+                                                            <span class="lbl on-sale">Sale</span>
+                                                        @endif
+                                                    </div>
+
                                                     <!-- End Product label -->
                                                     <!--Product Button-->
                                                     <div class="button-set style1">
@@ -653,11 +656,13 @@
                                                     </a>
                                                     <!-- End Product Image -->
                                                     <!-- Product label -->
-                                                    <div class="product-labels"><span class="lbl pr-label1">Best
-                                                            seller</span></div>
-                                                    @if ($product->is_new == 1)
-                                                        <div class="product-labels"><span class="lbl pr-label3">new</span></div>
-                                                    @endif
+                                                    <div class="product-labels">
+                                                        <span class="lbl pr-label1">Best seller</span>
+                                                        @if ($product->is_new == 1)
+                                                            <span class="lbl pr-label3">new</span>
+                                                        @endif
+                                                    </div>
+
                                                     <!-- End Product label -->
 
                                                     <!--Product Button-->
@@ -835,11 +840,13 @@
                                                     @else
 
                                                     @endif --}}
-                                                    <div class="product-labels"><span class="lbl on-sale">Sale</span>
+                                                    <div class="product-labels">
+                                                        <span class="lbl on-sale">Sale</span>
+                                                        @if ($product->is_new == 1)
+                                                            <span class="lbl pr-label3">new</span>
+                                                        @endif
                                                     </div>
-                                                    @if ($product->is_new == 1)
-                                                        <div class="product-labels"><span class="lbl pr-label3">new</span></div>
-                                                    @endif
+
                                                     <!-- End Product label -->
 
                                                     <!--Product Button-->
