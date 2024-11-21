@@ -9,79 +9,79 @@ use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
-    public function getRevenueData(Request $request)
+    //TOng doanh thu 
+    public function getMonthlyRevenue($year)
     {
-        $filterType = $request->input('filterType');
-        $data = [];
-    
-        if ($filterType === 'year') {
-            $data = DB::table('orders')
-                ->selectRaw('YEAR(created_at) as label, SUM(total_price) as revenue')
-                ->whereNotNull('created_at')
-                ->groupByRaw('YEAR(created_at)')
-                ->orderBy('label')
-                ->get();
-    
-            $data->transform(function ($item) {
-                $item->revenue = $item->revenue * 1000;
-                return $item;
-            });
-        } elseif ($filterType === 'month') {
-            $year = $request->input('year', date('Y'));
-            $data = DB::table('orders')
-                ->selectRaw('MONTH(created_at) as label, SUM(total_price) as revenue')
-                ->whereYear('created_at', $year)
-                ->groupByRaw('MONTH(created_at)')
-                ->orderBy('label')
-                ->get();
-    
-            $formattedData = [];
-            for ($i = 1; $i <= 12; $i++) {
-                $revenue = $data->firstWhere('label', $i)->revenue ?? 0;
-                $formattedData[] = [
-                    'label' => $i,
-                    'revenue' => $revenue * 1000, 
-                ];
-            }
-            $data = collect($formattedData);
-        } elseif ($filterType === 'date_range') {
-            $startDate = $request->input('startDate');
-            $endDate = $request->input('endDate');
-    
-            if (!$startDate || !$endDate) {
-                return response()->json(['error' => 'Both start date and end date are required'], 400);
-            }
-    
-            if (!strtotime($startDate) || !strtotime($endDate)) {
-                return response()->json(['error' => 'Invalid date format'], 400);
-            }
-    
-            $startDate = Carbon::parse($startDate);
-            $endDate = Carbon::parse($endDate);
-    
-            if ($startDate->greaterThan($endDate)) {
-                return response()->json(['error' => 'Start date must be before or equal to end date'], 400);
-            }
-    
-            $data = DB::table('orders')
-                ->selectRaw('DATE(created_at) as date, SUM(total_price) as revenue')
-                ->whereBetween(DB::raw('DATE(created_at)'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
-                ->groupByRaw('DATE(created_at)')
-                ->orderBy('date')
-                ->get();
-    
-            if ($data->isEmpty()) {
-                return response()->json(['message' => 'No data found for the selected date range.'], 200);
-            }
-    
-            $data->transform(function ($item) {
-                $item->revenue = $item->revenue * 1000;
-                $item->date = Carbon::parse($item->date)->format('d-m-Y'); 
-                return $item;
-            });
-        }
-    
-        return response()->json($data);
+        $monthlyRevenue = DB::table('orders')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_price) as total_revenue'))
+            ->whereYear('created_at', $year)
+            // Loại bỏ điều kiện status để tính cả đơn hàng đã hủy
+            ->where('status', '!=', 'huy_don_hang')
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->get();
+
+        return response()->json($monthlyRevenue);
     }
-    
+
+    public function getDailyRevenue($year, $month)
+    {
+        $dailyRevenue = DB::table('orders')
+            ->select(DB::raw('DAY(created_at) as day'), DB::raw('SUM(total_price) as total_revenue'))
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            // Loại bỏ điều kiện status để tính cả đơn hàng đã hủy
+            ->where('status', '!=', 'huy_don_hang')
+            ->groupBy(DB::raw('DAY(created_at)'))
+            ->orderBy(DB::raw('DAY(created_at)'))
+            ->get();
+
+        return response()->json($dailyRevenue);
+    }
+
+    public function getRevenueByDateRange($startDate, $endDate)
+    {
+        // Chuyển đổi ngày bắt đầu và kết thúc sang định dạng phù hợp với DB
+        $dailyRevenue = DB::table('orders')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) as total_revenue'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$startDate, $endDate])
+            // Loại bỏ điều kiện status để tính cả đơn hàng đã hủy
+            ->where('status', '!=', 'huy_don_hang')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
+            ->get();
+
+        return response()->json($dailyRevenue);
+    }
+
+    public function getTotalIncome()
+    {
+        try {
+            $totalIncome = DB::table('orders')
+                ->where('status', '4') 
+                ->sum('total_price') * 1000;
+
+            if (is_null($totalIncome)) {
+                $totalIncome = 0;
+            }
+
+            return response()->json([
+                'total_income' => $totalIncome,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to fetch total income',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getTotalOrders()
+    {
+        $totalOrders = DB::table('orders')->count();
+
+        return response()->json([
+            'total_orders' => $totalOrders ?? 0, 
+        ]);
+    }
 }
