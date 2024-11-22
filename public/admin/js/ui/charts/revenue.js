@@ -63,8 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             chart.update();
         }
     }
-    
-
+  
     // Hàm lấy doanh thu theo tháng
     function fetchMonthlyRevenue(year) {
         currentYear = year;
@@ -108,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Lỗi khi lấy dữ liệu doanh thu, vui lòng thử lại sau.");
             });
     }
-    
     // Hàm lọc doanh thu theo ngày trong khoảng thời gian
     function fetchRevenueByDateRange(startDate, endDate) {
         // Gọi API với startDate và endDate

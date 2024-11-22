@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const checkAll = document.getElementById("checkAll");
   const checkboxes = document.querySelectorAll(".cart-checkbox");
   const totalPriceElement = document.getElementById("totalPrice");
-
+  
   // Chức năng chọn tất cả
   checkAll.addEventListener("change", function () {
     // Lọc ra tất cả các checkbox không thuộc sản phẩm đã xóa
