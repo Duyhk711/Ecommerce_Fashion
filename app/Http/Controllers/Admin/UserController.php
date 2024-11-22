@@ -8,6 +8,9 @@ use App\Models\Order;
 use App\Models\User;
 use App\Services\Admin\UserService;
 use App\Services\OrderService;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -28,16 +31,107 @@ class UserController extends Controller
         return view(Self::PATH_VIEW . __FUNCTION__, compact('users'));
     }
 
-    public function create()
+    public function getAllRole()
     {
-        return view(Self::PATH_VIEW . __FUNCTION__);
+        $roles = Role::orderBy('id', 'DESC')->get();
+        // dd($users);
+        return view('admin.users.role.index', compact('roles'));
     }
 
-    public function store(AuthRequest $request, User $user)
+    public function storeRole(Request $request)
     {
-        $isRegistered = $this->userService->storeUser($request, $user);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        Role::create(['name' => $request->input('name')]);
+
+        return redirect()->back()
+            ->with('success', 'Thêm vai trò thành công');
+
+    }
+
+    public function editRole(Role $role)
+    {
+        $roles = Role::orderBy('id', 'DESC')->get();
+        return view('admin.users.role.edit', compact('role', 'roles'));
+    }
+
+    public function updateRole(Request $request, Role $role)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $role->name = $request->input('name');
+        $role->save();
+        return redirect()->back()
+            ->with('success', 'Sửa vai trò thành công');
+
+    }
+
+    public function getAllPermissionRole(Role $role)
+    {
+        $permission = Permission::orderBy('id', 'DESC')->get();
+        $permissionsOfRole = $role->permissions;
+        return view('admin.users.role.permission', compact('role', 'permission', 'permissionsOfRole'));
+    }
+
+    public function updatePermissionRole(Request $request, Role $role)
+    {
+        // dd($request->input('permission'));
+        $role->syncPermissions($request->input('permission'));
+        return redirect()->back()
+            ->with('success', 'thêm quyền cho vai trò thành công');
+    }
+
+    public function deleteRole(Role $role)
+    {
+        if ($role) {
+            // Trước khi xóa, nếu cần, xóa tất cả quyền gắn liền với Role
+            $role->permissions()->detach(); // Detach các quyền nếu không cần giữ lại
+
+            // Xóa Role
+            $role->delete();
+
+            return redirect()->back()->with('success', 'Xóa vai trò thành công');
+        } else {
+            return redirect()->back()->with('error', 'Vai trò không tồn tại');
+        }
+    }
+
+    public function getAllClient()
+    {
+        $users = $this->userService->getAllClient();
+        // dd($users);
+        return view('admin.users.client.index', compact('users'));
+    }
+
+    public function getAllStaff()
+    {
+        $users = $this->userService->getAllAdmin();
+        return view('admin.users.staff.index', compact('users'));
+    }
+
+    public function createStaff()
+    {
+        $roles = Role::orderBy('id', 'DESC')->get();
+        return view('admin.users.staff.create', compact('roles'));
+    }
+
+    public function editStaff(User $user)
+    {
+        // dd($user);
+        $user_role = $user->roles->first();
+        $roles = Role::orderBy('id', 'DESC')->get();
+        return view('admin.users.staff.edit', compact('roles', 'user', 'user_role'));
+    }
+
+    public function storeStaff(AuthRequest $request)
+    {
+        $isRegistered = $this->userService->storeStaff($request);
         if ($isRegistered) {
-            return redirect()->route('admin.users.index')->with('success', 'Tạo mới thành công');
+            return redirect()->route('admin.users.staffs')->with('success', 'Tạo mới thành công');
         }
         return redirect()->back()->with('error', 'Lỗi.');
     }
@@ -63,13 +157,13 @@ class UserController extends Controller
             $user->is_active = false;
             $user->save();
 
-            return redirect()->route('admin.users.index')
+            return redirect()->back()
                 ->with('success', 'Người dùng đã bỏ kích hoạt thành công');
         } else {
             $user->is_active = true;
             $user->save();
 
-            return redirect()->route('admin.users.index')
+            return redirect()->back()
                 ->with('success', 'Người dùng đã được kích hoạt thành công');
         }
 

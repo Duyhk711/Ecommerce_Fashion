@@ -7,7 +7,7 @@
     <div class="content">
         <div class="block-content block-content-full">
             <div class="d-flex justify-content-start align-items-center mb-3">
-               
+
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-6">
@@ -19,14 +19,14 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-sm mb-0">
-                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i> 
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-income">0</span>₫</h4>
-                                    <a href="" class="text-decoration-underline">View net earnings</a>
+                                    {{-- <a href="" class="text-decoration-underline">View net earnings</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-3 col-md-6">
                     <div class="card card-animate">
                         <div class="card-body">
@@ -47,14 +47,14 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-sm mb-0">
-                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i> 
+                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-orders">0</span></h4>
-                                    <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a>
+                                    {{-- <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                
+
 
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-sm mb-0">
-                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i> 
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                     </h5>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                         <span class="counter-value" data-target="0">0</span>
                                     </h4>
-                                    <a href="" class="text-decoration-underline">Xem chi tiết</a>
+                                    {{-- <a href="" class="text-decoration-underline">Xem chi tiết</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-muted fs-sm mb-0">
-                                        
+
                                     </h5>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                         <span id="total-sold-products">0</span>
                                     </h4>
-                                    <a href="#" class="text-decoration-underline">Xem chi tiết</a>
+                                    {{-- <a href="#" class="text-decoration-underline">Xem chi tiết</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-danger-subtle rounded fs-3">
@@ -128,7 +128,7 @@
                         </div><!-- end card body -->
                     </div><!-- end card -->
                 </div><!-- end col -->
-                
+
             </div> <!-- end row-->
 
             <div class="row mt-4">
@@ -148,7 +148,7 @@
                                     <button class="btn btn-sm btn-alt dropdown-toggle" type="button" id="dateDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Tùy chỉnh
                                     </button>
-                                
+
                                     <!-- Nội dung dropdown -->
                                     <div class="dropdown-menu p-3" aria-labelledby="dateDropdown">
                                         <div class="row d-flex justify-content-end">
@@ -176,7 +176,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-xl-6">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
@@ -586,18 +586,18 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-8">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Đơn hàng gần đây</h4>
                             <div class="flex-shrink-0">
                                 <button type="button" class="btn btn-soft-info btn-sm">
-                                    <i class="ri-file-list-3-line align-middle"></i> 
+                                    <i class="ri-file-list-3-line align-middle"></i>
                                 </button>
                             </div>
                         </div><!-- end card header -->
-              
+
                         <div class="card-body">
                             <div class="table-responsive table-card">
                                 <table class="table table-border table-centered align-middle table-nowrap fs-sm mb-0">
@@ -611,14 +611,14 @@
                                         </tr>
                                     </thead>
                                     <tbody id="orders-tbody">
-                                       
+
                                     </tbody><!-- end tbody -->
                                 </table><!-- end table -->
                             </div>
                         </div>
                     </div> <!-- .card-->
                 </div> <!-- .col-->
-                
+
             </div>
 
         </div>
@@ -630,6 +630,6 @@
     <script src="{{ asset('admin/js/ui/charts/revenue.js') }}"></script>
     <script src="{{ asset('admin/js/ui/charts/order-status.js') }}"></script>
     <script>
-        
+
     </script>
 @endsection

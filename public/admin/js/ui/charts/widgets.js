@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
             totalOrdersElement.textContent = data.total_orders; // Hiển thị số đơn hàng
         })
         .catch(error => console.error('Error fetching total orders:', error));
-
-
         fetch('/api/total-customers')
         .then(response => response.json())
         .then(data => {

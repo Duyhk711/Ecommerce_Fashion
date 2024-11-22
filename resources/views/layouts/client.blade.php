@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
-<!-- Mirrored from www.annimexweb.com/items/hema/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Aug 2024 15:16:15 GMT -->
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -43,14 +41,9 @@
         @include('client.component.footer')
 
 
-        {{-- @include('client.component.menubar_mobile') --}}
-
-
         <!--Scoll Top-->
         <div id="site-scroll"><i class="icon anm anm-arw-up"></i></div>
         <!--End Scoll Top-->
-
-        {{-- @include('client.component.mini_cart') --}}
 
         @yield('modal')
 
@@ -100,7 +93,5 @@
     </div>
     <!--End Page Wrapper-->
 </body>
-
-<!-- Mirrored from www.annimexweb.com/items/hema/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Aug 2024 15:17:37 GMT -->
 
 </html>
