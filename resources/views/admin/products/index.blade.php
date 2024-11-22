@@ -203,7 +203,7 @@
                                                     title="Sửa">
                                                     <i class="fa fa-pencil-alt"></i>
                                                 </a>
-                                                
+
                                                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                                                     class="form-delete">
                                                     @csrf

@@ -68,7 +68,6 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->load('variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue', 'images', 'catalogue');
-
         $variantIds = $product->variants->pluck('id')->toArray();
 
         $orderData = DB::table('order_items')
@@ -149,7 +148,7 @@ class ProductController extends Controller
                 'price_regular' => 'required|numeric',
                 'price_sale' => 'required|numeric|lt:price_regular',
                 'stock' => 'required|integer|min:0',
-            ], [
+            ],[
                 'price_regular.required' => 'Giá bán là bắt buộc.',
                 'price_regular.numeric' => 'Giá bán phải là một số.',
                 'price_sale.required' => 'Giá khuyến mãi là bắt buộc.',

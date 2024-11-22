@@ -2,28 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const checkAll = document.getElementById("checkAll");
   const checkboxes = document.querySelectorAll(".cart-checkbox");
   const totalPriceElement = document.getElementById("totalPrice");
-  // const cartTable = document.querySelector("tbody");
-  // const cartContainer = document.querySelector(".main-col");
-
-  // Cập nhật tổng tiền
-  // function updateTotalPrice() {
-  //   let totalPrice = 0;
-
-  //   checkboxes.forEach((checkbox) => {
-  //     // Kiểm tra xem checkbox có được chọn và sản phẩm chưa bị xóa hay không
-  //     if (checkbox.checked && checkbox.closest('tr') !== null) {
-  //       const price = parseFloat(checkbox.getAttribute("data-price"));
-  //       const quantity = parseInt(
-  //         checkbox.closest("tr").querySelector(".quantity-input").value
-  //       );
-  //       totalPrice += price * quantity;
-  //     }
-  //   });
-
-  //   // Cập nhật tổng tiền hiển thị
-  //   totalPriceElement.textContent =
-  //     numberFormat(totalPrice * 1000, 0, ".", ",") + " ₫";
-  // }
 
   // Chức năng chọn tất cả
   checkAll.addEventListener("change", function () {

@@ -37,4 +37,3 @@ Route::get('/orders/status-distribution', [ChartController::class, 'getOrderStat
 Route::get('/orders', [ChartController::class, 'getOrders']);
 
 
-

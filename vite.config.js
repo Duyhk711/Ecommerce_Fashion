@@ -19,7 +19,6 @@ export default defineConfig({
                 'resources/js/chat.js',
                 'resources/js/voucher.js',
                 'resources/js/pages/datatables.js',
-                
             ],
             refresh: true,
         }),

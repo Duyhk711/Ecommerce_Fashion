@@ -1,11 +1,6 @@
 @extends('layouts.backend')
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-
-<style>
-
-
-</style>
 @endsection
 @section('content')
     <!-- Hero -->
