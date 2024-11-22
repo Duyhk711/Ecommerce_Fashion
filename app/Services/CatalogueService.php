@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Catalogue;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CatalogueService
 {
@@ -37,9 +37,6 @@ class CatalogueService
         return Catalogue::create($data);
     }
 
-
-
-
     public function updateCatalogue(Catalogue $catalogue, $data)
     {
         // Xử lý ảnh bìa nếu có ảnh mới được cung cấp
@@ -62,7 +59,6 @@ class CatalogueService
         return $catalogue->update($data);
     }
 
-
     public function deleteCatalogue(Catalogue $catalogue)
     {
         // Xóa hình ảnh bìa nếu tồn tại
@@ -73,7 +69,6 @@ class CatalogueService
         // Xóa mềm catalogue
         return $catalogue->delete(); // Xóa mềm thay vì xóa vĩnh viễn
     }
-
 
     protected function generateUniqueSlug($slug, $ignoreId = null)
     {
