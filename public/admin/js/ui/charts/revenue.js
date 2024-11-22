@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedMonth = null; // Tháng hiện tại (nếu có)
     let currentYear = new Date().getFullYear(); // Mặc định năm hiện tại
     let dailyData = {}; // Dữ liệu doanh thu theo ngày (sẽ được lưu trữ khi gọi API)
-
+    let isCustomDateFilter = false; 
     // Hàm vẽ biểu đồ
     function renderChart(data, labels, labelText) {
         if (!chart) {
@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
             chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels, // Sử dụng labels để xác định tháng
+                    labels: labels,
                     datasets: [{
                         label: labelText,
                         data: data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        backgroundColor: '#5f93df',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }]
@@ -23,45 +23,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 options: {
                     responsive: true,
                     onClick: (evt, elements) => {
-                        // Kiểm tra xem có đang xem doanh thu theo ngày không
+                        if (isCustomDateFilter) {
+                            alert("Bạn đang lọc theo ngày tùy chọn. Không thể thực hiện thao tác này.");
+                            return; // Ngừng xử lý
+                        }
+                        // Nếu đang ở chế độ xem tháng, ngăn click
                         if (selectedMonth !== null) {
-                            // Nếu đang ở chế độ xem theo ngày, không làm gì khi click
-                            console.log(
-                                "Bạn đang ở chế độ xem doanh thu theo ngày, không thể chọn tháng."
-                            );
+                            alert("Bạn đang xem doanh thu theo tháng. Không thể xem chi tiết từng ngày.");
+                            return; // Ngăn xử lý tiếp
+                        }
+    
+                        // Nếu không có phần tử nào được chọn, thoát
+                        if (elements.length === 0) {
                             return;
                         }
-
-                        // Nếu không có selectedMonth, tức là đang ở chế độ xem theo tháng
-                        if (elements.length > 0) {
-                            const index = elements[0].index; // Lấy index của tháng được chọn
-                            const selectedLabel = labels[
-                                index]; // Lấy tháng từ label (chẳng hạn 'Tháng 10')
-
-                            // Lấy tháng từ 'Tháng X' (ví dụ: 'Tháng 10' -> 10)
-                            const selectedMonth = selectedLabel.match(/\d+/)[0];
-                            console.log(
-                                `Bạn đã chọn năm: ${currentYear}, tháng: ${selectedMonth}`);
-                            // Nếu đang ở chế độ Yearly, click vào tháng
-                            if (selectedMonth !== undefined) {
-                                fetchDailyRevenue(currentYear,
-                                    selectedMonth); // Gọi API với tháng đã chọn
-                            } else {
-                                alert("Tháng không xác định.");
-                            }
+    
+                        // Lấy index của phần tử được click
+                        const index = elements[0].index;
+                        const selectedLabel = labels[index]; // Lấy label (ví dụ: 'Tháng 10')
+    
+                        // Lấy số tháng từ label (ví dụ: 'Tháng 10' -> 10)
+                        const month = parseInt(selectedLabel.match(/\d+/)[0]);
+    
+                        // Chuyển sang chế độ xem tháng
+                        if (!isNaN(month)) {
+                            selectedMonth = month; // Cập nhật trạng thái
+                            fetchDailyRevenue(currentYear, selectedMonth); // Gọi API
+                        } else {
+                            alert("Không thể xác định tháng từ dữ liệu.");
                         }
                     }
                 }
             });
         } else {
+            // Cập nhật dữ liệu nếu chart đã tồn tại
             chart.data.labels = labels;
             chart.data.datasets[0].data = data;
             chart.data.datasets[0].label = labelText;
             chart.update();
         }
     }
-
-
+  
     // Hàm lấy doanh thu theo tháng
     function fetchMonthlyRevenue(year) {
         currentYear = year;
@@ -105,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Lỗi khi lấy dữ liệu doanh thu, vui lòng thử lại sau.");
             });
     }
-
     // Hàm lọc doanh thu theo ngày trong khoảng thời gian
     function fetchRevenueByDateRange(startDate, endDate) {
         // Gọi API với startDate và endDate
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.length === 0) {
                     alert(`Không có dữ liệu doanh thu từ ${startDate} đến ${endDate}`);
+                    isCustomDateFilter = false;
                     return;
                 }
 
@@ -140,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const endDate = document.getElementById('endDate').value;
 
         if (startDate && endDate) {
+            isCustomDateFilter = true;
             fetchRevenueByDateRange(startDate, endDate);
         }
     });
@@ -149,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const endDate = document.getElementById('endDate').value;
 
         if (startDate && endDate) {
+            isCustomDateFilter = true;
             fetchRevenueByDateRange(startDate, endDate);
         }
     });
@@ -161,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('startDate').value = '';
         document.getElementById('endDate').value = '';
         selectedMonth = null; // Reset lại selectedMonth khi đặt lại
-
+        isCustomDateFilter = false;
         // Hiển thị lại doanh thu của năm hiện tại
         fetchMonthlyRevenue(currentYear);
     });

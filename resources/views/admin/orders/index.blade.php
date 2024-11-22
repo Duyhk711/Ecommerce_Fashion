@@ -40,7 +40,29 @@
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Đơn hàng</h3>
-
+                <div class="block-options">
+                  <form method="GET" action="{{ route('admin.orders.index') }}" class="mb-3 ">
+                    <div  class="d-flex">
+                        <div>
+                            <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
+                                <option value="">Trạng thái</option>
+                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
+                                <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
+                                <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
+                                <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành</option>
+                                <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
+                            </select>
+                        </div>
+                        <div class="ms-2">
+                            <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
+                                <option value="">Thanh toán</option>
+                                <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
+                                <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
+                            </select>
+                        </div>
+                    </div>
+                  </form>
+                </div>
             </div>
             <div class="block-content">
                 <div class="block-options">
