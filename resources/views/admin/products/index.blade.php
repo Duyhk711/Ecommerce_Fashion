@@ -47,7 +47,7 @@
                 </div>
 
             </div>
-            <ul class="nav nav-tabs mb-3">
+            <ul class="nav nav-tabs mb-3 mt-3">
                 <li class="nav-item">
                     <a class="nav-link active" id="products-tab" data-bs-toggle="tab" href="#products" role="tab">Danh sách</a>
                 </li>
@@ -192,11 +192,18 @@
                                         </td>
                                         <td class="text-center fs-sm">
                                             <div class="d-flex justify-content-center align-items-center">
+                                                <a href="{{ route('admin.products.show', $product) }}"
+                                                    class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
+                                                    title="Xem">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+
                                                 <a href="{{ route('admin.products.edit', $product) }}"
                                                     class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
                                                     title="Sửa">
                                                     <i class="fa fa-pencil-alt"></i>
                                                 </a>
+
                                                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                                                     class="form-delete">
                                                     @csrf

@@ -23,7 +23,7 @@ Cập nhật sản phẩm
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.products.index') }}" style="color: inherit;">Quản lý sản phẩm</a>
+                            <a href="{{ route('admin.products.index') }}" style="color: inherit;">Sản phẩm</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Cập nhật sản phẩm</li>
                     </ol>

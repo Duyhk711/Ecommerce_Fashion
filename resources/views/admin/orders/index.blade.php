@@ -53,7 +53,7 @@
                                 <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                             </select>
                         </div>
-                        <div>
+                        <div class="ms-2">
                             <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
                                 <option value="">Thanh toán</option>
                                 <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
@@ -71,6 +71,7 @@
                         id="order-list">
                         <thead>
                             <tr>
+                                <th class="text-center fs-sm" >STT</th>
                                 <th class="text-center fs-sm" style="width: 100px;">Mã đơn</th>
                                 <th class="d-none d-xl-table-cell fs-sm">Khách hàng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-center">Ngày đặt</th>
@@ -79,7 +80,7 @@
                                 <th class="d-sm-table-cell fs-sm">PTTT</th>
                                 <th class="d-none d-xl-table-cell fs-sm text-center">Số lượng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-end">Tổng</th>
-                                <th class="text-center">#</th>
+                                <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,6 +91,9 @@
                           @else
                             @foreach ($orders as $order)
                                 <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}" data-order-id="{{$order->id}}">
+                                    <td class="text-center fs-sm">
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td class="text-center fs-sm">
                                         <strong>{{ $order->sku }}</strong>
                                     </td>
@@ -122,18 +126,18 @@
                                     </td>
                                     <td class="fs-base">
                                         @php
-                                            $statusMapping = [
+                                            $statusMappingPayment = [
                                                 'cho_thanh_toan' => 'Chờ thanh toán',
                                                 'da_thanh_toan' => 'Đã thanh toán',
                                             ];
-                                            $badgeColor = [
+                                            $badgeColorPayment = [
                                                 'cho_thanh_toan' => 'bg-warning',
                                                 'da_thanh_toan' => 'bg-success',
                                             ];
-                                            $currentStatus = $order->payment_status;
+                                            $currentStatusPayment = $order->payment_status;
                                         @endphp
-                                         <span id="orderStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
-                                            {{ $statusMapping[$currentStatus] ?? $currentStatus }}
+                                         <span id="paymentStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColorPayment[$currentStatusPayment] }}">
+                                            {{ $statusMappingPayment[$currentStatusPayment] ?? $currentStatusPayment }}
                                         </span>
                                     </td>
                                     <td class="fs-base">
@@ -155,7 +159,7 @@
                                         <strong>{{ number_format($order->total_price *1000, 0, ',', '.') }} ₫</strong>
                                     </td>
                                     <td class="text-center fs-base fs-sm">
-                                        <div class="btn-group">
+                                        <div class="btn-group" style="width: 35px">
                                             <!-- Cập nhật trạng thái -->
                                             @if ($order->status == '4' || $order->status == 'huy_don_hang')
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
@@ -172,9 +176,9 @@
                                                 </button>
                                             @endif
                                         </div>
-                                        <a class="btn btn-sm btn-alt-secondary"
+                                        <a class="btn btn-sm btn-alt-secondary" style="height: 30px;"
                                             href="{{ route('admin.order.show', $order->id) }}">
-                                            <i class="fa fa-fw fa-eye"></i>
+                                            <i class="fa fa-fw fa-eye mt-1 "></i>
                                         </a>
                                     </td>
                                 </tr>

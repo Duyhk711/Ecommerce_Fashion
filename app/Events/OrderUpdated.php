@@ -32,13 +32,23 @@ class OrderUpdated implements ShouldBroadcast
             '4' => 'Hoàn thành',
             'huy_don_hang' => 'Đơn hàng đã hủy',
         ];
-
-        $badgeColor = [
+      
+        $badgeColor= [
             '1' => 'bg-warning',
             '2' => 'bg-info',
             '3' => 'bg-primary',
             '4' => 'bg-success',
             'huy_don_hang' => 'bg-danger',
+        ];
+
+        $statusPaymentMapping = [
+            'cho_thanh_toan' => 'Chờ thanh toán',
+            'da_thanh_toan' => 'Đã thanh toán',
+        ];
+
+        $badgeColorPayment = [
+            'cho_thanh_toan' => 'bg-warning',
+            'da_thanh_toan' => 'bg-success',
         ];
 
         $orderSku = $this->order->sku;
@@ -58,6 +68,9 @@ class OrderUpdated implements ShouldBroadcast
                 'status' => $status,
                 'statusMapping' => $statusMapping,
                 'badgeColor' => $badgeColor,
+                'statusPaymentMapping' => $statusPaymentMapping,
+                'badgeColorPayment' => $badgeColorPayment,
+                'payment_status' => $this->order->payment_status,
             ],
             'success' => "Trạng thái đơn hàng #$orderSku đã thay đổi thành: $statusName"
         ];
