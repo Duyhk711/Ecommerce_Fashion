@@ -192,11 +192,18 @@
                                         </td>
                                         <td class="text-center fs-sm">
                                             <div class="d-flex justify-content-center align-items-center">
+                                                <a href="{{ route('admin.products.show', $product) }}"
+                                                    class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
+                                                    title="Xem">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+
                                                 <a href="{{ route('admin.products.edit', $product) }}"
                                                     class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
                                                     title="Sửa">
                                                     <i class="fa fa-pencil-alt"></i>
                                                 </a>
+                                                
                                                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                                                     class="form-delete">
                                                     @csrf

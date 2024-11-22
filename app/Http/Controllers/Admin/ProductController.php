@@ -11,6 +11,7 @@ use App\Models\ProductVariant;
 use App\Services\ProductService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -68,7 +69,40 @@ class ProductController extends Controller
     {
         $product->load('variants.variantAttributes.attribute', 'variants.variantAttributes.attributeValue', 'images', 'catalogue');
 
-        return view('admin.products.show', compact('product'));
+        $variantIds = $product->variants->pluck('id')->toArray();
+
+        $orderData = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->selectRaw('
+            COUNT(DISTINCT orders.id) as total_orders,
+            SUM(order_items.quantity * IFNULL(order_items.variant_price_sale, order_items.variant_price_regular)) as total_revenue
+        ')
+            ->whereIn('order_items.product_variant_id', $variantIds)
+            ->whereNull('orders.deleted_at')
+            ->first();
+
+        $totalStock = DB::table('product_variants')
+            ->where('product_id', $product->id)
+            ->sum('stock');
+
+        $comments = DB::table('comments')->join('users', 'comments.user_id', '=', 'users.id')
+            ->where('comments.product_id', $product->id)
+            ->select('comments.*', 'users.name as user_name')
+            ->get();
+
+        $totalReviews = $comments->count();
+
+        $averageRating = $comments->avg('rating');
+
+        $ratingsCount = [
+            5 => $comments->where('rating', 5)->count(),
+            4 => $comments->where('rating', 4)->count(),
+            3 => $comments->where('rating', 3)->count(),
+            2 => $comments->where('rating', 2)->count(),
+            1 => $comments->where('rating', 1)->count(),
+        ];
+
+        return view('admin.products.show', compact('product', 'totalStock', 'orderData', 'comments', 'totalReviews', 'averageRating', 'ratingsCount'));
     }
 
     public function edit($id)
@@ -115,7 +149,7 @@ class ProductController extends Controller
                 'price_regular' => 'required|numeric',
                 'price_sale' => 'required|numeric|lt:price_regular',
                 'stock' => 'required|integer|min:0',
-            ],[
+            ], [
                 'price_regular.required' => 'Giá bán là bắt buộc.',
                 'price_regular.numeric' => 'Giá bán phải là một số.',
                 'price_sale.required' => 'Giá khuyến mãi là bắt buộc.',
