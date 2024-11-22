@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin;
 
-use App\Http\Controllers\Admin\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,12 +12,22 @@ class UserService
         return User::all();
     }
 
+    public function getAllClient()
+    {
+        return User::where('role', 'user')->get();
+    }
+
+    public function getAllAdmin()
+    {
+        return User::where('role', 'admin')->where('id', '<>', auth()->user()->id)->get();
+    }
+
     public function deleteUser(User $user)
     {
         return $user->delete();
     }
 
-    public function storeUser(Request $request, User $user)
+    public function storeStaff(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -32,11 +41,22 @@ class UserService
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-        $user->query()->create($data);  
+
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->avatar = $request->input('avatar');
+        $user->phone = $request->input('phone');
+        $user->role = 'admin';
+        if ($request->input('role') != '') {
+            $user->syncRoles($request->input('role'));
+        }
+        $user->save();
         if ($user) {
             return true;
         }
         return false;
     }
-   
+
 }
