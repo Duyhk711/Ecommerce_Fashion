@@ -25,8 +25,17 @@ class OrderController extends Controller
     {
         $status = $request->get('status');
         $payment_status = $request->get('payment_status');
-        $orders = $this->orderService->getOrder($status, 10, $payment_status);
-        // dd($orders);
+        $order_search = $request->get('order_search');
+        $order_date_start = $request->get('order_date_start');
+        $order_date_end = $request->get('order_date_end');
+        $orders = $this->orderService->getOrder(
+            $status,
+            10,
+            $payment_status,
+            $order_date_start,
+            $order_date_end,
+            $order_search
+        );
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
 

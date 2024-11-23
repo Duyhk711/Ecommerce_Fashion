@@ -40,7 +40,7 @@ class MyOrderService
               $query->where('sku', 'LIKE', '%' . $keyword . '%');
           }
 
-          return $query->paginate(5)->appends(['status' => $status, 'search' => $keyword]);
+          return $query->orderBy('created_at', 'desc')->paginate(5)->appends(['status' => $status, 'search' => $keyword]);
       }
 
     public function getOrderDetail($id)
@@ -63,7 +63,7 @@ class MyOrderService
         }
 
         if ($order->payment_status == 'da_thanh_toan') {
-            $order->payment_status = 'cho_thanh_toan';  
+            $order->payment_status = 'cho_thanh_toan';
         }
         $oldStatus = $order->status;
         // Cập nhật trạng thái đơn hàng thành "Đã hủy"
@@ -72,9 +72,9 @@ class MyOrderService
 
         OrderStatusChange::create([
             'order_id' => $order->id,
-            'user_id' => Auth::id(),        
-            'old_status' => $oldStatus,    
-            'new_status' => 'huy_don_hang', 
+            'user_id' => Auth::id(),
+            'old_status' => $oldStatus,
+            'new_status' => 'huy_don_hang',
         ]);
 
         return ['success' => true, 'message' => 'Đơn hàng đã được hủy thành công.'];
@@ -84,15 +84,15 @@ class MyOrderService
     public function getCommentForProduct($orderId, $productId)
     {
         $userId = auth()->id();
-    
+
         $comment = Comment::where('order_id', $orderId)
                     ->where('product_id', $productId)
                     ->where('user_id', $userId)
                     ->first();
-    
+
         if ($comment == null) {
             $status = 'not_comment';  // Chưa comment
-            
+
         } else {
             if ($comment->updated_at == null) {
                 // Nếu created_at bằng updated_at -> Đã comment nhưng chưa sửa
@@ -105,7 +105,7 @@ class MyOrderService
         // dd($status);
         return [
             'comment' => $comment,
-            'status' => $status, 
+            'status' => $status,
         ];
     }
 

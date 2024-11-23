@@ -3,11 +3,25 @@
 namespace App\Services;
 
 use App\Models\Order;
+use Illuminate\Support\Carbon;
 use App\Models\OrderStatusChange;
 
 class OrderService{
-    public function getOrder($status = null, $perPage = 6, $payment_status = null){
+    public function getOrder($status = null, $perPage = 6, $payment_status = null, $order_date_start = null, $order_date_end = null, $order_search = null) {
         $query = Order::with('items');
+
+        if ($order_search) {
+            $query->where(function ($q) use ($order_search) {
+                $q->where('sku', 'like', "%$order_search%")
+                  ->orWhere('customer_name', 'like', "%$order_search%");
+            });
+        }
+
+        if ($order_date_start && $order_date_end) {
+            $order_date_start = Carbon::parse($order_date_start)->startOfDay();
+            $order_date_end = Carbon::parse($order_date_end)->endOfDay();
+            $query->whereBetween('created_at', [$order_date_start, $order_date_end]);
+        }
 
         if ($status) {
             $query->where('status', $status);
@@ -16,9 +30,10 @@ class OrderService{
         if ($payment_status) {
             $query->where('payment_status', $payment_status);
         }
-        $query->orderBy('created_at', 'desc');
-        return $query->paginate($perPage);
+
+        return $query->orderBy('created_at', 'desc')->paginate($perPage);
     }
+
 
     public function getOrderDetail($id){
         return $order = Order::with([
