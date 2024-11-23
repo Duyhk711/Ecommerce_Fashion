@@ -14,6 +14,13 @@ window.Echo.channel('orders')
             orderStatusElement.className = `badge rounded-pill ${event.order.badgeColor[currentStatus]}`;
         }
 
+        const paymentStatusElement = document.getElementById(`paymentStatus-${event.order.id}`);
+        if (paymentStatusElement) {
+            const currentPaymentStatus = event.order.payment_status;
+            paymentStatusElement.innerHTML = `${event.order.statusPaymentMapping[currentPaymentStatus] ?? currentPaymentStatus}`;
+            paymentStatusElement.className = `badge rounded-pill ${event.order.badgeColorPayment[currentPaymentStatus]}`;
+        }
+  
         // Display real-time toastr notification using the success message from the event
         toastr.success(event.success, 'Thành công', {
             positionClass: 'toast-top-right',

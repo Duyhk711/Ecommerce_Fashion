@@ -279,6 +279,7 @@
                             <input type="hidden" name="color_id" id="color_id">
                             <input type="hidden" name="size_id" id="size_id">
                             <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="product_slug" value="{{ $product->slug }}">
                             <input type="hidden" name="product_variant_id" id="product_variant_id">
                             <!-- Product Action -->
                             <div class="product-action w-100 d-flex-wrap my-3 my-md-4">

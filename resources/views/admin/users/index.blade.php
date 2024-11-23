@@ -38,7 +38,7 @@
             </div>
             <div class="block-content block-content-full">
                 <!-- Table with data -->
-                <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
+                <table id="productTable" class="table align-middle js-dataTable-full">
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 100px;">
@@ -115,23 +115,18 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <!-- jQuery (required for DataTables plugin) -->
-    <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-
-    <!-- Page JS Plugins -->
-    <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+    <!-- Nhúng jQuery từ CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
     {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
-
-    <!-- Page JS Code -->
-    @vite(['resources/js/pages/datatables.js'])
+    <script>
+        $(document).ready(function() {
+            $('#productTable').DataTable();
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

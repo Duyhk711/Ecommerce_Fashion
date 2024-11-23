@@ -45,7 +45,7 @@
           <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
                   <tr >
-                      <th style="text-align: center;" class="text-center" style="width: 100px;">ID</th>
+                      <th style="text-align: center;" class="text-center" style="width: 100px;">STT</th>
                       <th style="text-align: center;" class="d-none d-sm-table-cell text-center">Người dùng</th>
                       <th style="text-align: center;" class="d-none d-md-table-cell">Sản phẩm</th>
                       <!-- <th style="text-align: center;" class="d-none d-md-table-cell">Tiêu đề</th> -->
@@ -59,7 +59,7 @@
                 @foreach( $comments as $comment)
                   <tr>
                       <td class="text-center fs-sm">
-                         {{$comment->id}}
+                        {{ $loop->iteration }}
                       </td>
                       <td class="d-none d-sm-table-cell text-center fs-sm">{{$comment->user->name}}</td>
                       <td class="d-none d-md-table-cell fs-sm" style="text-align: center;">
