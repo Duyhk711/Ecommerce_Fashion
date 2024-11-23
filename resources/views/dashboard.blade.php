@@ -26,7 +26,7 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-income">0</span>₫</h4>
-                                    <a href="" class="text-decoration-underline">View net earnings</a>
+                                    {{-- <a href="" class="text-decoration-underline">View net earnings</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -54,7 +54,7 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-orders">0</span></h4>
-                                    <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a>
+                                    {{-- <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -86,7 +86,7 @@
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                         <span class="counter-value" data-target="0">0</span>
                                     </h4>
-                                    <a href="" class="text-decoration-underline">Xem chi tiết</a>
+                                    {{-- <a href="" class="text-decoration-underline">Xem chi tiết</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -117,7 +117,7 @@
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                         <span id="total-sold-products">0</span>
                                     </h4>
-                                    <a href="#" class="text-decoration-underline">Xem chi tiết</a>
+                                    {{-- <a href="#" class="text-decoration-underline">Xem chi tiết</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-danger-subtle rounded fs-3">
@@ -176,7 +176,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-xl-6">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
