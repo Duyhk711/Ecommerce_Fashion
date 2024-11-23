@@ -164,7 +164,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class=" fs-sm">{{ number_format($product->price_regular, 3, '.', 0) }}₫</td>
+                                        <td class=" fs-sm"> {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', ',') }}₫</td>
                                         <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
                                             @if ($product->total_stock > 5)
                                                 <span class="" >{{ $product->total_stock }}</span>
