@@ -34,7 +34,7 @@
 
     <div class="content ">
         <!-- Dynamic Table Full -->
-        <div class="block block-rounded">
+        <div class="block block-rounded table-responsive">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Danh sách Sản Phẩm</h3>
                 <div class="block-options">
@@ -119,9 +119,9 @@
                         </form>
 
                     </div>
-                    <div class="block-content block-content-full">
+                    <div class="block-content block-content-full ">
                         <!-- Table with data -->
-                        <table id="productTable" class="table   align-middle js-dataTable-full">
+                        <table id="productTable" class="table  align-middle js-dataTable-full">
                             <thead>
                                 <tr>
                                     <th class="text-center">Tên sản phẩm</th>
@@ -136,7 +136,7 @@
                                 @foreach ($products as $product)
                                     <tr>
                                         <td class="fs-sm">
-                                            <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center" style="max-width: 70%">
                                                 <!-- Hình ảnh -->
                                                 <div class="image-container" style="width: 60px; height: height: 100%;; position: relative;">
                                                     <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm" class="img-thumbnail">
@@ -164,7 +164,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class=" fs-sm">{{ number_format($product->price_regular, 3, '.', 0) }}₫</td>
+                                        <td class=" fs-sm"> {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', ',') }}₫</td>
                                         <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
                                             @if ($product->total_stock > 5)
                                                 <span class="" >{{ $product->total_stock }}</span>
@@ -192,11 +192,18 @@
                                         </td>
                                         <td class="text-center fs-sm">
                                             <div class="d-flex justify-content-center align-items-center">
+                                                <a href="{{ route('admin.products.show', $product) }}"
+                                                    class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
+                                                    title="Xem">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+
                                                 <a href="{{ route('admin.products.edit', $product) }}"
                                                     class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
                                                     title="Sửa">
                                                     <i class="fa fa-pencil-alt"></i>
                                                 </a>
+
                                                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                                                     class="form-delete">
                                                     @csrf

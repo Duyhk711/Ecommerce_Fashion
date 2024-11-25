@@ -11,11 +11,11 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Danh sách người dùng</h1>
+                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Danh sách khách hàng</h1>
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">users</li>
-                        <li class="breadcrumb-item active" aria-current="page">Danh sách người dùng</li>
+                        <li class="breadcrumb-item">Người dùng</li>
+                        <li class="breadcrumb-item active" aria-current="page">Danh sách khách hàng</li>
                     </ol>
                 </nav>
             </div>
@@ -26,15 +26,15 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Danh sách người dùng</h3>
-                <div class="block-options">
+                <h3 class="block-title">Danh sách khách hàng</h3>
+                {{-- <div class="block-options">
                     <div class="block-options-item">
                         <a href="{{ route('admin.users.create') }}" class="btn btn-sm btn-alt-secondary"
                             data-bs-toggle="tooltip" title="Add">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="block-content block-content-full">
                 <!-- Table with data -->

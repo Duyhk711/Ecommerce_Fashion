@@ -183,24 +183,15 @@
                                                 </div>
                                             </td>
 
-                                            {{-- <td class="cart-delete text-center small-hide"> --}}
                                             <td class="text-center">
-                                                <form action="{{ route('cart.remove') }}" method="POST">
-                                                    @csrf
-                                                    @if (isset($item['cart_item_id']))
-                                                        <input type="hidden" name="cart_item_id"
-                                                            value="{{ $item['cart_item_id'] }}">
-                                                    @else
-                                                        <input type="hidden" name="product_variant_id"
-                                                            value="{{ $item['product_variant_id'] }}">
-                                                    @endif
-                                                    <button type="submit" class="cart-remove remove-icon btn-delete"
-                                                        data-bs-toggle="tooltip" title="Xóa">
-                                                        <i class="icon anm anm-times-r me-1"></i>
-                                                    </button>
-                                                </form>
+                                                <button class="cart-remove remove-icon btn-delete"
+                                                    data-cart-item-id="{{ $item['cart_item_id'] ?? '' }}"
+                                                    data-product-variant-id="{{ $item['product_variant_id'] ?? '' }}"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Xóa">
+                                                    <i class="icon anm anm-times-r me-1"></i>
+                                                </button>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -275,6 +266,7 @@
     <script>
         const updateUrl = "{{ route('cart.update') }}";
         const csrfToken = "{{ csrf_token() }}";
+        const removeUrl = "{{ route('cart.remove') }}";
     </script>
     <script src="{{ asset('client/js/cart/cart.js') }}"></script>
 

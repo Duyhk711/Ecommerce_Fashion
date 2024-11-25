@@ -29,16 +29,15 @@ class AttributeValueService
             ]);
         }
     }
-    
+
     public function updateAttributeValue(array $validatedData, AttributeValue $attributeValue)
     {
-        $attributeValue -> update([
+        $attributeValue->update([
             'attribute_id' => $validatedData['attribute_id'],
             'value' => $validatedData['value'],
-            'color_code' => $validatedData['color_code'] ?? $attributeValue->color_code
+            'color_code' => $validatedData['color_code'] ?? $attributeValue->color_code,
         ]);
     }
-
 
     public function deleteAttributeValue(AttributeValue $attributeValue)
     {
