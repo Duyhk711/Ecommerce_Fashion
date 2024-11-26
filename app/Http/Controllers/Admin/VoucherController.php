@@ -29,22 +29,66 @@ class VoucherController extends Controller
     }
 
     public function store(VoucherRequest $request)
-    {
-        $data = $request->validated();
-
-        if (Voucher::where('code', $data['code'])->exists()) {
-            return redirect()->back()->withErrors(['code' => 'Mã giảm giá này đã tồn tại.'])->withInput();
-        }
-        if ($data['discount_value'] > $data['minimum_order_value']) {
-            return redirect()->back()->withErrors(['discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.'])->withInput();
-        }
-        if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
-            return redirect()->back()->withErrors(['end_date' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.'])->withInput();
-        }
-        $voucher = $this->voucherService->storeVoucher($data);
-        $this->voucherService->sendNewVoucherNotification($voucher);
-        return redirect()->route('admin.vouchers.create')->with('success', 'Voucher mới đã được tạo thành công.');
+{
+    $data = $request->validated();
+    if (Voucher::where('code', $data['code'])->exists()) {
+        return redirect()
+            ->back()
+            ->withErrors(['code' => 'Mã giảm giá này đã tồn tại.'])
+            ->withInput();
     }
+    if (
+        isset($data['minimum_order_value']) &&
+        $data['discount_value'] > $data['minimum_order_value']
+    ) {
+        return redirect()
+            ->back()
+            ->withErrors([
+                'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
+            ])
+            ->withInput();
+    }
+    if (
+        $data['discount_type'] === 'percentage' &&
+        $data['discount_value'] > 20
+    ) {
+        return redirect()
+            ->back()
+            ->withErrors([
+                'discount_value' => 'Giảm giá phần trăm tối đa là 20%.',
+            ])
+            ->withInput();
+    }
+
+    // Kiểm tra ngày bắt đầu và ngày kết thúc
+    if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
+        return redirect()
+            ->back()
+            ->withErrors([
+                'end_date' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.',
+            ])
+            ->withInput();
+    }
+
+    // Thực hiện lưu voucher qua service
+    try {
+        $voucher = $this->voucherService->storeVoucher($data);
+
+        // Gửi thông báo khi tạo thành công
+        $this->voucherService->sendNewVoucherNotification($voucher);
+
+        return redirect()
+            ->route('admin.vouchers.create')
+            ->with('success', 'Voucher mới đã được tạo thành công.');
+    } catch (\Exception $e) {
+        // Xử lý lỗi khi lưu voucher không thành công
+        return redirect()
+            ->back()
+            ->withErrors(['general' => 'Có lỗi xảy ra. Vui lòng thử lại sau.'])
+            ->withInput();
+    }
+}
+
 
     public function edit(Voucher $voucher)
     {

@@ -32,7 +32,6 @@ class VoucherRequest extends FormRequest
         ];
     }
 
-
     // Hàm để cung cấp các thông báo lỗi tùy chỉnh
     public function messages()
     {
@@ -42,10 +41,19 @@ class VoucherRequest extends FormRequest
             'code.max' => 'Mã voucher không được vượt quá :max ký tự.',
 
             'discount_type.required' => 'Vui lòng chọn kiểu giảm giá.',
-            'discount_type.in' => 'Kiểu giảm giá không hợp lệ, chỉ chấp nhận "percentage" hoặc "amount".',
+            'discount_type.in' => 'Kiểu giảm giá không hợp lệ, chỉ chấp nhận "percentage" hoặc "fixed".',
 
             'discount_value.required' => 'Vui lòng nhập giá trị giảm.',
             'discount_value.numeric' => 'Giá trị giảm phải là một số.',
+
+            'minimum_order_value.required' => 'Vui lòng nhập giá trị đơn hàng tối thiểu.',
+            'minimum_order_value.numeric' => 'Giá trị đơn hàng tối thiểu phải là một số.',
+
+            'quantity.required' => 'Vui lòng nhập số lượng.',
+            'quantity.integer' => 'Số lượng phải là một số nguyên.',
+
+            'description.required' => 'Vui lòng nhập mô tả.',
+            'description.string' => 'Mô tả phải là chuỗi ký tự.',
 
             'start_date.required' => 'Vui lòng nhập ngày bắt đầu.',
             'start_date.date' => 'Ngày bắt đầu không hợp lệ.',
