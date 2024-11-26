@@ -32,7 +32,7 @@ class OrderUpdated implements ShouldBroadcast
             '4' => 'Hoàn thành',
             'huy_don_hang' => 'Đơn hàng đã hủy',
         ];
-
+      
         $badgeColor= [
             '1' => 'bg-warning',
             '2' => 'bg-info',
@@ -50,7 +50,6 @@ class OrderUpdated implements ShouldBroadcast
             'cho_thanh_toan' => 'bg-warning',
             'da_thanh_toan' => 'bg-success',
         ];
-
 
         $orderSku = $this->order->sku;
         $orderId = $this->order->id;

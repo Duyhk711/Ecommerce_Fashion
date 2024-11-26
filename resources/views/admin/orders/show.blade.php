@@ -258,11 +258,11 @@
                       <td>
                           <div class="d-flex">
                             <div>
-                              <img src="{{asset('storage/' . $item->productVariant->image)}}" width="80px" alt="">
+                              <img src="{{asset('storage/' . $item->variant_image	)}}" width="80px" alt="">
                             </div>
                             <div class="mx-2">
-                              <a class="text-black fs-5"  href="{{route('productDetail',$item->productVariant->product->slug)}}"><strong>{{$item->product_name}}</strong></a><br>
-                              <strong style="font-size: 13px"> {{$item->productVariant->sku}}</strong> <br>
+                              <a class="text-black fs-5"><strong>{{$item->product_name}}</strong></a><br>
+                              <strong style="font-size: 13px"> {{$item->product_sku	}}</strong> <br>
                               <p style="font-size: 13px">
                               @foreach ($item->productVariant->variantAttributes as $variantAttribute)
                                   @if ($variantAttribute->attribute->name == 'Size')
