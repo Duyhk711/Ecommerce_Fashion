@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <!-- Hero -->
-    <div class="content">
+    <div class="content mb-3">
         <div class="block-content block-content-full">
             <div class="d-flex justify-content-start align-items-center mb-3">
 
@@ -180,8 +180,8 @@
                 <div class="col-xl-6">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Sản phẩm bán chạy</h4>
-                            <div class="flex-shrink-0">
+                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm bán chạy nhất trong ngày</h4>
+                            {{-- <div class="flex-shrink-0">
                                 <div class="dropdown card-header-dropdown">
                                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="fw-semibold text-uppercase fs-12">Lọc theo:
@@ -196,189 +196,25 @@
                                         <a class="dropdown-item" href="#">Tháng trước</a>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div><!-- end card header -->
 
                         <div class="card-body">
                             <div class="table-responsive table-card">
                                 <table class="table table-hover table-centered align-middle table-nowrap mb-0">
-                                    <tbody>
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                        <img src="{{asset('assets/storage/products/1.jpg')}}" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Áo phông nam in chữ</a></h5>
-                                                        <span class="text-muted">24 Apr 2021</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$29.00</h5>
-                                                <span class="text-muted">Giá</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">62</h5>
-                                                <span class="text-muted">Đơn hàng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">510</h5>
-                                                <span class="text-muted">Số lượng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$10.298.230đ</h5>
-                                                <span class="text-muted">Tổng</span>
-                                            </td>
+                                            <th scope="col" class="text-muted">Sản phẩm</th>
+                                            <th scope="col" class="text-muted">Giá</th>
+                                            <th scope="col" class="text-muted">SL</th>
+                                            <th scope="col" class="text-muted">Tổng</th>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                        <img src="{{asset('assets/storage/products/1.jpg')}}" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Áo phông nam in chữ</a></h5>
-                                                        <span class="text-muted">24 Apr 2021</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$29.00</h5>
-                                                <span class="text-muted">Giá</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">62</h5>
-                                                <span class="text-muted">Đơn hàng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">510</h5>
-                                                <span class="text-muted">Số lượng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$10.298.230đ</h5>
-                                                <span class="text-muted">Tổng</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                        <img src="{{asset('assets/storage/products/1.jpg')}}" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Áo phông nam in chữ</a></h5>
-                                                        <span class="text-muted">24 Apr 2021</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$29.00</h5>
-                                                <span class="text-muted">Giá</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">62</h5>
-                                                <span class="text-muted">Đơn hàng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">510</h5>
-                                                <span class="text-muted">Số lượng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$10.298.230đ</h5>
-                                                <span class="text-muted">Tổng</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                        <img src="{{asset('assets/storage/products/1.jpg')}}" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Áo phông nam in chữ</a></h5>
-                                                        <span class="text-muted">24 Apr 2021</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$29.00</h5>
-                                                <span class="text-muted">Giá</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">62</h5>
-                                                <span class="text-muted">Đơn hàng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">510</h5>
-                                                <span class="text-muted">Số lượng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$10.298.230đ</h5>
-                                                <span class="text-muted">Tổng</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                        <img src="{{asset('assets/storage/products/1.jpg')}}" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Áo phông nam in chữ</a></h5>
-                                                        <span class="text-muted">24 Apr 2021</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$29.00</h5>
-                                                <span class="text-muted">Giá</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">62</h5>
-                                                <span class="text-muted">Đơn hàng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">510</h5>
-                                                <span class="text-muted">Số lượng</span>
-                                            </td>
-                                            <td>
-                                                <h5 class="fs-sm my-1 fw-normal">$10.298.230đ</h5>
-                                                <span class="text-muted">Tổng</span>
-                                            </td>
-                                        </tr>
+                                    </thead>
+                                    <tbody id="products-sale-statistics">
+
                                     </tbody>
                                 </table>
                             </div>
-
-                            <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
-                                <div class="col-sm">
-                                    <div class="text-muted">
-                                        Showing <span class="fw-semibold">5</span> of <span class="fw-semibold">25</span> Results
-                                    </div>
-                                </div>
-                                <div class="col-sm-auto  mt-3 mt-sm-0">
-                                    <ul class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
-                                        <li class="page-item disabled">
-                                            <a href="#" class="page-link">←</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#" class="page-link">1</a>
-                                        </li>
-                                        <li class="page-item active">
-                                            <a href="#" class="page-link">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#" class="page-link">3</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#" class="page-link">→</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -386,186 +222,27 @@
                 <div class="col-xl-6">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm đánh giá tốt nhất</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm đánh giá cao nhất trong tháng</h4>
                             <div class="flex-shrink-0">
-                                <div class="dropdown card-header-dropdown">
-                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="text-muted">Report<i class="mdi mdi-chevron-down ms-1"></i></span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        {{-- <a class="dropdown-item" href="#">Download Report</a>
-                                        <a class="dropdown-item" href="#">Export</a>
-                                        <a class="dropdown-item" href="#">Import</a> --}}
-                                    </div>
-                                </div>
                             </div>
                         </div><!-- end card header -->
 
                         <div class="card-body">
                             <div class="table-responsive table-card">
                                 <table class="table table-centered table-hover align-middle table-nowrap mb-0">
-                                    <tbody>
+                                    <thead>
+                                        <th>Sản phẩm</th>
+                                        <th class="text-center">Tổng</th>
+                                        <th class="text-center">Trung bình</th>
+                                    </thead>
+                                    <tbody id="products-top-rate">
                                         <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-2">
-                                                        <img src="assets/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1 fw-medium">
-                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">Áo phông nam in chữ</a>
-                                                        </h5>
-                                                        <span class="text-muted"></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="text-muted">Áo phông nam</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">20</p>
-                                                <span class="text-muted">Rate</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">4.8</p>
-                                                <span class="text-muted">Trung bình</span>
-                                            </td>
-                                        </tr><!-- end -->
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-2">
-                                                        <img src="assets/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1 fw-medium">
-                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">Áo phông nam in chữ</a>
-                                                        </h5>
-                                                        <span class="text-muted"></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="text-muted">Áo phông nam</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">20</p>
-                                                <span class="text-muted">Rate</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">4.8</p>
-                                                <span class="text-muted">Trung bình</span>
-                                            </td>
-                                        </tr><!-- end -->
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-2">
-                                                        <img src="assets/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1 fw-medium">
-                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">Áo phông nam in chữ</a>
-                                                        </h5>
-                                                        <span class="text-muted"></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="text-muted">Áo phông nam</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">20</p>
-                                                <span class="text-muted">Rate</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">4.8</p>
-                                                <span class="text-muted">Trung bình</span>
-                                            </td>
-                                        </tr><!-- end -->
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-2">
-                                                        <img src="assets/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1 fw-medium">
-                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">Áo phông nam in chữ</a>
-                                                        </h5>
-                                                        <span class="text-muted"></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="text-muted">Áo phông nam</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">20</p>
-                                                <span class="text-muted">Rate</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">4.8</p>
-                                                <span class="text-muted">Trung bình</span>
-                                            </td>
-                                        </tr><!-- end -->
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-2">
-                                                        <img src="assets/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="fs-sm my-1 fw-medium">
-                                                            <a href="apps-ecommerce-seller-details.html" class="text-reset">Áo phông nam in chữ</a>
-                                                        </h5>
-                                                        <span class="text-muted"></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="text-muted">Áo phông nam</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">20</p>
-                                                <span class="text-muted">Rate</span>
-                                            </td>
-                                            <td>
-                                                <p class="mb-0">4.8</p>
-                                                <span class="text-muted">Trung bình</span>
-                                            </td>
+
                                         </tr><!-- end -->
                                     </tbody>
                                 </table><!-- end table -->
                             </div>
-
-                            <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
-                                <div class="col-sm">
-                                    <div class="text-muted">
-                                        Showing <span class="fw-semibold">5</span> of <span class="fw-semibold">25</span> Results
-                                    </div>
-                                </div>
-                                <div class="col-sm-auto  mt-3 mt-sm-0">
-                                    <ul class="pagination pagination-separated pagination-sm mb-0 justify-content-center">
-                                        <li class="page-item disabled">
-                                            <a href="#" class="page-link">←</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#" class="page-link">1</a>
-                                        </li>
-                                        <li class="page-item active">
-                                            <a href="#" class="page-link">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#" class="page-link">3</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#" class="page-link">→</a>
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
-
                         </div> <!-- .card-body-->
                     </div> <!-- .card-->
                 </div> <!-- .col-->
@@ -625,6 +302,8 @@
     <script src="{{ asset('admin/js/ui/charts/widgets.js') }}"></script>
     <script src="{{ asset('admin/js/ui/charts/revenue.js') }}"></script>
     <script src="{{ asset('admin/js/ui/charts/order-status.js') }}"></script>
+    <script src="{{asset('admin/js/ui/charts/product-sale-table.js')}}"></script>
+    <script src="{{asset('admin/js/ui/charts/product-top-rate-table.js')}}"></script>
     <script>
 
     </script>
