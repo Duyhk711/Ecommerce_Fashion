@@ -184,6 +184,18 @@
                          </span>
                      </a>
                  </div>
+                 <div class="wishlist-link iconset" title="Wishlist">
+                     <a href="{{ route('my.wishlist') }}">
+                        <i class="hdr-icon icon anm bi-bell fs-5"></i>
+                     </a>
+                     <span class="wishlist-count" id="wishlist-count">
+                        @auth
+                            {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
+                        @else
+                            0
+                        @endauth
+                    </span>
+                 </div>
                  <!--End Wishlist-->
                  <!--Minicart-->
                  <div class="header-cart iconset" title="Cart">
