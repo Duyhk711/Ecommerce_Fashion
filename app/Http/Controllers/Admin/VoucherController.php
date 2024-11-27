@@ -31,6 +31,7 @@ class VoucherController extends Controller
     public function store(VoucherRequest $request)
 {
     $data = $request->validated();
+    $data['usage_limit'] = $data['usage_limit'] ?? null;
     if (Voucher::where('code', $data['code'])->exists()) {
         return redirect()
             ->back()
@@ -59,8 +60,6 @@ class VoucherController extends Controller
             ])
             ->withInput();
     }
-
-    // Kiểm tra ngày bắt đầu và ngày kết thúc
     if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
         return redirect()
             ->back()
@@ -70,18 +69,14 @@ class VoucherController extends Controller
             ->withInput();
     }
 
-    // Thực hiện lưu voucher qua service
     try {
         $voucher = $this->voucherService->storeVoucher($data);
-
-        // Gửi thông báo khi tạo thành công
         $this->voucherService->sendNewVoucherNotification($voucher);
 
         return redirect()
             ->route('admin.vouchers.create')
             ->with('success', 'Voucher mới đã được tạo thành công.');
     } catch (\Exception $e) {
-        // Xử lý lỗi khi lưu voucher không thành công
         return redirect()
             ->back()
             ->withErrors(['general' => 'Có lỗi xảy ra. Vui lòng thử lại sau.'])

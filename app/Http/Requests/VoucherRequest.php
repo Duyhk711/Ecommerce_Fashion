@@ -29,6 +29,7 @@ class VoucherRequest extends FormRequest
             'is_active' => 'nullable|boolean',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'usage_limit' => 'nullable|integer|min:1',
         ];
     }
 
@@ -61,6 +62,9 @@ class VoucherRequest extends FormRequest
             'end_date.required' => 'Vui lòng nhập ngày kết thúc.',
             'end_date.date' => 'Ngày kết thúc không hợp lệ.',
             'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+
+            'usage_limit.integer' => 'Giới hạn số lượng dùng phải là số nguyên.',
+            'usage_limit.min' => 'Giới hạn số lượng dùng phải lớn hơn hoặc bằng 1.',
         ];
     }
 }
