@@ -1213,59 +1213,183 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.add-to-cart-form').on('submit', function(event) {
-                event.preventDefault(); // Ngăn chặn tải lại trang
+        document.addEventListener('DOMContentLoaded', function() {
+            let priceOrder = document.getElementById('total_price').value;
+            console.log(priceOrder);
 
-                const form = $(this); // Lấy form hiện tại đang được submit
-
-                $.ajax({
-                    url: form.attr('action'),
-                    type: 'POST',
-                    data: form.serialize(),
-                    success: function(response) {
-                        if (response.success) {
-                            updateCartCount();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thành công!',
-                                text: response.message ||
-                                    'Sản phẩm đã được thêm vào giỏ hàng!',
-                                confirmButtonText: 'OK'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Có lỗi xảy ra!',
-                                text: response.message || 'Xin vui lòng thử lại!',
-                                confirmButtonText: 'OK'
-                            });
+            fetch('/api/available-vouchers')
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    const datalist = document.getElementById('voucher-list');
+                    data.forEach(voucher => {
+                        if (voucher.minimum_order_value <= priceOrder) {
+                            const option = document.createElement('option');
+                            option.value = voucher.code;
+                            option.text =
+                                `Giảm (${voucher.discount_type === 'percentage' ? voucher.discount_value + '%' : voucher.discount_value*1000 + 'đ'})`;
+                            datalist.appendChild(option);
                         }
-                    },
-                    error: function(xhr) {
-                        console.error('Error:', xhr);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Có lỗi xảy ra!',
-                            text: 'Xin vui lòng thử lại!',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            });
+                    });
+                })
+                .catch(error => console.error('Error loading vouchers:', error));
+        });
 
-            function updateCartCount() {
-                $.ajax({
-                    url: '/cart/count', // Thay đổi đường dẫn này
-                    type: 'GET',
-                    success: function(data) {
-                        $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+        document.querySelector('.coupon-btn').addEventListener('click', function() {
+            const code = document.getElementById('coupon-code').value;
+            let priceOrder = document.getElementById('total_price_old').value;
+
+            fetch('/apply-coupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
                     },
-                    error: function(xhr) {
-                        console.error('Error:', xhr);
+                    body: JSON.stringify({
+                        code: code,
+                        order_total: priceOrder
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let discountItem = document.querySelectorAll('.discount');
+                        let totalPriceItem = document.querySelectorAll('.total_price');
+                        let totalPrice = document.getElementById('total_price_old').value;
+                        // console.log(discount);
+                        discountItem.forEach((item) => {
+                            let dis = data.discount * 1000
+                            item.textContent = `-${dis.toLocaleString('de-DE')}`
+                        });
+                        totalPriceItem.forEach((item) => {
+                            let dis = (totalPrice - data.discount) * 1000
+                            item.textContent = `${dis.toLocaleString('de-DE')}₫`
+                        });
+
+                        document.getElementById('discount').value = data.discount;
+                        document.getElementById('voucher_id').value = data.voucher_id;
+                        document.getElementById('total_price').value = totalPrice - data.discount;
+                        // discount.innerHTML = data.discount;
+                        // console.log(`Giảm giá: ${data.voucher}`);
+                    } else {
+                        alert(data.message);
                     }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    <script>
+    var isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const wishlistLinks = document.querySelectorAll('.wishlist');
+        const wishlistCountElement = document.getElementById('wishlist-count');
+
+        wishlistLinks.forEach(wishlistLink => {
+            const productId = wishlistLink.getAttribute('data-product-id');
+            let isFavorite = wishlistLink.classList.contains('active');
+
+            // Thêm sự kiện click vào wishlist link
+            wishlistLink.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (!isLoggedIn) {
+                    // Chuyển hướng sang trang đăng nhập nếu chưa đăng nhập
+                    window.location.href = '/login';
+                    return;
+                }
+                const url = isFavorite ? `/wishlist/remove/${productId}` :
+                    `/wishlist/add/${productId}`;
+                const method = isFavorite ? 'DELETE' : 'POST';
+
+                fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector(
+                                'meta[name="csrf-token"]').getAttribute('content'),
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            isFavorite = !isFavorite; // Đổi trạng thái yêu thích
+
+                            // Toggle giữa biểu tượng viền và đổ đầy
+                            const heartOutline = wishlistLink.querySelector('.anm-heart-l');
+                            const heartFill = wishlistLink.querySelector('.bi-heart-fill');
+
+                            if (isFavorite) {
+                                wishlistLink.classList.add('active');
+                                heartOutline.classList.add('d-none');
+                                heartFill.classList.remove('d-none');
+                                updateWishlistCount(1);
+                            } else {
+                                wishlistLink.classList.remove('active');
+                                heartOutline.classList.remove('d-none');
+                                heartFill.classList.add('d-none');
+                                updateWishlistCount(-1);
+                            }
+                        } else {
+                            alert('Lỗi: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                    });
+            });
+        });
+
+        function updateWishlistCount(change) {
+            let currentCount = parseInt(wishlistCountElement.textContent) || 0;
+            currentCount += change;
+            wishlistCountElement.textContent = currentCount;
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function() {
+    $('.add-to-cart-form').on('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn tải lại trang
+
+        const form = $(this); // Lấy form hiện tại đang được submit
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    updateCartCount();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Có lỗi xảy ra!',
+                        text: response.message || 'Xin vui lòng thử lại!',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Có lỗi xảy ra!',
+                    text: 'Xin vui lòng thử lại!',
+                    confirmButtonText: 'OK'
                 });
             }
         });
-    </script>
+    });
+
+});
+
+</script>
 @endsection
