@@ -1348,48 +1348,7 @@
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script>
-    $(document).ready(function() {
-    $('.add-to-cart-form').on('submit', function(event) {
-        event.preventDefault(); // Ngăn chặn tải lại trang
 
-        const form = $(this); // Lấy form hiện tại đang được submit
-
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            success: function(response) {
-                if (response.success) {
-                    updateCartCount();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công!',
-                        text: response.message || 'Sản phẩm đã được thêm vào giỏ hàng!',
-                        confirmButtonText: 'OK'
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Có lỗi xảy ra!',
-                        text: response.message || 'Xin vui lòng thử lại!',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            },
-            error: function(xhr) {
-                console.error('Error:', xhr);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Có lỗi xảy ra!',
-                    text: 'Xin vui lòng thử lại!',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-    });
-
-});
 
 </script>
 @endsection
