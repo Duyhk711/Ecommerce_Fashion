@@ -93,11 +93,11 @@
                     <div class="form-group mb-3">
                         <label for="minimum_order_value" class="required-label">Giá trị đơn hàng tối thiểu</label>
                         <input type="number" name="minimum_order_value" class="form-control" id="minimum_order_value"
-                            placeholder="Nhập giá trị tối thiểu" value="{{ old('minimum_order_value') }}" min="0">
+                            placeholder="( Lưu ý: Giá trị nhập sẽ được tự động nhân *1000 Đơn vị: VND. )" value="{{ old('minimum_order_value') }}" min="0">
                         @if ($errors->has('minimum_order_value'))
                             <span class="text-danger">{{ $errors->first('minimum_order_value') }}</span>
                         @endif
-                        <small class="form-text text-muted">( Lưu ý: Giá trị nhập sẽ được tự động nhân *1000 Đơn vị: VND. )</small>
+
                     </div>
 
 
@@ -162,7 +162,7 @@
         var submitButton = document.getElementById('submitButton');
         submitButton.disabled = true;
         submitButton.setAttribute('data-original-text', submitButton.innerHTML);
-        submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...'; 
+        submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
          });
         function toggleDiscountValueField() {
             var discountValueContainer = document.getElementById('discount_value_container');
