@@ -1212,6 +1212,18 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    @if($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: '{{ $errors->first() }}', // Lấy lỗi đầu tiên
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
     <script>
         $(document).ready(function() {
             $('.add-to-cart-form').on('submit', function(event) {
