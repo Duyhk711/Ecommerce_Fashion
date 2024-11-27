@@ -13,7 +13,7 @@ class VoucherService
 {
     public function getAllVouchers()
     {
-        return Voucher::all();
+        return Voucher::orderBy("created_at", "desc")->get();
     }
 
     public function storeVoucher(array $data)
@@ -38,27 +38,27 @@ class VoucherService
     }
 
     public function updateVoucher(Voucher $voucher, array $data)
-{
-    // Kiểm tra trùng lặp mã, nhưng loại trừ mã hiện tại
-    $existingVoucher = Voucher::where('code', $data['code'])
-        ->where('id', '!=', $voucher->id) // Đảm bảo không kiểm tra chính nó
-        ->first();
+    {
+        // Kiểm tra trùng lặp mã, nhưng loại trừ mã hiện tại
+        $existingVoucher = Voucher::where('code', $data['code'])
+            ->where('id', '!=', $voucher->id) // Đảm bảo không kiểm tra chính nó
+            ->first();
 
-    if ($existingVoucher) {
-        throw new \Exception('Mã giảm giá đã tồn tại.');
+        if ($existingVoucher) {
+            throw new \Exception('Mã giảm giá đã tồn tại.');
+        }
+
+        return $voucher->update([
+            'code' => $data['code'],
+            'discount_type' => $data['discount_type'],
+            'discount_value' => $data['discount_value'],
+            'description' => $data['description'],
+            'minimum_order_value' => $data['minimum_order_value'],
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'quantity' => $data['quantity'] ?? $voucher->quantity,
+        ]);
     }
-
-    return $voucher->update([
-        'code' => $data['code'],
-        'discount_type' => $data['discount_type'],
-        'discount_value' => $data['discount_value'],
-        'description' => $data['description'],
-        'minimum_order_value' => $data['minimum_order_value'],
-        'start_date' => $data['start_date'],
-        'end_date' => $data['end_date'],
-        'quantity' => $data['quantity'] ?? $voucher->quantity,
-    ]);
-}
 
 
     public function deleteVoucher(Voucher $voucher)

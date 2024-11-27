@@ -43,7 +43,7 @@ class VoucherController extends Controller
         }
         $voucher = $this->voucherService->storeVoucher($data);
         $this->voucherService->sendNewVoucherNotification($voucher);
-        return redirect()->route('admin.vouchers.create')->with('success', 'Voucher mới đã được tạo thành công.');
+        return redirect()->route('admin.vouchers.index')->with('success', 'Voucher mới đã được tạo thành công.');
     }
 
     public function edit(Voucher $voucher)
