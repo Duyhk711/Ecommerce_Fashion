@@ -121,9 +121,10 @@
                     </div>
                     <div class="block-content block-content-full ">
                         <!-- Table with data -->
-                        <table id="productTable" class="table  align-middle js-dataTable-full">
+                        <table id="" class="table  align-middle ">
                             <thead>
                                 <tr>
+                                    <th class="text-center">STT</th>
                                     <th class="text-center">Tên sản phẩm</th>
                                     <th class="text-center">Giá</th>
                                     <th class="text-center">Số lượng</th>
@@ -133,12 +134,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($products as $product)
+                                @foreach ($products as $index => $product)
                                     <tr>
+                                        <td>{{ ($products->currentPage() - 1) * $products->perPage() + $index + 1 }}</td>
                                         <td class="fs-sm">
-                                            <div class="d-flex align-items-center" style="max-width: 70%">
+                                            <div class="d-flex align-items-center" >
                                                 <!-- Hình ảnh -->
-                                                <div class="image-container" style="width: 60px; height: height: 100%;; position: relative;">
+                                                <div class="image-container" style="width: 60px; height: height: 100%; position: relative;">
                                                     <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm" class="img-thumbnail">
                                                     <div class="overlay">
                                                         <i class="fa fa-eye eye-icon"></i>
@@ -218,11 +220,12 @@
                                     </tr>
                                     <!-- Hàng thứ hai chứa nội dung mở rộng -->
                                     <tr class="product-row">
-                                        <td colspan="6" class="content-row">
+                                        <td colspan="7" class="content-row">
                                             <div class="row mb-2">
+                                                <div class="col-1"></div>
                                                 <div class="col-3 text-muted fs-sm">Tổng mặt hàng: {{ $product->variant_count }}
                                                 </div>
-                                                <div class="col-6"></div>
+                                                <div class="col-5"></div>
                                                 <div class="col-3 text-end">
                                                     <a href="#" class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
                                                         style="font-weight: 400;" data-target="#content-{{ $product->id }}"
@@ -360,7 +363,7 @@
 
                     <div class="block-content block-content-full">
                         <!-- Table with data -->
-                        <table id="productTable" class="table  table-striped align-middle js-dataTable-full">
+                        <table id="" class="table table-striped align-middle ">
                             <thead>
                                 <tr>
                                     <th class="text-center">Tên sản phẩm</th>
@@ -583,17 +586,16 @@
 
 @section('js')
     <!-- Nhúng jQuery từ CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
- {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#productTable').DataTable();
         });
-    </script>
+    </script> --}}
 
     <script>
         $(document).ready(function() {
