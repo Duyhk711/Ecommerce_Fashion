@@ -919,7 +919,7 @@
                         // console.log(discount);
                         discountItem.forEach((item) => {
                             let dis = data.discount * 1000
-                            item.textContent = `-${dis.toLocaleString('de-DE')}`
+                            item.textContent = `${dis.toLocaleString('de-DE')}₫`
                         });
                         totalPriceItem.forEach((item) => {
                             let dis = (totalPrice - data.discount) * 1000

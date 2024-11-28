@@ -222,7 +222,7 @@
                 <div class="col-xl-6">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm đánh giá cao nhất trong tháng</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm đánh giá cao nhất trong tuần</h4>
                             <div class="flex-shrink-0">
                             </div>
                         </div><!-- end card header -->

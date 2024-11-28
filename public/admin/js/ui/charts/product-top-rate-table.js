@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const storageUrl = document.querySelector('meta[name="storage-url"]').getAttribute("content");
-  fetch("/api/products/top-rated?filter=this_month")
+  fetch("/api/products/top-rated?filter=last_7_days")
     .then((response) => response.json())
     .then((data) => {
       const tableProductTopRate = document.getElementById("products-top-rate");
