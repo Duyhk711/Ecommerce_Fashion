@@ -75,11 +75,11 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Sửa"
+                                        <a class="btn btn-sm btn-alt-secondary me-1" data-bs-toggle="tooltip" title="Sửa"
                                             href="{{ route('admin.users.staffs.edit', $user) }}">
                                             <i class="fa fa-fw fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('admin.users.active', $user) }}" method="POST"
+                                        {{-- <form action="{{ route('admin.users.active', $user) }}" method="POST"
                                             style="display:inline;" class="form-activate">
                                             @csrf
 
@@ -88,7 +88,7 @@
                                                 title="{{ $user->is_active == 1 ? 'Deactivate' : 'Activate' }}">
                                                 <i class="fa-solid fa-power-off"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                         <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
                                             title="Quickly edit roles"
                                             href="{{ route('admin.users.staffs.edit', $user) }}">

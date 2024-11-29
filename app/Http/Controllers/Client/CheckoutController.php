@@ -152,7 +152,7 @@ class CheckoutController extends Controller
                         DB::rollBack();
 
                         return redirect()->route('home')
-                            ->withErrors(["error" => "Sản phẩm '{$product->product_name}' không đủ hàng."]);
+                            ->withErrors(["error" => "Sản phẩm {$product->product_name} không đủ hàng."]);
                     }
                     $orderItem = new OrderItem();
                     $orderItem->order_id = $order->id;
