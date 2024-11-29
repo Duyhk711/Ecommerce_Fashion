@@ -86,7 +86,7 @@ Route::prefix('admin')
             Route::get('staffs/create', [UserController::class, 'createStaff'])->name('users.staffs.create');
             Route::post('staffs/store', [UserController::class, 'storeStaff'])->name('users.staffs.store');
             Route::get('staffs/{user}/edit', [UserController::class, 'editStaff'])->name('users.staffs.edit');
-            Route::get('staffs/{user}/update', [UserController::class, 'editStaff'])->name('users.staffs.update');
+            Route::put('staffs/{user}/update', [UserController::class, 'updateStaff'])->name('users.staffs.update');
             Route::post('/user/{user}/active', [UserController::class, 'active'])->name('users.active');
 
             // Role
