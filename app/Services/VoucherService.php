@@ -13,7 +13,7 @@ class VoucherService
 {
     public function getAllVouchers()
     {
-        return Voucher::all();
+        return Voucher::orderBy('created_at', 'desc')->get();
     }
 
     public function storeVoucher(array $data)

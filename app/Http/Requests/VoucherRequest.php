@@ -29,9 +29,9 @@ class VoucherRequest extends FormRequest
             'is_active' => 'nullable|boolean',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'usage_limit' => 'nullable|integer|min:1',
         ];
     }
-
 
     // Hàm để cung cấp các thông báo lỗi tùy chỉnh
     public function messages()
@@ -42,10 +42,19 @@ class VoucherRequest extends FormRequest
             'code.max' => 'Mã voucher không được vượt quá :max ký tự.',
 
             'discount_type.required' => 'Vui lòng chọn kiểu giảm giá.',
-            'discount_type.in' => 'Kiểu giảm giá không hợp lệ, chỉ chấp nhận "percentage" hoặc "amount".',
+            'discount_type.in' => 'Kiểu giảm giá không hợp lệ, chỉ chấp nhận "percentage" hoặc "fixed".',
 
             'discount_value.required' => 'Vui lòng nhập giá trị giảm.',
             'discount_value.numeric' => 'Giá trị giảm phải là một số.',
+
+            'minimum_order_value.required' => 'Vui lòng nhập giá trị đơn hàng tối thiểu.',
+            'minimum_order_value.numeric' => 'Giá trị đơn hàng tối thiểu phải là một số.',
+
+            'quantity.required' => 'Vui lòng nhập số lượng.',
+            'quantity.integer' => 'Số lượng phải là một số nguyên.',
+
+            'description.required' => 'Vui lòng nhập mô tả.',
+            'description.string' => 'Mô tả phải là chuỗi ký tự.',
 
             'start_date.required' => 'Vui lòng nhập ngày bắt đầu.',
             'start_date.date' => 'Ngày bắt đầu không hợp lệ.',
@@ -53,6 +62,9 @@ class VoucherRequest extends FormRequest
             'end_date.required' => 'Vui lòng nhập ngày kết thúc.',
             'end_date.date' => 'Ngày kết thúc không hợp lệ.',
             'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+
+            'usage_limit.integer' => 'Giới hạn số lượng dùng phải là số nguyên.',
+            'usage_limit.min' => 'Giới hạn số lượng dùng phải lớn hơn hoặc bằng 1.',
         ];
     }
 }
