@@ -99,7 +99,7 @@ class OrderController extends Controller
         // Kiểm tra trạng thái và thêm thông báo tương ứng
         switch ($order->status) {
             case 1:
-                $statusMessage = "đang chờ xác nhận";
+                $statusMessage = "Đơn hàng đã đặt thành công, đang chờ xác nhận từ cửa hàng";
                 break;
             case 2:
                 $statusMessage = "đã được xác nhận và đang chờ giao cho đơn vị vận chuyển";

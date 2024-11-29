@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Comment;
 use App\Models\OrderStatusChange;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\OrderStatusUpdated;
 
 
 class MyOrderService
@@ -68,6 +69,11 @@ class MyOrderService
         $oldStatus = $order->status;
         // Cập nhật trạng thái đơn hàng thành "Đã hủy"
         $order->status = 'huy_don_hang';
+
+        $user = $order->user;
+        $message = "Đơn hàng <strong>{$order->sku}</strong> đã bị huỷ";
+        $title = "Cập nhật đơn hàng";
+        $user->notify(new OrderStatusUpdated($order, $message, $title));
         $order->save();
 
         OrderStatusChange::create([
