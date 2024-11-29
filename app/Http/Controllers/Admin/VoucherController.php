@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\VoucherRequest;
+use App\Models\User;
 use App\Models\Voucher;
 use App\Services\VoucherService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\VoucherRequest;
+use App\Notifications\NewVoucherNotification;
 
 class VoucherController extends Controller
 {
@@ -29,60 +32,73 @@ class VoucherController extends Controller
     }
 
     public function store(VoucherRequest $request)
-{
-    $data = $request->validated();
-    $data['usage_limit'] = $data['usage_limit'] ?? null;
-    if (Voucher::where('code', $data['code'])->exists()) {
-        return redirect()
-            ->back()
-            ->withErrors(['code' => 'Mã giảm giá này đã tồn tại.'])
-            ->withInput();
-    }
-    if (
-        isset($data['minimum_order_value']) &&
-        $data['discount_value'] > $data['minimum_order_value']
-    ) {
-        return redirect()
-            ->back()
-            ->withErrors([
-                'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
-            ])
-            ->withInput();
-    }
-    if (
-        $data['discount_type'] === 'percentage' &&
-        $data['discount_value'] > 20
-    ) {
-        return redirect()
-            ->back()
-            ->withErrors([
-                'discount_value' => 'Giảm giá phần trăm tối đa là 20%.',
-            ])
-            ->withInput();
-    }
-    if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
-        return redirect()
-            ->back()
-            ->withErrors([
-                'end_date' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.',
-            ])
-            ->withInput();
-    }
+    {
+        try {
+            $data = $request->validated();
+            $data['usage_limit'] = $data['usage_limit'] ?? null;
+            if (Voucher::where('code', $data['code'])->exists()) {
+                return redirect()
+                    ->back()
+                    ->withErrors(['code' => 'Mã giảm giá này đã tồn tại.'])
+                    ->withInput();
+            }
+            if (
+                isset($data['minimum_order_value']) &&
+                $data['discount_value'] > $data['minimum_order_value']
+            ) {
+                return redirect()
+                    ->back()
+                    ->withErrors([
+                        'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
+                    ])
+                    ->withInput();
+            }
+            if (
+                $data['discount_type'] === 'percentage' &&
+                $data['discount_value'] > 20
+            ) {
+                return redirect()
+                    ->back()
+                    ->withErrors([
+                        'discount_value' => 'Giảm giá phần trăm tối đa là 20%.',
+                    ])
+                    ->withInput();
+            }
+            if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
+                return redirect()
+                    ->back()
+                    ->withErrors([
+                        'end_date' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.',
+                    ])
+                    ->withInput();
+            }
 
-    try {
-        $voucher = $this->voucherService->storeVoucher($data);
-        $this->voucherService->sendNewVoucherNotification($voucher);
+            $voucher = $this->voucherService->storeVoucher($data);
+            $this->voucherService->sendNewVoucherNotification($voucher);
 
-        return redirect()
-            ->route('admin.vouchers.create')
-            ->with('success', 'Voucher mới đã được tạo thành công.');
-    } catch (\Exception $e) {
-        return redirect()
-            ->back()
-            ->withErrors(['general' => 'Có lỗi xảy ra. Vui lòng thử lại sau.'])
-            ->withInput();
+            $users = User::all(); // Hoặc filter user theo tiêu chí cụ thể
+            $message = "Mã giảm giá mới <strong>{$voucher->code}</strong> giảm {$voucher->discount_value}";
+                if ($voucher->discount_type == 'fixed') {
+                    $message .= "K cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
+                } elseif ($voucher->discount_type == 'percentage') {
+                    $message .= "% cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
+                }
+            $title = "Bạn đã nhận được voucher mới";
+            foreach ($users as $user) {
+                $user->notify(new NewVoucherNotification($voucher, $message, $title));
+            }
+
+            return redirect()
+                ->route('admin.vouchers.index')
+                ->with('success', 'Voucher mới đã được tạo thành công.');
+        } catch (\Exception $e) {
+            // Log::error('Error sending notification: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->withErrors(['general' => 'Có lỗi xảy ra. Vui lòng thử lại sau.'])
+                ->withInput();
+        }
     }
-}
 
 
     public function edit(Voucher $voucher)
@@ -120,5 +136,4 @@ class VoucherController extends Controller
         $this->voucherService->toggleDeactiveStatus($voucher);
         return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
     }
-
 }

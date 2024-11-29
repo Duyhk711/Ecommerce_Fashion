@@ -7,6 +7,7 @@ use App\Events\OrderUpdated;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 use App\Http\Controllers\Controller;
+use App\Notifications\OrderStatusUpdated;
 
 class OrderController extends Controller
 {
@@ -90,7 +91,38 @@ class OrderController extends Controller
     {
        try {
         $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+        $user = $order->user;
 
+        // In đậm SKU
+        $message = "Đơn hàng <strong>{$order->sku}</strong> ";
+
+        // Kiểm tra trạng thái và thêm thông báo tương ứng
+        switch ($order->status) {
+            case 1:
+                $statusMessage = "đang chờ xác nhận";
+                break;
+            case 2:
+                $statusMessage = "đã được xác nhận và đang chờ giao cho đơn vị vận chuyển";
+                break;
+            case 3:
+                $statusMessage = "đang trên đường giao tới bạn";
+                break;
+            case 4:
+                $statusMessage = "đã giao thành công";
+                break;
+            case 'huy_don_hang':
+                $statusMessage = "đã bị hủy";
+                break;
+            default:
+                $statusMessage = "trạng thái không xác định";
+                break;
+        }
+
+        // Thêm trạng thái vào thông báo
+        $message .= $statusMessage . ".";
+
+        $title = "Cập nhật đơn hàng";
+        $user->notify(new OrderStatusUpdated($order, $message, $title));
         broadcast(new OrderUpdated($order))->toOthers();
 
         return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <title>@yield('title')</title>
-
+    <meta name="storage-url" content="{{ Storage::url('') }}">
     <meta name="description"
         content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
     <meta name="author" content="pixelcave">
@@ -678,7 +678,6 @@
             @if (session('success'))
                 toastr.success(
                     '{{ session('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    success ') }}',
                     'Thành công', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
@@ -688,7 +687,6 @@
             @if (session('error'))
                 toastr.error(
                     '{{ session('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                error ') }}',
                     'Lỗi', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000

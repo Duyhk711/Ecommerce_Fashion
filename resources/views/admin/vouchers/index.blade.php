@@ -67,8 +67,8 @@
                         <tr>
                             <th class="text-center">STT</th>
                             <th class="text-center">Mã</th>
-                            <th class="text-center">Giá trị giảm</th>
-                            <th class="text-center">Giá trị đơn hàng tối thiểu</th>
+                            <th class="text-center">Giá trị</th>
+                            <th class="text-center">Giá trị tối thiểu</th>
                             <th class="text-center">Số lượng</th>
                             <th class="text-center">Mô tả</th>
                             <th class="text-center">Trạng thái</th>
@@ -82,12 +82,12 @@
                                 <td class="text-center">{{ $voucher->code }}</td>
                                 <td class="text-center">
                                     @if($voucher->discount_type == 'fixed')
-                                        {{ number_format($voucher->discount_value, 3, '.') }} ₫
+                                        {{ number_format($voucher->discount_value*1000 , 0, '.', '.') }} ₫
                                     @else
                                         {{ $voucher->discount_value }} %
                                     @endif
                                 </td>
-                                <td class="text-center">{{ number_format($voucher->minimum_order_value * 1000, 0, '.', ',') }} ₫</td>
+                                <td class="text-center">{{ number_format($voucher->minimum_order_value * 1000, 0, '.', '.') }} ₫</td>
                                 <td class="text-center">{{ $voucher->quantity }}</td>
                                 <td class="text-center">{{ $voucher->description }}</td>
                                 <td class="text-center">
