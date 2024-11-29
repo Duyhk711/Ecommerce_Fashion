@@ -125,9 +125,12 @@ class VouchersController extends Controller
             ->with('voucher')
             ->get();
 
-        if ($userVouchers->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Không có voucher nào đã lưu.']);
-        }
+            if ($userVouchers->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn chưa lưu mã giảm giá nào.'
+                ]);
+            }
 
         return response()->json([
             'success' => true,
