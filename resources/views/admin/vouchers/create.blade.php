@@ -70,6 +70,7 @@
                             {{ $errors->first('general') }}
                         </div>
                     @endif
+                    <input type="hidden" name="is_active" value="0">
                     <div class="form-group mb-3">
                         <label for="code" class="required-label">Mã Voucher</label>
                         <input type="text" name="code" class="form-control" id="code"
@@ -150,7 +151,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="submitButton" data-original-text="Lưu">Lưu</button>
+                    <button type="submit" class="btn btn-primary mb-3" id="submitButton" data-original-text="Lưu">Lưu</button>
 
                 </form>
             </div>

@@ -70,18 +70,18 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="discount_value">Giá trị giảm</label>
-                        <input type="number" name="discount_value" class="form-control" id="discount_value" placeholder="Nhập giá trị giảm" value="{{ old('discount_value', $voucher->discount_value) }}" min="1" required>
-                        @if($errors->has('discount_value'))
-                            <span class="text-danger">{{ $errors->first('discount_value') }}</span>
-                        @endif
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label for="minimum_order_value">Giá trị đơn hàng tối thiểu</label>
                         <input type="number" name="minimum_order_value" class="form-control" id="minimum_order_value" placeholder="Nhập giá trị tối thiểu" value="{{ old('minimum_order_value', $voucher->minimum_order_value) }}" min="0">
                         @if($errors->has('minimum_order_value'))
                             <span class="text-danger">{{ $errors->first('minimum_order_value') }}</span>
+                        @endif
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="discount_value">Giá trị giảm</label>
+                        <input type="number" name="discount_value" class="form-control" id="discount_value" placeholder="Nhập giá trị giảm" value="{{ old('discount_value', $voucher->discount_value) }}" min="1" required>
+                        @if($errors->has('discount_value'))
+                            <span class="text-danger">{{ $errors->first('discount_value') }}</span>
                         @endif
                     </div>
 

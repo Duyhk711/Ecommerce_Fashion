@@ -33,7 +33,8 @@ class VoucherService
             'description' => $data['description'],
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
-            'quantity' => $data['quantity'] ?? 0, // Thêm trường số lượng, mặc định là 0 nếu không có
+            'quantity' => $data['quantity'] ?? 0,
+            'is_active' => $data['is_active'],
         ]);
     }
 

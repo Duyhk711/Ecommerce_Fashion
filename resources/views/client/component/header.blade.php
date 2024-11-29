@@ -184,19 +184,55 @@
                          </span>
                      </a>
                  </div>
-                 <div class="wishlist-link iconset" title="Wishlist">
-                     <a href="{{ route('my.wishlist') }}">
-                        <i class="hdr-icon icon anm bi-bell fs-5"></i>
-                     </a>
-                     <span class="wishlist-count" id="wishlist-count">
-                        @auth
-                            {{ \App\Models\Favorite::where('user_id', auth()->id())->count() }}
-                        @else
-                            0
-                        @endauth
-                    </span>
-                 </div>
-                 <!--End Wishlist-->
+                 <div class="notify-parent iconset">
+                    <div class="notification-bell" title="Thông báo">
+                        <a href="#" class="bell-link">
+                            <i class="hdr-icon icon anm bi-bell fs-5"></i>
+                            <span class="wishlist-count" id="wishlist-count">
+                                <span class="notification-count">
+                                    @if(auth()->check()) 
+                                        {{ auth()->user()->unreadNotifications->count() }}
+                                    @else
+                                        0
+                                    @endif
+                                </span>
+                            </span>
+                        </a>
+                        <div id="notifyBox">
+                            <style>
+                                .read{
+                                    background-color: #ffffff;
+                                }
+                                .unread{
+                                    background-color: bisque;
+                                }
+                            </style>
+                            <ul class="m-0" id="notification-list">
+                                <li class="mb-2"><strong>Thông báo</strong></li>
+
+                                @if(auth()->check())
+                                    @if(auth()->user()->notifications->count() > 0)
+                                        @foreach(auth()->user()->notifications as $notification)
+                                            <li class="{{ $notification->read_at ? 'read' : 'unread' }} px-2 mb-2" data-id="{{ $notification->id }}">
+                                                <strong style="font-family: 'Quicksand', sans-serif">{{ $notification->data['title'] }}</strong><br>
+                                                <a href="{{ $notification->data['link'] }}" class="mark-as-read" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
+                                                    {!! $notification->data['message'] !!}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
+                                    @endif
+                                @else
+                                    <li>Vui lòng đăng nhập để xem thông báo</li> <!-- Nếu chưa đăng nhập -->
+                                @endif
+                            </ul>
+                            <div id="loading" style="display: none;">Đang tải thêm...</div> <!-- Hiển thị khi đang tải -->
+                        </div>
+                    </div>
+                </div>
+
+                 <!--End notify-->
                  <!--Minicart-->
                  <div class="header-cart iconset" title="Cart">
                      <a href="{{ route('cart.show') }}" class="header-cart btn-minicart clr-none"><i
@@ -573,3 +609,86 @@
      </ul>
  </div>
  <!--End Mobile Menu-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.mark-as-read');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.dataset.url; // URL để đánh dấu đã đọc
+                const redirectLink = this.getAttribute('href'); // URL của thông báo
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    },
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = redirectLink; // Chuyển trang sau khi đánh dấu
+                    }
+                });
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const notificationList = document.getElementById('notifyBox');  // Bạn cần sử dụng đúng ID
+        const loading = document.getElementById('loading');
+        let page = 1;
+        let loadingData = false;
+        let hasNextPage = true; // Kiểm tra nếu còn trang kế tiếp
+
+        // Hàm tải thông báo
+        function loadNotifications() {
+            if (loadingData || !hasNextPage) return;
+            loadingData = true;
+            loading.style.display = 'block';
+
+            // Gọi API và tải dữ liệu
+            fetch(`/notifications?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    const notifications = data.data;
+                    if (notifications.length > 0) {
+                        notifications.forEach(notification => {
+                            const li = document.createElement('li');
+                            li.className = notification.read_at ? 'read px-2 mb-2' : 'unread px-2 mb-2';
+                            li.innerHTML = `
+                                <strong style="font-family: 'Quicksand', sans-serif">${notification.data.title}</strong><br>
+                                <a href="${notification.data.link}" class="mark-as-read" data-id="${notification.id}">
+                                    ${notification.data.message}
+                                </a>
+                            `;
+                            notificationList.appendChild(li);
+                        });
+                        page++;  // Tăng số trang lên mỗi lần tải
+                        hasNextPage = !!data.next_page_url;  // Kiểm tra xem có trang tiếp theo hay không
+                    } else {
+                        loading.innerText = 'Không còn thông báo nào';
+                    }
+                    loadingData = false;
+                    loading.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải thông báo:', error);
+                    loading.style.display = 'none';
+                    loadingData = false;
+                });
+        }
+
+        // Gọi loadNotifications lần đầu tiên
+        loadNotifications();
+
+        // Xử lý sự kiện scroll để tải thêm dữ liệu khi cuộn đến cuối
+        notificationList.addEventListener('scroll', () => {
+            if (notificationList.scrollTop + notificationList.clientHeight >= notificationList.scrollHeight) {
+                loadNotifications();
+            }
+        });
+    });
+
+</script>
