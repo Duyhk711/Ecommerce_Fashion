@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
@@ -54,6 +55,50 @@ class UserService
         }
         $user->save();
         if ($user) {
+            return true;
+        }
+        return false;
+    }
+    public function updateStaff(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $data = $request->except('avatar');
+        $data['avatar'] = '';
+        // if ($request->hasFile('avatar')) {
+        //     $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        //     $data['avatar'] = $avatarPath;
+        // }
+        if ($request->hasFile('avatar')) {
+            // Xóa ảnh bìa cũ nếu có
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            // Tải ảnh bìa mới lên
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            // $request->merge(['avatar' => $avatarPath]);
+
+            $user->avatar = $avatarPath;
+        }
+
+        // $user = new User();
+        $user->name = $request->input('name');
+        if ($user->email != $request->input('email')) {
+
+            $user->email = $request->input('email');
+        }
+        $user->phone = $request->input('phone');
+        if ($request->input('role') != '') {
+            $user->syncRoles($request->input('role'));
+        }
+        // dd($user, $request->all());
+        $user->save();
+        if ($user) {
+
             return true;
         }
         return false;

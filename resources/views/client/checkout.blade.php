@@ -273,8 +273,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-secondary me-1 btnPrevious">Back</button>
+                                <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-primary ms-1 btnNext">Next</button>
                                 </div>
                             </div>
@@ -381,7 +380,8 @@
                                 </div>
                                 <!--End Shipping Address-->
 
-                                <div class="d-flex justify-content-end">
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary me-1 btnPrevious">Back</button>
                                     <button type="button" class="btn btn-primary btnNext ms-1">Next</button>
                                 </div>
                             </div>

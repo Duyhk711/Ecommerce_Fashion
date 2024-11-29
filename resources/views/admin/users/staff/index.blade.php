@@ -90,7 +90,8 @@
                                             </button>
                                         </form>
                                         <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
-                                            title="Quickly edit roles" href="{{ route('admin.users.show', $user) }}">
+                                            title="Quickly edit roles"
+                                            href="{{ route('admin.users.staffs.edit', $user) }}">
                                             <i class="fa fa-fw fa-gear"></i>
                                         </a>
 
@@ -106,6 +107,40 @@
 
     </div>
     <!-- END Page Content -->
+@endsection
+@section('modal')
+    <div class="modal fade" id="updateRole" tabindex="-1" aria-labelledby="updateRoleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateRoleModalLabel">Cập Nhật Trạng Thái</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="updateRoleForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <input type="hidden" id="orderId" name="id">
+                        <div class="mb-3">
+                            <label for="statusSelect" class="form-label">Chọn trạng thái mới</label>
+                            <select id="statusSelect" class="form-select" name="status">
+                                <option value="1">Chờ xác nhận</option>
+                                <option value="2">Chờ vận chuyển</option>
+                                <option value="3">Đang vận chuyển</option>
+                                <option value="4">Hoàn thành</option>
+                                <option value="huy_don_hang">Hủy bỏ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
     <!-- Nhúng jQuery từ CDN -->

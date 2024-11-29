@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CatalogueRequest;
 use App\Models\Catalogue;
 use App\Services\CatalogueService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class CatalogueController extends Controller
@@ -79,7 +77,6 @@ class CatalogueController extends Controller
         return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được cập nhật thành công.');
     }
 
-
     public function destroy(Catalogue $catalogue)
     {
         // Delete cover image if exists
@@ -92,7 +89,6 @@ class CatalogueController extends Controller
     }
     public function activate(Catalogue $catalogue)
     {
-
 
         // Kích hoạt danh mục hiện tại
         $catalogue->is_active = true;
