@@ -135,6 +135,15 @@ class UserController extends Controller
         }
         return redirect()->back()->with('error', 'Lỗi.');
     }
+    public function updateStaff(AuthRequest $request, User $user)
+    {
+        // dd($user, $request->all());
+        $isRegistered = $this->userService->updateStaff($request, $user);
+        if ($isRegistered) {
+            return redirect()->route('admin.users.staffs')->with('success', 'Tạo mới thành công');
+        }
+        return redirect()->back()->with('error', 'Lỗi.');
+    }
 
     public function show(User $user)
     {

@@ -1,114 +1,9 @@
-/**
- * WEBSITE: https://themefisher.com
- * TWITTER: https://twitter.com/themefisher
- * FACEBOOK: https://www.facebook.com/themefisher
- * GITHUB: https://github.com/themefisher/
- */
-
-/* ====== Index ======
-1. SPLINA AREA CHART 01
-2. SPLINA AREA CHART 02
-3. SPLINA AREA CHART 03
-4. SPLINA AREA CHART 04
-5. MIXED CHART 01
-6. RADIAL BAR CHART 01
-7.1 HORIZONTAL BAR CHART
-7.2 HORIZONTAL BAR CHART2
-8.1 TABLE SMALL BAR CHART 01
-8.2 TABLE SMALL BAR CHART 02
-8.3 TABLE SMALL BAR CHART 03
-8.4 TABLE SMALL BAR CHART 04
-8.5 TABLE SMALL BAR CHART 05
-8.6 TABLE SMALL BAR CHART 06
-8.7 TABLE SMALL BAR CHART 07
-8.8 TABLE SMALL BAR CHART 08
-8.9 TABLE SMALL BAR CHART 09
-8.10 TABLE SMALL BAR CHART 10
-8.11 TABLE SMALL BAR CHART 11
-8.12 TABLE SMALL BAR CHART 12
-8.13 TABLE SMALL BAR CHART 13
-8.14 TABLE SMALL BAR CHART 14
-8.15 TABLE SMALL BAR CHART 15
-9.1 STATUS SMALL BAR CHART 01
-9.2 STATUS SMALL BAR CHART 02
-9.3 STATUS SMALL BAR CHART 03
-10.1 LINE CHART 01
-10.2 LINE CHART 02
-10.3 LINE CHART 03
-10.4 LINE CHART 04
-11.1 BAR CHART LARGE 01
-11.2 BAR CHART LARGE 02
-12.1 DONUT CHART 01
-12.2 DONUT CHART 02
-13. PIE CHART
-14. RADER CHART
-15.1 ARIA CHART 01
-
-====== End ======*/
 
 "use strict";
 
 /*======== 1. SPLINA AREA CHART 01 ========*/
 var splinaArea1 = document.querySelector("#spline-area-1");
-if (splinaArea1 !== null) {
-  var splinaAreaOptions1 = {
-    chart: {
-      id: "spline-area-1",
-      group: "social",
-      height: 135,
-      width: "100%",
-      background: "#fd5190",
-      type: "area",
-      sparkline: {
-        enabled: true,
-      },
-    },
-    yaxis: {
-      labels: {
-        minWidth: 40,
-      },
-    },
-    stroke: {
-      width: 2,
-    },
-    colors: ["rgba(255, 255, 255, .6)"],
-    fill: {
-      type: "gradient",
-      gradient: {
-        shade: "light",
-        shadeIntensity: 1,
-        opacityFrom: 0.3,
-        opacityTo: 0.3,
-        stops: [0, 50, 100],
-      },
-    },
 
-    tooltip: {
-      theme: "dark",
-      marker: {
-        show: false,
-      },
-      x: {
-        show: false,
-      },
-      y: {
-        title: {
-          formatter: function () {
-            return "";
-          },
-        },
-      },
-    },
-
-    series: [
-      {
-        data: [0, 15, 18, 20, 16, 17, 23, 17, 25],
-      },
-    ],
-  };
-  var randerSplinaArea1 = new ApexCharts(splinaArea1, splinaAreaOptions1);
-  randerSplinaArea1.render();
-}
 
 //   /*======== 2. SPLINA AREA CHART 02 ========*/
 var splinaArea2 = document.querySelector("#spline-area-2");
@@ -3591,16 +3486,6 @@ proto.enableTransition = function(/* style */) {
     return;
   }
 
-  // make `transition: foo, bar, baz` from style object
-  // HACK un-comment this when enableTransition can work
-  // while a transition is happening
-  // var transitionValues = [];
-  // for ( var prop in style ) {
-  //   // dash-ify camelCased properties like WebkitTransition
-  //   prop = vendorProperties[ prop ] || prop;
-  //   transitionValues.push( toDashedAll( prop ) );
-  // }
-  // munge number to millisecond, to match stagger
   var duration = this.layout.options.transitionDuration;
   duration = typeof duration == 'number' ? duration + 'ms' : duration;
   // enable transition styles
@@ -3811,11 +3696,7 @@ return Item;
 
 }));
 
-/*!
- * Outlayer v2.1.1
- * the brains and guts of a layout library
- * MIT license
- */
+
 
 ( function( window, factory ) {
   'use strict';
@@ -4875,10 +4756,7 @@ return Item;
 
   var proto = LayoutMode.prototype;
 
-  /**
-   * some methods should just defer to default Outlayer method
-   * and reference the Isotope instance as `this`
-  **/
+  
   var facadeMethods = [
     '_resetLayout',
     '_getItemLayoutPosition',
@@ -4901,8 +4779,7 @@ return Item;
   proto.needsVerticalResizeLayout = function() {
     // don't trigger if size did not change
     var size = getSize( this.isotope.element );
-    // check that this.size and size are there
-    // IE8 triggers resize on body size change, so they might not be
+   
     var hasSizes = this.isotope.size && size;
     return hasSizes && size.innerHeight != this.isotope.size.innerHeight;
   };
@@ -4921,11 +4798,6 @@ return Item;
     this.getSegmentSize( 'row', 'Height' );
   };
 
-  /**
-   * get columnWidth or rowHeight
-   * segment: 'column' or 'row'
-   * size 'Width' or 'Height'
-  **/
   proto.getSegmentSize = function( segment, size ) {
     var segmentName = segment + size;
     var outerSize = 'outer' + size;
@@ -4987,13 +4859,7 @@ return Item;
 
 }));
 
-/*!
- * Masonry v4.2.1
- * Cascading grid layout library
- * https://masonry.desandro.com
- * MIT License
- * by David DeSandro
- */
+
 
 ( function( window, factory ) {
   // universal module definition
@@ -5167,28 +5033,7 @@ return Item;
     };
   };
 
-  proto._manageStamp = function( stamp ) {
-    var stampSize = getSize( stamp );
-    var offset = this._getElementOffset( stamp );
-    // get the columns that this stamp affects
-    var isOriginLeft = this._getOption('originLeft');
-    var firstX = isOriginLeft ? offset.left : offset.right;
-    var lastX = firstX + stampSize.outerWidth;
-    var firstCol = Math.floor( firstX / this.columnWidth );
-    firstCol = Math.max( 0, firstCol );
-    var lastCol = Math.floor( lastX / this.columnWidth );
-    // lastCol should not go over if multiple of columnWidth #425
-    lastCol -= lastX % this.columnWidth ? 0 : 1;
-    lastCol = Math.min( this.cols - 1, lastCol );
-    // set colYs to bottom of the stamp
 
-    var isOriginTop = this._getOption('originTop');
-    var stampMaxY = ( isOriginTop ? offset.top : offset.bottom ) +
-      stampSize.outerHeight;
-    for ( var i = firstCol; i <= lastCol; i++ ) {
-      this.colYs[i] = Math.max( stampMaxY, this.colYs[i] );
-    }
-  };
 
   proto._getContainerSize = function() {
     this.maxY = Math.max.apply( Math, this.colYs );
@@ -5227,11 +5072,7 @@ return Item;
 
 }));
 
-/*!
- * Masonry layout mode
- * sub-classes Masonry
- * https://masonry.desandro.com
- */
+
 
 ( function( window, factory ) {
   // universal module definition
@@ -5426,15 +5267,6 @@ return Vertical;
 
 }));
 
-/*!
- * Isotope v3.0.6
- *
- * Licensed GPLv3 for open source use
- * or Isotope Commercial License for commercial use
- *
- * https://isotope.metafizzy.co
- * Copyright 2010-2018 Metafizzy
- */
 
 ( function( window, factory ) {
   // universal module definition
@@ -5614,7 +5446,7 @@ var trim = String.prototype.trim ?
     this._sort();
     this._layout();
   };
-  // alias to _init for main plugin method
+ 
   proto._init = proto.arrange;
 
   proto._hideReveal = function( filtered ) {
@@ -5622,9 +5454,6 @@ var trim = String.prototype.trim ?
     this.hide( filtered.needHide );
   };
 
-  // HACK
-  // Don't animate/transition first layout
-  // Or don't animate/transition other layouts
   proto._getIsInstant = function() {
     var isLayoutInstant = this._getOption('layoutInstant');
     var isInstant = isLayoutInstant !== undefined ? isLayoutInstant :
@@ -5633,30 +5462,6 @@ var trim = String.prototype.trim ?
     return isInstant;
   };
 
-  // listen for layoutComplete, hideComplete and revealComplete
-  // to trigger arrangeComplete
-  proto._bindArrangeComplete = function() {
-    // listen for 3 events to trigger arrangeComplete
-    var isLayoutComplete, isHideComplete, isRevealComplete;
-    var _this = this;
-    function arrangeParallelCallback() {
-      if ( isLayoutComplete && isHideComplete && isRevealComplete ) {
-        _this.dispatchEvent( 'arrangeComplete', null, [ _this.filteredItems ] );
-      }
-    }
-    this.once( 'layoutComplete', function() {
-      isLayoutComplete = true;
-      arrangeParallelCallback();
-    });
-    this.once( 'hideComplete', function() {
-      isHideComplete = true;
-      arrangeParallelCallback();
-    });
-    this.once( 'revealComplete', function() {
-      isRevealComplete = true;
-      arrangeParallelCallback();
-    });
-  };
 
   // -------------------------- filter -------------------------- //
 
@@ -5761,16 +5566,9 @@ var trim = String.prototype.trim ?
     }
   };
 
-  // ----- munge sorter ----- //
-
-  // encapsulate this, as we just need mungeSorter
-  // other functions in here are just for munging
+ 
   var mungeSorter = ( function() {
-    // add a magic layer to sorters for convienent shorthands
-    // `.foo-bar` will use the text of .foo-bar querySelector
-    // `[foo-bar]` will use attribute
-    // you can also add parser
-    // `.foo-bar parseInt` will parse that as a number
+    
     function mungeSorter( sorter ) {
       // if not a string, return function or whatever it is
       if ( typeof sorter != 'string' ) {
@@ -5853,25 +5651,6 @@ var trim = String.prototype.trim ?
     }
     return true;
   };
-
-  // returns a function used for sorting
-  function getItemSorter( sortBys, sortAsc ) {
-    return function sorter( itemA, itemB ) {
-      // cycle through all sortKeys
-      for ( var i = 0; i < sortBys.length; i++ ) {
-        var sortBy = sortBys[i];
-        var a = itemA.sortData[ sortBy ];
-        var b = itemB.sortData[ sortBy ];
-        if ( a > b || a < b ) {
-          // if sortAsc is an object, use the value given the sortBy key
-          var isAscending = sortAsc[ sortBy ] !== undefined ? sortAsc[ sortBy ] : sortAsc;
-          var direction = isAscending ? 1 : -1;
-          return ( a > b ? 1 : -1 ) * direction;
-        }
-      }
-      return 0;
-    };
-  }
 
   // -------------------------- methods -------------------------- //
 
@@ -6048,3 +5827,362 @@ var trim = String.prototype.trim ?
 
 }));
 
+document.addEventListener("DOMContentLoaded", function () {
+  const checkAll = document.getElementById("checkAll");
+  const checkboxes = document.querySelectorAll(".cart-checkbox");
+  const totalPriceElement = document.getElementById("totalPrice");
+  
+  // Chức năng chọn tất cả
+  checkAll.addEventListener("change", function () {
+    // Lọc ra tất cả các checkbox không thuộc sản phẩm đã xóa
+    const checkboxesToCheck = Array.from(checkboxes).filter((checkbox) => {
+      const cartItemRow = checkbox.closest("tr");
+      // Kiểm tra nếu dòng sản phẩm không bị xóa
+      return !cartItemRow.classList.contains("deleted");
+    });
+
+    // Đánh dấu tất cả các checkbox còn lại là checked
+    checkboxesToCheck.forEach((checkbox) => {
+      checkbox.checked = checkAll.checked;
+    });
+
+    // Cập nhật tổng tiền sau khi thay đổi trạng thái checkbox
+    updateTotalPrice2();
+  });
+
+  // Cập nhật tổng tiền khi thay đổi trạng thái checkbox
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", updateTotalPrice2);
+  });
+
+  // Cập nhật số lượng
+  window.changeQuantity = function (button, change) {
+    const quantityInput = button.parentElement.querySelector(".quantity-input");
+    const maxStock = parseInt(
+      button.closest("tr").querySelector(".max-stock").value
+    ); // Lấy số lượng tồn kho
+    let currentQuantity = parseInt(quantityInput.value);
+
+    // Kiểm tra nếu số lượng hiện tại + thay đổi không vượt quá số lượng tồn kho
+    currentQuantity = Math.max(1, Math.min(currentQuantity + change, maxStock)); // Giới hạn số lượng giữa 1 và tồn kho
+    quantityInput.value = currentQuantity;
+
+    // Vô hiệu hóa nút "-" khi số lượng bằng 1
+    const decreaseButton =
+      button.parentElement.querySelector(".decrease-quantity");
+    if (currentQuantity === 1) {
+      decreaseButton.disabled = true;
+    } else {
+      decreaseButton.disabled = false;
+    }
+
+    // Vô hiệu hóa nút "+" khi đạt tồn kho
+    const increaseButton =
+      button.parentElement.querySelector(".increase-quantity");
+    if (currentQuantity >= maxStock) {
+      increaseButton.disabled = true;
+    } else {
+      increaseButton.disabled = false;
+    }
+
+    let itemId;
+    const cartItemInput = button
+      .closest("tr")
+      .querySelector('input[name="cart_item_id"]');
+    const variantInput = button
+      .closest("tr")
+      .querySelector('input[name="product_variant_id"]');
+
+    if (cartItemInput) {
+      itemId = cartItemInput.value;
+    } else if (variantInput) {
+      itemId = variantInput.value;
+    } else {
+      alert("Không tìm thấy thông tin sản phẩm");
+      return;
+    }
+
+    updateCart(
+      itemId,
+      currentQuantity,
+      cartItemInput ? "cart_item_id" : "product_variant_id"
+    );
+  };
+
+  document.querySelectorAll(".quantity-input").forEach((input) => {
+    // Lưu trữ số lượng hiện tại trước khi thay đổi
+    let previousQuantity = parseInt(input.value);
+
+    // Kiểm tra khi người dùng rời khỏi ô input (blur)
+    input.addEventListener("blur", function () {
+      const maxStock = parseInt(
+        this.closest("tr").querySelector(".max-stock").value
+      ); // Lấy số lượng tồn kho
+      let currentQuantity = parseInt(this.value);
+
+      // Nếu ô trống, không làm gì, đợi người dùng nhập xong
+      if (!this.value) {
+        return;
+      }
+
+      // Kiểm tra nếu người dùng nhập số hợp lệ
+      if (isNaN(currentQuantity) || currentQuantity < 1) {
+        this.value = previousQuantity;
+        return;
+      }
+
+      // Nếu số lượng vượt quá tồn kho, hiển thị popup và đặt lại giá trị trước đó
+      if (currentQuantity > maxStock) {
+        showPopup(`Mặt hàng này chỉ còn ${maxStock} số lượng.`);
+        this.value = previousQuantity; // Đặt lại về giá trị trước đó
+        return;
+      }
+
+      // Cập nhật số lượng hợp lệ và lưu lại số lượng mới
+      previousQuantity = currentQuantity;
+
+      // Cập nhật nút tăng/giảm số lượng
+      const increaseButton =
+        this.parentElement.querySelector(".increase-quantity");
+      const decreaseButton =
+        this.parentElement.querySelector(".decrease-quantity");
+
+      if (currentQuantity >= maxStock) {
+        increaseButton.disabled = true;
+      } else {
+        increaseButton.disabled = false;
+      }
+
+      if (currentQuantity <= 1) {
+        decreaseButton.disabled = true;
+      } else {
+        decreaseButton.disabled = false;
+      }
+
+      // Lấy thông tin sản phẩm để cập nhật giỏ hàng
+      let itemId;
+      const cartItemInput = this.closest("tr").querySelector(
+        'input[name="cart_item_id"]'
+      );
+      const variantInput = this.closest("tr").querySelector(
+        'input[name="product_variant_id"]'
+      );
+
+      if (cartItemInput) {
+        itemId = cartItemInput.value;
+      } else if (variantInput) {
+        itemId = variantInput.value;
+      } else {
+        console.error("Không tìm thấy thông tin sản phẩm");
+        return;
+      }
+
+      // Gửi request cập nhật giỏ hàng ngay sau khi người dùng nhập số hợp lệ
+      updateCart(
+        itemId,
+        currentQuantity,
+        cartItemInput ? "cart_item_id" : "product_variant_id"
+      );
+    });
+
+    // Cho phép xóa số khi đang nhập, không ép buộc hiện số ngay lập tức
+    input.addEventListener("input", function () {
+      if (!this.value || this.value < 1) {
+        this.value = ""; // Xóa giá trị khi đang chỉnh sửa
+      }
+    });
+  });
+
+  // Hàm hiển thị popup
+  function showPopup(message) {
+    const modal = document.getElementById("quantityPopup");
+    const messageElement = document.getElementById("popupMessage");
+    messageElement.textContent = message;
+    modal.style.display = "block";
+  }
+
+  // Đóng popup khi nhấn nút close (X)
+  document.querySelector(".close").addEventListener("click", function () {
+    document.getElementById("quantityPopup").style.display = "none";
+  });
+
+  // Đóng popup khi nhấn bên ngoài modal
+  window.addEventListener("click", function (event) {
+    const modal = document.getElementById("quantityPopup");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  // Hàm gửi AJAX request để cập nhật giỏ hàng
+  function updateCart(itemId, quantity, itemType) {
+    // console.log(`${itemType}:`, itemId);
+    // console.log("quantity:", quantity);
+
+    let data = {};
+    data[itemType] = itemId;
+    data["quantity"] = quantity;
+
+    fetch(updateUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        // console.log("Response status:", response.status);
+        if (!response.ok) {
+          throw new Error(
+            "Cập nhật giỏ hàng thất bại với mã lỗi " + response.status
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          // console.log("Giỏ hàng đã được cập nhật");
+          updateTotalPrice2(); // Cập nhật tổng giá trị giỏ hàng
+        } else {
+          // console.error("Cập nhật giỏ hàng thất bại:", data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi:", error);
+      });
+  }
+
+  function updateTotalPrice2() {
+    const checkboxes = document.querySelectorAll(".cart-checkbox");
+    let totalPrice = 0;
+
+    checkboxes.forEach((checkbox) => {
+      // Chỉ tính vào tổng giá nếu checkbox được chọn
+      if (checkbox.checked) {
+        const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+        const quantity =
+          parseInt(
+            checkbox.closest("tr").querySelector(".quantity-input").value
+          ) || 1;
+        totalPrice += price * quantity;
+      }
+    });
+
+    // Hiển thị tổng tiền đã định dạng
+    document.getElementById("totalPrice").textContent =
+      numberFormat(totalPrice * 1000, 0, ".", ",") + " ₫";
+  }
+  // XOA
+  const removeButtons = document.querySelectorAll(".cart-remove");
+
+  // Lưu trạng thái checkbox đã chọn
+  let checkedItems = [];
+
+  // Lưu lại trạng thái của các checkbox đã chọn
+  function saveCheckedItems() {
+    checkedItems = [];
+    document.querySelectorAll(".cart-checkbox:checked").forEach((checkbox) => {
+      checkedItems.push(checkbox.value); // Lưu giá trị của checkbox (ID sản phẩm, cart_item_id hoặc product_variant_id)
+    });
+  }
+
+  // Khôi phục trạng thái checkbox đã chọn
+  function restoreCheckedItems() {
+    document.querySelectorAll(".cart-checkbox").forEach((checkbox) => {
+      if (checkedItems.includes(checkbox.value)) {
+        checkbox.checked = true;
+      }
+    });
+  }
+
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngừng hành động mặc định
+
+      // Lưu lại trạng thái checkbox đã chọn trước khi xóa
+      saveCheckedItems();
+
+      const cartItemId = this.getAttribute("data-cart-item-id");
+      const productVariantId = this.getAttribute("data-product-variant-id");
+
+      // Gửi yêu cầu AJAX để xóa sản phẩm
+      const data = cartItemId
+        ? { cart_item_id: cartItemId }
+        : { product_variant_id: productVariantId };
+        const tooltipInstance = bootstrap.Tooltip.getInstance(this); // Lấy tooltip đã được gắn
+        if (tooltipInstance) {
+          tooltipInstance.dispose(); // Hủy tooltip
+        }
+      fetch(removeUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            // Xóa sản phẩm khỏi giao diện
+            const cartItemRow = this.closest("tr");
+            if (cartItemRow) {
+              cartItemRow.remove();
+            }
+
+            // Khôi phục trạng thái checkbox đã chọn
+            restoreCheckedItems();
+
+            // Cập nhật lại tổng tiền
+            updateTotalPrice2(); // Cập nhật tổng tiền
+            updateCartCount();
+            // setTimeout(() => {
+            //   checkEmptyCart();  // Kiểm tra giỏ hàng trống sau khi cập nhật DOM
+            // }, 50); 
+          } else {
+            alert("Lỗi: " + data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi:", error);
+          alert("Không thể kết nối đến server!");
+        });
+        function updateCartCount() {
+          $.ajax({
+              url: '/cart/count', // Thay đổi đường dẫn này
+              type: 'GET',
+              success: function(data) {
+                  $('.cart-count').text(data.count); // Cập nhật số lượng vào phần tử .cart-count
+              },
+              error: function(xhr) {
+                  console.error('Error:', xhr);
+              }
+          });
+      }
+    });
+  });
+  // check gio hang trong
+  function checkEmptyCart() {
+    const cartItems = document.querySelectorAll(".cart-item"); // Lấy tất cả các phần tử sản phẩm trong giỏ
+    const emptyCartMessage = document.querySelector(".cart-empty");
+  
+    if (cartItems.length === 0) {
+      emptyCartMessage.style.display = "block"; // Hiển thị thông báo giỏ hàng trống
+    } else {
+      emptyCartMessage.style.display = "none"; // Ẩn thông báo giỏ hàng trống
+    }
+  }
+});
+
+function numberFormat(number, decimals, dec_point, thousands_sep) {
+  // Chuyển đổi số thành chuỗi với số thập phân
+  number = parseFloat(number).toFixed(decimals);
+
+  // Phân tách phần nguyên và phần thập phân
+  let parts = number.split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep); // Thêm dấu phân cách hàng nghìn
+
+  // Kết hợp lại
+  return parts.join(dec_point);
+}

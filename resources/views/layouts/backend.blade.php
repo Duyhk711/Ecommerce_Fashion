@@ -314,7 +314,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    @can('xem danh sách vai trò')
+                                    @can('phân quyền')
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.roles') }}">
@@ -330,7 +330,7 @@
                         @endif
 
                         {{-- DON HANG --}}
-                        @if (Auth::user()->hasAnyRole(['xem danh sách đơn hàng', 'xem danh sách khuyến mãi']))
+                        @if (Auth::user()->can('xem danh sách đơn hàng') || Auth::user()->can('xem danh sách khuyến mãi'))
                             <li
                                 class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -678,7 +678,6 @@
             @if (session('success'))
                 toastr.success(
                     '{{ session('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
                     'Thành công', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
@@ -688,7 +687,6 @@
             @if (session('error'))
                 toastr.error(
                     '{{ session('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            error ') }}',
                     'Lỗi', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
