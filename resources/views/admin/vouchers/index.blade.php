@@ -67,7 +67,7 @@
                         <tr>
                             <th class="text-center">STT</th>
                             <th class="text-center">Mã</th>
-                            <th class="text-center">Giá trị</th>
+                            <th class="text-center">Giá trị giảm</th>
                             <th class="text-center">Giá trị đơn hàng tối thiểu</th>
                             <th class="text-center">Số lượng</th>
                             <th class="text-center">Mô tả</th>

@@ -18,6 +18,7 @@ class Voucher extends Model
         'quantity',
         'description',
         'is_active',
+        'usage_limit',
         'start_date',
         'end_date',
         'quantity',
