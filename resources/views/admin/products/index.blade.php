@@ -136,7 +136,7 @@
                                 @foreach ($products as $product)
                                     <tr>
                                         <td class="fs-sm">
-                                            <div class="d-flex align-items-center" style="max-width: 70%">
+                                            <div class="d-flex align-items-center">
                                                 <!-- Hình ảnh -->
                                                 <div class="image-container" style="width: 60px; height: height: 100%;; position: relative;">
                                                     <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm" class="img-thumbnail">
@@ -164,7 +164,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class=" fs-sm"> {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', ',') }}₫</td>
+                                        <td class=" fs-sm"> {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', '.') }}₫</td>
                                         <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
                                             @if ($product->total_stock > 5)
                                                 <span class="" >{{ $product->total_stock }}</span>

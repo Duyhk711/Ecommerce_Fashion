@@ -26,7 +26,7 @@
                     enctype="multipart/form-data">
                     @csrf
                     <h2 class="content-heading pt-0">Vai trò: {{ $role->name }}</h2>
-                    <div class="mb-3 row m-3">
+                    <div class="mb-3 row m-3 justify-content-between">
                         @foreach ($permission as $per)
                             <div class="form-check form-check-inline col-3">
                                 <input class="form-check-input" type="checkbox"

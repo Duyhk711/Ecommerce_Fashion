@@ -120,7 +120,7 @@
         });
     }
 
-    
+
     function setupPagination(totalResults, currentPage) {
         const totalPages = Math.ceil(totalResults / pageSize);
         const paginationHTML = generatePagination(totalPages, currentPage);
