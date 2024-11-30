@@ -89,11 +89,11 @@
                                                 <i class="fa-solid fa-power-off"></i>
                                             </button>
                                         </form> --}}
-                                        <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
+                                        {{-- <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
                                             title="Quickly edit roles"
                                             href="{{ route('admin.users.staffs.edit', $user) }}">
                                             <i class="fa fa-fw fa-gear"></i>
-                                        </a>
+                                        </a> --}}
 
                                     </div>
                                 </td>
