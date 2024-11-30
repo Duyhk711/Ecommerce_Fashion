@@ -74,7 +74,7 @@
                     <!-- Nút tạo mới và quay lại -->
                     <div class="block-options mb-5 text-center mt-5">
                         <button type="submit" class="btn btn-outline-primary me-2">Lưu</button>
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-alt-secondary">
+                        <a href="{{ route('admin.users.staffs') }}" class="btn btn-alt-secondary">
                             <i class="fa fa-arrow-left"></i> Quay lại
                         </a>
                     </div>
