@@ -23,11 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Route::apiResource('attributes', AttributeController::class);
 // Route::apiResource('attribute-values', AttributeValueController::class);
-Route::get('/total-income', [ChartController::class, 'getTotalIncome'])->name('api.total-income');
+Route::get('/total-income', [ChartController::class, 'getTotalIncomeByWeek'])->name('api.total-income');
 
-Route::get('/total-orders', [ChartController::class, 'getTotalOrders'])->name('api.total-orders');
-Route::get('/total-customers', [ChartController::class, 'getTotalCustomers']);
-Route::get('/stats/total-sold-products', [ChartController::class, 'getTotalSoldProducts']);
+Route::get('/total-orders', [ChartController::class, 'getTotalOrdersByWeek'])->name('api.total-orders');
+Route::get('/total-customers', [ChartController::class, 'getTotalCustomersByWeek']);
+Route::get('/stats/total-sold-products', [ChartController::class, 'getTotalSoldProductsByWeek']);
 
 Route::get('/revenue-data', [ChartController::class, 'getRevenueData']);
 Route::get('revenue/monthly/{year}', [ChartController::class, 'getMonthlyRevenue']);
@@ -36,5 +36,5 @@ Route::get('/revenue/daily-range/{startDate}/{endDate}', [ChartController::class
 Route::get('/orders/status-distribution', [ChartController::class, 'getOrderStatusDistribution']);
 Route::get('/orders', [ChartController::class, 'getOrders']);
 
-
-
+Route::get('/sales-statistics', [ChartController::class, 'getSalesStatistics']);
+Route::get('/products/top-rated', [ChartController::class, 'topRatedProducts']);

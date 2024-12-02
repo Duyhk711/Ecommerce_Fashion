@@ -84,7 +84,7 @@
                                 <th class="d-none d-xl-table-cell fs-sm">Khách hàng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-center">Ngày đặt</th>
                                 <th class="d-sm-table-cell fs-sm">Trạng thái</th>
-                                <th class="d-sm-table-cell fs-sm">Thanh toán</th>
+                                {{-- <th class="d-sm-table-cell fs-sm">Thanh toán</th> --}}
                                 <th class="d-sm-table-cell fs-sm">PTTT</th>
                                 <th class="d-none d-xl-table-cell fs-sm text-center">Số lượng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-end">Tổng</th>
@@ -132,7 +132,7 @@
                                             {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                         </span>
                                     </td>
-                                    <td class="fs-base">
+                                    {{-- <td class="fs-base">
                                         @php
                                             $statusMappingPayment = [
                                                 'cho_thanh_toan' => 'Chờ thanh toán',
@@ -147,7 +147,7 @@
                                          <span id="paymentStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColorPayment[$currentStatusPayment] }}">
                                             {{ $statusMappingPayment[$currentStatusPayment] ?? $currentStatusPayment }}
                                         </span>
-                                    </td>
+                                    </td> --}}
                                     <td class="fs-base">
                                         @php
                                             $statusMapping = [
