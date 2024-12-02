@@ -784,9 +784,7 @@
                     reader.readAsDataURL(this.files[0]);
                 }
             });
-
-
-
+            
             // Xóa biến thể
             $(document).on('click', '.delete-variant', function() {
                 $(this).closest('tr').remove();
@@ -1208,3 +1206,4 @@
         });
     </script>
 @endsection
+
