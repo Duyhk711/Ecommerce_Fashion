@@ -138,7 +138,7 @@
                                     <tr>
                                         <td>{{ ($products->currentPage() - 1) * $products->perPage() + $index + 1 }}</td>
                                         <td class="fs-sm">
-                                            <div class="d-flex align-items-center" >
+                                            <div class="d-flex align-items-center">
                                                 <!-- Hình ảnh -->
                                                 <div class="image-container" style="width: 60px; height: height: 100%; position: relative;">
                                                     <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm" class="img-thumbnail">

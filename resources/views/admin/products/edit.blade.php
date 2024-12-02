@@ -863,6 +863,7 @@
             const mainImageInput = document.getElementById('main-image-input');
             mainImageInput.addEventListener('change', function() {
                 displayImage(this, mainImageContainer);
+
             });
 
             // Hàm hiển thị ảnh chính khi chọn từ input
@@ -885,6 +886,8 @@
             const subImageList = []; // Danh sách lưu các ảnh phụ đã chọn
             subImagesInput.addEventListener('change', function() {
                 displayMultipleImages(this, subImagesContainer, subImageList);
+            });
+
             });
 
             // Hàm hiển thị nhiều ảnh phụ khi chọn từ input
@@ -919,4 +922,6 @@
 
     {{-- validate variant --}}
     <script src="{{ asset('admin/js/ui/validations/product-edit.js') }}"></script>
+
 @endsection
+

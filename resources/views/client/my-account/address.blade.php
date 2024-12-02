@@ -89,7 +89,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    {{-- <div class="modal-body">
+                    <div class="modal-body">
                         <form id="editAddressForm" method="post"
                             action="{{ route('addresses.update', $address->id) }}">
                             @csrf
@@ -121,19 +121,26 @@
                                         class="form-control" placeholder="Địa chỉ phụ (nếu có)" />
                                 </div>
                                 <div class="form-group col-lg-6">
-                                    <label for="edit-ward">Phường/Xã <span class="required">*</span></label>
-                                    <input name="ward" id="edit-ward" type="text" class="form-control"
-                                        placeholder="Phường/Xã" required />
+                                    <label for="edit-city">Tỉnh/Thành phố <span class="required">*</span></label>
+                                    <select name="city" id="edit-city" class="form-control" required>
+                                        <option value="">Chọn tỉnh/thành phố</option>
+                                        <!-- Wards will be dynamically added here -->
+                                    </select>
+
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <label for="edit-district">Quận/Huyện <span class="required">*</span></label>
-                                    <input name="district" id="edit-district" type="text"
-                                        class="form-control" placeholder="Quận/Huyện" required />
+                                    <select name="district" id="edit-district" class="form-control" required>
+                                        <option value="">Chọn Quận/Huyện</option>
+                                        <!-- Districts will be dynamically added here -->
+                                    </select>
                                 </div>
                                 <div class="form-group col-lg-6">
-                                    <label for="edit-city">Tỉnh/Thành phố <span class="required">*</span></label>
-                                    <input name="city" id="edit-city" type="text" class="form-control"
-                                        placeholder="Tỉnh/Thành phố" required />
+                                    <label for="edit-ward">Phường/Xã <span class="required">*</span></label>
+                                    <select name="ward" id="edit-ward" class="form-control" required>
+                                        <option value="">Chọn phường/xã</option>
+                                        <!-- Cities will be dynamically added here -->
+                                    </select>
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <label for="edit-type">Loại địa chỉ <span class="required">*</span></label>
@@ -149,9 +156,7 @@
                                 <button type="submit" class="btn btn-primary m-0">Lưu địa chỉ</button>
                             </div>
                         </form>
-                    </div> --}}
-
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -324,10 +329,22 @@
                         document.getElementById('edit-customer-phone').value = data.address.customer_phone;
                         document.getElementById('edit-address-line1').value = data.address.address_line1;
                         document.getElementById('edit-address-line2').value = data.address.address_line2;
-                        document.getElementById('edit-ward').value = data.address.ward;
-                        document.getElementById('edit-district').value = data.address.district;
-                        document.getElementById('edit-city').value = data.address.city;
                         document.getElementById('edit-type').value = data.address.type;
+
+                        // Lưu trữ các giá trị đã chọn
+                        selectedCity = data.address.city;
+                        selectedDistrict = data.address.district;
+                        selectedWard = data.address.ward;
+                        console.log(selectedCity, selectedDistrict, selectedWard);
+
+                        // Gọi lại API để tải danh sách thành phố, quận huyện và phường xã
+                        axios.get("/address.json")
+                            .then(function(result) {
+                                renderCity(result.data);  // Gọi render lại thành phố
+                            })
+                            .catch(function(error) {
+                                console.error("Lỗi khi tải dữ liệu:", error);
+                            });
 
                         const form = document.getElementById('editAddressForm');
                         form.action = form.action.replace(/\/\d+$/, `/${addressId}`);
@@ -343,6 +360,7 @@
                     alert('Có lỗi xảy ra!');
                 });
         }
+
 
         // Xử lý khi DOM đã tải xong
         document.addEventListener("DOMContentLoaded", function() {
@@ -367,13 +385,22 @@
                             emptyAddress.style.display = 'none';
                         }
 
+                        let currentDefault = document.querySelector('.address-select-box.default-address');
+                        if (currentDefault) {
+                            currentDefault.classList.remove('default-address');
+                            // Xóa thông báo hoặc biểu tượng mặc định cũ nếu cần
+                            let defaultLabel = currentDefault.querySelector('.default-label');
+                            if (defaultLabel) defaultLabel.remove();
+                        }
+
                         // Thêm địa chỉ mới vào danh sách
                         let addressHtml = `
-                            <div class="address-select-box" data-id="${data.address.id}">
+                           <div class="address-select-box ${data.address.is_default ? 'default-address' : ''}" data-id="${data.address.id}">
                                 <div class="address-box bg-block">
                                     <div class="top d-flex justify-content-between mb-3">
                                         <h5 class="m-0">${data.address.customer_name}</h5>
-                                        <span class="product-labels start-auto end-0">
+                                        <span class="product-labels start-auto end-0 d-flex flex-wrap">
+                                             ${data.address.is_default ? '<span class="lbl pr-label-default me-2">Mặc định</span>' : ''}
                                             <span class="lbl ${data.address.type == 'home' ? 'pr-label1' : 'pr-label4'}">
                                                 ${data.address.type == 'home' ? 'Home' : 'Office'}
                                             </span>
@@ -394,9 +421,8 @@
                                     <div class="bottom d-flex justify-content-start gap-2">
                                         <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="editAddress(${data.address.id})">Sửa Địa Chỉ</button>
                                         <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="removeAddress(${data.address.id})">Xóa Địa Chỉ</button>
-                                        <button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="setDefaultAddress(${data.address.id})">Cài làm địa chỉ mặc định</button>
+                                        ${!data.address.is_default ? `<button type="button" class="bottom-btn btn btn-gray btn-sm" onclick="setDefaultAddress(${data.address.id})">Cài làm địa chỉ mặc định</button>` : ''}                                  </div>
                                     </div>
-                                </div>
                             </div>
                         `;
                         document.querySelector('.address-book-section .row').innerHTML += addressHtml;
@@ -511,4 +537,95 @@
         }
     </script>
 
+    <script>
+        function renderCity(data) {
+            const citis = document.getElementById('edit-city');
+            citis.innerHTML = "<option value=''>Chọn Thành Phố</option>";
+
+            data.forEach(city => {
+                citis.options[citis.options.length] = new Option(city.Name, city.Name);
+            });
+
+            // Đặt giá trị cho thành phố nếu đã có
+            if (selectedCity) {
+                citis.value = selectedCity;
+                citis.onchange();  // Gọi để load các quận/huyện tương ứng
+            }
+
+            citis.onchange = function() {
+                updateDistricts(data); // Cập nhật quận huyện sau khi chọn thành phố
+            };
+        }
+
+        function updateDistricts(data) {
+            console.log("Calling updateDistricts...");
+            const citis = document.getElementById('edit-city');
+            const districts = document.getElementById('edit-district');
+            const wards = document.getElementById('edit-ward');
+
+            console.log("Updating districts for city:", citis.value);
+            districts.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
+            wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+            if (citis.value) {
+                const cityData = data.find(n => n.Name === citis.value);
+                if (cityData) {
+                    cityData.Districts.forEach(district => {
+                        districts.options[districts.options.length] = new Option(district.Name, district.Name);
+                    });
+                    console.log("Districts added:", cityData.Districts);
+
+                    if (selectedDistrict) {
+                        districts.value = selectedDistrict;
+                        console.log("Quận huyện mới:", selectedDistrict);
+
+                        // Kích hoạt sự kiện onchange để cập nhật phường/xã
+                        updateWards(data);
+                    }
+                }
+            }
+
+            // Kiểm tra xem attachDistrictOnChange có được gọi không
+            console.log("Attaching districts onchange event...");
+            attachDistrictOnChange(data);
+        }
+
+        function attachDistrictOnChange(data) {
+            const districts = document.getElementById('edit-district');
+            console.log("Attaching onchange event to districts...");
+            districts.onchange = function () {
+                console.log("Districts dropdown changed. Updating wards...");
+                updateWards(data); // Cập nhật phường xã
+            };
+        }
+
+        function updateWards(data) {
+            const citis = document.getElementById('edit-city');
+            const districts = document.getElementById('edit-district');
+            const wards = document.getElementById('edit-ward');
+            console.log(wards);
+
+            const currentWard = selectedWard || wards.value;
+            // console.log(currentWard);
+
+            wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
+
+            const cityData = data.find(n => n.Name === citis.value);
+            if (districts.value && cityData) {
+                console.log(districts.value, cityData);
+
+                const districtData = cityData.Districts.find(d => d.Name === districts.value);
+                if (districtData) {
+                    districtData.Wards.forEach(ward => {
+                        wards.options[wards.options.length] = new Option(ward.Name, ward.Name);
+                    });
+
+                    // Đặt giá trị cho ward nếu đã có
+                    if (currentWard) {
+                        wards.value = currentWard;
+                    }
+                }
+            }
+        }
+
+    </script>
 @endsection

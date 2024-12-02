@@ -4,9 +4,10 @@
 @endsection
 @section('css')
     <style>
-        .font-uppercase{
+        .font-uppercase {
             font-family: 'Quicksand', sans-serif;
         }
+
         .offcanvas-body {
             padding: 20px;
             padding-top: 0;
@@ -115,10 +116,10 @@
                         <div id="nav-tabs" class="step-checkout">
                             <ul class="nav nav-tabs step-items">
                                 <li class="nav-item onactive active">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#steps1">Địa Chỉ</a>
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#steps1">Giỏ hàng</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#steps2">Tóm Tắt</a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#steps2">Địa Chỉ</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#steps3">Thanh Toán</a>
@@ -130,112 +131,6 @@
                         <!--Tab checkout content-->
                         <div class="tab-content checkout-form">
                             <div class="tab-pane active" id="steps1">
-                                <!--Shipping Address-->
-                                <div class="block shipping-address mb-4">
-                                    <div class="block-content">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h3 class="title mb-3">Shipping Address</h3>
-                                            @auth
-                                                @if (Auth::check() && !$dataAddress->isEmpty())
-                                                    <a style="padding-bottom: 16px" data-bs-toggle="offcanvas"
-                                                        href="#offcanvasRight" aria-controls="offcanvasRight">
-                                                        Thay đổi
-                                                    </a>
-                                                @endif
-                                            @endauth
-
-                                        </div>
-
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="customer_name" class="form-label">Họ tên <span
-                                                            class="required">*</span></label>
-                                                    <input name="customer_name" id="customer_name" type="text" required
-                                                        class="form-control"
-                                                        value="{{ $address == '' ? '' : $address->customer_name }}">
-                                                </div>
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="customer_phone" class="form-label">Số điện thoại <span
-                                                            class="required">*</span></label>
-                                                    <input name="customer_phone" id="customer_phone" type="tel" required
-                                                        class="form-control"
-                                                        value="{{ $address == '' ? '' : $address->customer_phone }}">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="email" class="form-label">E-Mail <span
-                                                            class="required">*</span></label>
-                                                    <input name="customer_email"
-                                                        value="{{ Auth::check() ? Auth::user()->email : '' }}"
-                                                        id="email" type="email" required="" class="form-control">
-                                                </div>
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="city" class="form-label">Tỉnh/Thành phố <span
-                                                            class="required">*</span></label>
-                                                    <select id="city" name="city" data-default="city"
-                                                        class="form-control">
-                                                        <option value="" selected>
-                                                            Chọn tỉnh thành</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="district" class="form-label">Quận/Huyện <span
-                                                            class="required">*</span></label>
-                                                    <select id="district" name="district" class="form-control">
-                                                        <option value="" selected>
-                                                            Chọn quận huyện</option>
-
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="ward" class="form-label">Phường/Xã <span
-                                                            class="required">*</span></label>
-                                                    <select id="ward" name="ward" class="form-control">
-                                                        <option value="" selected>
-                                                            Chọn phường xã</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="address_line1" class="form-label">Địa chỉ <span
-                                                            class="required">*</span></label>
-                                                    <input name="address_line1" id="address_line1" type="text" required
-                                                        placeholder="Địa chỉ đường phố" class="form-control"
-                                                        value="{{ $address == '' ? '' : $address->address_line1 }}">
-                                                </div>
-                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label for="address_line1"
-                                                        class="form-label d-none d-sm-block">&nbsp;</label>
-                                                    <input name="address_line2" id="address_line2" type="text"
-                                                        placeholder="Số nhà, dãy phòng, căn hộ, v.v. (tùy chọn)"
-                                                        class="form-control"
-                                                        value="{{ $address == '' ? '' : $address->address_line2 }}">
-                                                </div>
-                                            </div>
-                                            {{-- <div class="row">
-                                                <div class="form-group col-md-12 col-lg-12 mb-0">
-                                                    <div class="checkout-tearm customCheckbox">
-                                                        <input id="checkout_tearm" name="tearm" type="checkbox"
-                                                            value="checkout tearm" required />
-                                                        <label for="checkout_tearm"> Save address to my account</label>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <!--End Shipping Address-->
-
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-primary btnNext ms-1">Next</button>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="steps2">
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-7 col-lg-8">
                                         <!--Order Summary-->
@@ -305,7 +200,7 @@
                                                 <fieldset>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                            <textarea class="resize-both form-control" rows="3" placeholder="Viết ghi chú ở đáy"></textarea>
+                                                            <textarea class="resize-both form-control" rows="3" placeholder="Viết ghi chú ở đáy" name="comment"></textarea>
                                                         </div>
                                                     </div>
                                                 </fieldset>
@@ -340,20 +235,24 @@
                                         <div class="cart-info mb-4">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong class="font-uppercase">Tổng
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong
+                                                            class="font-uppercase">Tổng
                                                             cộng</strong></span>
                                                     <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
-                                                        <span class="money">{{ number_format($total, 3, '.', '.') }} ₫</span>
+                                                        <span class="money">{{ number_format($total, 3, '.', '.') }}
+                                                            ₫</span>
                                                     </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong class="font-uppercase">Phiếu giảm giá</strong></span>
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title"><strong
+                                                            class="font-uppercase">Phiếu giảm giá</strong></span>
                                                     <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
-                                                      <span class="money discount">0 ₫</span>
+                                                        <span class="money discount">0 ₫</span>
                                                     </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong class="font-uppercase">Giao
+                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong
+                                                            class="font-uppercase">Giao
                                                             hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span
@@ -362,8 +261,10 @@
                                                 <div class="row g-0 pt-2">
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title fs-6 font-uppercase"><strong>Tổng</strong></span>
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
-                                                        <b class="money total_price">{{ number_format($total, 3, '.', '.') }}  ₫</b>
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                        <b class="money total_price">{{ number_format($total, 3, '.', '.') }}
+                                                            ₫</b>
                                                     </span>
                                                 </div>
                                             </div>
@@ -372,9 +273,116 @@
                                     </div>
                                 </div>
 
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-primary ms-1 btnNext">Next</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="steps2">
+                                <!--Shipping Address-->
+                                <div class="block shipping-address mb-4">
+                                    <div class="block-content">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h3 class="title mb-3">Shipping Address</h3>
+                                            @auth
+                                                @if (Auth::check() && !$dataAddress->isEmpty())
+                                                    <a style="padding-bottom: 16px" data-bs-toggle="offcanvas"
+                                                        href="#offcanvasRight" aria-controls="offcanvasRight">
+                                                        Thay đổi
+                                                    </a>
+                                                @endif
+                                            @endauth
+
+                                        </div>
+
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="customer_name" class="form-label">Họ tên <span
+                                                            class="required">*</span></label>
+                                                    <input name="customer_name" id="customer_name" type="text"
+                                                        required class="form-control"
+                                                        value="{{ $address == '' ? old('customer_name') : $address->customer_name }}">
+                                                </div>
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="customer_phone" class="form-label">Số điện thoại <span
+                                                            class="required">*</span></label>
+                                                    <input name="customer_phone" id="customer_phone" type="tel"
+                                                        required class="form-control"
+                                                        value="{{ $address == '' ? old('customer_phone') : $address->customer_phone }}">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="email" class="form-label">E-Mail <span
+                                                            class="required">*</span></label>
+                                                    <input name="customer_email"
+                                                        value="{{ Auth::check() ? Auth::user()->email : old('customer_email') }}"
+                                                        id="email" type="email" required=""
+                                                        class="form-control">
+                                                </div>
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="city" class="form-label">Tỉnh/Thành phố <span
+                                                            class="required">*</span></label>
+                                                    <select id="city" name="city" data-default="city"
+                                                        class="form-control">
+                                                        <option value="" selected>
+                                                            Chọn tỉnh thành</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="district" class="form-label">Quận/Huyện <span
+                                                            class="required">*</span></label>
+                                                    <select id="district" name="district" class="form-control">
+                                                        <option value="" selected>
+                                                            Chọn quận huyện</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="ward" class="form-label">Phường/Xã <span
+                                                            class="required">*</span></label>
+                                                    <select id="ward" name="ward" class="form-control">
+                                                        <option value="" selected>
+                                                            Chọn phường xã</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="address_line1" class="form-label">Địa chỉ <span
+                                                            class="required">*</span></label>
+                                                    <input name="address_line1" id="address_line1" type="text"
+                                                        required placeholder="Địa chỉ đường phố" class="form-control"
+                                                        value="{{ $address == '' ? old('address_line') : $address->address_line1 }}">
+                                                </div>
+                                                <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="address_line1"
+                                                        class="form-label d-none d-sm-block">&nbsp;</label>
+                                                    <input name="address_line2" id="address_line2" type="text"
+                                                        placeholder="Số nhà, dãy phòng, căn hộ, v.v. (tùy chọn)"
+                                                        class="form-control"
+                                                        value="{{ $address == '' ? old('address_line2') : $address->address_line2 }}">
+                                                </div>
+                                            </div>
+                                            {{-- <div class="row">
+                                                <div class="form-group col-md-12 col-lg-12 mb-0">
+                                                    <div class="checkout-tearm customCheckbox">
+                                                        <input id="checkout_tearm" name="tearm" type="checkbox"
+                                                            value="checkout tearm" required />
+                                                        <label for="checkout_tearm"> Save address to my account</label>
+                                                    </div>
+                                                </div>
+                                            </div> --}}
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <!--End Shipping Address-->
+
                                 <div class="d-flex justify-content-between">
                                     <button type="button" class="btn btn-secondary me-1 btnPrevious">Back</button>
-                                    <button type="button" class="btn btn-primary ms-1 btnNext">Next</button>
+                                    <button type="button" class="btn btn-primary btnNext ms-1">Next</button>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="steps3">
@@ -391,7 +399,8 @@
                                                                 <input id="paymentRadio4" value="COD"
                                                                     name="payment_method" type="radio" class="radio"
                                                                     checked="checked" />
-                                                                <label for="paymentRadio4 font-uppercase" class="mb-0">Thanh
+                                                                <label for="paymentRadio4 font-uppercase"
+                                                                    class="mb-0">Thanh
                                                                     toán khi nhận hàng</label>
                                                             </span>
                                                         </div>
@@ -417,31 +426,42 @@
                                         <div class="cart-info">
                                             <div class="cart-order-detail cart-col">
                                                 <div class="row g-0 border-bottom pb-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Tổng
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Tổng
                                                             cộng</strong></span>
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
-                                                        <span class="money">{{ number_format($total, 3, '.', '.') }}₫</span>
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                        <span
+                                                            class="money">{{ number_format($total, 3, '.', '.') }}₫</span>
                                                     </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Phiếu giảm
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Phiếu
+                                                            giảm
                                                             giá</strong></span>
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end">
                                                         <span class="money discount">0 ₫</span>
                                                     </span>
                                                 </div>
                                                 <div class="row g-0 border-bottom py-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Giao
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title font-uppercase"><strong>Giao
                                                             hàng</strong></span>
                                                     <span
                                                         class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end font-uppercase"><span
                                                             class="money">Miễn phí giao hàng</span></span>
                                                 </div>
                                                 <div class="row g-0 pt-2">
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-6 font-uppercase"><strong>Tổng phải
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-6 font-uppercase"><strong>Tổng
+                                                            phải
                                                             trả</strong></span>
-                                                    <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
-                                                      <b class="money total_price">{{ number_format($total, 3, '.', '.') }} ₫</b>
+                                                    <span
+                                                        class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                                        <b class="money total_price">{{ number_format($total, 3, '.', '.') }}
+                                                            ₫</b>
                                                     </span>
                                                 </div>
                                                 <input type="hidden" value="{{ $total }}" id="total_price"
@@ -486,8 +506,7 @@
                 @foreach ($dataAddress as $add)
                     <div class="address-item d-flex gap-2">
                         <div class="check-icon">
-                            <input type="radio" value="{{ $add->id }}" name="address"
-                                @if ($add->id == $address->id) {{ 'checked' }} @endif>
+                            <input type="radio" value="{{ $add->id }}" name="address" {{-- @if ($add->id == $address->id) {{ 'checked' }} @endif --}}>
                         </div>
                         <div>
                             <div class="d-flex justify-content-sm-start gap-1">
@@ -683,6 +702,8 @@
             }
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         // document.getElementById('checkout').addEventListener('submit', function(event) {
 
@@ -869,6 +890,18 @@
             return true;
         }
     </script>
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: '{{ $errors->first() }}', // Lấy lỗi đầu tiên
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    @endif
 
     {{-- Voucher --}}
     <script>
@@ -919,7 +952,7 @@
                         // console.log(discount);
                         discountItem.forEach((item) => {
                             let dis = data.discount * 1000
-                            item.textContent = `-${dis.toLocaleString('de-DE')}`
+                            item.textContent = `${dis.toLocaleString('de-DE')}₫`
                         });
                         totalPriceItem.forEach((item) => {
                             let dis = (totalPrice - data.discount) * 1000

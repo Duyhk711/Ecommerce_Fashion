@@ -36,5 +36,5 @@ Route::get('/revenue/daily-range/{startDate}/{endDate}', [ChartController::class
 Route::get('/orders/status-distribution', [ChartController::class, 'getOrderStatusDistribution']);
 Route::get('/orders', [ChartController::class, 'getOrders']);
 
-
-
+Route::get('/sales-statistics', [ChartController::class, 'getSalesStatistics']);
+Route::get('/products/top-rated', [ChartController::class, 'topRatedProducts']);

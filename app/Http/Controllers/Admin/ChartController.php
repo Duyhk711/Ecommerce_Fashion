@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Order;
+use Log;
 use Carbon\Carbon;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class ChartController extends Controller
 {
-    //TOng doanh thu 
+    //TOng doanh thu
     public function getMonthlyRevenue($year)
     {
         $monthlyRevenue = DB::table('orders')
@@ -280,4 +282,121 @@ public function getTotalSoldProductsByWeek()
 
         return response()->json($distribution);
     }
+
+    public function getSalesStatistics(Request $request)
+    {
+        // Lấy bộ lọc từ request, mặc định là 'today'
+        $filter = $request->query('filter', 'today');
+
+        // Xác định khoảng thời gian dựa trên bộ lọc
+        $now = Carbon::now();
+
+        switch ($filter) {
+            case 'today':
+                $startDate = $now->clone()->startOfDay();
+                $endDate = $now->clone()->endOfDay();
+                break;
+            case 'last_7_days':
+                $startDate = $now->clone()->subDays(6)->startOfDay(); // Bao gồm ngày hiện tại
+                $endDate = $now->clone()->endOfDay();
+                break;
+            case 'last_30_days':
+                $startDate = $now->clone()->subDays(29)->startOfDay(); // Bao gồm ngày hiện tại
+                $endDate = $now->clone()->endOfDay();
+                break;
+            case 'this_month':
+                $startDate = $now->clone()->startOfMonth();
+                $endDate = $now->clone()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = $now->clone()->subMonth()->startOfMonth();
+                $endDate = $now->clone()->subMonth()->endOfMonth();
+                break;
+            default:
+                return response()->json(['error' => 'Invalid filter'], 400);
+        }
+
+        // Truy vấn thống kê
+        $query = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
+            ->join('products', 'product_variants.product_id', '=', 'products.id')
+            ->select(
+                'products.name',
+                'products.img_thumbnail',
+                'products.price_regular',
+                'products.price_sale',
+                DB::raw('SUM(order_items.quantity) as total_quantity_sold'),
+                DB::raw('SUM(order_items.quantity * CASE
+                    WHEN product_variants.price_sale IS NOT NULL AND product_variants.price_sale > 0 THEN product_variants.price_sale
+                    ELSE product_variants.price_regular
+                    END) as total_revenue')
+                )
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_quantity_sold')
+            ->limit(5)
+            ->get();
+
+        // Trả về kết quả dưới dạng JSON
+        return response()->json($query, 200);
+    }
+
+    public function topRatedProducts(Request $request)
+    {
+        $filter = $request->query('filter', 'today'); // Mặc định là 'today'
+        $now = Carbon::now();
+
+        // Xác định khoảng thời gian dựa trên bộ lọc
+        switch ($filter) {
+            case 'today':
+                $startDate = $now->clone()->startOfDay();
+                $endDate = $now->clone()->endOfDay();
+                break;
+            case 'last_7_days':
+                $startDate = $now->clone()->subDays(6)->startOfDay();
+                $endDate = $now->clone()->endOfDay();
+                break;
+            case 'last_30_days':
+                $startDate = $now->clone()->subDays(29)->startOfDay();
+                $endDate = $now->clone()->endOfDay();
+                break;
+            case 'this_month':
+                $startDate = $now->clone()->startOfMonth();
+                $endDate = $now->clone()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = $now->clone()->subMonth()->startOfMonth();
+                $endDate = $now->clone()->subMonth()->endOfMonth();
+                break;
+            default:
+                $startDate = $request->query('start_date') ? Carbon::parse($request->query('start_date'))->startOfDay() : null;
+                $endDate = $request->query('end_date') ? Carbon::parse($request->query('end_date'))->endOfDay() : null;
+
+                if (!$startDate || !$endDate) {
+                    return response()->json(['error' => 'Invalid filter or missing date range'], 400);
+                }
+                break;
+        }
+
+        // Truy vấn dữ liệu bằng Query Builder
+        $topProducts = DB::table('products')
+            ->select('products.*')
+            ->selectRaw('COALESCE(COUNT(comments.id), 0) as total_comments')
+            ->selectRaw('COALESCE(AVG(comments.rating), 0) as average_rating')
+            ->leftJoin('comments', 'comments.product_id', '=', 'products.id')
+            ->whereBetween('comments.created_at', [$startDate, $endDate])
+            ->groupBy('products.id')
+            ->orderByDesc('total_comments')
+            ->orderByDesc('average_rating')
+            ->limit(5)
+            ->get();
+
+        // Trả về kết quả dưới dạng JSON
+        return response()->json([
+            'success' => true,
+            'data' => $topProducts,
+        ]);
+    }
+
 }

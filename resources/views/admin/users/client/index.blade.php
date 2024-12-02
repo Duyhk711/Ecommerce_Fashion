@@ -73,7 +73,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <form action="{{ route('admin.users.active', $user) }}" method="POST"
+                                        {{-- <form action="{{ route('admin.users.active', $user) }}" method="POST"
                                             style="display:inline;" class="form-activate">
                                             @csrf
 
@@ -82,7 +82,7 @@
                                                 title="{{ $user->is_active == 1 ? 'Deactivate' : 'Activate' }}">
                                                 <i class="fa-solid fa-power-off"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                         <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Show"
                                             href="{{ route('admin.users.show', $user) }}">
                                             <i class="fa fa-fw fa-eye"></i>
