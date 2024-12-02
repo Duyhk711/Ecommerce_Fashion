@@ -57,77 +57,190 @@ class ChartController extends Controller
         return response()->json($dailyRevenue);
     }
 
-    public function getTotalIncome()
-    {
-        try {
-            $totalIncome = DB::table('orders')
-                ->where('status', '4')
-                ->sum('total_price') * 1000;
+    public function getTotalIncomeByWeek()
+{
+    try {
+        // Lấy ngày bắt đầu và kết thúc của tuần hiện tại
+        $startOfWeek = today()->startOfWeek(); // Thứ Hai
+        $endOfWeek = today()->endOfDay(); // Hôm nay
 
-            if (is_null($totalIncome)) {
-                $totalIncome = 0;
-            }
+        // Lấy ngày bắt đầu và kết thúc của tuần trước
+        $startOfLastWeek = today()->subWeek()->startOfWeek(); // Thứ Hai tuần trước
+        $endOfLastWeek = today()->subWeek()->endOfWeek(); // Chủ Nhật tuần trước
 
-            return response()->json([
-                'total_income' => $totalIncome,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Failed to fetch total income',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-    }
+        // Tổng thu nhập tuần hiện tại (tới hôm nay)
+        $totalIncomeThisWeek = DB::table('orders')
+            ->where('status', '4') // Chỉ tính những đơn hàng hoàn thành
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->sum('total_price') * 1000;
 
-    public function getTotalOrders()
-    {
-        $totalOrders = DB::table('orders')->count();
+        // Lấy các ngày có dữ liệu trong tuần trước
+        $daysWithDataLastWeek = DB::table('orders')
+            ->selectRaw('DATE(created_at) as date')
+            ->where('status', '4')
+            ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->pluck('date'); // Lấy danh sách ngày có dữ liệu
+
+        // Tổng thu nhập tuần trước chỉ tính cho các ngày có dữ liệu
+        $totalIncomeLastWeek = DB::table('orders')
+            ->where('status', '4')
+            ->whereIn(DB::raw('DATE(created_at)'), $daysWithDataLastWeek)
+            ->sum('total_price') * 1000;
+
+        // Đảm bảo không bị null
+        $totalIncomeThisWeek = $totalIncomeThisWeek ?: 0;
+        $totalIncomeLastWeek = $totalIncomeLastWeek ?: 0;
+
+        // Tính phần trăm thay đổi
+        $percentChange = $totalIncomeLastWeek > 0
+            ? (($totalIncomeThisWeek - $totalIncomeLastWeek) / $totalIncomeLastWeek) * 100
+            : ($totalIncomeThisWeek > 0 ? 100 : 0);
 
         return response()->json([
-            'total_orders' => $totalOrders ?? 0,
+            'total_income_this_week' => $totalIncomeThisWeek,
+            'total_income_last_week' => $totalIncomeLastWeek,
+            'percent_change' => $percentChange,
         ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Failed to fetch total income',
+            'message' => $e->getMessage(),
+        ], 500);
     }
+}
 
-    public function getTotalCustomers()
-    {
-        try {
-            // Đếm tổng số khách hàng (role = 'user')
-            $totalCustomers = DB::table('users')
-                ->where('role', 'user')
-                ->count();
+    
 
-            return response()->json([
-                'total_customers' => $totalCustomers,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Failed to fetch total customers',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
+
+// togn don hang trong ngay
+public function getTotalOrdersByWeek()
+{
+    try {
+        // Ngày bắt đầu và kết thúc của tuần hiện tại
+        $startOfWeek = today()->startOfWeek(); // Thứ Hai tuần này
+        $endOfWeek = today()->endOfWeek(); // Chủ Nhật tuần này
+
+        // Ngày bắt đầu và kết thúc của tuần trước
+        $startOfLastWeek = today()->subWeek()->startOfWeek(); // Thứ Hai tuần trước
+        $endOfLastWeek = today()->subWeek()->endOfWeek(); // Chủ Nhật tuần trước
+
+        // Tổng đơn hàng tuần này
+        $totalOrdersThisWeek = DB::table('orders')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->count();
+
+        // Tổng đơn hàng tuần trước
+        $totalOrdersLastWeek = DB::table('orders')
+            ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
+            ->count();
+
+        // Tính phần trăm thay đổi
+        $percentChange = $totalOrdersLastWeek > 0
+            ? (($totalOrdersThisWeek - $totalOrdersLastWeek) / $totalOrdersLastWeek) * 100
+            : ($totalOrdersThisWeek > 0 ? 100 : 0);
+
+        return response()->json([
+            'total_orders_this_week' => $totalOrdersThisWeek,
+            'total_orders_last_week' => $totalOrdersLastWeek,
+            'percent_change' => $percentChange,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Failed to fetch order data',
+            'message' => $e->getMessage(),
+        ], 500);
     }
+}
 
-    public function getTotalSoldProducts()
-    {
-        try {
-            // Truy vấn tổng số lượng sản phẩm đã bán
-            $totalSold = DB::table('orders as o')
-                ->join('order_items as oi', 'o.id', '=', 'oi.order_id')
-                ->where('o.status', '!=', 'huy_don_hang')
-                ->sum('oi.quantity');
 
-            // Trả kết quả JSON
-            return response()->json([
-                'total_sold_products' => $totalSold,
-            ]);
-        } catch (\Exception $e) {
-            // Xử lý lỗi
-            return response()->json([
-                'error' => 'Failed to fetch total sold products',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
+
+public function getTotalCustomersByWeek()
+{
+    try {
+        // Ngày bắt đầu và kết thúc của tuần hiện tại
+        $startOfWeek = today()->startOfWeek(); // Thứ Hai tuần này
+        $endOfWeek = today()->endOfWeek(); // Chủ Nhật tuần này
+
+        // Ngày bắt đầu và kết thúc của tuần trước
+        $startOfLastWeek = today()->subWeek()->startOfWeek(); // Thứ Hai tuần trước
+        $endOfLastWeek = today()->subWeek()->endOfWeek(); // Chủ Nhật tuần trước
+
+        // Tổng số khách hàng mới trong tuần này
+        $totalCustomersThisWeek = DB::table('users')
+            ->where('role', 'user')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->count();
+
+        // Tổng số khách hàng mới trong tuần trước
+        $totalCustomersLastWeek = DB::table('users')
+            ->where('role', 'user')
+            ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
+            ->count();
+
+        // Tính phần trăm thay đổi
+        $percentChange = $totalCustomersLastWeek > 0
+            ? (($totalCustomersThisWeek - $totalCustomersLastWeek) / $totalCustomersLastWeek) * 100
+            : ($totalCustomersThisWeek > 0 ? 100 : 0); // Nếu tuần trước không có khách hàng, tăng 100%.
+
+        return response()->json([
+            'total_customers_this_week' => $totalCustomersThisWeek,
+            'total_customers_last_week' => $totalCustomersLastWeek,
+            'percent_change' => $percentChange,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Failed to fetch total customers',
+            'message' => $e->getMessage(),
+        ], 500);
     }
+}
+
+
+
+public function getTotalSoldProductsByWeek()
+{
+    try {
+        // Ngày bắt đầu và kết thúc của tuần hiện tại
+        $startOfWeek = today()->startOfWeek(); // Thứ Hai tuần này
+        $endOfWeek = today()->endOfWeek(); // Chủ Nhật tuần này
+
+        // Ngày bắt đầu và kết thúc của tuần trước
+        $startOfLastWeek = today()->subWeek()->startOfWeek(); // Thứ Hai tuần trước
+        $endOfLastWeek = today()->subWeek()->endOfWeek(); // Chủ Nhật tuần trước
+
+        // Tổng số sản phẩm đã bán trong tuần này
+        $totalSoldThisWeek = DB::table('orders as o')
+            ->join('order_items as oi', 'o.id', '=', 'oi.order_id')
+            ->where('o.status', '!=', 'huy_don_hang')
+            ->whereBetween('o.created_at', [$startOfWeek, $endOfWeek])
+            ->sum('oi.quantity');
+
+        // Tổng số sản phẩm đã bán trong tuần trước
+        $totalSoldLastWeek = DB::table('orders as o')
+            ->join('order_items as oi', 'o.id', '=', 'oi.order_id')
+            ->where('o.status', '!=', 'huy_don_hang')
+            ->whereBetween('o.created_at', [$startOfLastWeek, $endOfLastWeek])
+            ->sum('oi.quantity');
+
+        // Tính phần trăm thay đổi
+        $percentChange = $totalSoldLastWeek > 0
+            ? (($totalSoldThisWeek - $totalSoldLastWeek) / $totalSoldLastWeek) * 100
+            : ($totalSoldThisWeek > 0 ? 100 : 0); // Nếu tuần trước không có sản phẩm bán, tăng 100%.
+
+        return response()->json([
+            'total_sold_this_week' => $totalSoldThisWeek,
+            'total_sold_last_week' => $totalSoldLastWeek,
+            'percent_change' => round($percentChange, 2),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Failed to fetch total sold products',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+}
+
 
     public function getOrders(Request $request)
     {

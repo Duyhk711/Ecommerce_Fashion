@@ -6732,6 +6732,7 @@ textarea:-ms-input-placeholder {
     cursor: no-drop;
     box-shadow: 0 0 1px 1px #ddd;
     border: 1px solid #fff;
+    pointer-events: none;
 }
 .size-swatches li.soldout:after,
 .swatches li.soldout:after {

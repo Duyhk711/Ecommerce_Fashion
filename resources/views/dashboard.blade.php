@@ -15,18 +15,21 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Tổng thu nhập</p>
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Tổng thu nhập tuần này</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-success fs-sm mb-0">
-                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
+                                    <!-- Phần trăm thay đổi -->
+                                    <h5 id="percent-change" class="fs-sm mb-0 text-success">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>+0.00%
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-income">0</span>₫</h4>
-                                    {{-- <a href="" class="text-decoration-underline">View net earnings</a> --}}
+                                    <!-- Tổng thu nhập tuần này -->
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                                        <span id="total-income-this-week">0</span>₫
+                                    </h4>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -35,6 +38,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
 
@@ -43,18 +47,17 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Đơn hàng</p>
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Đơn hàng tuần này</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-danger fs-sm mb-0">
-                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
+                                    <h5 id="order-change" class="fs-sm mb-0">
+                                        <i id="order-icon" class="fs-13 align-middle"></i><span id="order-percent">0</span> %
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span id="total-orders">0</span></h4>
-                                    {{-- <a href="" class="text-decoration-underline">Xem tất cả đơn hàng</a> --}}
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span id="total-orders">0</span></h4>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -63,6 +66,8 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
                     </div>
                 </div>
 
@@ -73,20 +78,19 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Khách hàng</p>
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Khách hàng tuần này</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-success fs-sm mb-0">
-                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
+                                    <h5 id="customer-change" class="fs-sm mb-0">
+                                        <i id="customer-icon" class="fs-13 align-middle"></i><span id="customer-percent">0</span> %
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                        <span class="counter-value" data-target="0">0</span>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                                        <span id="total-customers" class="counter-value" data-target="0">0</span>
                                     </h4>
-                                    {{-- <a href="" class="text-decoration-underline">Xem chi tiết</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -94,30 +98,31 @@
                                     </span>
                                 </div>
                             </div>
-                        </div><!-- end card body -->
+                        </div>
+                        
+                        
                     </div><!-- end card -->
                 </div><!-- end col -->
 
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
                     <div class="card card-animate">
-                        <div class="card-body">
+                        <div class="card-body" style="height: 122px">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Sản phẩm đã bán</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-muted fs-sm mb-0">
-
+                                    <h5 class="fs-sm mb-0 percent-change">
+                                        <!-- Phần trăm thay đổi sẽ được JavaScript cập nhật -->
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                        <span id="total-sold-products">0</span>
+                                        <span id="total-sold-this-week">0</span>
                                     </h4>
-                                    {{-- <a href="#" class="text-decoration-underline">Xem chi tiết</a> --}}
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-danger-subtle rounded fs-3">
@@ -126,6 +131,8 @@
                                 </div>
                             </div>
                         </div><!-- end card body -->
+                        
+                        
                     </div><!-- end card -->
                 </div><!-- end col -->
 

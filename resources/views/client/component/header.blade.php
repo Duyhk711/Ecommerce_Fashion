@@ -204,7 +204,7 @@
                                     background-color: #ffffff;
                                 }
                                 .unread{
-                                    background-color: bisque;
+                                    background-color: rgb(255, 250, 244);
                                 }
                             </style>
                             <ul class="m-0" id="notification-list">
