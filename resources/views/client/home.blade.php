@@ -410,14 +410,14 @@
                 <div class="tabs-listing">
                     <ul class="nav nav-tabs style1 justify-content-center" id="productTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font" id="newarrivals-tab" data-bs-toggle="tab"
+                            <button class="nav-link head-font active" id="newarrivals-tab" data-bs-toggle="tab"
                                 data-bs-target="#newarrivals" type="button" role="tab" aria-controls="newarrivals"
                                 aria-selected="false">
                                 Hàng mới về
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font active" id="bestsellers-tab" data-bs-toggle="tab"
+                            <button class="nav-link head-font " id="bestsellers-tab" data-bs-toggle="tab"
                                 data-bs-target="#bestsellers" type="button" role="tab" aria-controls="bestsellers"
                                 aria-selected="true">
                                 Sản phẩm bán chạy
@@ -435,7 +435,7 @@
 
                     <div class="tab-content" id="productTabsContent">
                         <!-- newarrivals -->
-                        <div class="tab-pane " id="newarrivals" role="tabpanel" aria-labelledby="newarrivals-tab">
+                        <div class="tab-pane show active" id="newarrivals" role="tabpanel" aria-labelledby="newarrivals-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
                                 <div
@@ -624,7 +624,7 @@
                             <!--End Product Grid-->
                         </div>
                         <!-- bestsellers -->
-                        <div class="tab-pane show active" id="bestsellers" role="tabpanel"
+                        <div class="tab-pane " id="bestsellers" role="tabpanel"
                             aria-labelledby="bestsellers-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
