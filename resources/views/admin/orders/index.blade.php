@@ -55,7 +55,8 @@
                                   <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
                                   <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
                                   <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
-                                  <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành</option>
+                                  <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đã giao</option>
+                                  <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Hoàn thành</option>
                                   <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                               </select>
                           </div>
@@ -116,7 +117,8 @@
                                                 '1' => 'Chờ xác nhận',
                                                 '2' => 'Chờ vận chuyển',
                                                 '3' => 'Đang vận chuyển',
-                                                '4' => 'Hoàn thành',
+                                                '4' => 'Đã giao',
+                                                '5' => 'Hoàn thành',
                                                 'huy_don_hang' => 'Đơn hàng đã hủy',
                                             ];
                                             $badgeColor = [
@@ -124,6 +126,7 @@
                                                 '2' => 'bg-info',
                                                 '3' => 'bg-primary',
                                                 '4' => 'bg-success',
+                                                '5' => 'bg-success',
                                                 'huy_don_hang' => 'bg-danger',
                                             ];
                                             $currentStatus = $order->status;
@@ -152,7 +155,7 @@
                                         @php
                                             $statusMapping = [
                                                 'COD' => 'COD',
-                                                'THANH_TOAN_ONLINE' => 'ONLINE',
+                                                'THANH_TOAN_ONLINE' => 'VN Pay',
                                             ];
                                             $currentStatus = $order->payment_method;
                                         @endphp
@@ -169,7 +172,7 @@
                                     <td class="text-center fs-base fs-sm">
                                         <div class="btn-group" style="width: 35px">
                                             <!-- Cập nhật trạng thái -->
-                                            @if ($order->status == '4' || $order->status == 'huy_don_hang')
+                                            @if ($order->status == '4' || $order->status == 'huy_don_hang' || $order->status == '5')
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
                                                     style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
                                                     data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
@@ -226,7 +229,7 @@
                                 <option value="1">Chờ xác nhận</option>
                                 <option value="2">Chờ vận chuyển</option>
                                 <option value="3">Đang vận chuyển</option>
-                                <option value="4">Hoàn thành</option>
+                                <option value="4">Đã giao</option>
                                 <option value="huy_don_hang">Hủy bỏ</option>
                             </select>
                         </div>

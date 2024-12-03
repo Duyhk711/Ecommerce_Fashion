@@ -95,6 +95,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-order/{id}', [MyOrderController::class, 'showOne'])->name('orderOneDetail');
     //Route hủy đơn hàng
     Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+    Route::post('/order/{order_id}/success', [MyOrderController::class, 'orderSuccess'])->name('order.success');
     Route::post('/order/{order_id}/remove', [MyOrderController::class, 'removeOrder'])->name('order.remove');
 
     // address
@@ -132,4 +133,3 @@ Route::get('/not-found', function () {
 
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
-

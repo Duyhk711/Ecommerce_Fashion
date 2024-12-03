@@ -458,7 +458,7 @@
     </div>
 
 @endsection
-
+@vite(['resources/js/app.js'])
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- Hủy đơn hàng --}}

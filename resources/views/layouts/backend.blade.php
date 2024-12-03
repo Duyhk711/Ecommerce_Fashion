@@ -677,20 +677,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 toastr.success(
-                    '{{ session('
-                    'Thành công', {
+                    '{{ session('success') }}',
+                    'Thành công',
+                    {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
+                    }
+                );
             @endif
 
             @if (session('error'))
                 toastr.error(
-                    '{{ session('
-                    'Lỗi', {
+                    '{{ session('error') }}',
+                    'Lỗi',
+                    {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
+                    }
+                );
             @endif
         });
     </script>

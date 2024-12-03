@@ -100,6 +100,20 @@ class MyOrderController extends Controller
             return redirect()->back()->with('error', $result['message']);
         }
     }
+
+    public function orderSuccess(Request $request, $order_id)
+    {
+        // Gọi service để đổi đơn hàng thành đã nhận
+        $result = $this->myOrderService->orderSuccess($order_id);
+
+        // Kiểm tra kết quả
+        if ($result['success']) {
+            return redirect()->route('my.order')->with('success', $result['message']);
+        } else {
+            return redirect()->back()->with('error', $result['message']);
+        }
+    }
+
     public function removeOrder(Request $request, $order_id)
     {
         // Gọi service để hủy đơn hàng

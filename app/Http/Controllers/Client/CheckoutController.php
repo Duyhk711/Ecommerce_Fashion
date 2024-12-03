@@ -206,10 +206,12 @@ class CheckoutController extends Controller
                 // Trường hợp biến không phải là mảng hoặc đối tượng, xử lý lỗi hoặc thông báo
                 echo "Dữ liệu không hợp lệ";
             }
-            $user = $order->user;
-            $message = "Đơn hàng <strong>{$order->sku}</strong> đã được đặt thành công, đang chờ xác nhận từ cửa hàng.";
-            $title = "Cập nhật đơn hàng";
-            $user->notify(new OrderStatusUpdated($order, $message, $title));
+            if ($order->user_id) {
+                $user = $order->user;
+                $message = "Đơn hàng <strong>{$order->sku}</strong> đã được đặt thành công, đang chờ xác nhận từ cửa hàng.";
+                $title = "Cập nhật đơn hàng";
+                $user->notify(new OrderStatusUpdated($order, $message, $title));
+            }
             // Commit transaction nếu không có lỗi
             DB::commit();
             // Kiểm tra phương thức thanh toán

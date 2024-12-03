@@ -190,7 +190,7 @@
                             <i class="hdr-icon icon anm bi-bell fs-5"></i>
                             <span class="wishlist-count" id="wishlist-count">
                                 <span class="notification-count">
-                                    @if(auth()->check()) 
+                                    @if(auth()->check())
                                         {{ auth()->user()->unreadNotifications->count() }}
                                     @else
                                         0
@@ -198,7 +198,7 @@
                                 </span>
                             </span>
                         </a>
-                        <div id="notifyBox">
+                        <div id="notifyBox" class="custom-scrollbar">
                             <style>
                                 .read{
                                     background-color: #ffffff;
