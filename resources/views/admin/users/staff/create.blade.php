@@ -9,7 +9,7 @@
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.users.index') }}" style="color: inherit;">người dùng</a>
+                            <a href="{{ route('admin.users.clients') }}" style="color: inherit;">người dùng</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Thêm mới nhân viên</li>
                     </ol>

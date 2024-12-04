@@ -121,14 +121,14 @@
                                                                 <h6 class="mb-0">
                                                                     @if($product->price_sale)
                                                                         <span class="text-danger fw-bold">
-                                                                            {{ number_format($product->price_sale * 1000, 0, '.', ',') }}₫
+                                                                            {{ number_format($product->price_sale * 1000, 0, '.', '.') }}₫
                                                                         </span>
                                                                         <span class="text-muted text-decoration-line-through ms-2">
-                                                                            {{ number_format($product->price_regular * 1000, 0, '.', ',') }}₫
+                                                                            {{ number_format($product->price_regular * 1000, 0, '.', '.') }}₫
                                                                         </span>
                                                                     @else
                                                                         <span class="fw-bold">
-                                                                            {{ number_format($product->price_regular * 1000, 0, '.', ',') }}₫
+                                                                            {{ number_format($product->price_regular * 1000, 0, '.', '.') }}₫
                                                                         </span>
                                                                     @endif
                                                                 </h6>
@@ -184,7 +184,7 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <p class="text-muted mb-1">Tổng doanh thu :</p>
-                                                                <h6 class="mb-0">{{ number_format($orderData->total_revenue * 1000, 0, '.', ',') }}₫</h6>
+                                                                <h6 class="mb-0">{{ number_format($orderData->total_revenue * 1000, 0, '.', '.') }}₫</h6>
                                                             </div>
                                                         </div>
                                                     </div>

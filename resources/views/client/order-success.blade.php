@@ -4,7 +4,7 @@
 @endsection
 @section('css')
     <style>
-        .font-uppercase{
+        .font-uppercase {
             font-family: 'Quicksand', sans-serif;
         }
     </style>
@@ -18,7 +18,7 @@
             <div class="success-text checkout-card text-center mb-4 mb-md-5">
                 <i class="icon anm anm-shield-check"></i>
                 <h2>Cảm ơn bạn đã đặt hàng!</h2>
-                <p class="mb-1">Thanh toán được xử lý thành công và đơn hàng của bạn đang được xử lý</p>
+                <p class="mb-1">Bạn đã đặt hàng thành công và đơn hàng của bạn đang được xử lý</p>
                 <p class="mb-1">Bạn sẽ nhận được email xác nhận đơn hàng với chi tiết về đơn đặt hàng của bạn và liên kết
                     đến theo dõi tiến trình của nó.</p>
                 {{-- <p class="text-order badge bg-success mt-3">Transaction ID: GHERT05764</p> --}}

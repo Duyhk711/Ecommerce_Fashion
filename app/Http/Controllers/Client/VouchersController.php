@@ -105,7 +105,7 @@ class VouchersController extends Controller
             UserVoucher::create([
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
-                'is_used' => false
+                'is_used' => false,
             ]);
 
             $voucher->decrement('quantity');
@@ -145,11 +145,11 @@ class VouchersController extends Controller
                     'expiry_date' => $userVoucher->voucher->end_date,
                     'is_used' => $userVoucher->is_used,
                 ];
-            })
+            }),
         ]);
     }
-  
-  public function getAvailableVouchers()
+
+    public function getAvailableVouchers()
     {
         $user = Auth::user();
 

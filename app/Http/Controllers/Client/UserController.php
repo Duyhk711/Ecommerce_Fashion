@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\AuthRequest;
-use App\Http\Requests\StoreAddressRequest;
-use App\Models\Favorite;
 use App\Models\User;
-use App\Services\Client\FavoriteService;
+use App\Models\Address;
+use App\Models\Favorite;
 use App\Services\UserService;
+use App\Http\Requests\AuthRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use App\Services\Client\FavoriteService;
+use App\Http\Requests\StoreAddressRequest;
 
 class UserController extends Controller
 {
@@ -130,11 +131,35 @@ class UserController extends Controller
 
         // Lưu địa chỉ và nhận thông tin địa chỉ đã lưu
         $address = $this->userService->storeAddress($data);
+        if ($address) {
+            // Kiểm tra nếu đây là địa chỉ duy nhất của user có deleted_at == null
+            $userId = auth()->id(); // Giả định bạn đang lấy user từ authentication
+            $activeAddressesCount = Address::where('user_id', $userId)
+                ->whereNull('deleted_at')
+                ->count();
+
+            if ($activeAddressesCount == 1) {
+                // Đặt địa chỉ này làm mặc định
+                $this->userService->setDefaultAddress($address->id);
+                $address->refresh();
+            }
+        }
 
         // return view('client.my-account.address', compact('address'));
         return response()->json([
             'success' => true,
-            'address' => $address
+            'address' => [
+                'id' => $address->id,
+                'customer_name' => $address->customer_name,
+                'customer_phone' => $address->customer_phone,
+                'address_line1' => $address->address_line1,
+                'address_line2' => $address->address_line2,
+                'ward' => $address->ward,
+                'district' => $address->district,
+                'city' => $address->city,
+                'type' => $address->type,
+                'is_default' => $address->is_default
+            ]
         ]);
     }
 
