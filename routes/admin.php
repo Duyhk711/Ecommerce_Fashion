@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\ThongkeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
@@ -125,7 +126,9 @@ Route::prefix('admin')
             Route::get('/get-sorted-users', [ChatsController::class, 'getSortedUsers'])->name('getSortedUsers');
 
             //THONGKE
-            Route::resource('/thongkes', ThongkeController::class);
-            Route::get('/admin/thongkes', [ThongkeController::class, 'index'])->name('admin.thongkes.index');
+            Route::view('statistics', 'admin.statistics.index')->name('statistics.index');
+            Route::view('statistics/orders', 'admin.statistics.orders')->name('statistics.orders');
+            Route::view('statistics/revenues', 'admin.statistics.revenues')->name('statistics.revenues');
+            
         });
     });
