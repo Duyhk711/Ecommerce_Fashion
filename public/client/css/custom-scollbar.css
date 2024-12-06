@@ -1,0 +1,61 @@
+/* Ẩn thanh cuộn mặc định */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: transparent; /* Nền trong suốt */
+}
+
+/* Đường track (phần nền) */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Ẩn track khi không cuộn */
+}
+
+/* Phần kéo của thanh cuộn (thumb) */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Ẩn thumb mặc định */
+  border-radius: 10px;
+}
+
+/* Khi hover hoặc đang cuộn mới hiển thị thumb */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb
+{
+  background-color: rgba(136, 136, 136, 0.8); /* Thumb hiện khi hover hoặc cuộn */
+}
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background-color: transparent;  /* Góc giữa thanh cuộn ngang và dọc */
+}
+
+/* Firefox support */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.custom-scrollbar:hover {
+  scrollbar-color: rgba(136, 136, 136, 0.8) transparent;
+}
+
+/* Scrollbar ngang */
+.custom-scrollbar-horizontal {
+  overflow-x: auto;
+  white-space: nowrap; /* Giữ nội dung trên cùng một dòng */
+}
+
+.custom-scrollbar-horizontal::-webkit-scrollbar {
+  height: 8px; /* Chiều cao của thanh cuộn ngang */
+}
+
+/* Scrollbar dọc */
+.custom-scrollbar-vertical {
+  overflow-y: auto;
+}
+
+.custom-scrollbar-vertical::-webkit-scrollbar {
+  width: 8px; /* Độ rộng của thanh cuộn dọc */
+}
+
+/* Firefox support */
+.custom-scrollbar {
+  scrollbar-color: #888 #f1f1f1;  /* Màu thanh kéo và track */
+  scrollbar-width: thin; /* Thanh cuộn nhỏ */
+}

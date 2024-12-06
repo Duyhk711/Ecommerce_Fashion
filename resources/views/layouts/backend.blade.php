@@ -688,26 +688,32 @@
     <!-- toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                toastr.success(
+                    '{{ session('success') }}',
+                    'Thành công',
+                    {
+                        positionClass: 'toast-top-right',
+                        timeOut: 3000
+                    }
+                );
+            @endif
 
-   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        @if (session('success'))
-            toastr.success('{{ session('success') }}', 'Thành công', {
-                positionClass: 'toast-top-right',
-                timeOut: 3000
-            });
-        @endif
-
-        @if (session('error'))
-            toastr.error('{{ session('error') }}', 'Lỗi', {
-                positionClass: 'toast-top-right',
-                timeOut: 3000
-            });
-        @endif
-    });
-</script>
-
-
+            @if (session('error'))
+                toastr.error(
+                    '{{ session('error') }}',
+                    'Lỗi',
+                    {
+                        positionClass: 'toast-top-right',
+                        timeOut: 3000
+                    }
+                );
+            @endif
+        });
+    </script>
+    
 </body>
 @yield('js')
 
