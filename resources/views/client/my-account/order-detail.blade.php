@@ -125,7 +125,8 @@
                         '1' => 'Chờ xác nhận',
                         '2' => 'Chờ vận chuyển',
                         '3' => 'Đang vận chuyển',
-                        '4' => 'Hoàn thành',
+                        '4' => 'Đã giao',
+                        '5' => 'Hoàn thành',
                         'huy_don_hang' => 'Hủy đơn hàng'
                     ];
                 @endphp
@@ -134,6 +135,7 @@
                     @elseif($order->status == '2') bg-info
                     @elseif($order->status == '3') bg-primary text-dark
                     @elseif($order->status == '4') bg-success
+                    @elseif($order->status == '5') bg-success
                     @elseif($order->status == 'huy_don_hang') bg-danger
                     @endif">
                     {{ $statusText[$order->status] ?? $order->status }}
@@ -167,7 +169,8 @@
                 @php
                     $paymentText = [
                         'cho_thanh_toan' => 'Chờ thanh toán',
-                        'da_thanh_toan' => 'Đã thanh toán'
+                        'da_thanh_toan' => 'Đã thanh toán',
+                        'huy_thanh_toan' => 'Hủy thanh toán'
                     ];
                 @endphp
                 @php
@@ -255,7 +258,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        @if ($order->status == '4')
+                        @if ($order->status == '5')
                             @if ($commentDataArray[$item->productVariant->product->id]['status'] == "not_comment")
                                 <div class="review-button-container" style="text-align: right;">
                                     <a href="#" class="btn btn-primary btn-sm rounded-2 w-30 fw-normal"
