@@ -6,23 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <title>@yield('title')</title>
-<<<<<<< HEAD
-
-    <meta name="description"
-        content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
-    <meta name="author" content="pixelcave">
-    <meta name="robots" content="noindex, nofollow">
-
-    <!-- Icons -->
-    <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
-    <link rel="icon" sizes="192x192" type="image/png"
-        href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180"
-        href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- Modules -->
-
-=======
     <meta name="storage-url" content="{{ Storage::url('') }}">
     <meta name="description"
         content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
@@ -38,7 +21,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Modules -->
 
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
@@ -332,11 +314,7 @@
                                             </a>
                                         </li>
                                     @endcan
-<<<<<<< HEAD
-                                    {{-- @can('xem danh sách vai trò') --}}
-=======
                                     {{-- @can('phân quyền') --}}
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.roles') }}">
@@ -352,12 +330,7 @@
                         @endif
 
                         {{-- DON HANG --}}
-<<<<<<< HEAD
-                         @if (Auth::user()->can('xem danh sách đơn hàng') ||
-                                Auth::user()->can('xem danh sách khuyến mãi'))
-=======
                         @if (Auth::user()->can('xem danh sách đơn hàng') || Auth::user()->can('xem danh sách khuyến mãi'))
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                             <li
                                 class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -428,36 +401,21 @@
 
                         {{-- THONGKE --}}
                         @can('xem thống kê')
-<<<<<<< HEAD
-                            <li class="nav-main-item{{ request()->is('admin/thongkes*') ? ' open' : '' }}">
-                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-                                    aria-expanded="{{ request()->is('admin/thongkes*') ? 'true' : 'false' }}"
-=======
                             <li class="nav-main-item{{ request()->is('admin/statistics*') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/statistics*') ? 'true' : 'false' }}"
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                     href="#">
                                     <i class="nav-main-link-icon fa fa-keyboard"></i>
                                     <span class="nav-main-link-name">Thống kê</span>
                                 </a>
-<<<<<<< HEAD
-                                <ul class="nav-main-submenu{{ request()->is('admin/thongkes*') ? ' show' : '' }}">
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('admin/thongkes') ? ' active' : '' }}"
-                                            href="{{ route('admin.thongkes.index') }}">
-=======
                                 <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
                                             href="{{ route('admin.statistics.index') }}">
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                             <span class="nav-main-link-name">Thống kê</span>
                                         </a>
                                     </li>
                                 </ul>
-<<<<<<< HEAD
-=======
                                 <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
@@ -490,7 +448,6 @@
                                         </a>
                                     </li>
                                 </ul>
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                             </li>
                         @endcan
 
@@ -747,22 +704,10 @@
     <!-- toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 toastr.success(
-<<<<<<< HEAD
-                    '{{ session('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
-                    'Thành công', {
-                        positionClass: 'toast-top-right',
-                        timeOut: 3000
-                    });
-=======
                     '{{ session('success') }}',
                     'Thành công',
                     {
@@ -770,19 +715,10 @@
                         timeOut: 3000
                     }
                 );
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
             @endif
 
             @if (session('error'))
                 toastr.error(
-<<<<<<< HEAD
-                    '{{ session('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            error ') }}',
-                    'Lỗi', {
-                        positionClass: 'toast-top-right',
-                        timeOut: 3000
-                    });
-=======
                     '{{ session('error') }}',
                     'Lỗi',
                     {
@@ -790,7 +726,6 @@
                         timeOut: 3000
                     }
                 );
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
             @endif
         });
     </script>
