@@ -23,10 +23,11 @@ class CartController extends Controller
         $productId = $request['product_id'];
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
+        $slug = $request['product_slug'];
         $urlWithoutParams = url()->previous();
         $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
-            $this->cartService->addToCart($productId, $productVariantId, $quantity);
+            $this->cartService->addToCart($productId, $productVariantId, $quantity,$slug);
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,

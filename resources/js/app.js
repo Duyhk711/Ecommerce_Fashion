@@ -20,7 +20,7 @@ window.Echo.channel('orders')
             paymentStatusElement.innerHTML = `${event.order.statusPaymentMapping[currentPaymentStatus] ?? currentPaymentStatus}`;
             paymentStatusElement.className = `badge rounded-pill ${event.order.badgeColorPayment[currentPaymentStatus]}`;
         }
-
+  
         // Display real-time toastr notification using the success message from the event
         toastr.success(event.success, 'Thành công', {
             positionClass: 'toast-top-right',

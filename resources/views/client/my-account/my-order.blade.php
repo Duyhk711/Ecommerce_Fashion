@@ -197,10 +197,10 @@
                             <div class="bottom d-flex justify-content-start gap-2">
 
                                 @if ($item->payment_status == 'cho_thanh_toan' && $item->payment_method == 'THANH_TOAN_ONLINE')
-                                    <a href="{{ route('', ['id' => $item->id]) }}"
+                                    {{-- <a href="{{ route('', ['id' => $item->id]) }}"
                                         class="order-link btn btn-success btn-sm">
                                         Thanh toán
-                                    </a>
+                                    </a> --}}
                                 @endif
                                 @if ($item->status != 'huy_don_hang')
                                     <a href="{{ route('orderDetail', ['id' => $item->id]) }}"
