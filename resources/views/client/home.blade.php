@@ -410,14 +410,14 @@
                 <div class="tabs-listing">
                     <ul class="nav nav-tabs style1 justify-content-center" id="productTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font" id="newarrivals-tab" data-bs-toggle="tab"
+                            <button class="nav-link head-font active" id="newarrivals-tab" data-bs-toggle="tab"
                                 data-bs-target="#newarrivals" type="button" role="tab" aria-controls="newarrivals"
                                 aria-selected="false">
                                 Hàng mới về
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font active" id="bestsellers-tab" data-bs-toggle="tab"
+                            <button class="nav-link head-font " id="bestsellers-tab" data-bs-toggle="tab"
                                 data-bs-target="#bestsellers" type="button" role="tab" aria-controls="bestsellers"
                                 aria-selected="true">
                                 Sản phẩm bán chạy
@@ -435,7 +435,7 @@
 
                     <div class="tab-content" id="productTabsContent">
                         <!-- newarrivals -->
-                        <div class="tab-pane " id="newarrivals" role="tabpanel" aria-labelledby="newarrivals-tab">
+                        <div class="tab-pane show active" id="newarrivals" role="tabpanel" aria-labelledby="newarrivals-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
                                 <div
@@ -624,7 +624,7 @@
                             <!--End Product Grid-->
                         </div>
                         <!-- bestsellers -->
-                        <div class="tab-pane show active" id="bestsellers" role="tabpanel"
+                        <div class="tab-pane " id="bestsellers" role="tabpanel"
                             aria-labelledby="bestsellers-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
@@ -998,21 +998,20 @@
                         <div class="container">
                             <div class="wrap-text center text-white">
                                 <h1 class="hero-title text-white">
-                                    Clearance Sale - Flat 50% Off
+                                    Giảm giá sốc - Giảm giá 50%
                                 </h1>
                                 <p class="hero-subtitle h3 text-white">
-                                    Sale will end soon in
+                                 Khuyến mãi sẽ kết thúc trong
                                 </p>
                                 <!--Countdown Timer-->
                                 <div class="hero-saleTime d-flex-center text-center justify-content-center"
                                     data-countdown="2028/10/01"></div>
                                 <!--End Countdown Timer-->
                                 <p class="hero-details">
-                                    Hema Multipurpose Template that will give you and your
-                                    customers a smooth shopping experience which can be used for
-                                    various kinds of stores such as fashion.
+                                    Mẫu áo đa năng Poly Fashion sẽ mang đến cho bạn và khách hàng trải nghiệm mua
+                                    sắm thuận tiện, có thể sử dụng cho nhiều loại sản phẩm khác nhau.
                                 </p>
-                                <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Shop now</a>
+                                <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Mua ngay</a>
                             </div>
                         </div>
                     </div>

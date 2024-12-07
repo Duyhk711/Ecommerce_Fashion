@@ -9,11 +9,13 @@ use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\VouchersController;
+use App\Http\Controllers\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +61,8 @@ Route::view('/support', 'client.support')->name('support');
 Route::view('/barter', 'client.barter')->name('barter');
 Route::view('/blog', 'client.blog')->name('blog');
 Route::get('/vouchers', [VouchersController::class, 'index'])->name('vouchers.index');
+Route::get('/fetch-news', [NewsController::class, 'fetchNews']);
+Route::get('/get-news', [BlogController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     // wishlist
