@@ -1,18 +1,19 @@
 <?php
 
-use App\Http\Controllers\AuthenticationController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatsController;
+use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\MyOrderController;
-use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\MyOrderController;
+use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\VouchersController;
-use App\Http\Controllers\VNPayController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +95,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-order/{id}', [MyOrderController::class, 'showOne'])->name('orderOneDetail');
     //Route hủy đơn hàng
     Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+    Route::post('/order/{order_id}/success', [MyOrderController::class, 'orderSuccess'])->name('order.success');
     Route::post('/order/{order_id}/remove', [MyOrderController::class, 'removeOrder'])->name('order.remove');
 
     // address
@@ -128,3 +130,6 @@ Route::get('/check-voucher/{code}', [VouchersController::class, 'checkVoucher'])
 Route::get('/not-found', function () {
     return view('client.not-found');
 })->name('not-found');
+
+Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');

@@ -40,36 +40,14 @@
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Đơn hàng</h3>
-                <div class="block-options">
-                  <form method="GET" action="{{ route('admin.orders.index') }}" class="mb-3 ">
-                    <div  class="d-flex">
-                        <div>
-                            <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
-                                <option value="">Trạng thái</option>
-                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
-                                <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
-                                <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
-                                <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành</option>
-                                <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
-                            </select>
-                        </div>
-                        <div class="ms-2">
-                            <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
-                                <option value="">Thanh toán</option>
-                                <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
-                                <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
-                            </select>
-                        </div>
-                    </div>
-                  </form>
-                </div>
             </div>
             <div class="block-content">
                 <div class="block-options">
                     <form method="GET" action="{{ route('admin.orders.index') }}" class="mb-3 ">
                       <div class="d-flex justify-content-end">
                         <div class="input-group mb-3 mx-2" style="width: 40%">
-                            <input type="text" class="form-control" name="order_search" placeholder="Tìm kiếm theo mã đơn, tên khách hàng" aria-label="Search" aria-describedby="button-addon">
+                            <input type="text" class="form-control" name="order_search" placeholder="Tìm kiếm theo mã đơn, tên khách hàng" aria-label="Search" aria-describedby="button-addon" value="{{ request('order_search') }}"
+                            onchange="this.form.submit()">
                         </div>
                           <div>
                               <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
@@ -77,20 +55,21 @@
                                   <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
                                   <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
                                   <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
-                                  <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành</option>
+                                  <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đã giao</option>
+                                  <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Hoàn thành</option>
                                   <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                               </select>
                           </div>
                           <div class="ms-2">
                               <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
-                                  <option value="">Tất cả thanh toán</option>
+                                  <option value="">Thanh toán</option>
                                   <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
                                   <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
                               </select>
                           </div>
                           <div class="ms-2 d-flex">
-                              <input type="date" name="" class="form-control" style="width: 150px; height: 38px;" id="">
-                              <input type="date" name="" class="form-control ms-2" style="width: 150px; height: 38px;" id="">
+                              <input type="date" name="order_date_start" value="{{ request('order_date_start') }}" onchange="this.form.submit()" class="form-control" style="width: 150px; height: 38px;" id="">
+                              <input type="date" name="order_date_end" value="{{ request('order_date_end') }}" onchange="this.form.submit()" class="form-control ms-2" style="width: 150px; height: 38px;" id="">
                           </div>
                       </div>
                     </form>
@@ -106,7 +85,7 @@
                                 <th class="d-none d-xl-table-cell fs-sm">Khách hàng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-center">Ngày đặt</th>
                                 <th class="d-sm-table-cell fs-sm">Trạng thái</th>
-                                <th class="d-sm-table-cell fs-sm">Thanh toán</th>
+                                {{-- <th class="d-sm-table-cell fs-sm">Thanh toán</th> --}}
                                 <th class="d-sm-table-cell fs-sm">PTTT</th>
                                 <th class="d-none d-xl-table-cell fs-sm text-center">Số lượng</th>
                                 <th class="d-none d-sm-table-cell fs-sm text-end">Tổng</th>
@@ -116,7 +95,7 @@
                         <tbody>
                           @if ($orders->isEmpty())
                             <tr>
-                                <td colspan="7" class="text-center fs-sm">Không có đơn hàng nào</td>
+                                <td colspan="10" class="text-center fs-sm">Không có đơn hàng nào</td>
                             </tr>
                           @else
                             @foreach ($orders as $order)
@@ -138,7 +117,8 @@
                                                 '1' => 'Chờ xác nhận',
                                                 '2' => 'Chờ vận chuyển',
                                                 '3' => 'Đang vận chuyển',
-                                                '4' => 'Hoàn thành',
+                                                '4' => 'Đã giao',
+                                                '5' => 'Hoàn thành',
                                                 'huy_don_hang' => 'Đơn hàng đã hủy',
                                             ];
                                             $badgeColor = [
@@ -146,6 +126,7 @@
                                                 '2' => 'bg-info',
                                                 '3' => 'bg-primary',
                                                 '4' => 'bg-success',
+                                                '5' => 'bg-success',
                                                 'huy_don_hang' => 'bg-danger',
                                             ];
                                             $currentStatus = $order->status;
@@ -154,7 +135,7 @@
                                             {{ $statusMapping[$currentStatus] ?? $currentStatus }}
                                         </span>
                                     </td>
-                                    <td class="fs-base">
+                                    {{-- <td class="fs-base">
                                         @php
                                             $statusMappingPayment = [
                                                 'cho_thanh_toan' => 'Chờ thanh toán',
@@ -169,12 +150,12 @@
                                          <span id="paymentStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColorPayment[$currentStatusPayment] }}">
                                             {{ $statusMappingPayment[$currentStatusPayment] ?? $currentStatusPayment }}
                                         </span>
-                                    </td>
+                                    </td> --}}
                                     <td class="fs-base">
                                         @php
                                             $statusMapping = [
                                                 'COD' => 'COD',
-                                                'THANH_TOAN_ONLINE' => 'ONLINE',
+                                                'THANH_TOAN_ONLINE' => 'VN Pay',
                                             ];
                                             $currentStatus = $order->payment_method;
                                         @endphp
@@ -191,7 +172,7 @@
                                     <td class="text-center fs-base fs-sm">
                                         <div class="btn-group" style="width: 35px">
                                             <!-- Cập nhật trạng thái -->
-                                            @if ($order->status == '4' || $order->status == 'huy_don_hang')
+                                            @if ($order->status == '4' || $order->status == 'huy_don_hang' || $order->status == '5')
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
                                                     style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
                                                     data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
@@ -248,7 +229,7 @@
                                 <option value="1">Chờ xác nhận</option>
                                 <option value="2">Chờ vận chuyển</option>
                                 <option value="3">Đang vận chuyển</option>
-                                <option value="4">Hoàn thành</option>
+                                <option value="4">Đã giao</option>
                                 <option value="huy_don_hang">Hủy bỏ</option>
                             </select>
                         </div>

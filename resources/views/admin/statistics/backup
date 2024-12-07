@@ -75,7 +75,7 @@
   <!-- Overview -->
 
 
-  <div class="row items-push">
+  {{-- <div class="row items-push">
     <div class="col-sm-6 col-xl-3">
       <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
         <div class="block-content block-content-full flex-grow-1">
@@ -160,39 +160,64 @@
             </div> -->
       </div>
     </div>
-  </div>
+  </div> --}}
 
 
   <!-- END Overview -->
 
   <!-- Store Growth -->
   <div class="block block-rounded">
-    <div class="block-header block-header-default">
-      <h3 class="block-title">
-        Biểu đồ doanh thu trong tháng
-      </h3>
-      <div class="block-options">
-        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-          <!-- <i class="si si-refresh"></i> -->
-        </button>
-        <button type="button" class="btn-block-option">
-          <!-- <i class="si si-wrench"></i> -->
-        </button>
-      </div>
-    </div>
-    <div class="block-content block-content-full">
-      <div class="">
-        <div class="col-12 d-md-flex align-items-md-center">
-          <div class="p-md-2 p-lg-3 w-100" style="height: 600px;">
-            <canvas style="height: 100%;width: 100%;" id="revenueChart"></canvas>
-          </div>
+    
+      <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0 align-items-center d-flex">
+                    <div class="col-9"><h4 class="card-title mb-0 flex-grow-1">Tổng doanh thu</h4></div>
+                        <div class="col-1">
+                            <select id="yearSelector" class="form-control">
+                                <option value="2024" selected>2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                            </select>
+                        </div>
+                        <div class="col-1 dropdown">
+                            <!-- Nút dropdown -->
+                            <button class="btn btn-sm btn-alt dropdown-toggle" type="button" id="dateDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Tùy chỉnh
+                            </button>
+
+                            <!-- Nội dung dropdown -->
+                            <div class="dropdown-menu p-3" aria-labelledby="dateDropdown">
+                                <div class="row d-flex justify-content-end">
+                                    <div class="col-12 mb-3">
+                                        <label for="startDate" class="form-label">Từ ngày:</label>
+                                        <input type="date" class="form-control" id="startDate">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="endDate" class="form-label">Đến ngày:</label>
+                                        <input type="date" class="form-control" id="endDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 text-center">
+                            <button class="btn btn-sm btn-alt" id="resetButton">Đặt lại</button>
+                        </div>
+                </div><!-- end card header -->
+
+                <!-- Biểu đồ -->
+                <div class="card-body p-0 pb-2">
+                    <canvas id="revenueChart" width="800" height="400"></canvas>
+                </div><!-- end card body -->
+            </div><!-- end card -->
         </div>
-      </div>
+   
     </div>
+    
   </div>
   <!-- END Store Growth -->
 
-  <div class="row justify-content-center">
+  {{-- <div class="row justify-content-center">
     <div class="col-xl-12">
       <div class="block block-rounded">
         <div class="block-header block-header-default">
@@ -848,7 +873,7 @@
     </div>
 
 
-  </div>
+  </div> --}}
 
 
   <!-- END Latest Orders + Stats -->
@@ -858,86 +883,7 @@
 <!-- END Main Container -->
 @endsection
 @section('js')
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    const revenueChart = new Chart(ctx, {
-      type: 'line', // kiểu biểu đồ (line, bar, pie, ...)
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // nhãn cho trục X
-        datasets: [{
-          label: 'Doanh thu (VNĐ)', // tiêu đề cho chuỗi dữ liệu
-          data: [12000, 15000, 10000, 17000, 20000, 25000, 23000, 30000, 28000, 32000, 35000, 40000], // dữ liệu doanh thu
-          borderColor: 'rgba(75, 192, 192, 1)', // màu đường
-          backgroundColor: 'rgba(75, 192, 192, 0.2)', // màu nền dưới đường
-          borderWidth: 2,
-          fill: true, // điền màu dưới đường
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true // bắt đầu trục Y từ 0
-          }
-        }
-      }
-    });
-  });
-</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Function để tạo biểu đồ tròn
-  function createPieChart(ctx, percent, color) {
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        datasets: [{
-          data: [percent, 100 - percent],
-          backgroundColor: [color, '#e9e9e9']
-        }]
-      },
-      options: {
-        responsive: false,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            callbacks: {
-              label: function(tooltipItem) {
-                return percent + '%';
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-
-  // Khởi tạo các biểu đồ
-  window.onload = function() {
-    createPieChart(document.getElementById('cancelRateChart').getContext('2d'), 25, '#e04f1a'); // Chỉ số hủy
-    createPieChart(document.getElementById('completionRateChart').getContext('2d'), 90, '#8dc451'); // Tỷ lệ hoàn thành
-    createPieChart(document.getElementById('orderStatusChart').getContext('2d'), 50, '#4a90e2'); // Trạng thái đơn hàng
-  };
-</script>
-{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script> --}}
-<!-- jQuery (required for Easy Pie Chart + jQuery Sparkline plugin) -->
-<script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-
-<!-- Page JS Plugins -->
-<script src="{{ asset('admin/js/plugins/easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/chart.js/chart.umd.js') }}"></script>
-
-<!-- Page JS Code -->
-<script src="{{asset('admin/js/pages/be_comp_charts.min.js') }}"></script>
-
-<!-- Page JS Helpers (Easy Pie Chart + jQuery Sparkline Plugins) -->
-<script>
-  Dashmix.helpersOnLoad(['jq-easy-pie-chart', 'jq-sparkline']);
-</script>
-
+<script src="{{ asset('admin/js/ui/charts/revenue.js') }}"></script>
 @endsection

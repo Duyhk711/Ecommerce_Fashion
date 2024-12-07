@@ -117,8 +117,22 @@
                                                                 </div>
                                                             </div>
                                                             <div class="flex-grow-1">
-                                                                <p class="text-muted mb-1">Giá gốc :</p>
-                                                                <h5 class="mb-0">{{number_format($product->price_regular, 3, '.', 0)}}</h5>
+                                                                <p class="text-muted mb-1">Giá bán:</p>
+                                                                <h6 class="mb-0">
+                                                                    @if($product->price_sale)
+                                                                        <span class="text-danger fw-bold">
+                                                                            {{ number_format($product->price_sale * 1000, 0, '.', '.') }}₫
+                                                                        </span>
+                                                                        <span class="text-muted text-decoration-line-through ms-2">
+                                                                            {{ number_format($product->price_regular * 1000, 0, '.', '.') }}₫
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="fw-bold">
+                                                                            {{ number_format($product->price_regular * 1000, 0, '.', '.') }}₫
+                                                                        </span>
+                                                                    @endif
+                                                                </h6>
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -135,7 +149,7 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <p class="text-muted mb-1">Số lượng đơn :</p>
-                                                                <h5 class="mb-0">{{ $orderData->total_orders }}</h5>
+                                                                <h6 class="mb-0">{{ $orderData->total_orders }}</h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -152,7 +166,11 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <p class="text-muted mb-1">Số lượng sẵn có :</p>
+<<<<<<< HEAD
                                                                 <h5 class="mb-0">{{$totalStock}}</h5>
+=======
+                                                                <h6 class="mb-0">{{$totalStock}}</h6>
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
 
                                                             </div>
                                                         </div>
@@ -170,7 +188,7 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <p class="text-muted mb-1">Tổng doanh thu :</p>
-                                                                <h5 class="mb-0">{{ number_format($orderData->total_revenue, 3, '.', 0) }}₫</h5>
+                                                                <h6 class="mb-0">{{ number_format($orderData->total_revenue * 1000, 0, '.', '.') }}₫</h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -182,7 +200,7 @@
                                                  <!-- Hiển thị Color -->
                                                  <div class="col-xl-6">
                                                     <div class="mt-4">
-                                                        <h6 class="">Màu sắc :</h6>
+                                                        <p class="">Màu sắc :</p>
                                                         <div class="d-flex flex-wrap gap-2">
                                                             @php
                                                                 $displayedColors = [];
@@ -214,7 +232,7 @@
                                                 <!-- Hiển thị Size -->
                                                 <div class="col-xl-6">
                                                     <div class="mt-4">
-                                                        <h6 class="">Kích cỡ :</h6>
+                                                        <p class="">Kích cỡ :</p>
                                                         <div class="d-flex flex-wrap gap-2">
                                                             @php
                                                                 $displayedSizes = [];
@@ -244,12 +262,12 @@
                                             <!-- end row -->
 
                                             <div class="mt-4 text-muted">
-                                                <h5 class="">Mô tả :</h5>
+                                                <h6 class="">Mô tả :</h6>
                                                 <p>{!!$product->description !!}</p>
                                             </div>
 
                                             <div class="product-content mt-5">
-                                                <h5 class=" mb-3">Mô tả :</h5>
+                                                <h6 class=" mb-3">Mô tả sản phẩm :</h6>
                                                 <nav>
                                                     <ul class="nav nav-tabs nav-tabs-custom nav-success" id="nav-tab"
                                                         role="tablist">
@@ -274,15 +292,16 @@
                                                             <table class="table mb-0">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <th scope="row" style="width: 200px;">Category
+                                                                        <th scope="row" style="width: 200px;">Phân loại
                                                                         </th>
-                                                                        <td>T-Shirt</td>
+                                                                        <td>{{$product->catalogue->name}}</td>
                                                                     </tr>
-                                                                    <tr>
+                                                                    {{-- <tr>
                                                                         <th scope="row">Brand</th>
                                                                         <td>Tommy Hilfiger</td>
-                                                                    </tr>
+                                                                    </tr> --}}
                                                                     <tr>
+<<<<<<< HEAD
                                                                         <th scope="row">Color</th>
                                                                         <td>Blue</td>
                                                                     </tr>
@@ -294,6 +313,36 @@
                                                                         <th scope="row">Weight</th>
                                                                         <td>140 Gram</td>
                                                                     </tr>
+=======
+                                                                        <th scope="row">Màu sắc</th>
+                                                                        <td>
+                                                                            @php
+                                                                                $displayedColors = [];
+                                                                            @endphp
+                                                                            @foreach ($product->variants as $variant)
+                                                                                @foreach ($variant->variantAttributes as $attribute)
+                                                                                    @if ($attribute->attribute->slug === 'color' && !in_array($attribute->attributeValue->value, $displayedColors))
+                                                                                        @php
+                                                                                            $displayedColors[] = $attribute->attributeValue->value;
+                                                                                        @endphp
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endforeach
+                                                                    
+                                                                            {{-- Hiển thị danh sách màu, cách nhau bởi dấu phẩy --}}
+                                                                            {{ implode(', ', $displayedColors) }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <th scope="row">Chất liệu</th>
+                                                                        <td>{{$product->material}}</td>
+                                                                    </tr>
+                                                                    {{-- <tr>
+                                                                        <th scope="row">Weight</th>
+                                                                        <td>140 Gram</td>
+                                                                    </tr> --}}
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -312,7 +361,11 @@
 
                                             <div class="mt-5">
                                                 <div>
+<<<<<<< HEAD
                                                     <h5 class=" mb-3">Xếp hạng và đánh giá</h5>
+=======
+                                                    <h6 class=" mb-3">Xếp hạng & đánh giá</h6>
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                 </div>
                                                 <div class="row gy-4 gx-0">
                                                     <div class="col-lg-4">
@@ -334,7 +387,11 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-shrink-0">
+<<<<<<< HEAD
                                                                             <h6 class="mb-0">{{ number_format($averageRating, 1) }}</h6>
+=======
+                                                                            <p class="mb-0">{{ number_format($averageRating, 1) }}/5</p>
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -344,16 +401,28 @@
                                                             </div>
 
                                                             @foreach ([5, 4, 3, 2, 1] as $stars)
+<<<<<<< HEAD
                                                                 <div class="mt-3">
                                                                     <div class="row align-items-center g-2">
                                                                         <div class="col-auto">
                                                                             <div class="p-2">
                                                                                 <h6 class="mb-0">{{ $stars }} star</h6>
+=======
+                                                                <div class=" fs-sm" >
+                                                                    <div class="row align-items-center g-2">
+                                                                        <div class="col-auto">
+                                                                            <div class="p-2">
+                                                                                <span class="mb-0">{{ $stars }} star</span>
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                             </div>
                                                                         </div>
                                                                         <div class="col">
                                                                             <div class="p-2">
+<<<<<<< HEAD
                                                                                 <div class="progress animated-progress progress-sm">
+=======
+                                                                                <div class="progress animated-progress progress-sm" style="height:5px">
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                                     <div class="progress-bar bg-success"
                                                                                          role="progressbar"
                                                                                          style="width: {{ $totalReviews > 0 ? ($ratingsCount[$stars] / $totalReviews * 100) : 0 }}%"
@@ -365,7 +434,11 @@
                                                                         </div>
                                                                         <div class="col-auto">
                                                                             <div class="p-2">
+<<<<<<< HEAD
                                                                                 <h6 class="mb-0 text-muted">{{ $ratingsCount[$stars] }}</h6>
+=======
+                                                                                <span class="mb-0 text-muted">{{ $ratingsCount[$stars] }}</span>
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -377,6 +450,7 @@
                                                     <div class="col-lg-8">
                                                         <div class="ps-lg-4">
                                                             <div class="d-flex flex-wrap align-items-start gap-3">
+<<<<<<< HEAD
                                                                 <h5 class="">Đánh giá: </h5>
                                                             </div>
 
@@ -410,9 +484,51 @@
                                                                         </li>
                                                                     @endforeach
                                                                 </ul>
+=======
+                                                                <h6 class="">Đánh giá: </h6>
+                                                            </div>
+                                                    
+                                                            <div class="me-lg-n3 pe-lg-4" data-simplebar style="max-height: 225px;">
+                                                                @if ($comments->isEmpty())
+                                                                    <p class="text-muted">Chưa có đánh giá nào.</p>
+                                                                @else
+                                                                    <ul class="list-unstyled mb-0">
+                                                                        @foreach ($comments as $comment)
+                                                                            <li class="py-2">
+                                                                                <div class="border border-dashed rounded p-3">
+                                                                                    <div class="d-flex align-items-start mb-3">
+                                                                                        <div class="hstack gap-3">
+                                                                                            <div class="badge rounded-pill bg-success mb-0">
+                                                                                                <i class="mdi mdi-star"></i> {{ $comment->rating }}
+                                                                                            </div>
+                                                                                            <div class="vr"></div>
+                                                                                            <div class="flex-grow-1">
+                                                                                                <p class="text-muted mb-0">{{ $comment->comment }}</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                    
+                                                                                    <div class="d-flex align-items-end">
+                                                                                        <div class="flex-grow-1">
+                                                                                            <span class="mb-0"><strong>{{ $comment->user_name }}</strong></span>
+                                                                                        </div>
+                                                    
+                                                                                        <div class="flex-shrink-0">
+                                                                                            <p class="text-muted fs-13 mb-0">
+                                                                                                {{ \Carbon\Carbon::parse($comment->created_at)->locale('vi')->translatedFormat('d M, Y') }}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                @endif
+>>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
                                                 <!-- end card body -->
                                             </div>

@@ -64,17 +64,17 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/orders") // Thay đổi đường dẫn nếu cần
     .then((response) => response.json())
     .then((data) => {
-      console.log("Data received:", data); // Log dữ liệu nhận được từ API
+      // console.log("Data received:", data); // Log dữ liệu nhận được từ API
 
       const orders = data.data; // Giả sử bạn nhận được dữ liệu trong "data"
-      console.log("Orders:", orders); // Log danh sách đơn hàng
+      // console.log("Orders:", orders); // Log danh sách đơn hàng
 
       const tableBody = document.getElementById("orders-tbody");
       tableBody.innerHTML = ""; // Clear any existing rows
 
       orders.forEach((order) => {
         // Log từng đơn hàng
-        console.log("Processing order:", order);
+        // console.log("Processing order:", order);
 
         const products = order.items
           .map((item) => item.product_name)

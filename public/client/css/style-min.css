@@ -2,6 +2,7 @@
 @import url(//fonts.googleapis.com/css2?family=Heebo:wght@300;500;600;700;800;900&display=swap);
 @import url(//fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,400;1,500;1,600&display=swap);
 @import url(//fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Beginner:wght@400;500;600;700&display=swap);
+@import 'custom-scollbar.css';
 body,
 button,
 html,
@@ -2043,13 +2044,22 @@ textarea:-ms-input-placeholder {
     -webkit-transition: 0.3s ease-in-out;
     transition: 0.3s ease-in-out;
 }
+/* #notifyBox{
+    color: #171717;
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(5, 0, 0, 0.1);
+    -ms-transition: 0.3s ease-in-out;
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+} */
 #accountBox,
 #settingsBox {
     visibility: hidden;
     opacity: 0;
     padding: 20px;
     margin: 10px 0 0;
-    width: 170px;
+    width: 150px;
     border-radius: 0;
     position: absolute;
     top: 130%;
@@ -2058,14 +2068,83 @@ textarea:-ms-input-placeholder {
     transform: translateX(-50%);
     z-index: 99;
 }
+#notifyBox {
+    max-height: 400px;
+    overflow-y: auto;
+    color: #171717;
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(5, 0, 0, 0.1);
+    visibility: hidden;
+    opacity: 0;
+    padding: 20px;
+    margin: 10px 0 0;
+    width: 300px;
+    border-radius: 0;
+    position: absolute;
+    top: 130%;
+    left: 40%;
+    transform: translateX(-80%);
+    z-index: 99;
+    overflow-x: hidden;
+    padding-left: 10px; /* Tùy chỉnh để không tràn */
+    padding-right: 10px;
+    box-sizing: border-box; /* Đảm bảo padding không làm vượt quá kích thước hộp */
+}
+
+.notify-parent:focus-within #notifyBox {
+    visibility: visible;
+    opacity: 1;
+    top: 100%;
+}
+
+.notify-parent a {
+    outline: none; /* Remove outline when clicked */
+}
+
+/* Đảm bảo hộp thông báo không tràn trên màn hình nhỏ */
+@media screen and (max-width: 768px) {
+    #notifyBox {
+        left: 10px; /* Dịch sang phải một chút để không tràn */
+        right: 10px; /* Giữ lại khoảng cách bên phải */
+        transform: none; /* Không cần căn giữa khi màn hình nhỏ */
+        width: auto; /* Chiều rộng tự động */
+    }
+}
+.notify-parent:focus-within #notifyBox {
+    visibility: visible;
+    opacity: 1;
+    top: 100%;
+}
+/* #notifyBox {
+    visibility: hidden;
+    opacity: 0;
+    padding: 20px;
+    margin: 10px 0 0;
+    width: 300px;
+    border-radius: 0;
+    position: absolute;
+    top: 130%;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 99;
+} */
 #accountBox.active,
+/* #notifyBox.active, */
 #settingsBox.active,
 .account-parent:hover #accountBox,
+/* .notify-parent:hover #notifyBox, */
 .setting-parent:hover #settingsBox {
     visibility: visible;
     opacity: 1;
     top: 100%;
 }
+/* #notifyBox.active {
+    visibility: visible;
+    opacity: 1;
+    top: 100%;
+} */
 #settingsBox {
     width: 253px;
 }
@@ -6672,6 +6751,7 @@ textarea:-ms-input-placeholder {
     cursor: no-drop;
     box-shadow: 0 0 1px 1px #ddd;
     border: 1px solid #fff;
+    pointer-events: none;
 }
 .size-swatches li.soldout:after,
 .swatches li.soldout:after {

@@ -7,6 +7,7 @@ use App\Events\OrderUpdated;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 use App\Http\Controllers\Controller;
+use App\Notifications\OrderStatusUpdated;
 
 class OrderController extends Controller
 {
@@ -25,8 +26,17 @@ class OrderController extends Controller
     {
         $status = $request->get('status');
         $payment_status = $request->get('payment_status');
-        $orders = $this->orderService->getOrder($status, 10, $payment_status);
-        // dd($orders);
+        $order_search = $request->get('order_search');
+        $order_date_start = $request->get('order_date_start');
+        $order_date_end = $request->get('order_date_end');
+        $orders = $this->orderService->getOrder(
+            $status,
+            10,
+            $payment_status,
+            $order_date_start,
+            $order_date_end,
+            $order_search
+        );
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
 
@@ -81,6 +91,40 @@ class OrderController extends Controller
     {
        try {
         $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+        if ($order->user_id) {
+
+            $user = $order->user;
+            // In đậm SKU
+            $message = "Đơn hàng <strong>{$order->sku}</strong> ";
+
+            // Kiểm tra trạng thái và thêm thông báo tương ứng
+            switch ($order->status) {
+                case 1:
+                    $statusMessage = "Đơn hàng đã đặt thành công, đang chờ xác nhận từ cửa hàng";
+                    break;
+                case 2:
+                    $statusMessage = "đã được xác nhận và đang chờ giao cho đơn vị vận chuyển";
+                    break;
+                case 3:
+                    $statusMessage = "đang trên đường giao tới bạn";
+                    break;
+                case 4:
+                    $statusMessage = "đã giao thành công";
+                    break;
+                case 'huy_don_hang':
+                    $statusMessage = "đã bị hủy";
+                    break;
+                default:
+                    $statusMessage = "trạng thái không xác định";
+                    break;
+            }
+
+            // Thêm trạng thái vào thông báo
+            $message .= $statusMessage . ".";
+
+            $title = "Cập nhật đơn hàng";
+            $user->notify(new OrderStatusUpdated($order, $message, $title));
+        }
 
         broadcast(new OrderUpdated($order))->toOthers();
 
