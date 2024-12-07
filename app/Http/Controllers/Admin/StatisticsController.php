@@ -109,4 +109,8 @@ class StatisticsController extends Controller
             ], 500);
         }
     }
+
+    public function voucher(){
+        return view('admin.statistics.index');
+    }
 }
