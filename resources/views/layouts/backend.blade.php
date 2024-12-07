@@ -11,6 +11,8 @@
         content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Icons -->
     <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
@@ -20,7 +22,7 @@
         href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Modules -->
-
+    
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
