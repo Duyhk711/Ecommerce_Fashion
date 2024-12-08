@@ -110,7 +110,8 @@ class UserController extends Controller
     public function getAllStaff()
     {
         $users = $this->userService->getAllAdmin();
-        return view('admin.users.staff.index', compact('users'));
+        $roles = Role::orderBy('id', 'DESC')->get();
+        return view('admin.users.staff.index', compact('users', 'roles'));
     }
 
     public function createStaff()
@@ -143,6 +144,22 @@ class UserController extends Controller
             return redirect()->route('admin.users.staffs')->with('success', 'Tạo mới thành công');
         }
         return redirect()->back()->with('error', 'Lỗi.');
+    }
+
+    public function updateQuicklyRole(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->syncRoles($request->input('role'));
+
+            $user->save();
+
+            return redirect()->back()->with('success', 'Thay đổi vai trò thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Vai trò đơn hàng đã được cập nhật.');
     }
 
     public function show(User $user)

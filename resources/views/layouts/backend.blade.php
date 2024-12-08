@@ -314,14 +314,14 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('phân quyền') --}}
+                                    @can('phân quyền')
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.roles') }}">
                                                 <span class="nav-main-link-name">Vai trò</span>
                                             </a>
                                         </li>
-                                    {{-- @endcan --}}
+                                    @endcan
 
 
 

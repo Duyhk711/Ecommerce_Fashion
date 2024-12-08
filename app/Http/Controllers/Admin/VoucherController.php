@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use App\Models\Voucher;
-use App\Services\VoucherService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VoucherRequest;
+use App\Models\User;
+use App\Models\Voucher;
 use App\Notifications\NewVoucherNotification;
+use App\Services\VoucherService;
 
 class VoucherController extends Controller
 {
@@ -17,6 +16,10 @@ class VoucherController extends Controller
     public function __construct(VoucherService $voucherService)
     {
         $this->voucherService = $voucherService;
+        $this->middleware('permission:xem danh sách khuyến mãi|Kích hoạt khuyến mại|Xóa khuyến mại|Chỉnh sửa khuyến mại|Thêm mới khuyến mại', ['only' => ['index']]);
+        $this->middleware('permission:Xóa khuyến mại', ['only' => ['destroy']]);
+        $this->middleware('permission:Chỉnh sửa khuyến mại', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Thêm mới khuyến mại', ['only' => ['create', 'store']]);
     }
 
     public function index()
@@ -78,11 +81,11 @@ class VoucherController extends Controller
 
             $users = User::all(); // Hoặc filter user theo tiêu chí cụ thể
             $message = "Mã giảm giá mới <strong>{$voucher->code}</strong> giảm {$voucher->discount_value}";
-                if ($voucher->discount_type == 'fixed') {
-                    $message .= "K cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
-                } elseif ($voucher->discount_type == 'percentage') {
-                    $message .= "% cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
-                }
+            if ($voucher->discount_type == 'fixed') {
+                $message .= "K cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
+            } elseif ($voucher->discount_type == 'percentage') {
+                $message .= "% cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
+            }
             $title = "Bạn đã nhận được voucher mới";
             foreach ($users as $user) {
                 $user->notify(new NewVoucherNotification($voucher, $message, $title));
@@ -99,7 +102,6 @@ class VoucherController extends Controller
                 ->withInput();
         }
     }
-
 
     public function edit(Voucher $voucher)
     {
