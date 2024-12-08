@@ -461,36 +461,36 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        let selectedCity = "";
-        let selectedDistrict = "";
-        let selectedWard = "";
+        let selectCity = "";
+        let selectDistrict = "";
+        let selectWard = "";
 
         axios.get("/address.json")
             .then(function(result) {
-                renderCity(result.data);
+                loadCity(result.data);
                 setDefaultValues();
             })
             .catch(function(error) {
                 console.error("Lỗi khi tải dữ liệu:", error);
             });
 
-        function renderCity(data) {
+        function loadCity(data) {
             citis.innerHTML = "<option value=''>Chọn Thành Phố</option>"; // Thêm tùy chọn mặc định
             data.forEach(city => {
                 citis.options[citis.options.length] = new Option(city.Name, city.Name);
             });
 
             citis.onchange = function() {
-                updateDistricts(data);
+                loadDistricts(data);
             };
 
-            if (selectedCity) {
+            if (selectCity) {
                 citis.value = selectedCity;
                 citis.onchange(); // Cập nhật quận/huyện
             }
         }
 
-        function updateDistricts(data) {
+        function loadDistricts(data) {
             districts.innerHTML = "<option value=''>Chọn Quận/Huyện</option>"; // Thêm tùy chọn mặc định
             wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>"; // Thêm tùy chọn mặc định
 
@@ -504,7 +504,7 @@
             }
 
             districts.onchange = function() {
-                updateWards(data);
+                loadWards(data);
             };
 
             // Không tự động chọn quận/huyện
@@ -512,7 +512,7 @@
             wards.value = ""; // Đặt giá trị phường/xã rỗng
         }
 
-        function updateWards(data) {
+        function loadWards(data) {
             wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>"; // Thêm tùy chọn mặc định
 
             const cityData = data.find(n => n.Name === citis.value);
@@ -530,102 +530,124 @@
         }
 
         function setDefaultValues() {
-            if (selectedCity) {
+            if (selectCity) {
                 citis.value = selectedCity;
                 citis.onchange(); // Cập nhật quận/huyện
             }
         }
     </script>
 
-    <script>
-        function renderCity(data) {
-            const citis = document.getElementById('edit-city');
-            citis.innerHTML = "<option value=''>Chọn Thành Phố</option>";
+   <script>
+    let selectedCity = "";
+    let selectedDistrict = "";
+    let selectedWard = "";
 
-            data.forEach(city => {
-                citis.options[citis.options.length] = new Option(city.Name, city.Name);
-            });
+    axios.get("/address.json")
+        .then(function(result) {
+            renderCity(result.data); // Gọi hàm renderCity để hiển thị thành phố
+            setDefaultValues(); // Cập nhật giá trị mặc định
+        })
+        .catch(function(error) {
+            console.error("Lỗi khi tải dữ liệu:", error);
+        });
 
-            // Đặt giá trị cho thành phố nếu đã có
-            if (selectedCity) {
-                citis.value = selectedCity;
-                citis.onchange();  // Gọi để load các quận/huyện tương ứng
-            }
+    // Hàm render thành phố
+    function renderCity(data) {
+        const citySelect = document.getElementById('edit-city');
+        citySelect.innerHTML = "<option value=''>Chọn Thành Phố</option>"; // Thêm tùy chọn mặc định
 
-            citis.onchange = function() {
-                updateDistricts(data); // Cập nhật quận huyện sau khi chọn thành phố
-            };
+        // Thêm các thành phố vào dropdown
+        data.forEach(city => {
+            citySelect.options[citySelect.options.length] = new Option(city.Name, city.Name);
+        });
+
+        // Nếu đã có thành phố được chọn, đặt giá trị
+        if (selectedCity) {
+            citySelect.value = selectedCity;
+            citySelect.onchange(); // Cập nhật các quận/huyện
         }
 
-        function updateDistricts(data) {
-            console.log("Calling updateDistricts...");
-            const citis = document.getElementById('edit-city');
-            const districts = document.getElementById('edit-district');
-            const wards = document.getElementById('edit-ward');
+        // Sự kiện onchange cho thành phố
+        citySelect.onchange = function() {
+            updateDistricts(data); // Cập nhật quận/huyện khi chọn thành phố
+        };
+    }
 
-            console.log("Updating districts for city:", citis.value);
-            districts.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
-            wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-            if (citis.value) {
-                const cityData = data.find(n => n.Name === citis.value);
-                if (cityData) {
-                    cityData.Districts.forEach(district => {
-                        districts.options[districts.options.length] = new Option(district.Name, district.Name);
-                    });
-                    console.log("Districts added:", cityData.Districts);
+    // Hàm cập nhật các quận/huyện
+    function updateDistricts(data) {
+        const citySelect = document.getElementById('edit-city');
+        const districtSelect = document.getElementById('edit-district');
+        const wardSelect = document.getElementById('edit-ward');
 
-                    if (selectedDistrict) {
-                        districts.value = selectedDistrict;
-                        console.log("Quận huyện mới:", selectedDistrict);
+        districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>"; // Thêm tùy chọn mặc định
+        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>"; // Thêm tùy chọn mặc định
 
-                        // Kích hoạt sự kiện onchange để cập nhật phường/xã
-                        updateWards(data);
-                    }
-                }
-            }
-
-            // Kiểm tra xem attachDistrictOnChange có được gọi không
-            console.log("Attaching districts onchange event...");
-            attachDistrictOnChange(data);
-        }
-
-        function attachDistrictOnChange(data) {
-            const districts = document.getElementById('edit-district');
-            console.log("Attaching onchange event to districts...");
-            districts.onchange = function () {
-                console.log("Districts dropdown changed. Updating wards...");
-                updateWards(data); // Cập nhật phường xã
-            };
-        }
-
-        function updateWards(data) {
-            const citis = document.getElementById('edit-city');
-            const districts = document.getElementById('edit-district');
-            const wards = document.getElementById('edit-ward');
-            console.log(wards);
-
-            const currentWard = selectedWard || wards.value;
-            // console.log(currentWard);
-
-            wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-
-            const cityData = data.find(n => n.Name === citis.value);
-            if (districts.value && cityData) {
-                console.log(districts.value, cityData);
-
-                const districtData = cityData.Districts.find(d => d.Name === districts.value);
-                if (districtData) {
-                    districtData.Wards.forEach(ward => {
-                        wards.options[wards.options.length] = new Option(ward.Name, ward.Name);
-                    });
-
-                    // Đặt giá trị cho ward nếu đã có
-                    if (currentWard) {
-                        wards.value = currentWard;
-                    }
-                }
+        if (citySelect.value) {
+            const cityData = data.find(n => n.Name === citySelect.value);
+            if (cityData) {
+                // Thêm các quận/huyện vào dropdown
+                cityData.Districts.forEach(district => {
+                    districtSelect.options[districtSelect.options.length] = new Option(district.Name, district.Name);
+                });
             }
         }
 
-    </script>
+        // Sự kiện onchange cho quận/huyện
+        districtSelect.onchange = function() {
+            updateWards(data); // Cập nhật phường/xã khi chọn quận/huyện
+        };
+
+        // Không tự động chọn quận/huyện
+        districtSelect.value = ""; // Đặt giá trị quận/huyện rỗng
+        wardSelect.value = ""; // Đặt giá trị phường/xã rỗng
+    }
+
+    // Hàm cập nhật các phường/xã
+    function updateWards(data) {
+        const citySelect = document.getElementById('edit-city');
+        const districtSelect = document.getElementById('edit-district');
+        const wardSelect = document.getElementById('edit-ward');
+
+        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>"; // Thêm tùy chọn mặc định
+
+        const cityData = data.find(n => n.Name === citySelect.value);
+        if (districtSelect.value && cityData) {
+            const districtData = cityData.Districts.find(d => d.Name === districtSelect.value);
+            if (districtData) {
+                // Thêm các phường/xã vào dropdown
+                districtData.Wards.forEach(ward => {
+                    wardSelect.options[wardSelect.options.length] = new Option(ward.Name, ward.Name);
+                });
+            }
+        }
+
+        // Không tự động chọn phường/xã
+        wardSelect.value = ""; // Đặt giá trị phường/xã rỗng
+    }
+
+    // Hàm set giá trị mặc định cho thành phố, quận/huyện, và phường/xã
+    function setDefaultValues() {
+    const citySelect = document.getElementById('edit-city');
+    const districtSelect = document.getElementById('edit-district');
+    const wardSelect = document.getElementById('edit-ward');
+
+    // Nếu có thành phố đã chọn, thiết lập giá trị cho thành phố
+    if (selectedCity) {
+        citySelect.value = selectedCity;
+        citySelect.onchange(); // Gọi onchange để cập nhật quận/huyện
+    }
+
+    // Nếu có quận/huyện đã chọn, thiết lập giá trị cho quận/huyện
+    if (selectedDistrict) {
+        districtSelect.value = selectedDistrict;
+        districtSelect.onchange(); // Gọi onchange để cập nhật phường/xã
+    }
+
+    // Nếu có phường/xã đã chọn, thiết lập giá trị cho phường/xã
+    if (selectedWard) {
+        wardSelect.value = selectedWard; // Đặt giá trị cho phường/xã
+    }
+}
+</script>
+
 @endsection
