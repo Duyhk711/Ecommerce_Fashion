@@ -115,11 +115,11 @@
     }
 
     #send {
-        padding: 8px 15px;
+        padding: 8px 14px;
         background-color: #007bff;
         color: white;
         border: none;
-        border-radius: 20px;
+        border-radius: 10px;
         cursor: pointer;
         font-size: 14px;
     }
@@ -158,7 +158,7 @@
     <div id="messages" style="display: none;"></div>
     <div id="chat-footer" style="display: none;">
         <input type="text" id="message" placeholder="Nhập tin nhắn để gửi...">
-        <button id="send" disabled>Send</button>
+        <button id="send" disabled><i class="bi bi-send-fill"></i></button>
     </div>
 </div>
 

@@ -124,7 +124,7 @@ Route::prefix('admin')
             Route::post('/send-message/{sessionId}', [AdminChatController::class, 'sendMessage']);
             Route::get('/chats', function () {
                 return view('admin.chat.chat');
-            });
+            })->name('admin.chats');
             Route::post('/mark-messages-read/{sessionId}', [AdminChatController::class, 'markMessagesRead']);
 
             //THONGKE
