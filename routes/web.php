@@ -99,6 +99,7 @@ Route::middleware('auth')->group(function () {
 
     //Route hủy đơn hàng
     Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
+    Route::post('/order/{order_id}/success', [MyOrderController::class, 'orderSuccess'])->name('order.success');
     Route::post('/order/{order_id}/remove', [MyOrderController::class, 'removeOrder'])->name('order.remove');
 
     // address

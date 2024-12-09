@@ -2,6 +2,7 @@
 @import url(//fonts.googleapis.com/css2?family=Heebo:wght@300;500;600;700;800;900&display=swap);
 @import url(//fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,400;1,500;1,600&display=swap);
 @import url(//fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Beginner:wght@400;500;600;700&display=swap);
+@import 'custom-scollbar.css';
 body,
 button,
 html,
@@ -2082,10 +2083,13 @@ textarea:-ms-input-placeholder {
     border-radius: 0;
     position: absolute;
     top: 130%;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 40%;
+    transform: translateX(-80%);
     z-index: 99;
-    /* transition: visibility 0.3s ease, opacity 0.3s ease; */
+    overflow-x: hidden;
+    padding-left: 10px; /* Tùy chỉnh để không tràn */
+    padding-right: 10px;
+    box-sizing: border-box; /* Đảm bảo padding không làm vượt quá kích thước hộp */
 }
 
 .notify-parent:focus-within #notifyBox {
@@ -2096,6 +2100,21 @@ textarea:-ms-input-placeholder {
 
 .notify-parent a {
     outline: none; /* Remove outline when clicked */
+}
+
+/* Đảm bảo hộp thông báo không tràn trên màn hình nhỏ */
+@media screen and (max-width: 768px) {
+    #notifyBox {
+        left: 10px; /* Dịch sang phải một chút để không tràn */
+        right: 10px; /* Giữ lại khoảng cách bên phải */
+        transform: none; /* Không cần căn giữa khi màn hình nhỏ */
+        width: auto; /* Chiều rộng tự động */
+    }
+}
+.notify-parent:focus-within #notifyBox {
+    visibility: visible;
+    opacity: 1;
+    top: 100%;
 }
 /* #notifyBox {
     visibility: hidden;

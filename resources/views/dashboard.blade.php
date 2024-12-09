@@ -1,317 +1,548 @@
 @extends('layouts.backend')
 @section('css')
-<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            width: 95%;
+            margin: 20px auto;
+        }
+
+        .section {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* .section h5 {
+            margin: 0 0 15px;
+            color: #333;
+            font-size: 22px;
+        } */
+
+        .info-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 16px;
+        }
+
+        /* .highlight {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0d47a1;
+            border-radius: 5px;
+        } */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .chart {
+            text-align: center;
+            margin: 15px 0;
+            color: #999;
+            font-style: italic;
+        }
+
+        ul {
+            margin: 10px 0 0;
+            padding: 0;
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        #customerChart,#voucherChart {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        p{
+            margin: 10px 0 0;
+            padding: 0;
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #555;
+        }
+    </style>
 @endsection
 @section('content')
-    <!-- Hero -->
-    <div class="content mb-3">
-        <div class="block-content block-content-full">
-            <div class="d-flex justify-content-start align-items-center mb-3">
-
+    <div class="content">
+        <!-- Tổng quan bán hàng -->
+        <div class="section">
+            <h5>Tổng quan bán hàng</h5>
+            <div class="info-box">
+                <div>
+                    <strong>Tổng doanh thu:</strong>
+                    <span class="highlight">Loading...</span>
+                </div>
+                <div>
+                    <strong>Đơn hàng chờ xác nhận:</strong>
+                    <span id="waiting_confirmation">Loading...</span>
+                </div>
+                <div>
+                    <strong>Đơn hàng đã giao:</strong>
+                    <span id="delivered">Loading...</span>
+                </div>
+                <div>
+                    <strong>Đơn hàng đã hủy:</strong>
+                    <span id="cancelled">Loading...</span>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-xl-3 col-md-6">
-                    <div class="card card-animate">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Tổng thu nhập tuần này</p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <!-- Phần trăm thay đổi -->
-                                    <h5 id="percent-change" class="fs-sm mb-0 text-success">
-                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>+0.00%
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <!-- Tổng thu nhập tuần này -->
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                        <span id="total-income-this-week">0</span>₫
-                                    </h4>
-                                </div>
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-success-subtle rounded fs-3">
-                                        <i class="bx bx-dollar-circle text-success"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
+            <div class="chart">
+                (Biểu đồ số lượng đơn hàng theo trạng thái)
+                <canvas id="ordersChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+
+        <!-- Hoạt động sản phẩm -->
+        <div class="section">
+            <h5>Hoạt động sản phẩm</h5>
+
+            <!-- Lọc thời gian -->
+            <label for="period">Lọc theo:</label>
+            <select id="period">
+                <option value="this_week">Tuần này</option>
+                <option value="this_month">Tháng này</option>
+                <option value="this_year">Năm nay</option>
+            </select>
+
+            <table id="product-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Mã</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng bán</th>
+                        <th>Doanh thu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Các dòng sản phẩm sẽ được đổ dữ liệu vào đây -->
+                </tbody>
+            </table>
+
+            <div class="chart">(Biểu đồ doanh thu theo danh mục sản phẩm)</div>
+            {{-- <h3></h3> --}}
+            <canvas id="category-chart"></canvas>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="section">
+                    <h5>Hoạt động người dùng</h5>
+                    <div class="info-box">
+                        <div><p>Khách đăng ký mới:</p> <span id="new-customers">...</span></div>
+                        <div><p>Khách hoạt động:</p> <span id="active-customers">...</span></div>
+                    </div>
+                    <div class="chart">
+                        (Biểu đồ tỷ lệ mua hàng)
+                        <canvas id="customerChart" width="200" height="200"></canvas>
                     </div>
                 </div>
-
-                <div class="col-xl-3 col-md-6">
-                    <div class="card card-animate">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Đơn hàng tuần này</p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <h5 id="order-change" class="fs-sm mb-0">
-                                        <i id="order-icon" class="fs-13 align-middle"></i><span id="order-percent">0</span> %
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span id="total-orders">0</span></h4>
-                                </div>
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-info-subtle rounded fs-3">
-                                        <i class="bx bx-shopping-bag text-info"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
+            </div>
+            
+            <div class="col-6">
+                <div class="section">
+                    <h5>Hoạt động marketing</h5>
+                    <div class="info-box">
+                        <!-- Đây là nơi hiển thị số liệu về voucher -->
+                        <div><p>Tổng số voucher:</p> <span id="total-vouchers">0</span></div>
+                        <div><p>Voucher đã sử dụng:</p> <span id="used-vouchers">0</span></div>
+                        <div><p>Tỷ lệ sử dụng voucher:</p> <span id="usage-rate">0%</span></div>
                     </div>
-                </div>
-
-
-                <div class="col-xl-3 col-md-6">
-                    <!-- card -->
-                    <div class="card card-animate">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Khách hàng tuần này</p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <h5 id="customer-change" class="fs-sm mb-0">
-                                        <i id="customer-icon" class="fs-13 align-middle"></i><span id="customer-percent">0</span> %
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                        <span id="total-customers" class="counter-value" data-target="0">0</span>
-                                    </h4>
-                                </div>
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-warning-subtle rounded fs-3">
-                                        <i class="bx bx-user-circle text-warning"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
-                    </div><!-- end card -->
-                </div><!-- end col -->
-
-                <div class="col-xl-3 col-md-6">
-                    <!-- card -->
-                    <div class="card card-animate">
-                        <div class="card-body" style="height: 122px">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Sản phẩm đã bán</p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <h5 class="fs-sm mb-0 percent-change">
-                                        <!-- Phần trăm thay đổi sẽ được JavaScript cập nhật -->
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                        <span id="total-sold-this-week">0</span>
-                                    </h4>
-                                </div>
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
-                                        <i class="bx bx-shopping-bag text-danger"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div><!-- end card body -->
-                        
-                        
-                    </div><!-- end card -->
-                </div><!-- end col -->
-
-            </div> <!-- end row-->
-
-            <div class="row mt-4">
-                <div class="col-xl-12">
-                    <div class="card">
-                        <div class="card-header border-0 align-items-center d-flex">
-                            <div class="col-9"><h4 class="card-title mb-0 flex-grow-1">Tổng doanh thu</h4></div>
-                                <div class="col-1">
-                                    <select id="yearSelector" class="form-control">
-                                        <option value="2024" selected>2024</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                    </select>
-                                </div>
-                                <div class="col-1 dropdown">
-                                    <!-- Nút dropdown -->
-                                    <button class="btn btn-sm btn-alt dropdown-toggle" type="button" id="dateDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Tùy chỉnh
-                                    </button>
-
-                                    <!-- Nội dung dropdown -->
-                                    <div class="dropdown-menu p-3" aria-labelledby="dateDropdown">
-                                        <div class="row d-flex justify-content-end">
-                                            <div class="col-12 mb-3">
-                                                <label for="startDate" class="form-label">Từ ngày:</label>
-                                                <input type="date" class="form-control" id="startDate">
-                                            </div>
-                                            <div class="col-12">
-                                                <label for="endDate" class="form-label">Đến ngày:</label>
-                                                <input type="date" class="form-control" id="endDate">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-1 text-center">
-                                    <button class="btn btn-sm btn-alt" id="resetButton">Đặt lại</button>
-                                </div>
-                        </div><!-- end card header -->
-
-                        <!-- Biểu đồ -->
-                        <div class="card-body p-0 pb-2">
-                            <canvas id="revenueChart" width="800" height="400"></canvas>
-                        </div><!-- end card body -->
-                    </div><!-- end card -->
+                    <!-- Biểu đồ tỷ lệ sử dụng voucher -->
+                    
+                    <div class="chart">(Biểu đồ tỷ lệ sử dụng voucher)</div>
+                    <canvas id="voucherChart" width="200" height="200"></canvas>
                 </div>
             </div>
 
-            <div class="row mt-3">
-                <div class="col-xl-6">
-                    <div class="card">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm bán chạy nhất trong ngày</h4>
-                            {{-- <div class="flex-shrink-0">
-                                <div class="dropdown card-header-dropdown">
-                                    <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="fw-semibold text-uppercase fs-12">Lọc theo:
-                                        </span><span class="text-muted">Hôm nay<i class="mdi mdi-chevron-down ms-1"></i></span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">Hôm nay</a>
-                                        <a class="dropdown-item" href="#">Hôm qua</a>
-                                        <a class="dropdown-item" href="#">7 ngày trước</a>
-                                        <a class="dropdown-item" href="#">30 ngày trước</a>
-                                        <a class="dropdown-item" href="#">Trong tháng này</a>
-                                        <a class="dropdown-item" href="#">Tháng trước</a>
-                                    </div>
-                                </div>
-                            </div> --}}
-                        </div><!-- end card header -->
+            
+        </div>
+       
 
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-hover table-centered align-middle table-nowrap mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="text-muted">Sản phẩm</th>
-                                            <th scope="col" class="text-muted">Giá</th>
-                                            <th scope="col" class="text-muted">SL</th>
-                                            <th scope="col" class="text-muted">Tổng</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="products-sale-statistics">
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+        <!-- Hoạt động giỏ hàng -->
+       <div class="row">
+            <div class="col-4">
+                <div class="section">
+                    <h5>Hoạt động giỏ hàng</h5>
+                    <div class="info-box">
+                        <div><p>Giỏ hàng tạo mới:</p></div>
+                        <div class="highlight" id="new-carts">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div><p>Giá trị giỏ hàng chưa thanh toán:</p></div>
+                        <div class="highlight" id="total-cart-value">0 VND</div>
                     </div>
                 </div>
-
-                <div class="col-xl-6">
-                    <div class="card card-height-100">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Top 5 sản phẩm đánh giá cao nhất trong tuần</h4>
-                            <div class="flex-shrink-0">
-                            </div>
-                        </div><!-- end card header -->
-
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-centered table-hover align-middle table-nowrap mb-0">
-                                    <thead>
-                                        <th>Sản phẩm</th>
-                                        <th class="text-center">Tổng</th>
-                                        <th class="text-center">Trung bình</th>
-                                    </thead>
-                                    <tbody id="products-top-rate">
-                                        <tr>
-
-                                        </tr><!-- end -->
-                                    </tbody>
-                                </table><!-- end table -->
-                            </div>
-                            </div>
-                        </div> <!-- .card-body-->
-                    </div> <!-- .card-->
-                </div> <!-- .col-->
-            </div> <!-- end row-->
-
-            <div class="row mt-4">
-                <div class="col-xl-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0 flex-grow-1">Tỉ lệ trạng thái đơn hàng</h4>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="orderStatusPieChart" width="400" height="400"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-8">
-                    <div class="card">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Đơn hàng gần đây</h4>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-soft-info btn-sm">
-                                    <i class="ri-file-list-3-line align-middle"></i>
-                                </button>
-                            </div>
-                        </div><!-- end card header -->
-
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-border table-centered align-middle table-nowrap fs-sm mb-0">
-                                    <thead class="text-muted table-light ">
-                                        <tr>
-                                            <th scope="col" class="text-muted">Mã đơn hàng</th>
-                                            <th scope="col" class="text-muted">Khách hàng</th>
-                                            <th scope="col" class="text-muted">Sản phẩm</th>
-                                            <th scope="col" class="text-muted">Tổng tiền</th>
-                                            <th scope="col" class="text-muted">Trạng thái</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="orders-tbody">
-
-                                    </tbody><!-- end tbody -->
-                                </table><!-- end table -->
-                            </div>
-                        </div>
-                    </div> <!-- .card-->
-                </div> <!-- .col-->
-
             </div>
+            <div class="col-8">
+                <!-- Phản hồi khách hàng -->
+                <div class="section">
+                    <h5>Phản hồi khách hàng</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Khách hàng</th>
+                                <th>Nội dung bình luận</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Nguyễn Văn A</td>
+                                <td>Sản phẩm đẹp, chất lượng!</td>
+                            </tr>
+                            <tr>
+                                <td>Trần Thị B</td>
+                                <td>Giao hàng hơi chậm.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+       </div>
 
+        <!-- Cảnh báo -->
+        <div class="section">
+            <h5>Cảnh báo</h5>
+            <ul>
+                <li>Đơn hàng #123 bị hủy do thiếu thông tin.</li>
+                <li>Lỗi hệ thống khi thanh toán bằng PayPal.</li>
+            </ul>
         </div>
     </div>
 @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('admin/js/ui/charts/widgets.js') }}"></script>
-    <script src="{{ asset('admin/js/ui/charts/revenue.js') }}"></script>
-    <script src="{{ asset('admin/js/ui/charts/order-status.js') }}"></script>
-    <script src="{{asset('admin/js/ui/charts/product-sale-table.js')}}"></script>
-    <script src="{{asset('admin/js/ui/charts/product-top-rate-table.js')}}"></script>
-    <script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch dữ liệu từ API
+            fetch('/api/dashboard/overview')
+                .then(response => response.json())
+                .then(data => {
+                    // Hiển thị dữ liệu Tổng quan bán hàng
+                    document.querySelector('.highlight').textContent = data.orders_summary.total_revenue
+                        .toLocaleString('vi-VN') + ' VND';
+                    document.querySelector('#waiting_confirmation').textContent = data.orders_summary
+                        .waiting_confirmation;
+                    document.querySelector('#delivered').textContent = data.orders_summary.delivered;
+                    document.querySelector('#cancelled').textContent = data.orders_summary.cancelled;
+
+                    // Biểu đồ dữ liệu
+                    displayChart(data.chart_data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+        // Hàm để hiển thị biểu đồ (sử dụng Chart.js)
+        function displayChart(chartData) {
+            // Các label sẽ là các ngày trong tuần từ thứ Hai đến Chủ Nhật
+            const chartLabels = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
+
+            // Khởi tạo dữ liệu cho các trạng thái
+            const chartValues = {
+                '1': [0, 0, 0, 0, 0, 0, 0], // Chờ xác nhận
+                '4': [0, 0, 0, 0, 0, 0, 0], // Đã giao
+                'huy_don_hang': [0, 0, 0, 0, 0, 0, 0] // Đã hủy
+            };
+
+            // Xử lý dữ liệu ngày tháng từ chartData (API trả về)
+            const currentDate = new Date();
+            const firstDayOfWeek = currentDate.getDate() - currentDate.getDay() + 1; // Thứ 2 của tuần hiện tại
+            const firstDayOfWeekDate = new Date(currentDate.setDate(firstDayOfWeek));
+
+            // Lặp qua tất cả các ngày trong tuần và gán giá trị 0 cho các ngày không có dữ liệu
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(firstDayOfWeekDate);
+                dayDate.setDate(firstDayOfWeekDate.getDate() + i);
+                const formattedDate = dayDate.toISOString().split('T')[0]; // Chuyển ngày thành định dạng YYYY-MM-DD
+
+                if (chartData[formattedDate]) {
+                    chartData[formattedDate].forEach(statusData => {
+                        if (chartValues[statusData.status] !== undefined) {
+                            const dayIndex = i; // Đánh dấu chỉ số ngày trong tuần
+                            chartValues[statusData.status][dayIndex] = statusData.count;
+                        }
+                    });
+                }
+            }
+
+            // Cấu hình và vẽ biểu đồ
+            const ctx = document.getElementById('ordersChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line', // Hoặc 'bar' nếu bạn muốn dùng biểu đồ cột
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                            label: 'Chờ xác nhận',
+                            data: chartValues['1'],
+                            borderColor: 'rgb(255, 99, 132)',
+                            fill: false
+                        },
+                        {
+                            label: 'Đã giao',
+                            data: chartValues['4'],
+                            borderColor: 'rgb(54, 162, 235)',
+                            fill: false
+                        },
+                        {
+                            label: 'Đã hủy',
+                            data: chartValues['huy_don_hang'],
+                            borderColor: 'rgb(75, 192, 192)',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Ngày'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Số lượng'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // Hàm lấy dữ liệu từ API và cập nhật bảng & biểu đồ
+        async function fetchProductActivity(period) {
+            try {
+                // Gửi yêu cầu lấy dữ liệu theo tham số period
+                const response = await fetch(`/api/product-activity?period=${period}`);
+                const data = await response.json();
+
+                // Đổ dữ liệu vào bảng sản phẩm
+                loadProductTable(data.products);
+                // Vẽ biểu đồ doanh thu theo nhóm sản phẩm
+                loadCategoryChart(data.categories);
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu:", error);
+            }
+        }
+
+        // Hàm đổ dữ liệu sản phẩm vào bảng
+        function loadProductTable(products) {
+            const tableBody = document.querySelector('#product-table tbody');
+            tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+
+            products.forEach((product, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${product.product_sku}</td>
+                <td>${product.product_name} </td>
+                <td>${product.sold_quantity}</td>
+                <td>${parseFloat(product.revenue).toLocaleString()} ₫</td>
+            `;
+                tableBody.appendChild(row);
+            });
+        }
+
+
+        function loadCategoryChart(categories) {
+            const ctx = document.getElementById('category-chart').getContext('2d');
+
+            if (window.categoryChart) {
+                window.categoryChart.destroy();
+            }
+
+            window.categoryChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories.map(category => category.category_name),
+                    datasets: [{
+                        label: 'Doanh thu',
+                        data: categories.map(category => category.category_revenue),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    responsive: true
+                }
+            });
+        }
+
+        window.onload = function() {
+            fetchProductActivity('this_week');
+        };
+
+        document.getElementById('period').addEventListener('change', function(e) {
+            fetchProductActivity(e.target.value);
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Gọi API
+            fetch('/api/customer-stats')
+                .then(response => response.json())
+                .then(data => {
+                    // Hiển thị số liệu khách hàng
+                    document.getElementById('new-customers').textContent = data.newCustomers;
+                    document.getElementById('active-customers').textContent = data.activeCustomers;
+
+                    // Vẽ biểu đồ
+                    const ctx = document.getElementById('customerChart').getContext('2d');
+                    const chartData = {
+                        labels: ['Khách hàng quay lại', 'Khách hàng mới'],
+                        datasets: [{
+                            label: 'Tỷ lệ khách hàng',
+                            data: [data.chartData.returning_customers, data.chartData
+                                .new_customers],
+                            backgroundColor: ['#36a2eb', '#ff6384'],
+                        }]
+                    };
+
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        // Hiển thị số và phần trăm trong tooltip
+                                        label: function(tooltipItem) {
+                                            let total = tooltipItem.dataset.data.reduce((a, b) =>
+                                                a + b, 0);
+                                            let percentage = Math.round((tooltipItem.raw / total) *
+                                                100);
+                                            return tooltipItem.label + ': ' + tooltipItem.raw +
+                                                ' (' + percentage + '%)';
+                                        }
+                                    }
+                                },
+                                // Hiển thị số và phần trăm trên chính các mảnh pie
+                                datalabels: {
+                                    formatter: function(value, context) {
+                                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        let percentage = Math.round((value / total) * 100);
+                                        return value + ' (' + percentage +
+                                        '%)'; // Hiển thị số và phần trăm
+                                    },
+                                    color: '#fff',
+                                    font: {
+                                        weight: 'bold',
+                                        size: 16
+                                    }
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching customer stats:', error));
+        });
+    </script>
+
+    {{-- cart --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Gọi API để lấy dữ liệu thống kê giỏ hàng
+            fetch('/api/cart/stats')
+                .then(response => response.json())
+                .then(data => {
+                    // Hiển thị số liệu giỏ hàng
+                    document.getElementById('new-carts').textContent = data.newCartsCount;
+                    document.getElementById('total-cart-value').textContent = data.totalCartValue;
+                })
+                .catch(error => console.error('Lỗi khi gọi API:', error));
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Gọi API để lấy tỷ lệ sử dụng voucher
+            fetch('/api/voucher-usage-rate')
+                .then(response => response.json()) // Chuyển phản hồi thành JSON
+                .then(data => {
+                    console.log(data); // Kiểm tra dữ liệu trả về từ API
+
+                    // Cập nhật số liệu trên trang
+                    document.getElementById('total-vouchers').textContent = data.total_vouchers;
+                    document.getElementById('used-vouchers').textContent = data.used_vouchers;
+                    document.getElementById('usage-rate').textContent = data.usage_rate;
+
+                    // Vẽ biểu đồ tỷ lệ sử dụng voucher
+                    const ctx = document.getElementById('voucherChart').getContext('2d');
+                    const chartData = {
+                        labels: ['Đã sử dụng', 'Chưa sử dụng'],
+                        datasets: [{
+                            label: 'Tỷ lệ sử dụng voucher',
+                            data: [
+                                (parseFloat(data.usage_rate.replace('%', '')) /
+                                100), // Chuyển tỷ lệ về giá trị phần trăm
+                                1 - (parseFloat(data.usage_rate.replace('%', '')) /
+                                100) // Tỷ lệ chưa sử dụng
+                            ],
+                            backgroundColor: ['#36a2eb', '#ff6384'],
+                        }]
+                    };
+
+                    new Chart(ctx, {
+                        type: 'pie', // Biểu đồ tròn
+                        data: chartData,
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching voucher usage data:', error);
+                });
+        });
     </script>
 @endsection
