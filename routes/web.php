@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Client\UserChatController;
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\NotificationController;
@@ -74,11 +74,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
     // chat
-    Route::get('/user/chats', [ChatsController::class, 'userIndex'])->name('user.chats');
-    Route::get('/fetch-messages', [ChatsController::class, 'fetchMessagesFromUserToAdmin'])->name('fetch.messagesFromUserToAdmin');
-    Route::post('/send-message', [ChatsController::class, 'sendMessageFromUserToAdmin'])->name('sendMessageFromUserToAdmin');
-    Route::get('/get-first-admin', [ChatsController::class, 'getFirstAdmin'])->name('getFirstAdmin');
-
+    Route::post('/start-session', [UserChatController::class, 'startSession']);
+    Route::post('/send-message/{sessionId}', [UserChatController::class, 'sendMessage']);
+    Route::delete('/end-session/{sessionId}', [UserChatController::class, 'endSession']);
+    Route::get('/check-session', [UserChatController::class, 'checkSession']);
+    Route::get('/messages/{sessionId}', [UserChatController::class, 'getMessages']);
+    Route::post('/end-session/{sessionId}', [UserChatController::class, 'endSession']);
     // save vouchers
     Route::post('/save-voucher', [VouchersController::class, 'save'])->name('save-voucher');
 
