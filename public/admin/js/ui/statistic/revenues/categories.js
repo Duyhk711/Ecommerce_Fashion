@@ -46,7 +46,7 @@ fetch("/api/category-revenue")
               const value = context.raw || 0;
               const total = context.dataset.data.reduce((a, b) => a + b, 0); // Tổng doanh thu
               const percentage = ((value / total) * 100).toFixed(2); // Tính phần trăm
-              return `${label}: ${value.toLocaleString()} VNĐ (${percentage}%)`;
+              return `${label}: ${value.toLocaleString()} ₫ (${percentage}%)`;
             },
           },
         },
@@ -82,7 +82,7 @@ fetch("/api/category-details")
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
                         <td>${item.quantity_sold}</td>
-                        <td>${item.revenue.toLocaleString()} VNĐ</td>
+                        <td>${item.revenue.toLocaleString()}₫</td>
                     </tr>
                 `;
       tableBody.innerHTML += row;

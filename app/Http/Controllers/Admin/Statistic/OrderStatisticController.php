@@ -47,7 +47,7 @@ class OrderStatisticController extends Controller
         // Tổng doanh thu (tính từ các đơn hàng đã hoàn thành)
         $totalRevenue = Order::where('status', '4')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum('total_price');
+            ->sum('total_price')*1000;
 
         return response()->json([
             'total_orders' => $totalOrders,
@@ -82,12 +82,35 @@ class OrderStatisticController extends Controller
         return response()->json($distribution);
     }
     // don hang gia tri cao
-    public function getTopOrders()
+    public function getTopOrders(Request $request)
     {
         try {
-            // Truy vấn danh sách đơn hàng
-            $topOrders = Order::select('sku', 'customer_name', 'total_price', 'created_at')
-                ->orderBy('total_price', 'desc')
+            $filter = $request->input('filter', 'all_time');
+            $query = Order::select('id', 'sku', 'customer_name', 'total_price', 'created_at');
+
+            // Áp dụng bộ lọc dựa trên yêu cầu
+            switch ($filter) {
+                case 'last_week':
+                    $query->whereBetween('created_at', [
+                        now()->startOfWeek()->subWeek(),
+                        now()->startOfWeek()->subDay(),
+                    ]);
+                    break;
+
+                case 'last_month':
+                    $query->whereMonth('created_at', now()->subMonth()->month)
+                        ->whereYear('created_at', now()->year);
+                    break;
+
+                case 'this_year':
+                    $query->whereYear('created_at', now()->year);
+                    break;
+
+                default:
+                    break;
+            }
+
+            $topOrders = $query->orderBy('total_price', 'desc')
                 ->limit(10)
                 ->get();
 
@@ -95,13 +118,13 @@ class OrderStatisticController extends Controller
                 $order->total_price = $order->total_price * 1000;
                 return $order;
             });
-            // Trả về dữ liệu dạng JSON (API)
+
             return response()->json($topOrders, 200);
         } catch (\Exception $e) {
-            // Trả về lỗi nếu xảy ra
             return response()->json(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
         }
     }
+
 
 
     // sanpham da ban ra
@@ -143,5 +166,31 @@ class OrderStatisticController extends Controller
                 'error' => 'Đã xảy ra lỗi: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    // dơn han va san pham 
+    public function getMonthlyOrderAndProductStats()
+    {
+        $data = DB::table('orders as o')
+            ->leftJoin('order_items as oi', 'o.id', '=', 'oi.order_id')
+            ->selectRaw('MONTH(o.created_at) as month')
+            ->selectRaw('COUNT(DISTINCT o.id) as total_orders')
+            ->selectRaw('SUM(oi.quantity) as total_products')
+            ->whereYear('o.created_at', now()->year)
+            ->groupByRaw('MONTH(o.created_at)')
+            ->orderByRaw('MONTH(o.created_at)')
+            ->get();
+
+        // Đảm bảo dữ liệu đủ 12 tháng (nếu không có đơn hàng/tháng thì sẽ là 0)
+        $monthlyData = array_fill(1, 12, ['orders' => 0, 'products' => 0]);
+
+        foreach ($data as $item) {
+            $monthlyData[$item->month] = [
+                'orders' => $item->total_orders,
+                'products' => $item->total_products,
+            ];
+        }
+
+        return response()->json($monthlyData, 200);
     }
 }

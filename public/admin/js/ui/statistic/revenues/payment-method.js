@@ -48,7 +48,7 @@ fetch("/api/revenue-by-payment-method")
                 const value = context.raw || 0;
                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
                 const percentage = ((value / total) * 100).toFixed(2); // Tính phần trăm
-                return `${label}: ${value.toLocaleString()} VNĐ (${percentage}%)`;
+                return `${label}: ${value.toLocaleString()} ₫ (${percentage}%)`;
               },
             },
           },
@@ -116,7 +116,7 @@ fetch("/api/monthly-revenue-by-payment-method")
           y: {
             title: {
               display: true,
-              text: "Doanh thu (VNĐ)",
+              text: "Doanh thu (₫)",
             },
             ticks: {
               beginAtZero: true,
@@ -132,7 +132,7 @@ fetch("/api/monthly-revenue-by-payment-method")
               label: function (context) {
                 const label = context.dataset.label || "";
                 const value = context.raw || 0;
-                return `${label}: ${value.toLocaleString()} VNĐ`;
+                return `${label}: ${value.toLocaleString()} ₫`;
               },
             },
           },
