@@ -28,12 +28,14 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Danh sách nhân viên</h3>
                 <div class="block-options">
-                    <div class="block-options-item">
-                        <a href="{{ route('admin.users.staffs.create') }}" class="btn btn-sm btn-alt-secondary"
-                            data-bs-toggle="tooltip" title="Add">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
+                    @role('admin')
+                        <div class="block-options-item">
+                            <a href="{{ route('admin.users.staffs.create') }}" class="btn btn-sm btn-alt-secondary"
+                                data-bs-toggle="tooltip" title="Add">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    @endrole
                 </div>
             </div>
             <div class="block-content block-content-full">
@@ -44,12 +46,14 @@
                             <th class="text-center" style="width: 100px;">
                                 <i class="far fa-user"></i>
                             </th>
-                            <th>Name</th>
+                            <th>Họ và tên</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th class="text-center" style="width: 100px;">Actions</th>
+                            <th>Số điện thoại</th>
+                            <th>Vai trò</th>
+                            <th>Trang thái</th>
+                            @role('admin')
+                                <th class="text-center" style="width: 100px;">Actions</th>
+                            @endrole
                         </tr>
                     </thead>
                     <tbody>
@@ -68,35 +72,44 @@
                                 <td>{{ $user->roles->first()?->name ?? 'Không có vai trò' }}</td>
                                 <td>
                                     @if ($user->is_active == 1)
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success">Kích hoạt</span>
                                     @else
-                                        <span class="badge bg-danger">Deactive</span>
+                                        <span class="badge bg-danger">Ngừng kích hoạt</span>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <div class="btn-group">
-                                        <a class="btn btn-sm btn-alt-secondary me-1" data-bs-toggle="tooltip" title="Sửa"
-                                            href="{{ route('admin.users.staffs.edit', $user) }}">
-                                            <i class="fa fa-fw fa-pencil-alt"></i>
-                                        </a>
-                                        {{-- <form action="{{ route('admin.users.active', $user) }}" method="POST"
-                                            style="display:inline;" class="form-activate">
-                                            @csrf
+                                @role('admin')
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a class="btn btn-sm btn-alt-secondary me-1" data-bs-toggle="tooltip" title="Sửa"
+                                                href="{{ route('admin.users.staffs.edit', $user) }}">
+                                                <i class="fa fa-fw fa-pencil-alt"></i>
+                                            </a>
+                                            <form action="{{ route('admin.users.active', $user) }}" method="POST"
+                                                style="display:inline;" class="form-activate me-1">
+                                                @csrf
 
-                                            <button type="submit" class="btn btn-sm btn-alt-secondary"
-                                                data-bs-toggle="tooltip"
-                                                title="{{ $user->is_active == 1 ? 'Deactivate' : 'Activate' }}">
-                                                <i class="fa-solid fa-power-off"></i>
+                                                <button type="submit" class="btn btn-sm btn-alt-secondary"
+                                                    data-bs-toggle="tooltip"
+                                                    title="{{ $user->is_active == 1 ? 'Deactivate' : 'Activate' }}">
+                                                    <i class="fa-solid fa-power-off"></i>
+                                                </button>
+                                            </form>
+                                            <button class="btn btn-sm btn-alt-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#updateRole" data-id="{{ $user->id }}"
+                                                data-role="{{ $user->roles->first()?->name ?? '' }}"
+                                                title="Quickly edit roles">
+
+                                                <i class="fa fa-fw fa-gear"></i>
+
                                             </button>
-                                        </form> --}}
-                                        {{-- <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
+                                            {{-- <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
                                             title="Quickly edit roles"
                                             href="{{ route('admin.users.staffs.edit', $user) }}">
-                                            <i class="fa fa-fw fa-gear"></i>
                                         </a> --}}
 
-                                    </div>
-                                </td>
+                                        </div>
+                                    </td>
+                                @endrole
                             </tr>
                         @endforeach
 
@@ -109,27 +122,25 @@
     <!-- END Page Content -->
 @endsection
 @section('modal')
-    <div class="modal fade" id="updateRole" tabindex="-1" aria-labelledby="updateRoleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="updateRole" tabindex="-1" aria-labelledby="updateRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateRoleModalLabel">Cập Nhật Trạng Thái</h5>
+                    <h5 class="modal-title" id="updateRoleModalLabel">Cập Nhật Vai Trò</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="updateRoleForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <input type="hidden" id="orderId" name="id">
+                        <input type="hidden" id="userId" name="id">
                         <div class="mb-3">
-                            <label for="statusSelect" class="form-label">Chọn trạng thái mới</label>
-                            <select id="statusSelect" class="form-select" name="status">
-                                <option value="1">Chờ xác nhận</option>
-                                <option value="2">Chờ vận chuyển</option>
-                                <option value="3">Đang vận chuyển</option>
-                                <option value="4">Hoàn thành</option>
-                                <option value="huy_don_hang">Hủy bỏ</option>
+                            <label for="roleSelect" class="form-label">Chọn vai trò mới</label>
+                            <select id="roleSelect" class="form-select" name="role">
+                                {{-- <option value="">Chọn vai trò</option> --}}
+                                @foreach ($roles as $r)
+                                    <option value="{{ $r->name }}">{{ $r->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -143,16 +154,54 @@
     </div>
 @endsection
 @section('js')
-    <!-- Nhúng jQuery từ CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
     {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
+
+    <!-- Page JS Code -->
+    @vite(['resources/js/pages/datatables.js'])
+
     <script>
-        $(document).ready(function() {
-            $('#productTable').DataTable();
+        document.addEventListener('DOMContentLoaded', function() {
+            var updateRole = document.getElementById('updateRole');
+            var roleSelect = document.getElementById('roleSelect');
+            var submitBtn = document.querySelector('.modal-footer .btn-primary');
+            var updateRoleForm = document.getElementById('updateRoleForm');
+
+            updateRole.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var userId = button.getAttribute('data-id');
+                var userRole = button.getAttribute('data-role');
+
+
+                var userIdInput = document.getElementById('userId');
+                userIdInput.value = userId;
+                roleSelect.value = userRole;
+                updateRoleForm.action = `{{ route('admin.users.staffs.quickly', ':id') }}`.replace(':id',
+                    userId);
+
+                // Disable the "Cập Nhật" button if the status is already the current one
+                submitBtn.disabled = true;
+            });
+
+            // Enable the "Cập Nhật" button only if a new status is selected
+            roleSelect.addEventListener('change', function() {
+                var currentStatus = document.getElementById('userId').getAttribute('data-status');
+
+                if (roleSelect.value != currentStatus) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            });
         });
     </script>
 

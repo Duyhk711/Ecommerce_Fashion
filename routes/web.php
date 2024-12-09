@@ -1,19 +1,21 @@
 <?php
 
 use App\Http\Controllers\Client\UserChatController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VNPayController;
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ShopController;
-use App\Http\Controllers\Client\UserController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
-use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\VouchersController;
+use App\Http\Controllers\VNPayController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +41,7 @@ Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 Route::get('/san-pham/{slug}/comment', 'ProductController@loadComments')->name('productDetail.comments');
-Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
+Route::get('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
 
 // order
 // Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
@@ -59,6 +61,8 @@ Route::view('/support', 'client.support')->name('support');
 Route::view('/barter', 'client.barter')->name('barter');
 Route::view('/blog', 'client.blog')->name('blog');
 Route::get('/vouchers', [VouchersController::class, 'index'])->name('vouchers.index');
+Route::get('/fetch-news', [NewsController::class, 'fetchNews']);
+Route::get('/get-news', [BlogController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     // wishlist
@@ -93,7 +97,6 @@ Route::middleware('auth')->group(function () {
     // Route xem chi tiết đơn hàng
     Route::get('/my-orders/{id}', [MyOrderController::class, 'show'])->name('orderDetail');
 
-    Route::get('/my-order/{id}', [MyOrderController::class, 'showOne'])->name('orderOneDetail');
     //Route hủy đơn hàng
     Route::post('/order/{order_id}/cancel', [MyOrderController::class, 'cancelOrder'])->name('order.cancel');
     Route::post('/order/{order_id}/remove', [MyOrderController::class, 'removeOrder'])->name('order.remove');
@@ -122,6 +125,7 @@ Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('v
 Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 Route::get('/api/available-vouchers', [VouchersController::class, 'getAvailableVouchers'])->name('vouchers.available');
 Route::post('/apply-coupon', [VouchersController::class, 'applyCoupon'])->name('apply.coupon');
+Route::get('/my-order/{id}', [MyOrderController::class, 'showOne'])->name('orderOneDetail');
 
 Route::get('/api/vouchers/all', [VouchersController::class, 'loadAllVouchers'])->name('vouchers.load.all');
 Route::get('/api/vouchers', [VouchersController::class, 'getAllVouchers']);
@@ -133,4 +137,3 @@ Route::get('/not-found', function () {
 
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
-

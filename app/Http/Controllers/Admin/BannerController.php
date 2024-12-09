@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BannerRequest;
 use App\Models\Banner;
-use App\Models\BannerImage;
 use App\Services\BannerService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
@@ -16,6 +14,10 @@ class BannerController extends Controller
     public function __construct(BannerService $bannerService)
     {
         $this->bannerService = $bannerService;
+        $this->middleware('permission:Kích hoạt banner|Xóa banner|Chỉnh sửa banner|Thêm mới banner|xem danh sách banner', ['only' => ['index']]);
+        $this->middleware('permission:Xóa banner', ['only' => ['destroy']]);
+        $this->middleware('permission:Chỉnh sửa banner', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Thêm mới banner', ['only' => ['create', 'store']]);
     }
 
     public function index()
@@ -47,7 +49,6 @@ class BannerController extends Controller
         $message = $this->bannerService->update($request, $id);
         return redirect()->route('admin.banners.index')->with('success', $message);
     }
-    
 
     public function destroy(Banner $banner)
     {
@@ -62,10 +63,10 @@ class BannerController extends Controller
         } else if ($banner->type == 'sub') {
             Banner::where('type', 'sub')->where('position', $banner->position)->update(['is_active' => false]);
         }
-    
+
         $banner->is_active = true;
         $banner->save();
-    
+
         return redirect()->route('admin.banners.index')->with('success', 'Banner được kích hoạt thành công');
     }
 }
