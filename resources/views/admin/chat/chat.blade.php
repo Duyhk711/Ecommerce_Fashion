@@ -1,428 +1,533 @@
 @extends('layouts.backend')
 
+@section('css')
+    <style>
+        .chat-app {
+            display: flex;
+            height: calc(100vh - 138px);
+            overflow: hidden;
+        }
+
+        .list-user {
+            width: 30%;
+            border-right: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            height: 100%;
+            background-color: #FFFFFF;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .chat-frame {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .chat-header {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+        #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #EEF0F1;
+        }
+        #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #EEF0F1;
+            scrollbar-width: thin;
+            scrollbar-color: #007bff #E4E4E4;
+        }
+        #messages::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background-color: #E4E4E4;
+            border-radius: 10px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background-color: #CFD2D5;
+            border-radius: 10px;
+        }
+
+        #messages::-webkit-scrollbar-thumb:hover {
+            background-color: #0056b3;
+        }
+
+        .chat-header {
+            display: flex;
+        }
+
+        .chat-footer {
+            display: flex;
+            gap: 10px;
+            position: relative;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .chat-footer button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 35px;
+            padding: 0 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .chat-footer input[type="text"] {
+            flex-grow: 1;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        #user-list {
+            list-style: none;
+
+            padding: 0;
+        }
+
+        #user-list li {
+            padding: 10px;
+        }
+
+        #user-list li:hover {
+            background-color: #EEF0F1;
+        }
+
+        #user-list li.selected {
+            background-color: #E5EFFF;
+        }
+        .list-header {
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #FFFFFF;
+        }
+        #user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-header #end-session {
+            margin-left: auto;
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            height: 40px;
+        }
+
+        .message p {
+            margin: 0;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+        .message.user {
+            text-align: left;
+            background-color: #F7F7F7;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            display: inline-block;
+            clear: both;
+            float: left;
+            box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
+        }
+        .message.admin {
+            text-align: left;
+            background-color: #dbebff;
+            color: #081b3a;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            display: inline-block;
+            clear: both;
+            float: right;
+            box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
+        }
+        .message-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-align: left;
+            display: block;
+            clear: both;
+        }
+
+        #user-list li {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #user-list li .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        #user-list li .user-name {
+            max-width: calc(100% - 50px);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            display: block;
+        }
+
+        #user-list li .unread-count {
+            margin-left: 8px;
+            color: #fff;
+            background-color: #dc3545;
+            padding: 6px 9px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        #user-name {
+            font-size: 1.125rem;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        button#end-session {
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 8px 16px;
+            font-size: 14px;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: not-allowed;
+
+        }
+    </style>
+@endsection
+
+
 @section('content')
-<style>
-    .row {
-        margin-left: 20px;
-        margin-right: 20px;
-        max-height: calc(100vh - 200px);
-    }
-    .chat-list {
-        max-height: calc(100vh - 70px - 68px - 80px);
-        overflow-y: auto;
-    }
+    <div class="chat-app">
 
-    .chat-item {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        cursor: pointer;
-    }
-
-    .chat-item:hover {
-        background-color: #f5f5f5;
-    }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
-    .chat-window {
-    max-height: calc(100vh - 290px); /* Chiều cao tối đa cho khung chat */
-    min-height: calc(100vh - 290px); /* Chiều cao tối thiểu để khung luôn cố định */
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    background: #F4F6F9;
-}
-.welcome-message {
-    height: calc(100vh - 180px); /* Chiều cao tương tự khung chat */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-    background-color: #f8f9fa;
-}
-
-.chat-message-container {
-    flex-grow: 1; /* Cho phép khung tin nhắn co dãn theo nội dung */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #ffffff;
-    margin-bottom: 10px;
-}
-
-
-    .chat-message {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-    }
-
-    .chat-message.sender {
-        justify-content: flex-end;
-    }
-
-    .chat-message.receiver {
-        justify-content: flex-start;
-    }
-
-    .chat-message .message-content {
-        background-color: #F4F6F9;
-        padding: 10px;
-        border-radius: 5px;
-        margin: 0 10px;
-        max-width: 70%;
-
-    }
-
-    .chat-message.sender .message-content {
-        background-color: #007BFF;
-        color: #fff;
-        align-self: flex-end;
-    }
-
-    .chat-message.receiver .message-content {
-        background-color: #E9ECEF;
-        color: #333333;
-        align-self: flex-start;
-    }
-
-    .chat-message .timestamp {
-        font-size: 0.8em;
-        color: #ffffff;
-    }
-    .chat-message .timestamp {
-    font-size: 0.7em;
-}
-
-.chat-message.sender .timestamp {
-    color: #ffffff; /* Màu cho người gửi */
-}
-
-.chat-message.receiver .timestamp {
-    color: #999999; /* Màu cho người nhận */
-}
-
-    .list-group-item.active {
-        z-index: 2;
-        color: #fff;
-        background-color: #4B49AC;
-        border-color: #4B49AC;
-    }
-
-    .unread-count {
-        background-color: #ff0000;
-        color: #fff;
-        border-radius: 50%;
-        min-width: 24px;
-        min-height: 24px;
-        padding: 3px;
-        margin-left: 10px;
-        font-size: 0.8em;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-    }
-    .profile_info {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-    }
-    .chat-list::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    .chat-list::-webkit-scrollbar-thumb {
-        background-color: #7c848d;
-        border-radius: 10px;
-    }
-    .chat-list::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    .chat-window::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    .chat-window::-webkit-scrollbar-thumb {
-        background-color: #7c848d;
-        border-radius: 10px;
-    }
-
-    .chat-window::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    .chat-message .message-content p {
-    line-height: 2; /* Điều chỉnh khoảng cách giãn dòng, giảm giá trị để thu nhỏ */
-    margin: 0; /* Xóa khoảng cách thừa giữa các dòng */
-}
-.chat-message .message-content{
-    margin-left: 20px;
-    margin-right: 20px;
-}
-.card-header {
-    background-color: #007BFF;
-}
-#sendMessageButton {
-    background-color: #007BFF;
-}
-#sendMessageButton:hover {
-    background-color: #b5d2e6;
-}
-</style>
-
-<div class="row">
-    <div class="col-md-12 mt-4 mb-4 grid-margin">
-        <div class="row">
-
-            <div class="col-md-4 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-header text-white">
-                        <h4 class="mb-0">Chats</h4>
-                    </div>
-                    <div class="list-group chat-list" id="chatList">
-                        <ul class="list-group list-group-flush">
-
-                        </ul>
-
-                    </div>
-                </div>
+        <div class="list-user">
+            <div class="list-header">
+                <h3>Danh sách user</h3>
             </div>
+            <ul id="user-list"></ul>
+        </div>
 
+        <div class="chat-frame">
+            <div class="chat-header" style="display: none;">
+                <img id="user-avatar" src="" alt="User Avatar">
+                <span id="user-name">Tên người dùng</span>
+                <button id="end-session" disabled>Kết thúc</button>
+            </div>
+            <div class="welcome-frame" style="display: block; text-align: center; padding: 150px; flex-grow: 1;">
+                <h2>Chào mừng bạn đến với hệ thống chat</h2>
+                <p>Chọn một người dùng từ danh sách bên trái để bắt đầu trò chuyện.</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/8744/8744028.png" width="80px" alt=""
+                    srcset="">
+            </div>
+            <div id="messages" style="display: none;"></div>
+            <div class="chat-footer" style="display: none;">
+                <input type="text" id="message" placeholder="Type your message..." style="width: 70%;">
+                <button id="send" disabled><i class="bi bi-send"></i></button>
 
-            <div class="col-md-8 col-lg-9">
-                <div id="welcomeMessage" class="welcome-message">
-                    <h5><img src="https://cdn-icons-png.flaticon.com/512/8744/8744028.png" width="80px" alt="" srcset=""> Trang hỗ trợ khách hàng trực tuyến cửa hàng Poly Fashion</h5>
-                    {{-- <p>Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.</p> --}}
-                </div>
-                <div class="card shadow-sm" id="chatContainer" style="display: none;">
-                    <div class="card-header text-white">
-                        <h4 class="mb-0" id="chat_name">Nói chuyện với</h4>
-                    </div>
-
-                    <div class="card-body chat-window">
-                        <div class="chat-message-container" id="chatMessageContainer">
-
-                        </div>
-                    </div>
-
-                    <div class="card-footer">
-                        <form id="messageForm" method="POST">
-                            @csrf
-                            <input type="hidden" name="receiver_id" id="receiver_id">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Nhập tin nhắn ở đây..." id="messageInput" name="message" required>
-                                <button class="btn btn-primary" type="submit" id="sendMessageButton"><i class="bi bi-send"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-</div>
-
 @endsection
 
 @section('js')
-{{-- @vite(['resources/js/chat.js']) --}}
-<script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
-
-<script>
-    $(document).ready(function() {
-        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-            encrypted: true
-        });
-
-        var userId = {{ Auth::id() }};
-
-        var currentChatUserId = null;
-
-        var channel = pusher.subscribe('chat.' + userId);
-        loadUsers();
-        channel.bind('user-message', function(data) {
-    if (data && data.message) {
-        let senderId = data.sender_id;
-        let receiverId = data.receiver_id;
-        let messageText = data.message;
-        let senderName = data.user.name;
-        let messageTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        if (receiverId == userId && senderId == currentChatUserId) {
-            let messageHtml = `
-                <div class="chat-message receiver">
-                    <div class="message-content">
-                        <p> ${messageText}</p>
-                        <div class="timestamp">${messageTime}</div>
-                    </div>
-                </div>`;
-
-            $('#chatMessageContainer').append(messageHtml);
-
-            $.ajax({
-                url: '{{ route('admin.markMessagesAsRead') }}',
-                method: 'POST',
-                data: {
-                    receiver_id: currentChatUserId,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log('Tin nhắn đã được đánh dấu là đã đọc');
-                },
-                error: function(xhr) {
-                    console.error('Lỗi khi đánh dấu tin nhắn là đã đọc:', xhr.responseText);
+    <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
+    @vite(['resources/js/chat.js'])
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-        } else if (receiverId == userId) {
-            let $chatItem = $('.chat-item').filter(function() {
-                return $(this).data('user-id') == senderId;
+            $('#user-list').on('click', 'li', function() {
+                $('#user-list li').removeClass('selected');
+                $(this).addClass('selected');
+                $('.welcome-frame').hide();
+                $('#messages').show();
+                $('.chat-header').show();
+                $('.chat-footer').show();
             });
-            if ($chatItem.length > 0) {
-                let $unreadCount = $chatItem.find('.unread-count');
-                if ($unreadCount.length > 0) {
-                    $unreadCount.text(parseInt($unreadCount.text()) + 1);
-                } else {
-                    $chatItem.append('<span class="unread-count">1</span>');
-                }
+
+            function scrollToBottom() {
+                const messageBox = $('#messages');
+                messageBox.scrollTop(messageBox[0].scrollHeight);
             }
-        }
-        scrollToBottom();
-        loadUsers();
-    } else {
-        console.error('Dữ liệu tin nhắn không hợp lệ.');
-    }
-});
+            const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+                cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
+            });
+            let sessionId = null;
+            const adminChannel = pusher.subscribe('admin-{{ auth()->id() }}');
+            adminChannel.bind('new-session-assigned', function(data) {
+                console.log('New session assigned to you:', data);
 
-        $(document).on('click', '.chat-item', function() {
-            let profileName = $(this).find('.profile_name').text();
-            let profileImage = $(this).find('img').attr('src');
-            currentChatUserId = $(this).data('user-id');
-            $('#receiver_id').val(currentChatUserId);
-            $('#chat_name').html(`<img src="${profileImage}" class="avatar" alt="${profileName}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${profileName}`);
-            $('#welcomeMessage').hide();
-            $('#chatContainer').show();
-            $(this).find('.unread-count').remove();
+                loadSessions(); 
+            });
 
-            $.ajax({
-                url: '{{ route('admin.markMessagesAsRead') }}',
-                method: 'POST',
-                data: {
-                    receiver_id: currentChatUserId,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log('Tin nhắn đã được đánh dấu là đã đọc');
-                },
-                error: function(xhr) {
-                    console.error('Lỗi khi đánh dấu tin nhắn là đã đọc:', xhr.responseText);
+            adminChannel.bind('new-message', function(data) {
+                console.log('New message received:', data);
+
+                loadSessions(); 
+                if (sessionId === data.chat_session_id) {
+                    markMessagesRead(); 
                 }
             });
 
-            $.ajax({
-                url: '{{ route('admin.fetchMessages') }}',
-                method: 'GET',
-                data: {
-                    receiver_id: currentChatUserId
-                },
-                success: function(response) {
-                    $('#chatMessageContainer').empty();
-
-                    response.messages.forEach(function(message) {
-                        let isSender = message.sender_id == userId;
-                        let userName = isSender ? '{{ Auth::user()->name }}' : profileName;
-
-                        let messageTime = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                        let messageHtml = `
-                            <div class="chat-message ${isSender ? 'sender' : 'receiver'}">
-                                <div class="message-content">
-                                    <p> ${message.message}</p>
-                                    <div class="timestamp">${messageTime}</div>
-                                </div>
-                            </div>`;
-                        $('#chatMessageContainer').append(messageHtml);
-                    });
-                    scrollToBottom();
-                },
-                error: function(xhr) {
-                    console.error('Lỗi khi lấy tin nhắn:', xhr.responseText);
-                }
-            });
-        });
-
-        $('#messageForm').submit(function(e) {
-            e.preventDefault();
-
-            let message = $('#messageInput').val().trim();
-            let receiverId = $('#receiver_id').val();
-
-            if (message !== '' && receiverId) {
+            function loadSessions() {
                 $.ajax({
-                    url: '{{ route('admin.sendMessage') }}',
-                    method: 'POST',
-                    data: {
-                        message: message,
-                        receiver_id: receiverId,
-                        _token: '{{ csrf_token() }}'
-                    },
+                    url: '/admin/list-sessions',
+                    method: 'GET',
                     success: function(response) {
-                        let messageHtml = `
-                            <div class="chat-message sender">
-                                <div class="message-content">
-                                    <p> ${message}</p>
-                                    <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                                </div>
-                            </div>`;
-                        $('#chatMessageContainer').append(messageHtml);
-                        $('#messageInput').val('');
-                        scrollToBottom();
+                        const sessions = response.sessions;
+                        const userList = $('#user-list');
+                        userList.empty();
+
+                        if (Array.isArray(sessions)) {
+                            sessions.forEach(session => {
+                                const li = $('<li></li>');
+                                const avatarPath = session.user.avatar;
+                                const avatarUrl = avatarPath && avatarPath.startsWith(
+                                        'avatars/') ?
+                                    `{{ asset('storage/') }}/${avatarPath}` :
+                                    avatarPath ?
+                                    avatarPath :
+                                    `http://fashion1.com/client/images/users/default-avatar.jpg`;
+
+                                let sessionInfo = `<div class="user-info">
+                                            <img src="${avatarUrl}" alt="img" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                            <span class="user-name">${session.user.name}</span>
+                                        </div>
+                                    `;
+
+                                if (session.unread_count > 0 && session.id !== sessionId) {
+                                    sessionInfo += `
+                                        <div class="unread-count">${session.unread_count}</div>
+                                    `;
+                                }
+
+                                li.html(sessionInfo);
+                                li.css('cursor', 'pointer');
+                                li.on('click', function() {
+                                    if (sessionId) {
+                                        pusher.unsubscribe(`chat-session.${sessionId}`);
+                                    }
+                                    sessionId = session.id;
+                                    loadMessages(sessionId);
+
+                                    const avatarPath = session.user.avatar;
+                                    const avatarUrl = avatarPath && avatarPath
+                                        .startsWith('avatars/') ?
+                                        `{{ asset('storage/') }}/${avatarPath}` :
+                                        avatarPath ?
+                                        avatarPath :
+                                        `http://fashion1.com/client/images/users/default-avatar.jpg`;
+
+                                    $('#user-avatar').attr('src', avatarUrl);
+                                    $('#user-name').text(session.user.name);
+                                    $('#message').attr('placeholder',
+                                        `Nhập tin nhắn tới ${session.user.name}`);
+                                    $('#send').prop('disabled', false);
+                                    $('#end-session').prop('disabled', false);
+                                    li.find('.unread-count')
+                                        .remove(); 
+
+                                    const channel = pusher.subscribe(
+                                        `chat-session.${sessionId}`);
+                                    channel.bind('session-ended', function(data) {
+                                        pusher.unsubscribe(
+                                            `chat-session.${sessionId}`);
+                                        $('#user-list li.selected').removeClass(
+                                            'selected');
+                                        $('#messages')
+                                            .empty(); 
+                                        $('.chat-header')
+                                            .hide(); 
+                                        $('.chat-footer')
+                                            .hide(); 
+                                        $('.welcome-frame')
+                                            .show(); 
+                                        alert('Phiên chat đã kết thúc.');
+                                        loadSessions();
+                                    });
+
+                                    channel.bind('new-message', function(data) {
+                                        const senderType = data.sender_id ===
+                                            {{ auth()->id() }} ? 'admin' :
+                                            'user';
+                                        const formattedTime = new Date(data
+                                            .created_at).toLocaleString();
+                                        appendMessage(data.message, senderType,
+                                            formattedTime);
+
+                                        if (sessionId === data
+                                            .chat_session_id) {
+                                            markMessagesRead();
+                                        }
+                                    });
+
+                                    markMessagesRead
+                                        (); 
+                                });
+                                userList.append(li);
+                            });
+                        }
                     },
-                    error: function(xhr) {
-                        console.error('Lỗi khi gửi tin nhắn:', xhr.responseText);
+                    error: function(error) {
+                        console.error(error);
                     }
                 });
             }
-        });
 
-        function scrollToBottom() {
-        $('.card-body.chat-window').animate({ scrollTop: $('.card-body.chat-window')[0].scrollHeight }, 300);
-    }
-        function loadUsers() {
-            $.ajax({
-                url: '{{ route('admin.getSortedUsers') }}',
-                method: 'GET',
-                success: function(response) {
-                    let chatList = $('#chatList ul');
-                    chatList.empty();
 
-                    response.users.forEach(function(user) {
-                        let unreadCountHtml = user.unread_count > 0 ? `<span class="unread-count">${user.unread_count}</span>` : '';
-                        let userHtml = `
-                            <li class="list-group-item d-flex align-items-center chat-item" data-user-id="${user.id}">
-                                <img src="${user.avatar_url}" class="profile_img rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
-                                <div class="profile_info d-flex justify-content-between w-100">
-                                    <span class="profile_name font-weight-bold">${user.name}</span>
-                                    ${unreadCountHtml}
-                                </div>
-                            </li>`;
-                        chatList.append(userHtml);
-                    });
-                },
-                error: function(xhr) {
-                    console.error('Lỗi khi tải danh sách user:', xhr.responseText);
+            function appendMessage(content, senderType, timestamp) {
+                const messageBox = $('#messages');
+                const messageHtml = `
+                                    <div class="message ${senderType}">
+                                        <p>${content}</p>
+                                        <div class="message-time">${timestamp}</div>
+                                    </div>
+                                    `;
+                messageBox.append(messageHtml);
+                scrollToBottom();
+            }
+
+            function markMessagesRead() {
+                $.ajax({
+                    url: `/admin/mark-messages-read/${sessionId}`,
+                    method: 'POST',
+                    success: function() {
+                        const selectedUser = $('#user-list li.selected');
+                        selectedUser.find('.unread-count').remove();
+                    }
+                });
+            }
+
+            function loadMessages(sessionId) {
+                $.ajax({
+                    url: `/admin/sessions/${sessionId}/messages`,
+                    method: 'GET',
+                    success: function(response) {
+                        const messages = response.messages;
+                        const messageBox = $('#messages');
+                        messageBox.empty();
+                        messages.forEach(msg => {
+                            const senderType = msg.sender_id === {{ auth()->id() }} ? 'admin' :
+                                'user';
+                            const formattedTime = new Date(msg.created_at).toLocaleString();
+                            appendMessage(msg.message, senderType, formattedTime);
+                        });
+                        scrollToBottom()
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            $('#send').on('click', function() {
+                const message = $('#message').val();
+                if (!message || !sessionId) return; 
+
+                $.ajax({
+                    url: `/admin/send-message/${sessionId}`,
+                    method: 'POST',
+                    data: {
+                        message: message
+                    }, 
+                    success: function(response) {
+                        $('#message').val(''); 
+                        scrollToBottom();
+                    },
+                    error: function(error) {
+                        console.error(error); 
+                        alert(
+                            'Failed to send message.'
+                        ); 
+                    }
+                });
+            });
+
+            $('#message').on('keypress', function(event) {
+                if (event.key === 'Enter' && !event
+                    .shiftKey) { 
+                    event.preventDefault();
+                    $('#send').trigger('click');
                 }
             });
-        }
-    });
-</script>
-{{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
+
+            $('#end-session').on('click', function() {
+                if (confirm('Bạn có muốn kết thúc phiên chat hay không ?')) {
+                    if (!sessionId) return;
+                }
+                $.ajax({
+                    url: `/admin/end-session/${sessionId}`,
+                    method: 'POST',
+                    success: function() {
+                        pusher.unsubscribe(`chat-session.${sessionId}`);
+                        sessionId = null;
+                        $('#user-list li.selected').removeClass('selected');
+                        $('#messages').empty(); 
+                        $('.chat-header').hide();
+                        $('.chat-footer').hide();
+                        $('.welcome-frame').show();
+                        loadSessions();
+                        alert('Phiên chat đã kết thúc.');
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        alert('lỗi khi hủy session');
+                    }
+                });
+            });
+            loadSessions();
+        });
+    </script>
 @endsection

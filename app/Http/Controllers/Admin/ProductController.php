@@ -9,7 +9,6 @@ use App\Models\Catalogue;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\ProductService;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +20,10 @@ class ProductController extends Controller
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
+        $this->middleware('permission:xem danh sách sản phâm|Xóa sản phẩm|Chỉnh sửa sản phẩm|Thêm mới sản phẩm|Khôi phục sản phẩm', ['only' => ['index', 'show']]);
+        $this->middleware('permission:Xóa sản phẩm', ['only' => ['destroy']]);
+        $this->middleware('permission:Chỉnh sửa sản phẩm', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Thêm mới sản phẩm', ['only' => ['create', 'store']]);
     }
 
     public function index(Request $request)
@@ -54,7 +57,7 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $validatedData = $request->validated();
 
         try {
@@ -112,10 +115,9 @@ class ProductController extends Controller
         return view('admin.products.edit', $data);
     }
 
-
     public function update(UpdateProductRequest $request, $id)
     {
-        dd($request->all());
+        // dd($request->all());
         try {
             $this->productService->updateProduct($id, $request->validated(), $request);
 
@@ -139,7 +141,6 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Khôi phục sản phẩm thành công.');
     }
 
-
     public function updateVariant(Request $request)
     {
         $variantsData = $request->input('variants');
@@ -149,7 +150,7 @@ class ProductController extends Controller
                 'price_regular' => 'required|numeric',
                 'price_sale' => 'required|numeric|lt:price_regular',
                 'stock' => 'required|integer|min:0',
-            ],[
+            ], [
                 'price_regular.required' => 'Giá bán là bắt buộc.',
                 'price_regular.numeric' => 'Giá bán phải là một số.',
                 'price_sale.required' => 'Giá khuyến mãi là bắt buộc.',
@@ -182,7 +183,6 @@ class ProductController extends Controller
         }
         if ($product) {
             $totalStock = $product->variants->sum('stock');
-
 
             return response()->json([
                 'status' => 'success',

@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email',
         'google_id',
         'password',
+        'is_online',
     ];
 
     /**
@@ -87,5 +88,9 @@ class User extends Authenticatable
     public function setAvatarAttribute($value)
     {
         $this->attributes['avatar'] = $value ? $value : $this->google_avatar;
+    }
+    public function sessions()
+    {
+        return $this->hasMany(ChatSession::class, 'admin_id');
     }
 }

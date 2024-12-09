@@ -43,8 +43,8 @@
         }
 
         .voucher-copy {
-            width: 100px; 
-            height: 40px; 
+            width: 100px;
+            height: 40px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -76,38 +76,49 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            $.ajax({
-                url: "{{ route('user.vouchers') }}",
-                type: "GET",
-                success: function(response) {
-                    if (response.success) {
-                        let vouchers = response.vouchers;
-                        let container = $('#saved-vouchers-container');
-                        container.empty();
-                        vouchers.forEach(voucher => {
-                            container.append(`
-                            <div class="voucher-card mb-4">
-                                <div class="voucher-header">${voucher.description}</div>
-                                <div class="voucher-code" id="voucher-code-${voucher.id}">${voucher.code}</div>
-                                <div class="voucher-description">Giảm ${voucher.discount_type === 'percentage' ? voucher.discount_value + '%' : voucher.discount_value + 'K'} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K</div>
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <div class="voucher-expiry">HSD: ${voucher.expiry_date}</div>
-                                    <a href="{{ route('shop') }}">
-                                        <button class="voucher-copy" onclick="copyCode('voucher-code-${voucher.id}')">Mua ngay</button>
-                                    </a>
-                                </div>
+    $.ajax({
+        url: "{{ route('user.vouchers') }}",
+        type: "GET",
+        success: function(response) {
+            let container = $('#saved-vouchers-container');
+            container.empty();
+
+            if (response.success) {
+                let vouchers = response.vouchers;
+                vouchers.forEach(voucher => {
+                    container.append(`
+                        <div class="voucher-card mb-4">
+                            <div class="voucher-header">${voucher.description}</div>
+                            <div class="voucher-code" id="voucher-code-${voucher.id}">${voucher.code}</div>
+                            <div class="voucher-description">Giảm ${voucher.discount_type === 'percentage' ? voucher.discount_value + '%' : voucher.discount_value + 'K'} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K</div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="voucher-expiry">HSD: ${voucher.expiry_date}</div>
+                                ${
+                                voucher.is_used 
+                                ? `<button class="voucher-copy used-button" disabled>Đã dùng</button>` 
+                                : `<a href="{{ route('shop') }}">
+                                   <button class="voucher-copy" onclick="copyCode('voucher-code-${voucher.id}')">Dùng ngay</button>
+                               </a>`
+                                }
                             </div>
-                        `);
-                        });
-                    } else {
-                        alert(response.message || 'Có lỗi xảy ra!');
-                    }
-                },
-                error: function() {
-                    alert('Không thể load dữ liệu voucher');
-                }
-            });
-        });
+                        </div>
+                    `);
+                });
+            } else {
+                container.append(`
+                    <div class="text-center">
+                        <img src="https://png.pngtree.com/png-vector/20220524/ourmid/pngtree-voucher-discount-png-image_4613299.png" alt="Chưa có voucher" class="img-fluid" style="max-width: 300px; margin: 20px auto;">
+                        <h3 class="text-muted"> Bạn chưa lưu mã giảm giá nào.</h3>
+                    </div>
+                `);
+            }
+        },
+        error: function() {
+            alert('Không thể load dữ liệu voucher');
+        }
+    });
+});
+
 
         function copyCode(voucherId) {
             const code = document.getElementById(voucherId).innerText;

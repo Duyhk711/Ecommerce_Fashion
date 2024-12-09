@@ -66,8 +66,8 @@
                                 <th class="text-center" style="width: 100px;">
                                     #
                                 </th>
-                                <th>Name</th>
-                                <th class="text-center" style="width: 100px;">Actions</th>
+                                <th>Têm</th>
+                                <th class="text-center" style="width: 100px;">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,7 +79,7 @@
                                     <td class="fw-semibold">
                                         <a href="be_pages_generic_profile.html">{{ $r->name }}</a>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         <div class="btn-group">
                                             <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip"
                                                 title="Sửa vai trò" href="{{ route('admin.users.roles.edit', $r) }}">
@@ -90,15 +90,17 @@
                                                 href="{{ route('admin.users.roles.permission', $r) }}">
                                                 <i class="fa fa-fw fa-gear"></i>
                                             </a>
-                                            <form action="{{ route('admin.users.roles.delete', $r) }}" method="POST"
-                                                class="form-delete">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-alt-secondary"
-                                                    data-bs-toggle="tooltip" title="Xóa">
-                                                    <i class="fa fa-fw fa-times text-danger"></i>
-                                                </button>
-                                            </form>
+                                            @if ($r->name != 'admin')
+                                                <form action="{{ route('admin.users.roles.delete', $r) }}" method="POST"
+                                                    class="form-delete">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-alt-secondary"
+                                                        data-bs-toggle="tooltip" title="Xóa">
+                                                        <i class="fa fa-fw fa-times text-danger"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
 
                                         </div>
                                     </td>
@@ -116,18 +118,20 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <!-- Nhúng jQuery từ CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
     {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
-    <script>
-        $(document).ready(function() {
-            $('#productTable').DataTable();
-        });
-    </script>
+
+    <!-- Page JS Code -->
+    @vite(['resources/js/pages/datatables.js'])
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

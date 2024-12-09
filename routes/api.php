@@ -53,6 +53,8 @@ Route::get('/orders/status-distribution', [OrderStatisticController::class, 'get
 Route::get('/orders/top', [OrderStatisticController::class, 'getTopOrders'])->name('orders.top');
 Route::get('/statistics/products', [OrderStatisticController::class, 'getProductStatistics']);
 Route::get('/monthly-sales', [OrderStatisticController::class, 'getMonthlySalesData']);
+Route::get('/monthly-order-product-stats', [OrderStatisticController::class, 'getMonthlyOrderAndProductStats']);
+
 
 // revenue
 Route::get('/category-revenue', [RevenuStatisticController::class, 'getCategoryRevenue']);
@@ -66,3 +68,9 @@ Route::get('/customer-return-rate', [CustomerStatisticController::class, 'getRet
 Route::get('/purchase-frequency', [CustomerStatisticController::class, 'getPurchaseFrequency']);
 
 
+// dashboard
+Route::get('dashboard/overview', [ChartController::class, 'getOrdersOverview'])->name('dashboard.overview');
+Route::get('product-activity', [ChartController::class, 'productActivity']);
+Route::get('/customer-stats', [ChartController::class, 'getCustomerStats'])->name('customer_stats');
+Route::get('/cart/stats', [ChartController::class, 'getCartStats']);
+Route::get('/voucher-usage-rate', [ChartController::class, 'getVoucherUsageRate']);
