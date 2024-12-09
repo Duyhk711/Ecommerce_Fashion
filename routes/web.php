@@ -39,7 +39,7 @@ Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 
 Route::get('/san-pham/{slug}', [ProductController::class, "getProductDetail"])->name('productDetail');
 Route::get('/san-pham/{slug}/comment', 'ProductController@loadComments')->name('productDetail.comments');
-Route::post('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
+Route::get('/buy-now', [CheckoutController::class, "buyNow"])->name('buyNow');
 
 // order
 // Route::view('/order-success', 'client.order-success')->name('orderSuccess'); // Thêm tên
