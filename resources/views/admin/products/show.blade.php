@@ -166,11 +166,7 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <p class="text-muted mb-1">Số lượng sẵn có :</p>
-<<<<<<< HEAD
-                                                                <h5 class="mb-0">{{$totalStock}}</h5>
-=======
                                                                 <h6 class="mb-0">{{$totalStock}}</h6>
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
 
                                                             </div>
                                                         </div>
@@ -301,19 +297,6 @@
                                                                         <td>Tommy Hilfiger</td>
                                                                     </tr> --}}
                                                                     <tr>
-<<<<<<< HEAD
-                                                                        <th scope="row">Color</th>
-                                                                        <td>Blue</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Material</th>
-                                                                        <td>Cotton</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Weight</th>
-                                                                        <td>140 Gram</td>
-                                                                    </tr>
-=======
                                                                         <th scope="row">Màu sắc</th>
                                                                         <td>
                                                                             @php
@@ -328,12 +311,12 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endforeach
-                                                                    
+
                                                                             {{-- Hiển thị danh sách màu, cách nhau bởi dấu phẩy --}}
                                                                             {{ implode(', ', $displayedColors) }}
                                                                         </td>
                                                                     </tr>
-                                                                    
+
                                                                     <tr>
                                                                         <th scope="row">Chất liệu</th>
                                                                         <td>{{$product->material}}</td>
@@ -342,7 +325,6 @@
                                                                         <th scope="row">Weight</th>
                                                                         <td>140 Gram</td>
                                                                     </tr> --}}
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -361,11 +343,7 @@
 
                                             <div class="mt-5">
                                                 <div>
-<<<<<<< HEAD
-                                                    <h5 class=" mb-3">Xếp hạng và đánh giá</h5>
-=======
                                                     <h6 class=" mb-3">Xếp hạng & đánh giá</h6>
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                 </div>
                                                 <div class="row gy-4 gx-0">
                                                     <div class="col-lg-4">
@@ -387,11 +365,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-shrink-0">
-<<<<<<< HEAD
-                                                                            <h6 class="mb-0">{{ number_format($averageRating, 1) }}</h6>
-=======
                                                                             <p class="mb-0">{{ number_format($averageRating, 1) }}/5</p>
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -401,28 +375,16 @@
                                                             </div>
 
                                                             @foreach ([5, 4, 3, 2, 1] as $stars)
-<<<<<<< HEAD
-                                                                <div class="mt-3">
-                                                                    <div class="row align-items-center g-2">
-                                                                        <div class="col-auto">
-                                                                            <div class="p-2">
-                                                                                <h6 class="mb-0">{{ $stars }} star</h6>
-=======
                                                                 <div class=" fs-sm" >
                                                                     <div class="row align-items-center g-2">
                                                                         <div class="col-auto">
                                                                             <div class="p-2">
                                                                                 <span class="mb-0">{{ $stars }} star</span>
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                             </div>
                                                                         </div>
                                                                         <div class="col">
                                                                             <div class="p-2">
-<<<<<<< HEAD
-                                                                                <div class="progress animated-progress progress-sm">
-=======
                                                                                 <div class="progress animated-progress progress-sm" style="height:5px">
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                                     <div class="progress-bar bg-success"
                                                                                          role="progressbar"
                                                                                          style="width: {{ $totalReviews > 0 ? ($ratingsCount[$stars] / $totalReviews * 100) : 0 }}%"
@@ -434,11 +396,7 @@
                                                                         </div>
                                                                         <div class="col-auto">
                                                                             <div class="p-2">
-<<<<<<< HEAD
-                                                                                <h6 class="mb-0 text-muted">{{ $ratingsCount[$stars] }}</h6>
-=======
                                                                                 <span class="mb-0 text-muted">{{ $ratingsCount[$stars] }}</span>
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -450,44 +408,9 @@
                                                     <div class="col-lg-8">
                                                         <div class="ps-lg-4">
                                                             <div class="d-flex flex-wrap align-items-start gap-3">
-<<<<<<< HEAD
-                                                                <h5 class="">Đánh giá: </h5>
-                                                            </div>
-
-                                                            <div class="me-lg-n3 pe-lg-4" data-simplebar style="max-height: 225px;">
-                                                                <ul class="list-unstyled mb-0">
-                                                                    @foreach ($comments as $comment)
-                                                                        <li class="py-2">
-                                                                            <div class="border border-dashed rounded p-3">
-                                                                                <div class="d-flex align-items-start mb-3">
-                                                                                    <div class="hstack gap-3">
-                                                                                        <div class="badge rounded-pill bg-success mb-0">
-                                                                                            <i class="mdi mdi-star"></i> {{ $comment->rating }}
-                                                                                        </div>
-                                                                                        <div class="vr"></div>
-                                                                                        <div class="flex-grow-1">
-                                                                                            <p class="text-muted mb-0">{{ $comment->comment }}</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="d-flex align-items-end">
-                                                                                    <div class="flex-grow-1">
-                                                                                        <h5 class="mb-0">{{  $comment->user_name }}</h5>
-                                                                                    </div>
-
-                                                                                    <div class="flex-shrink-0">
-                                                                                        <p class="text-muted fs-13 mb-0">{{ \Carbon\Carbon::parse($comment->created_at)->format('d M, Y') }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    @endforeach
-                                                                </ul>
-=======
                                                                 <h6 class="">Đánh giá: </h6>
                                                             </div>
-                                                    
+
                                                             <div class="me-lg-n3 pe-lg-4" data-simplebar style="max-height: 225px;">
                                                                 @if ($comments->isEmpty())
                                                                     <p class="text-muted">Chưa có đánh giá nào.</p>
@@ -507,12 +430,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                    
+
                                                                                     <div class="d-flex align-items-end">
                                                                                         <div class="flex-grow-1">
                                                                                             <span class="mb-0"><strong>{{ $comment->user_name }}</strong></span>
                                                                                         </div>
-                                                    
+
                                                                                         <div class="flex-shrink-0">
                                                                                             <p class="text-muted fs-13 mb-0">
                                                                                                 {{ \Carbon\Carbon::parse($comment->created_at)->locale('vi')->translatedFormat('d M, Y') }}
@@ -524,11 +447,10 @@
                                                                         @endforeach
                                                                     </ul>
                                                                 @endif
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <!-- end card body -->
                                             </div>

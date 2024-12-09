@@ -35,7 +35,7 @@ class ChartController extends Controller
             ->count();
 
         $delivered = Order::whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->where('status', '4')
+            ->where('status', '5')
             ->count();
 
         $cancelled = Order::whereBetween('created_at', [$startOfWeek, $endOfWeek])
@@ -61,7 +61,7 @@ class ChartController extends Controller
         ]);
     }
 
-    // 
+    //
 
     // Phương thức lấy doanh thu theo nhóm sản phẩm
     public function productActivity(Request $request)
@@ -206,4 +206,3 @@ class ChartController extends Controller
         ]);
     }
 }
-

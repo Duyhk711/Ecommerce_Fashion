@@ -94,7 +94,7 @@ class Order extends Model
             $this->status = $newStatus;
         }
 
-        // Nếu trạng thái mới là '4', cập nhật trạng thái thanh toán
+        // Nếu trạng thái mới là '5', cập nhật trạng thái thanh toán
         if ($newStatus === '5') {
             $this->payment_status = 'da_thanh_toan';
         }

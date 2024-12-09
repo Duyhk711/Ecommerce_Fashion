@@ -173,7 +173,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-6">
                 <div class="section">
                     <h5>Hoạt động marketing</h5>
@@ -184,15 +184,15 @@
                         <div><p>Tỷ lệ sử dụng voucher:</p> <span id="usage-rate">0%</span></div>
                     </div>
                     <!-- Biểu đồ tỷ lệ sử dụng voucher -->
-                    
+
                     <div class="chart">(Biểu đồ tỷ lệ sử dụng voucher)</div>
                     <canvas id="voucherChart" width="200" height="200"></canvas>
                 </div>
             </div>
 
-            
+
         </div>
-       
+
 
         <!-- Hoạt động giỏ hàng -->
        <div class="row">
@@ -278,7 +278,7 @@
             // Khởi tạo dữ liệu cho các trạng thái
             const chartValues = {
                 '1': [0, 0, 0, 0, 0, 0, 0], // Chờ xác nhận
-                '4': [0, 0, 0, 0, 0, 0, 0], // Đã giao
+                '5': [0, 0, 0, 0, 0, 0, 0], // Đã giao
                 'huy_don_hang': [0, 0, 0, 0, 0, 0, 0] // Đã hủy
             };
 
