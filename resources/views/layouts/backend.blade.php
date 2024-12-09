@@ -434,6 +434,22 @@
                                         </a>
                                     </li>
                                 </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.vouchers') }}">
+                                            <span class="nav-main-link-name">Khuyến mãi</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.customer') }}">
+                                            <span class="nav-main-link-name">Khách hàng</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         @endcan
 
@@ -715,7 +731,7 @@
             @endif
         });
     </script>
-    
+
 </body>
 @yield('js')
 
