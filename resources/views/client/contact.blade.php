@@ -75,7 +75,7 @@
             </div>
 
             <div class="contact-info">
-                <p><strong>Email:</strong> Hema@fpt.edu.vn</p>
+                <p><strong>Email:</strong> PolyfashionShop@gmail.com</p>
             </div>
 
             <div class="contact-info">
