@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use App\Models\Voucher;
-use App\Services\VoucherService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VoucherRequest;
+use App\Models\User;
+use App\Models\Voucher;
 use App\Notifications\NewVoucherNotification;
+use App\Services\VoucherService;
 
 class VoucherController extends Controller
 {
@@ -17,6 +16,10 @@ class VoucherController extends Controller
     public function __construct(VoucherService $voucherService)
     {
         $this->voucherService = $voucherService;
+        $this->middleware('permission:xem danh sách khuyến mãi|Kích hoạt khuyến mại|Xóa khuyến mại|Chỉnh sửa khuyến mại|Thêm mới khuyến mại', ['only' => ['index']]);
+        $this->middleware('permission:Xóa khuyến mại', ['only' => ['destroy']]);
+        $this->middleware('permission:Chỉnh sửa khuyến mại', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Thêm mới khuyến mại', ['only' => ['create', 'store']]);
     }
 
     public function index()
@@ -99,7 +102,6 @@ class VoucherController extends Controller
                 ->withInput();
         }
     }
-
 
     public function edit(Voucher $voucher)
     {

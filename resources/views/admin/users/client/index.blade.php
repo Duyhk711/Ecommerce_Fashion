@@ -115,18 +115,20 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <!-- Nhúng jQuery từ CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('admin/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
     {{-- <script src="{{ asset('admin/js/dashmix.app.min.js') }}"></script>  --}}
-    <script>
-        $(document).ready(function() {
-            $('#productTable').DataTable();
-        });
-    </script>
+
+    <!-- Page JS Code -->
+    @vite(['resources/js/pages/datatables.js'])
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
