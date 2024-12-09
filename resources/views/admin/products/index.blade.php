@@ -38,21 +38,25 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Danh sách Sản Phẩm</h3>
                 <div class="block-options">
-                    <div class="block-options-item">
-                        <a href="{{ route('admin.products.create') }}" class="btn btn-sm btn-alt-secondary"
-                            data-bs-toggle="tooltip" title="Add">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
+                    @can('Thêm mới sản phẩm')
+                        <div class="block-options-item">
+                            <a href="{{ route('admin.products.create') }}" class="btn btn-sm btn-alt-secondary"
+                                data-bs-toggle="tooltip" title="Add">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    @endcan
                 </div>
 
             </div>
             <ul class="nav nav-tabs mb-3 mt-3">
                 <li class="nav-item">
-                    <a class="nav-link active" id="products-tab" data-bs-toggle="tab" href="#products" role="tab">Danh sách</a>
+                    <a class="nav-link active" id="products-tab" data-bs-toggle="tab" href="#products" role="tab">Danh
+                        sách</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="deleted-products-tab" data-bs-toggle="tab" href="#deleted-products" role="tab">Đã xóa</a>
+                    <a class="nav-link" id="deleted-products-tab" data-bs-toggle="tab" href="#deleted-products"
+                        role="tab">Đã xóa</a>
                 </li>
             </ul>
 
@@ -64,25 +68,30 @@
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <!-- Tìm kiếm theo tên hoặc SKU -->
                                 <div>
-                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control"
-                                           placeholder="Tìm kiếm sản phẩm theo tên, sku">
+                                    <input type="text" name="search" value="{{ request('search') }}"
+                                        class="form-control" placeholder="Tìm kiếm sản phẩm theo tên, sku">
                                 </div>
 
                                 <!-- Lọc theo giá (dropdown) -->
                                 <div class="dropdown ms-3">
-                                    <button class="btn btn-sm btn-alt dropdown-toggle p-2" style="font-weight: 400;border:1.5px solid #d1d7dd" type="button"
-                                            id="priceFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-sm btn-alt dropdown-toggle p-2"
+                                        style="font-weight: 400;border:1.5px solid #d1d7dd" type="button"
+                                        id="priceFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Lọc theo giá
                                     </button>
 
                                     <div class="dropdown-menu p-3 " aria-labelledby="priceFilterDropdown">
                                         <div class="form-group">
                                             {{-- <label for="min_price">Giá từ</label> --}}
-                                            <input type="number" name="min_price" style="font-size: 14px;" id="min_price" value="{{ request('min_price') }}" class="form-control" placeholder="Giá tối thiểu">
+                                            <input type="number" name="min_price" style="font-size: 14px;" id="min_price"
+                                                value="{{ request('min_price') }}" class="form-control"
+                                                placeholder="Giá tối thiểu">
                                         </div>
                                         <div class="form-group mt-2">
                                             {{-- <label for="max_price">Giá đến</label> --}}
-                                            <input type="number" name="max_price" style="font-size: 14px;" id="max_price" value="{{ request('max_price') }}" class="form-control" placeholder="Giá tối đa">
+                                            <input type="number" name="max_price" style="font-size: 14px;" id="max_price"
+                                                value="{{ request('max_price') }}" class="form-control"
+                                                placeholder="Giá tối đa">
                                         </div>
                                         <button type="submit" class="btn btn-sm btn-alt-secondary mt-3">Áp dụng</button>
                                     </div>
@@ -93,7 +102,8 @@
                                     <select name="catalogue_id" id="catalogue-select" class="form-select">
                                         <option value="">Tất cả danh mục</option>
                                         @foreach ($catalogues as $catalogue)
-                                            <option value="{{ $catalogue->id }}" {{ request('catalogue_id') == $catalogue->id ? 'selected' : '' }}>
+                                            <option value="{{ $catalogue->id }}"
+                                                {{ request('catalogue_id') == $catalogue->id ? 'selected' : '' }}>
                                                 {{ $catalogue->name }}
                                             </option>
                                         @endforeach
@@ -104,15 +114,20 @@
                                 <div class="ms-3">
                                     <select name="stock_status" class="form-select" id="stock-status-select">
                                         <option value="">Tất cả trạng thái</option>
-                                        <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Sắp hết hàng</option>
-                                        <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>Còn hàng</option>
-                                        <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng</option>
+                                        <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Sắp
+                                            hết hàng</option>
+                                        <option value="in_stock"
+                                            {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>Còn hàng</option>
+                                        <option value="out_of_stock"
+                                            {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng
+                                        </option>
                                     </select>
                                 </div>
 
                                 <!-- Nút đặt lại -->
                                 <div class="ms-3">
-                                    <button type="button" class="btn btn-sm btn-alt-secondary p-2 px-4" id="reset-button">Đặt lại</button>
+                                    <button type="button" class="btn btn-sm btn-alt-secondary p-2 px-4"
+                                        id="reset-button">Đặt lại</button>
                                 </div>
                             </div>
 
@@ -140,8 +155,10 @@
                                         <td class="fs-sm">
                                             <div class="d-flex align-items-center">
                                                 <!-- Hình ảnh -->
-                                                <div class="image-container" style="width: 60px; height: height: 100%; position: relative;">
-                                                    <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm" class="img-thumbnail">
+                                                <div class="image-container"
+                                                    style="width: 60px; height: height: 100%; position: relative;">
+                                                    <img src="{{ Storage::url($product->img_thumbnail) }}"
+                                                        alt="Ảnh sản phẩm" class="img-thumbnail">
                                                     <div class="overlay">
                                                         <i class="fa fa-eye eye-icon"></i>
                                                     </div>
@@ -156,7 +173,8 @@
                                                 <!-- Thông tin sản phẩm, căn cách đều với hình ảnh -->
                                                 <div class="ms-3" style="flex: 1;">
                                                     <!-- Thêm flex: 1 để chiếm hết không gian còn lại -->
-                                                    <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}</div>
+                                                    <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}
+                                                    </div>
                                                     <div class="text-muted" style="font-size: 13px;">
                                                         Phân loại: <span>{{ $product->catalogue->name }}</span>
                                                     </div>
@@ -166,16 +184,18 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class=" fs-sm"> {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', '.') }}₫</td>
+                                        <td class=" fs-sm">
+                                            {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', '.') }}₫
+                                        </td>
                                         <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
                                             @if ($product->total_stock > 5)
-                                                <span class="" >{{ $product->total_stock }}</span>
+                                                <span class="">{{ $product->total_stock }}</span>
                                             @elseif ($product->total_stock > 0 && $product->total_stock <= 5)
-                                                <span class="text-warning" data-bs-toggle="tooltip"
-                                                title="Sắp hết hàng"> {{ $product->total_stock }}</span>
+                                                <span class="text-warning" data-bs-toggle="tooltip" title="Sắp hết hàng">
+                                                    {{ $product->total_stock }}</span>
                                             @else
                                                 <span class=" text-danger " data-bs-toggle="tooltip"
-                                                title="Hết hàng">{{ $product->total_stock }}</span>
+                                                    title="Hết hàng">{{ $product->total_stock }}</span>
                                             @endif
                                         </td>
 
@@ -184,11 +204,13 @@
                                         <td class="fs-sm text-center">
                                             @if ($product->is_active)
                                                 <span class="text-success">
-                                                    <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip" title="Hoạt động"></i>
+                                                    <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip"
+                                                        title="Hoạt động"></i>
                                                 </span>
                                             @else
                                                 <span class="text-danger">
-                                                    <i class="fa fa-ban text-danger"data-bs-toggle="tooltip" title="Không hoạt động"></i>
+                                                    <i class="fa fa-ban text-danger"data-bs-toggle="tooltip"
+                                                        title="Không hoạt động"></i>
                                                 </span>
                                             @endif
                                         </td>
@@ -200,21 +222,25 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a>
 
-                                                <a href="{{ route('admin.products.edit', $product) }}"
-                                                    class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
-                                                    title="Sửa">
-                                                    <i class="fa fa-pencil-alt"></i>
-                                                </a>
+                                                @can('Chỉnh sửa sản phẩm')
+                                                    <a href="{{ route('admin.products.edit', $product) }}"
+                                                        class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
+                                                        title="Sửa">
+                                                        <i class="fa fa-pencil-alt"></i>
+                                                    </a>
+                                                @endcan
 
-                                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
-                                                    class="form-delete">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-alt-secondary mx-1"
-                                                        data-bs-toggle="tooltip" title="Xóa">
-                                                        <i class="fa fa-fw fa-times text-danger"></i>
-                                                    </button>
-                                                </form>
+                                                @can('Xóa sản phẩm')
+                                                    <form action="{{ route('admin.products.destroy', $product->id) }}"
+                                                        method="POST" class="form-delete">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-alt-secondary mx-1"
+                                                            data-bs-toggle="tooltip" title="Xóa">
+                                                            <i class="fa fa-fw fa-times text-danger"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -223,12 +249,15 @@
                                         <td colspan="7" class="content-row">
                                             <div class="row mb-2">
                                                 <div class="col-1"></div>
-                                                <div class="col-3 text-muted fs-sm">Tổng mặt hàng: {{ $product->variant_count }}
+                                                <div class="col-3 text-muted fs-sm">Tổng mặt hàng:
+                                                    {{ $product->variant_count }}
                                                 </div>
                                                 <div class="col-5"></div>
                                                 <div class="col-3 text-end">
-                                                    <a href="#" class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
-                                                        style="font-weight: 400;" data-target="#content-{{ $product->id }}"
+                                                    <a href="#"
+                                                        class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
+                                                        style="font-weight: 400;"
+                                                        data-target="#content-{{ $product->id }}"
                                                         data-state="collapsed">
                                                         <span class="toggle-text">Mở rộng</span>
                                                         <i class="fa fa-angle-down"></i>
@@ -237,43 +266,63 @@
                                                 <div id="content-{{ $product->id }}" class="content2 mt-1 mb-2"
                                                     style="display: none;">
                                                     <div class="row">
-                                                        <div class="col-10 text-end mb-2">
-                                                            <!-- Nút chỉnh sửa hàng loạt -->
-                                                            <button class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
-                                                                sửa
-                                                                hàng loạt <i class="fa fa-angle-down"></i></button>
-                                                        </div>
+                                                        @can('Chỉnh sửa sản phẩm')
+                                                            <div class="col-10 text-end mb-2">
+                                                                <!-- Nút chỉnh sửa hàng loạt -->
+                                                                <button
+                                                                    class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
+                                                                    sửa
+                                                                    hàng loạt <i class="fa fa-angle-down"></i></button>
+                                                            </div>
+                                                        @endcan
                                                         <div class="col-2 text-end">
                                                             <!-- Nút lưu và hủy, ban đầu ẩn đi -->
                                                             <button class="btn btn-sm btn-alt save-all-btn d-none">Lưu
                                                             </button>
-                                                            <button class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
+                                                            <button
+                                                                class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
                                                         </div>
                                                     </div>
-                                                    <div class="batch-edit-form d-none mt-3 mb-2" data-product-id="{{ $product->id }}">
+                                                    <div class="batch-edit-form d-none mt-3 mb-2"
+                                                        data-product-id="{{ $product->id }}">
                                                         <div class="row d-flex justify-content-center">
                                                             <div class="col-3"></div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <input type="number" id="batch-price-{{ $product->id }}" class="form-control fs-sm batch-input" placeholder="Nhập vào đơn giá">
-                                                                    <span class="text-danger error-message" id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
+                                                                    <input type="number"
+                                                                        id="batch-price-{{ $product->id }}"
+                                                                        class="form-control fs-sm batch-input"
+                                                                        placeholder="Nhập vào đơn giá">
+                                                                    <span class="text-danger error-message"
+                                                                        id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <input type="number" id="batch-price_sale-{{ $product->id }}" class="form-control fs-sm batch-input" placeholder="Giá khuyến mãi">
-                                                                    <span class="text-danger error-message" id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
+                                                                    <input type="number"
+                                                                        id="batch-price_sale-{{ $product->id }}"
+                                                                        class="form-control fs-sm batch-input"
+                                                                        placeholder="Giá khuyến mãi">
+                                                                    <span class="text-danger error-message"
+                                                                        id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <input type="number" id="batch-stock-{{ $product->id }}" class="form-control fs-sm batch-input" placeholder="Nhập vào số lượng">
-                                                                    <span class="text-danger error-message" id="error-stock-{{ $product->id }}"></span> <!-- Chỗ để hiển thị lỗi -->
+                                                                    <input type="number"
+                                                                        id="batch-stock-{{ $product->id }}"
+                                                                        class="form-control fs-sm batch-input"
+                                                                        placeholder="Nhập vào số lượng">
+                                                                    <span class="text-danger error-message"
+                                                                        id="error-stock-{{ $product->id }}"></span>
+                                                                    <!-- Chỗ để hiển thị lỗi -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <button class="btn btn-sm btn-alt apply-all" data-product-id="{{ $product->id }}" disabled>Áp dụng cho tất cả</button>
+                                                                    <button class="btn btn-sm btn-alt apply-all"
+                                                                        data-product-id="{{ $product->id }}" disabled>Áp
+                                                                        dụng cho tất cả</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -295,22 +344,26 @@
                                                                     }
                                                                 }
                                                             @endphp
-                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
                                                             <div class="row d-flex justify-content-center variant-row"
                                                                 data-variant-id="{{ $variant->id }}">
                                                                 <div class="col-3 align-content-center">
                                                                     <div class="mb-2">
-                                                                        <label for="quantity" class="text-muted">Biến thể:</label>
+                                                                        <label for="quantity" class="text-muted">Biến
+                                                                            thể:</label>
                                                                         <span>{{ $color }}-{{ $size }}</span>
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-2">
                                                                     <div class="mb-2">
-                                                                        <label for="price_regular" class="text-muted fs-sm">Đơn
+                                                                        <label for="price_regular"
+                                                                            class="text-muted fs-sm">Đơn
                                                                             giá</label>
                                                                         <input type="number"
                                                                             name="variants[{{ $variant->id }}][price_regular]"
+                                                                            @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
                                                                             class="form-control fs-sm batch-input price-regular"
                                                                             value="{{ $variant->price_regular }}">
                                                                     </div>
@@ -318,9 +371,11 @@
 
                                                                 <div class="col-2">
                                                                     <div class="mb-2">
-                                                                        <label for="price_sale" class="text-muted fs-sm">Giá
+                                                                        <label for="price_sale"
+                                                                            class="text-muted fs-sm">Giá
                                                                             khuyến mãi</label>
                                                                         <input type="number"
+                                                                            @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
                                                                             name="variants[{{ $variant->id }}][price_sale]"
                                                                             class="form-control fs-sm batch-input price-sale"
                                                                             value="{{ $variant->price_sale }}">
@@ -332,6 +387,7 @@
                                                                         <label for="stock" class="text-muted fs-sm">Số
                                                                             lượng</label>
                                                                         <input type="number"
+                                                                            @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
                                                                             name="variants[{{ $variant->id }}][stock]"
                                                                             class="form-control fs-sm batch-input stock"
                                                                             value="{{ $variant->stock }}">
@@ -381,14 +437,17 @@
                                             <div class="d-flex align-items-center">
                                                 <!-- Hình ảnh -->
                                                 <div style="width: 60px; height: 100%;">
-                                                    <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm"
-                                                        style="width: 100%; height: 100%; object-fit: cover;" class="img-fluid">
+                                                    <img src="{{ Storage::url($product->img_thumbnail) }}"
+                                                        alt="Ảnh sản phẩm"
+                                                        style="width: 100%; height: 100%; object-fit: cover;"
+                                                        class="img-fluid">
                                                 </div>
 
                                                 <!-- Thông tin sản phẩm, căn cách đều với hình ảnh -->
                                                 <div class="ms-3" style="flex: 1;">
                                                     <!-- Thêm flex: 1 để chiếm hết không gian còn lại -->
-                                                    <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}</div>
+                                                    <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}
+                                                    </div>
                                                     <div class="text-muted" style="font-size: 13px;">
                                                         Phân loại: <span>{{ $product->catalogue->name }}</span>
                                                     </div>
@@ -401,13 +460,13 @@
                                         <td class=" fs-sm">{{ number_format($product->price_regular) }}₫</td>
                                         <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
                                             @if ($product->total_stock > 5)
-                                                <span class="" >{{ $product->total_stock }}</span>
+                                                <span class="">{{ $product->total_stock }}</span>
                                             @elseif ($product->total_stock > 0 && $product->total_stock <= 5)
-                                                <span class="text-warning" data-bs-toggle="tooltip"
-                                                title="Sắp hết hàng"> {{ $product->total_stock }}</span>
+                                                <span class="text-warning" data-bs-toggle="tooltip" title="Sắp hết hàng">
+                                                    {{ $product->total_stock }}</span>
                                             @else
                                                 <span class=" text-danger" data-bs-toggle="tooltip"
-                                                title="Hết hàng">{{ $product->total_stock }}</span>
+                                                    title="Hết hàng">{{ $product->total_stock }}</span>
                                             @endif 0
                                         </td>
 
@@ -416,11 +475,13 @@
                                         <td class="fs-sm text-center">
                                             @if ($product->is_active)
                                                 <span class="text-success">
-                                                    <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip" title="Hoạt động"></i>
+                                                    <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip"
+                                                        title="Hoạt động"></i>
                                                 </span>
                                             @else
                                                 <span class="text-danger">
-                                                    <i class="fa fa-ban text-danger" data-bs-toggle="tooltip" title="Không hoạt động"></i>
+                                                    <i class="fa fa-ban text-danger" data-bs-toggle="tooltip"
+                                                        title="Không hoạt động"></i>
                                                 </span>
                                             @endif
                                         </td>
@@ -431,13 +492,17 @@
                                                     title="Sửa">
                                                     <i class="fa fa-pencil-alt"></i>
                                                 </a> --}}
-                                                <form action="{{ route('admin.products.restore', $product->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Khôi phục sản phẩm">
-                                                        <i class="fa fa-undo"></i>
-                                                    </button>
-                                                </form>
+                                                @can('Khôi phục sản phẩm')
+                                                    <form action="{{ route('admin.products.restore', $product->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn btn-sm btn-alt-secondary"
+                                                            data-bs-toggle="tooltip" title="Khôi phục sản phẩm">
+                                                            <i class="fa fa-undo"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -445,12 +510,15 @@
                                     <tr class="product-row">
                                         <td colspan="6" class="content-row">
                                             <div class="row mb-2">
-                                                <div class="col-3 text-muted fs-sm">Tổng mặt hàng: {{ $product->variant_count }}
+                                                <div class="col-3 text-muted fs-sm">Tổng mặt hàng:
+                                                    {{ $product->variant_count }}
                                                 </div>
                                                 <div class="col-6"></div>
                                                 <div class="col-3 text-end">
-                                                    <a href="#" class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
-                                                        style="font-weight: 400;" data-target="#content-{{ $product->id }}"
+                                                    <a href="#"
+                                                        class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
+                                                        style="font-weight: 400;"
+                                                        data-target="#content-{{ $product->id }}"
                                                         data-state="collapsed">
                                                         <span class="toggle-text">Mở rộng</span>
                                                         <i class="fa fa-angle-down"></i>
@@ -459,43 +527,63 @@
                                                 <div id="content-{{ $product->id }}" class="content2 mt-1 mb-2"
                                                     style="display: none;">
                                                     <div class="row">
-                                                        <div class="col-10 text-end mb-2">
-                                                            <!-- Nút chỉnh sửa hàng loạt -->
-                                                            <button class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
-                                                                sửa
-                                                                hàng loạt <i class="fa fa-angle-down"></i></button>
-                                                        </div>
+                                                        @can('Chỉnh sửa sản phẩm')
+                                                            <div class="col-10 text-end mb-2">
+                                                                <!-- Nút chỉnh sửa hàng loạt -->
+                                                                <button
+                                                                    class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
+                                                                    sửa
+                                                                    hàng loạt <i class="fa fa-angle-down"></i></button>
+                                                            </div>
+                                                        @endcan
                                                         <div class="col-2 text-end">
                                                             <!-- Nút lưu và hủy, ban đầu ẩn đi -->
                                                             <button class="btn btn-sm btn-alt save-all-btn d-none">Lưu
                                                             </button>
-                                                            <button class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
+                                                            <button
+                                                                class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
                                                         </div>
                                                     </div>
-                                                    <div class="batch-edit-form d-none mt-3 mb-2" data-product-id="{{ $product->id }}">
+                                                    <div class="batch-edit-form d-none mt-3 mb-2"
+                                                        data-product-id="{{ $product->id }}">
                                                         <div class="row d-flex justify-content-center">
                                                             <div class="col-3"></div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <input type="number" id="batch-price-{{ $product->id }}" class="form-control fs-sm batch-input" placeholder="Nhập vào đơn giá">
-                                                                    <span class="text-danger error-message" id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
+                                                                    <input type="number"
+                                                                        id="batch-price-{{ $product->id }}"
+                                                                        class="form-control fs-sm batch-input"
+                                                                        placeholder="Nhập vào đơn giá">
+                                                                    <span class="text-danger error-message"
+                                                                        id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <input type="number" id="batch-price_sale-{{ $product->id }}" class="form-control fs-sm batch-input" placeholder="Giá khuyến mãi">
-                                                                    <span class="text-danger error-message" id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
+                                                                    <input type="number"
+                                                                        id="batch-price_sale-{{ $product->id }}"
+                                                                        class="form-control fs-sm batch-input"
+                                                                        placeholder="Giá khuyến mãi">
+                                                                    <span class="text-danger error-message"
+                                                                        id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <input type="number" id="batch-stock-{{ $product->id }}" class="form-control fs-sm batch-input" placeholder="Nhập vào số lượng">
-                                                                    <span class="text-danger error-message" id="error-stock-{{ $product->id }}"></span> <!-- Chỗ để hiển thị lỗi -->
+                                                                    <input type="number"
+                                                                        id="batch-stock-{{ $product->id }}"
+                                                                        class="form-control fs-sm batch-input"
+                                                                        placeholder="Nhập vào số lượng">
+                                                                    <span class="text-danger error-message"
+                                                                        id="error-stock-{{ $product->id }}"></span>
+                                                                    <!-- Chỗ để hiển thị lỗi -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                                 <div class="mb-2">
-                                                                    <button class="btn btn-sm btn-alt apply-all" data-product-id="{{ $product->id }}" disabled>Áp dụng cho tất cả</button>
+                                                                    <button class="btn btn-sm btn-alt apply-all"
+                                                                        data-product-id="{{ $product->id }}" disabled>Áp
+                                                                        dụng cho tất cả</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -517,19 +605,22 @@
                                                                     }
                                                                 }
                                                             @endphp
-                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
                                                             <div class="row d-flex justify-content-center variant-row"
                                                                 data-variant-id="{{ $variant->id }}">
                                                                 <div class="col-3 align-content-center">
                                                                     <div class="mb-2">
-                                                                        <label for="quantity" class="text-muted">Biến thể:</label>
+                                                                        <label for="quantity" class="text-muted">Biến
+                                                                            thể:</label>
                                                                         <span>{{ $color }}-{{ $size }}</span>
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-2">
                                                                     <div class="mb-2">
-                                                                        <label for="price_regular" class="text-muted fs-sm">Đơn
+                                                                        <label for="price_regular"
+                                                                            class="text-muted fs-sm">Đơn
                                                                             giá</label>
                                                                         <input type="number"
                                                                             name="variants[{{ $variant->id }}][price_regular]"
@@ -540,7 +631,8 @@
 
                                                                 <div class="col-2">
                                                                     <div class="mb-2">
-                                                                        <label for="price_sale" class="text-muted fs-sm">Giá
+                                                                        <label for="price_sale"
+                                                                            class="text-muted fs-sm">Giá
                                                                             khuyến mãi</label>
                                                                         <input type="number"
                                                                             name="variants[{{ $variant->id }}][price_sale]"
@@ -611,8 +703,6 @@
                 document.getElementById('filter-form').submit();
             });
         });
-
-
     </script>
 
     {{-- js lọc --}}
@@ -754,19 +844,25 @@
                         if (response.status === 'success') {
                             toastr.success(response.message);
 
-                            $form.closest('.content2').find('.save-all-btn, .cancel-btn').addClass('d-none');
+                            $form.closest('.content2').find('.save-all-btn, .cancel-btn')
+                                .addClass('d-none');
 
-                            var $totalStockElement = $('td.total-stock[data-id="' + productId + '"]');
+                            var $totalStockElement = $('td.total-stock[data-id="' + productId +
+                                '"]');
 
                             if ($totalStockElement.length) {
                                 $totalStockElement.text(response.total_stock);
-                                $totalStockElement.hide().show(0); // Buộc trình duyệt cập nhật lại (reflow)
+                                $totalStockElement.hide().show(
+                                    0); // Buộc trình duyệt cập nhật lại (reflow)
                             } else {
-                                console.error("Không tìm thấy phần tử total-stock với product_id: " + productId);
+                                console.error(
+                                    "Không tìm thấy phần tử total-stock với product_id: " +
+                                    productId);
                             }
                             console.log(response);
                         } else {
-                            toastr.error(response.message); // Hiển thị lỗi nếu status không phải là "success"
+                            toastr.error(response
+                                .message); // Hiển thị lỗi nếu status không phải là "success"
                         }
                     },
                     error: function(xhr) {
@@ -775,17 +871,19 @@
                             var errors = xhr.responseJSON.errors;
                             for (var key in errors) {
                                 if (errors.hasOwnProperty(key)) {
-                                    toastr.error(errors[key][0]); // Hiển thị từng lỗi xác thực với màu đỏ
+                                    toastr.error(errors[key][
+                                        0
+                                    ]); // Hiển thị từng lỗi xác thực với màu đỏ
                                 }
                             }
                         } else {
-                            toastr.error('Có lỗi xảy ra trong quá trình cập nhật: ' + xhr.status + ' - ' + xhr.responseText);
+                            toastr.error('Có lỗi xảy ra trong quá trình cập nhật: ' + xhr
+                                .status + ' - ' + xhr.responseText);
                         }
                     }
                 });
             });
         });
-
     </script>
 
     {{-- VALIDATE VARIANT APPLY ALL --}}
@@ -899,7 +997,7 @@
 
             // Đóng popup khi nhấn vào khoảng trống ngoài ảnh
             $('#imagePopup').on('click', function(e) {
-                if (e.target === this) {  // Kiểm tra nếu click vào vùng popup mà không phải ảnh
+                if (e.target === this) { // Kiểm tra nếu click vào vùng popup mà không phải ảnh
                     $(this).fadeOut();
                 }
             });
