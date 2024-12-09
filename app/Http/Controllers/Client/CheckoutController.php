@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\CartItem;
 use App\Models\OrderItem;
-use App\Models\ProductVariant;
 use App\Models\UserVoucher;
-use App\Services\Client\CartService;
-use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Services\Client\CartService;
+use Illuminate\Support\Facades\Auth;
+use App\Services\Client\CheckoutService;
+use App\Notifications\OrderStatusUpdated;
 
 class CheckoutController extends Controller
 {
