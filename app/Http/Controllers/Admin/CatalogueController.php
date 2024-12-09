@@ -17,6 +17,11 @@ class CatalogueController extends Controller
     public function __construct(CatalogueService $catalogueService)
     {
         $this->catalogueService = $catalogueService;
+
+        $this->middleware('permission:xem danh sách danh mục|Xóa danh mục|Chỉnh sửa danh mục|Thêm mới danh mục|Kích hoạt danh mục', ['only' => ['index']]);
+        $this->middleware('permission:Xóa danh mục', ['only' => ['destroy']]);
+        $this->middleware('permission:Chỉnh sửa danh mục', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Thêm mới danh mục', ['only' => ['create', 'store']]);
     }
 
     public function index()

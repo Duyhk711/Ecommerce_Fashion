@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Order;
 use App\Events\OrderUpdated;
-use Illuminate\Http\Request;
-use App\Services\OrderService;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Notifications\OrderStatusUpdated;
+use App\Services\OrderService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -20,6 +20,7 @@ class OrderController extends Controller
     public function __construct(OrderService $orderService)
     {
         $this->orderService = $orderService;
+        $this->middleware('permission:xem danh sách đơn hàng|Chỉnh sửa trạng thái đơn hàng', ['only' => ['index']]);
     }
 
     public function index(Request $request)
@@ -37,7 +38,7 @@ class OrderController extends Controller
             $order_date_end,
             $order_search
         );
-        return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('orders'));
     }
 
     /**
@@ -73,7 +74,7 @@ class OrderController extends Controller
             $paymentStatusMessage = 'Đơn hàng đã được thanh toán.';
         }
 
-        return view(self::PATH_VIEW.__FUNCTION__, compact('orderDetail', 'user','voucher','address','items','statusChanges', 'paymentStatusMessage'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('orderDetail', 'user', 'voucher', 'address', 'items', 'statusChanges', 'paymentStatusMessage'));
     }
 
     /**
@@ -93,7 +94,6 @@ class OrderController extends Controller
         $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
         if ($order->user_id) {
 
-            $user = $order->user;
             // In đậm SKU
             $message = "Đơn hàng <strong>{$order->sku}</strong> ";
 
@@ -132,7 +132,6 @@ class OrderController extends Controller
        } catch (\Exception $e) {
         return redirect()->back()->with('error', $e->getMessage());
        }
-
         return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
 
