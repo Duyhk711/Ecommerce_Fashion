@@ -33,7 +33,7 @@ window.Echo = new Echo({
 });
 window.Echo.connector.pusher.connection.bind('connected', () => {
     console.log('Connected to Pusher');
-});
+});``
 
 // import Pusher from 'pusher-js';
 // window.Pusher = Pusher;

@@ -233,7 +233,7 @@
 @endsection
 
 @section('js')
-@vite(['resources/js/chat.js'])
+{{-- @vite(['resources/js/chat.js']) --}}
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 
 <script>
