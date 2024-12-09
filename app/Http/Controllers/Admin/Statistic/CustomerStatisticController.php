@@ -85,23 +85,23 @@ class CustomerStatisticController extends Controller
     {
         // Lấy tham số lọc từ request
         $filterType = $request->query('filter', 'all'); // all, month, quarter, year
-        $filterValue = $request->query('value'); // Giá trị tương ứng (nếu có)
 
         // Query lấy khách hàng có ít nhất 1 giao dịch thành công
         $query = DB::table('orders')
-        ->select('user_id', DB::raw('MIN(created_at) as first_order_date'))
-        ->where('status', '3') // 3: Thành công
+            ->select('user_id', DB::raw('MIN(created_at) as first_order_date'))
+            ->where('status', '5')
             ->groupBy('user_id');
 
         // Áp dụng bộ lọc
-        if ($filterType === 'month' && $filterValue) {
-            $query->whereMonth('created_at', $filterValue)
+        if ($filterType === 'month') {
+            $query->whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year);
-        } elseif ($filterType === 'quarter' && $filterValue) {
-            $query->whereRaw('QUARTER(created_at) = ?', [$filterValue])
+        } elseif ($filterType === 'quarter') {
+            $currentQuarter = ceil(now()->month / 3); // Tính quý hiện tại
+            $query->whereRaw('QUARTER(created_at) = ?', [$currentQuarter])
                 ->whereYear('created_at', now()->year);
-        } elseif ($filterType === 'year' && $filterValue) {
-            $query->whereYear('created_at', $filterValue);
+        } elseif ($filterType === 'year') {
+            $query->whereYear('created_at', now()->year);
         }
 
         // Danh sách khách hàng có ít nhất 1 giao dịch thành công
@@ -112,9 +112,9 @@ class CustomerStatisticController extends Controller
 
         // Lấy danh sách khách hàng quay lại
         $returningCustomers = DB::table('orders')
-        ->whereIn('user_id', $successfulCustomers)
-            ->where('status', '3')
-            ->whereRaw('DATEDIFF(created_at, (SELECT MIN(o2.created_at) FROM orders o2 WHERE o2.user_id = orders.user_id AND o2.status = "3")) >= 30')
+            ->whereIn('user_id', $successfulCustomers)
+            ->where('status', '5')
+            ->whereRaw('DATEDIFF(created_at, (SELECT MIN(o2.created_at) FROM orders o2 WHERE o2.user_id = orders.user_id AND o2.status = "5")) >= 30')
             ->distinct()
             ->pluck('user_id')
             ->toArray();
@@ -129,12 +129,12 @@ class CustomerStatisticController extends Controller
 
         return response()->json([
             'filter' => $filterType,
-            'value' => $filterValue,
             'total_successful_customers' => $totalSuccessfulCustomers,
             'total_returning_customers' => $totalReturningCustomers,
             'return_rate' => round($returnRate, 2) // Làm tròn 2 chữ số thập phân
         ]);
     }
+
     /**
      * API Tần suất mua hàng
      */
@@ -142,22 +142,21 @@ class CustomerStatisticController extends Controller
     {
         // Lấy tham số lọc từ request
         $filterType = $request->query('filter', 'all'); // all, month, quarter, year
-        $filterValue = $request->query('value'); // Giá trị tương ứng (nếu có)
 
         // Khởi tạo query cơ bản
         $query = DB::table('orders')
-        ->select(DB::raw('COUNT(*) as total_orders, COUNT(DISTINCT user_id) as total_customers'))
-        ->where('status', '3'); // 3: Thành công
+            ->select(DB::raw('COUNT(*) as total_orders, COUNT(DISTINCT user_id) as total_customers'))
+            ->where('status', '5');
 
-        // Áp dụng bộ lọc
-        if ($filterType === 'month' && $filterValue) {
-            $query->whereMonth('created_at', $filterValue)
+        // Áp dụng bộ lọc tự động
+        if ($filterType === 'month') {
+            $query->whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year);
-        } elseif ($filterType === 'quarter' && $filterValue) {
-            $query->whereRaw('QUARTER(created_at) = ?', [$filterValue])
+        } elseif ($filterType === 'quarter') {
+            $query->whereRaw('QUARTER(created_at) = ?', [ceil(now()->month / 3)])
                 ->whereYear('created_at', now()->year);
-        } elseif ($filterType === 'year' && $filterValue) {
-            $query->whereYear('created_at', $filterValue);
+        } elseif ($filterType === 'year') {
+            $query->whereYear('created_at', now()->year);
         }
 
         // Lấy kết quả
@@ -170,10 +169,10 @@ class CustomerStatisticController extends Controller
 
         return response()->json([
             'filter' => $filterType,
-            'value' => $filterValue,
             'total_orders' => $result->total_orders,
             'total_customers' => $result->total_customers,
             'purchase_frequency' => round($purchaseFrequency, 2) // Làm tròn 2 chữ số thập phân
         ]);
     }
+
 }

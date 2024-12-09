@@ -234,29 +234,6 @@
                                 </div>
                             </div>
                         </div>
-
-<<<<<<< HEAD
-                                @if ($item->payment_status == 'cho_thanh_toan' && $item->payment_method == 'THANH_TOAN_ONLINE')
-                                    {{-- <a href="{{ route('', ['id' => $item->id]) }}"
-                                        class="order-link btn btn-success btn-sm">
-                                        Thanh toán
-                                    </a> --}}
-                                @endif
-                                @if ($item->status != 'huy_don_hang')
-                                    <a href="{{ route('orderDetail', ['id' => $item->id]) }}"
-                                        class="order-link btn btn-gray btn-sm">
-                                        Chi tiết
-                                    </a>
-                                @endif
-                                @if (in_array($item->status, ['1', '2']))
-                                    <div class="cancel-item" style="display: inline-block; margin-left: 10px;">
-                                        <form action="{{ route('order.cancel', ['order_id' => $item->id]) }}"
-                                            method="POST" id="cancelOrderForm-{{ $item->id }}">
-                                            @csrf
-                                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                                onclick="confirmCancelOrder({{ $item->id }})">Hủy đơn hàng</button>
-                                        </form>
-=======
                         <!-- Hiển thị các sản phẩm còn lại -->
                         @if ($item->items->count() > 1)
                             <div class="collapse" id="collapseOrder{{ $item->id }}">
@@ -272,7 +249,6 @@
                                                 </div>
                                             </div>
                                         @endforeach
->>>>>>> 93e97caa48e86a21600217c8a1057759d2dc2215
                                     </div>
                                 </div>
                             </div>
