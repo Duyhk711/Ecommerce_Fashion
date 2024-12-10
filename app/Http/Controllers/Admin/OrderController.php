@@ -90,9 +90,9 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
-            $user = $order->user;
+       try {
+        $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
+        if ($order->user_id) {
 
             // In đậm SKU
             $message = "Đơn hàng <strong>{$order->sku}</strong> ";
@@ -124,13 +124,14 @@ class OrderController extends Controller
 
             $title = "Cập nhật đơn hàng";
             $user->notify(new OrderStatusUpdated($order, $message, $title));
-            broadcast(new OrderUpdated($order))->toOthers();
-
-            return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
         }
 
+        broadcast(new OrderUpdated($order))->toOthers();
+
+        return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
+       } catch (\Exception $e) {
+        return redirect()->back()->with('error', $e->getMessage());
+       }
         return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
 

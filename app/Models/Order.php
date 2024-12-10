@@ -24,9 +24,9 @@ class Order extends Model
     'da_thanh_toan' => 'Đã thanh toán',
     ];
 
-    const COD = 'COD'; 
-    const THANH_TOAN_ONLINE = 'thanh_toan_online'; 
-    
+    const COD = 'COD';
+    const THANH_TOAN_ONLINE = 'thanh_toan_online';
+
 
     protected $fillable = [
         'user_id',
@@ -72,7 +72,7 @@ class Order extends Model
     {
         return $this->hasMany(Comment::class, 'order_id', 'id');
     }
-  
+
     public function changeStatus($newStatus)
     {
         // Kiểm tra xem trạng thái mới có hợp lệ không
@@ -83,18 +83,19 @@ class Order extends Model
         // Nếu trạng thái hiện tại là '1', cho phép chọn 'huy_don_hang'
         if ($this->status === '1' && $newStatus === 'huy_don_hang') {
             $this->status = $newStatus;
-        } 
+            $this->payment_status = 'huy_thanh_toan';
+        }
         // Kiểm tra nếu chọn trạng thái mới ngược lại hoặc trùng với trạng thái hiện tại
         elseif ($newStatus <= $this->status || $newStatus === 'huy_don_hang') {
             throw new \Exception("Trạng thái đã được cập nhật, vui lòng chọn trạng thái mới.");
-        } 
+        }
         // Trạng thái hợp lệ và tiến trình hợp lý
         else {
             $this->status = $newStatus;
         }
 
-        // Nếu trạng thái mới là '4', cập nhật trạng thái thanh toán
-        if ($newStatus === '4') {
+        // Nếu trạng thái mới là '5', cập nhật trạng thái thanh toán
+        if ($newStatus === '5') {
             $this->payment_status = 'da_thanh_toan';
         }
 

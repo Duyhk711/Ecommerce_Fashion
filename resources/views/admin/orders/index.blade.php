@@ -54,39 +54,27 @@
                             <div>
                                 <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
                                     <option value="">Tất cả trạng thái</option>
-                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận
-                                    </option>
-                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển
-                                    </option>
-                                    <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển
-                                    </option>
-                                    <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành
-                                    </option>
-                                    <option value="huy_don_hang"
-                                        {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
+                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
+                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
+                                    <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
+                                    <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đã giao</option>
+                                    <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Hoàn thành</option>
+                                    <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                                 </select>
                             </div>
                             <div class="ms-2">
-                                <select name="payment_status" id="paymentStatusFilter" class="form-select"
-                                    onchange="this.form.submit()">
+                                <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
                                     <option value="">Thanh toán</option>
-                                    <option value="cho_thanh_toan"
-                                        {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán
-                                    </option>
-                                    <option value="da_thanh_toan"
-                                        {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán
-                                    </option>
+                                    <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
+                                    <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
                                 </select>
                             </div>
                             <div class="ms-2 d-flex">
-                                <input type="date" name="order_date_start" value="{{ request('order_date_start') }}"
-                                    onchange="this.form.submit()" class="form-control" style="width: 150px; height: 38px;"
-                                    id="">
-                                <input type="date" name="order_date_end" value="{{ request('order_date_end') }}"
-                                    onchange="this.form.submit()" class="form-control ms-2"
-                                    style="width: 150px; height: 38px;" id="">
+                                <input type="date" name="order_date_start" value="{{ request('order_date_start') }}" onchange="this.form.submit()" class="form-control" style="width: 150px; height: 38px;" id="">
+                                <input type="date" name="order_date_end" value="{{ request('order_date_end') }}" onchange="this.form.submit()" class="form-control ms-2" style="width: 150px; height: 38px;" id="">
                             </div>
                         </div>
+                      </div>
                     </form>
                 </div>
                 <!-- All Orders Table -->
@@ -108,50 +96,49 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($orders->isEmpty())
-                                <tr>
-                                    <td colspan="10" class="text-center fs-sm">Không có đơn hàng nào</td>
-                                </tr>
-                            @else
-                                @foreach ($orders as $order)
-                                    <tr data-trang-thai="{{ $order->status }}"
-                                        data-thanh-toan="{{ $order->payment_status }}"
-                                        data-order-id="{{ $order->id }}">
-                                        <td class="text-center fs-sm">
-                                            {{ $loop->iteration }}
-                                        </td>
-                                        <td class="text-center fs-sm">
-                                            <strong>{{ $order->sku }}</strong>
-                                        </td>
-                                        <td class="d-none d-xl-table-cell fs-sm">
-                                            <a class="fs-sm">{{ $order->customer_name }}</a>
-                                        </td>
-                                        <td class="d-none d-sm-table-cell text-center fs-sm">
-                                            {{ $order->created_at->format('d-m-Y ') }}</td>
-                                        <td class="fs-base">
-                                            @php
-                                                $statusMapping = [
-                                                    '1' => 'Chờ xác nhận',
-                                                    '2' => 'Chờ vận chuyển',
-                                                    '3' => 'Đang vận chuyển',
-                                                    '4' => 'Hoàn thành',
-                                                    'huy_don_hang' => 'Đơn hàng đã hủy',
-                                                ];
-                                                $badgeColor = [
-                                                    '1' => 'bg-warning',
-                                                    '2' => 'bg-info',
-                                                    '3' => 'bg-primary',
-                                                    '4' => 'bg-success',
-                                                    'huy_don_hang' => 'bg-danger',
-                                                ];
-                                                $currentStatus = $order->status;
-                                            @endphp
-                                            <span id="orderStatus-{{ $order->id }}"
-                                                class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
-                                                {{ $statusMapping[$currentStatus] ?? $currentStatus }}
-                                            </span>
-                                        </td>
-                                        {{-- <td class="fs-base">
+                          @if ($orders->isEmpty())
+                            <tr>
+                                <td colspan="10" class="text-center fs-sm">Không có đơn hàng nào</td>
+                            </tr>
+                          @else
+                            @foreach ($orders as $order)
+                                <tr data-trang-thai="{{ $order->status }}" data-thanh-toan="{{ $order->payment_status }}" data-order-id="{{$order->id}}">
+                                    <td class="text-center fs-sm">
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td class="text-center fs-sm">
+                                        <strong>{{ $order->sku }}</strong>
+                                    </td>
+                                    <td class="d-none d-xl-table-cell fs-sm">
+                                        <a class="fs-sm">{{ $order->customer_name }}</a>
+                                    </td>
+                                    <td class="d-none d-sm-table-cell text-center fs-sm">
+                                        {{ $order->created_at->format('d-m-Y ') }}</td>
+                                    <td class="fs-base">
+                                        @php
+                                            $statusMapping = [
+                                                '1' => 'Chờ xác nhận',
+                                                '2' => 'Chờ vận chuyển',
+                                                '3' => 'Đang vận chuyển',
+                                                '4' => 'Đã giao',
+                                                '5' => 'Hoàn thành',
+                                                'huy_don_hang' => 'Đơn hàng đã hủy',
+                                            ];
+                                            $badgeColor = [
+                                                '1' => 'bg-warning',
+                                                '2' => 'bg-info',
+                                                '3' => 'bg-primary',
+                                                '4' => 'bg-success',
+                                                '5' => 'bg-success',
+                                                'huy_don_hang' => 'bg-danger',
+                                            ];
+                                            $currentStatus = $order->status;
+                                        @endphp
+                                        <span id="orderStatus-{{$order->id}}" class="badge rounded-pill {{ $badgeColor[$currentStatus] }}">
+                                            {{ $statusMapping[$currentStatus] ?? $currentStatus }}
+                                        </span>
+                                    </td>
+                                    {{-- <td class="fs-base">
                                         @php
                                             $statusMappingPayment = [
                                                 'cho_thanh_toan' => 'Chờ thanh toán',
@@ -167,52 +154,52 @@
                                             {{ $statusMappingPayment[$currentStatusPayment] ?? $currentStatusPayment }}
                                         </span>
                                     </td> --}}
-                                        <td class="fs-base">
-                                            @php
-                                                $statusMapping = [
-                                                    'COD' => 'COD',
-                                                    'THANH_TOAN_ONLINE' => 'ONLINE',
-                                                ];
-                                                $currentStatus = $order->payment_method;
-                                            @endphp
-                                            <span>
-                                                {{ $statusMapping[$currentStatus] ?? $currentStatus }}
-                                            </span>
-                                        </td>
-                                        <td class=" text-center fs-sm">
-                                            <a class="fs-sm">{{ $order->items->count() }}</a>
-                                        </td>
-                                        <td class=" text-end fs-sm">
-                                            <strong>{{ number_format($order->total_price * 1000, 0, ',', '.') }} ₫</strong>
-                                        </td>
-                                        <td class="text-center fs-base fs-sm">
-                                            <div class="btn-group" style="width: 35px">
-                                                @can('Chỉnh sửa trạng thái đơn hàng')
-                                                <!-- Cập nhật trạng thái -->
-                                                @if ($order->status == '4' || $order->status == 'huy_don_hang')
-                                                    <button type="button" class="btn btn-sm btn-alt-warning "
-                                                        style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
-                                                        data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
-                                                        <i class="fa fa-pencil-alt"></i>
-                                                    </button>
-                                                @else
-                                                    <button class="btn btn-sm btn-alt-warning" style="height: 30px;"
-                                                        data-bs-toggle="modal" data-bs-target="#updateStatusModal"
-                                                        data-id="{{ $order->id }}" data-status="{{ $order->status }}"
-                                                        title="Chỉnh sửa">
-                                                        <i class="fa fa-pencil-alt" style="padding-top: -15px"></i>
-                                                    </button>
-                                                @endif
-                                                @endcan
-                                            </div>
-                                            <a class="btn btn-sm btn-alt-secondary" style="height: 30px;"
-                                                href="{{ route('admin.order.show', $order->id) }}">
-                                                <i class="fa fa-fw fa-eye mt-1 "></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                                    <td class="fs-base">
+                                        @php
+                                            $statusMapping = [
+                                                'COD' => 'COD',
+                                                'THANH_TOAN_ONLINE' => 'VN Pay',
+                                            ];
+                                            $currentStatus = $order->payment_method;
+                                        @endphp
+                                         <span>
+                                            {{$statusMapping[$currentStatus] ?? $currentStatus}}
+                                        </span>
+                                    </td>
+                                    <td class=" text-center fs-sm">
+                                        <a class="fs-sm">{{ $order->items->count() }}</a>
+                                    </td>
+                                    <td class=" text-end fs-sm">
+                                        <strong>{{ number_format($order->total_price *1000, 0, ',', '.') }} ₫</strong>
+                                    </td>
+                                    <td class="text-center fs-base fs-sm">
+                                        <div class="btn-group" style="width: 35px">
+                                            @can('Chỉnh sửa trạng thái đơn hàng')
+                                            <!-- Cập nhật trạng thái -->
+                                            @if ($order->status == '4' || $order->status == 'huy_don_hang' || $order->status == '5')
+                                                <button type="button" class="btn btn-sm btn-alt-warning "
+                                                    style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
+                                                    data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
+                                                    <i class="fa fa-pencil-alt"></i>
+                                                </button>
+                                            @else
+                                                <button class="btn btn-sm btn-alt-warning" style="height: 30px;"
+                                                    data-bs-toggle="modal" data-bs-target="#updateStatusModal"
+                                                    data-id="{{ $order->id }}" data-status="{{ $order->status }}"
+                                                    title="Chỉnh sửa">
+                                                    <i class="fa fa-pencil-alt" style="padding-top: -15px"></i>
+                                                </button>
+                                            @endif
+                                            @endcan
+                                        </div>
+                                        <a class="btn btn-sm btn-alt-secondary" style="height: 30px;"
+                                            href="{{ route('admin.order.show', $order->id) }}">
+                                            <i class="fa fa-fw fa-eye mt-1 "></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                          @endif
                         </tbody>
                     </table>
                 </div>
@@ -247,7 +234,7 @@
                                 <option value="1">Chờ xác nhận</option>
                                 <option value="2">Chờ vận chuyển</option>
                                 <option value="3">Đang vận chuyển</option>
-                                <option value="4">Hoàn thành</option>
+                                <option value="4">Đã giao</option>
                                 <option value="huy_don_hang">Hủy bỏ</option>
                             </select>
                         </div>

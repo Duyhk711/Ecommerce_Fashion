@@ -161,6 +161,12 @@
                             </form>
                         </div>
                     @endif
+                    @if ($order->payment_status == 'cho_thanh_toan' && $order->payment_method == 'THANH_TOAN_ONLINE')
+                        <a href="{{ route('vnpay.payment', ['order_id' => $order->id]) }}"
+                            class="order-link btn btn-success btn-sm">
+                            Thanh toán
+                        </a>
+                    @endif
                 </p>
                 <p style="margin-top: 10px;">Ngày đặt hàng: {{ $order->created_at->format('H:i d/m/Y') }}</p>
             </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminChatController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\Admin\BannerController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\ThongkeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
@@ -118,15 +120,21 @@ Route::prefix('admin')
             Route::get('admin/comments/{id}', [CommentController::class, 'show']);
 
             //MESSAGE
-            Route::get('/chats', [ChatsController::class, 'adminIndex'])->name('admin.chats');
-            Route::get('/fetch-messages', [ChatsController::class, 'fetchMessages'])->name('fetchMessages');
-            Route::post('/send-message', [ChatsController::class, 'sendMessage'])->name('sendMessage');
-            Route::post('/chat/mark-messages-as-read', [ChatsController::class, 'markMessagesAsRead'])->name('markMessagesAsRead');
-            Route::get('/fetch-sorted-users', [ChatsController::class, 'fetchSortedUsers'])->name('fetchSortedUsers');
-            Route::get('/get-sorted-users', [ChatsController::class, 'getSortedUsers'])->name('getSortedUsers');
+            Route::get('/list-sessions', [AdminChatController::class, 'listSessions']);
+            Route::get('/sessions/{sessionId}/messages', [AdminChatController::class, 'getMessages']);
+            Route::post('/end-session/{sessionId}', [AdminChatController::class, 'endSession']);
+            Route::post('/send-message/{sessionId}', [AdminChatController::class, 'sendMessage']);
+            Route::get('/chats', function () {
+                return view('admin.chat.chat');
+            })->name('admin.chats');
+            Route::post('/mark-messages-read/{sessionId}', [AdminChatController::class, 'markMessagesRead']);
 
             //THONGKE
-            Route::resource('/thongkes', ThongkeController::class);
-            Route::get('/admin/thongkes', [ThongkeController::class, 'index'])->name('admin.thongkes.index');
+            Route::view('statistics', 'admin.statistics.index')->name('statistics.index');
+            Route::view('statistics/orders', 'admin.statistics.orders')->name('statistics.orders');
+            Route::view('statistics/revenues', 'admin.statistics.revenues')->name('statistics.revenues');
+            Route::view('statistics/vouchers', 'admin.statistics.vouchers')->name('statistics.vouchers');
+            Route::view('statistics/customer', 'admin.statistics.customer')->name('statistics.customer');
+
         });
     });

@@ -11,6 +11,8 @@
         content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Icons -->
     <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
@@ -20,7 +22,7 @@
         href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Modules -->
-
+    
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
@@ -401,18 +403,50 @@
 
                         {{-- THONGKE --}}
                         @can('xem thống kê')
-                            <li class="nav-main-item{{ request()->is('admin/thongkes*') ? ' open' : '' }}">
+                            <li class="nav-main-item{{ request()->is('admin/statistics*') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-                                    aria-expanded="{{ request()->is('admin/thongkes*') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ request()->is('admin/statistics*') ? 'true' : 'false' }}"
                                     href="#">
                                     <i class="nav-main-link-icon fa fa-keyboard"></i>
                                     <span class="nav-main-link-name">Thống kê</span>
                                 </a>
-                                <ul class="nav-main-submenu{{ request()->is('admin/thongkes*') ? ' show' : '' }}">
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('admin/thongkes') ? ' active' : '' }}"
-                                            href="{{ route('admin.thongkes.index') }}">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.index') }}">
                                             <span class="nav-main-link-name">Thống kê</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.revenues') }}">
+                                            <span class="nav-main-link-name">Doanh thu</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.orders') }}">
+                                            <span class="nav-main-link-name">Đơn hàng</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.vouchers') }}">
+                                            <span class="nav-main-link-name">Khuyến mãi</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.customer') }}">
+                                            <span class="nav-main-link-name">Khách hàng</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -672,25 +706,28 @@
     <!-- toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 toastr.success(
-                    '{{ session('
-                    'Thành công', {
+                    '{{ session('success') }}',
+                    'Thành công',
+                    {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
+                    }
+                );
             @endif
 
             @if (session('error'))
                 toastr.error(
-                    '{{ session('
-                    'Lỗi', {
+                    '{{ session('error') }}',
+                    'Lỗi',
+                    {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
+                    }
+                );
             @endif
         });
     </script>
