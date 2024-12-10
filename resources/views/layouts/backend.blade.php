@@ -22,7 +22,7 @@
         href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Modules -->
-    
+
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
@@ -291,7 +291,7 @@
                                 Auth::user()->can('xem danh sách vai trò'))
                             {{-- USER --}}
                             <li
-                                class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+                                class="nav-main-item{{ request()->is('admin/clients*') || request()->is('admin/roles') || request()->is('admin/staffs') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}"
@@ -302,7 +302,7 @@
                                 <ul class="nav-main-submenu{{ request()->is('admin/users*') ? ' show' : '' }}">
                                     @can('xem danh sách khách hàng')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/clients') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.clients') }}">
                                                 <span class="nav-main-link-name">Khách hàng</span>
                                             </a>
@@ -310,7 +310,7 @@
                                     @endcan
                                     @can('xem danh sách nhân viên')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/staffs') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.staffs') }}">
                                                 <span class="nav-main-link-name">Nhân viên</span>
                                             </a>
@@ -318,7 +318,7 @@
                                     @endcan
                                     @can('phân quyền')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/roles') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.roles') }}">
                                                 <span class="nav-main-link-name">Vai trò</span>
                                             </a>
@@ -334,7 +334,7 @@
                         {{-- DON HANG --}}
                         @if (Auth::user()->can('xem danh sách đơn hàng') || Auth::user()->can('xem danh sách khuyến mãi'))
                             <li
-                                class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders') ? ' open' : '' }}">
+                                class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/vouchers*') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/orders*') ? 'true' : 'false' }}"
@@ -355,7 +355,7 @@
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}"
                                                 href="{{ route('admin.vouchers.index') }}">
-                                                <span class="nav-main-link-name">Voucher</span>
+                                                <span class="nav-main-link-name">Khuyến mãi</span>
                                             </a>
                                         </li>
                                     @endcan
@@ -711,8 +711,7 @@
             @if (session('success'))
                 toastr.success(
                     '{{ session('success') }}',
-                    'Thành công',
-                    {
+                    'Thành công', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
                     }
@@ -722,8 +721,7 @@
             @if (session('error'))
                 toastr.error(
                     '{{ session('error') }}',
-                    'Lỗi',
-                    {
+                    'Lỗi', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
                     }
