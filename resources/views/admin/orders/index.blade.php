@@ -54,61 +54,26 @@
                             <div>
                                 <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
                                     <option value="">Tất cả trạng thái</option>
-                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận
-                                    </option>
-                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển
-                                    </option>
-                                    <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển
-                                    </option>
-                                    <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Hoàn thành
-                                    </option>
-                                    <option value="huy_don_hang"
-                                        {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
+                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
+                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
+                                    <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
+                                    <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đã giao</option>
+                                    <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Hoàn thành</option>
+                                    <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
                                 </select>
                             </div>
                             <div class="ms-2">
-                                <select name="payment_status" id="paymentStatusFilter" class="form-select"
-                                    onchange="this.form.submit()">
+                                <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
                                     <option value="">Thanh toán</option>
-                                    <option value="cho_thanh_toan"
-                                        {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán
-                                    </option>
-                                    <option value="da_thanh_toan"
-                                        {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán
-                                    </option>
+                                    <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
+                                    <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
                                 </select>
                             </div>
                             <div class="ms-2 d-flex">
-                                <input type="date" name="order_date_start" value="{{ request('order_date_start') }}"
-                                    onchange="this.form.submit()" class="form-control" style="width: 150px; height: 38px;"
-                                    id="">
-                                <input type="date" name="order_date_end" value="{{ request('order_date_end') }}"
-                                    onchange="this.form.submit()" class="form-control ms-2"
-                                    style="width: 150px; height: 38px;" id="">
+                                <input type="date" name="order_date_start" value="{{ request('order_date_start') }}" onchange="this.form.submit()" class="form-control" style="width: 150px; height: 38px;" id="">
+                                <input type="date" name="order_date_end" value="{{ request('order_date_end') }}" onchange="this.form.submit()" class="form-control ms-2" style="width: 150px; height: 38px;" id="">
                             </div>
                         </div>
-                          <div>
-                              <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
-                                  <option value="">Tất cả trạng thái</option>
-                                  <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Chờ xác nhận</option>
-                                  <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Chờ vận chuyển</option>
-                                  <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>Đã vận chuyển</option>
-                                  <option value="4" {{ request('status') == '4' ? 'selected' : '' }}>Đã giao</option>
-                                  <option value="5" {{ request('status') == '5' ? 'selected' : '' }}>Hoàn thành</option>
-                                  <option value="huy_don_hang" {{ request('status') == 'huy_don_hang' ? 'selected' : '' }}>Đã hủy</option>
-                              </select>
-                          </div>
-                          <div class="ms-2">
-                              <select name="payment_status" id="paymentStatusFilter" class="form-select" onchange="this.form.submit()">
-                                  <option value="">Thanh toán</option>
-                                  <option value="cho_thanh_toan" {{ request('payment_status') == 'cho_thanh_toan' ? 'selected' : '' }}>Chờ thanh toán</option>
-                                  <option value="da_thanh_toan" {{ request('payment_status') == 'da_thanh_toan' ? 'selected' : '' }}>Đã thanh toán</option>
-                              </select>
-                          </div>
-                          <div class="ms-2 d-flex">
-                              <input type="date" name="order_date_start" value="{{ request('order_date_start') }}" onchange="this.form.submit()" class="form-control" style="width: 150px; height: 38px;" id="">
-                              <input type="date" name="order_date_end" value="{{ request('order_date_end') }}" onchange="this.form.submit()" class="form-control ms-2" style="width: 150px; height: 38px;" id="">
-                          </div>
                       </div>
                     </form>
                 </div>
@@ -209,6 +174,7 @@
                                     </td>
                                     <td class="text-center fs-base fs-sm">
                                         <div class="btn-group" style="width: 35px">
+                                            @can('Chỉnh sửa trạng thái đơn hàng')
                                             <!-- Cập nhật trạng thái -->
                                             @if ($order->status == '4' || $order->status == 'huy_don_hang' || $order->status == '5')
                                                 <button type="button" class="btn btn-sm btn-alt-warning "
@@ -224,6 +190,7 @@
                                                     <i class="fa fa-pencil-alt" style="padding-top: -15px"></i>
                                                 </button>
                                             @endif
+                                            @endcan
                                         </div>
                                         <a class="btn btn-sm btn-alt-secondary" style="height: 30px;"
                                             href="{{ route('admin.order.show', $order->id) }}">

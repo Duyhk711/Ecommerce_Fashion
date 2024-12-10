@@ -234,7 +234,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Hiển thị các sản phẩm còn lại -->
                         @if ($item->items->count() > 1)
                             <div class="collapse" id="collapseOrder{{ $item->id }}">

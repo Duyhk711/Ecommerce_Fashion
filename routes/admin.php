@@ -133,6 +133,8 @@ Route::prefix('admin')
             Route::view('statistics', 'admin.statistics.index')->name('statistics.index');
             Route::view('statistics/orders', 'admin.statistics.orders')->name('statistics.orders');
             Route::view('statistics/revenues', 'admin.statistics.revenues')->name('statistics.revenues');
-            
+            Route::view('statistics/vouchers', 'admin.statistics.vouchers')->name('statistics.vouchers');
+            Route::view('statistics/customer', 'admin.statistics.customer')->name('statistics.customer');
+
         });
     });

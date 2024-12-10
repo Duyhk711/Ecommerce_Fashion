@@ -19,7 +19,7 @@ class StatisticsController extends Controller
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_price) * 1000 as total_revenue'))
             ->whereYear('created_at', $year)
             // Loại bỏ điều kiện status để tính cả đơn hàng đã hủy
-            ->where('status', '=', '4')
+            ->where('status', '=', '5')
             ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy(DB::raw('MONTH(created_at)'))
             ->get();
@@ -34,7 +34,7 @@ class StatisticsController extends Controller
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             // Loại bỏ điều kiện status để tính cả đơn hàng đã hủy
-            ->where('status', '=', '4')
+            ->where('status', '=', '5')
             ->groupBy(DB::raw('DAY(created_at)'))
             ->orderBy(DB::raw('DAY(created_at)'))
             ->get();
@@ -49,7 +49,7 @@ class StatisticsController extends Controller
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) * 1000 as total_revenue'))
             ->whereBetween(DB::raw('DATE(created_at)'), [$startDate, $endDate])
             // Loại bỏ điều kiện status để tính cả đơn hàng đã hủy
-            ->where('status', '=', '4')
+            ->where('status', '=', '5')
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy(DB::raw('DATE(created_at)'))
             ->get();
@@ -70,21 +70,21 @@ class StatisticsController extends Controller
 
             // Tổng thu nhập tuần hiện tại (tới hôm nay)
             $totalIncomeThisWeek = DB::table('orders')
-                ->where('status', '4') // Chỉ tính những đơn hàng hoàn thành
+                ->where('status', '5') // Chỉ tính những đơn hàng hoàn thành
                 ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
                 ->sum('total_price') * 1000;
 
             // Lấy các ngày có dữ liệu trong tuần trước
             $daysWithDataLastWeek = DB::table('orders')
                 ->selectRaw('DATE(created_at) as date')
-                ->where('status', '4')
+                ->where('status', '5')
                 ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
                 ->groupBy(DB::raw('DATE(created_at)'))
                 ->pluck('date'); // Lấy danh sách ngày có dữ liệu
 
             // Tổng thu nhập tuần trước chỉ tính cho các ngày có dữ liệu
             $totalIncomeLastWeek = DB::table('orders')
-                ->where('status', '4')
+                ->where('status', '5')
                 ->whereIn(DB::raw('DATE(created_at)'), $daysWithDataLastWeek)
                 ->sum('total_price') * 1000;
 

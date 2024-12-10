@@ -311,12 +311,12 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endforeach
-                                                                    
+
                                                                             {{-- Hiển thị danh sách màu, cách nhau bởi dấu phẩy --}}
                                                                             {{ implode(', ', $displayedColors) }}
                                                                         </td>
                                                                     </tr>
-                                                                    
+
                                                                     <tr>
                                                                         <th scope="row">Chất liệu</th>
                                                                         <td>{{$product->material}}</td>
@@ -410,7 +410,7 @@
                                                             <div class="d-flex flex-wrap align-items-start gap-3">
                                                                 <h6 class="">Đánh giá: </h6>
                                                             </div>
-                                                    
+
                                                             <div class="me-lg-n3 pe-lg-4" data-simplebar style="max-height: 225px;">
                                                                 @if ($comments->isEmpty())
                                                                     <p class="text-muted">Chưa có đánh giá nào.</p>
@@ -430,12 +430,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                    
+
                                                                                     <div class="d-flex align-items-end">
                                                                                         <div class="flex-grow-1">
                                                                                             <span class="mb-0"><strong>{{ $comment->user_name }}</strong></span>
                                                                                         </div>
-                                                    
+
                                                                                         <div class="flex-shrink-0">
                                                                                             <p class="text-muted fs-13 mb-0">
                                                                                                 {{ \Carbon\Carbon::parse($comment->created_at)->locale('vi')->translatedFormat('d M, Y') }}
@@ -450,7 +450,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <!-- end card body -->
                                             </div>

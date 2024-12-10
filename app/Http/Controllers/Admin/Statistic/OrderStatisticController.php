@@ -45,7 +45,7 @@ class OrderStatisticController extends Controller
         $totalOrders = Order::whereBetween('created_at', [$startDate, $endDate])->count();
 
         // Tổng doanh thu (tính từ các đơn hàng đã hoàn thành)
-        $totalRevenue = Order::where('status', '4')
+        $totalRevenue = Order::where('status', '5')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total_price')*1000;
 
@@ -168,7 +168,7 @@ class OrderStatisticController extends Controller
         }
     }
 
-    // dơn han va san pham 
+    // dơn han va san pham
     public function getMonthlyOrderAndProductStats()
     {
         $data = DB::table('orders as o')

@@ -164,7 +164,6 @@
 
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 @vite(['resources/js/chat.js'])
-
 <script>
     $(document).ready(function() {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ChartController;
+use App\Http\Controllers\Admin\Statistic\CustomerStatisticController;
 use App\Http\Controllers\Admin\Statistic\OrderStatisticController;
 use App\Http\Controllers\Admin\Statistic\RevenuStatisticController;
 use App\Http\Controllers\Admin\StatisticsController;
@@ -60,6 +61,11 @@ Route::get('/category-revenue', [RevenuStatisticController::class, 'getCategoryR
 Route::get('/category-details', [RevenuStatisticController::class, 'getCategoryDetails']);
 Route::get('/revenue-by-payment-method', [RevenuStatisticController::class, 'getRevenueByPaymentMethod']);
 Route::get('/monthly-revenue-by-payment-method', [RevenuStatisticController::class, 'getMonthlyRevenueByPaymentMethod']);
+
+//custumer
+Route::get('/customer-statistics', [CustomerStatisticController::class, 'getPotentialCustomers']);
+Route::get('/customer-return-rate', [CustomerStatisticController::class, 'getReturningCustomerRate']);
+Route::get('/purchase-frequency', [CustomerStatisticController::class, 'getPurchaseFrequency']);
 
 
 // dashboard

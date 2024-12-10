@@ -27,9 +27,9 @@ Danh sách thuộc tính
         <div class="block-header block-header-default">
             <h3 class="block-title">Danh sách thuộc tính</h3>
             <div class="block-options">
-                <div class="block-options-item">
+                {{-- <div class="block-options-item">
                     <a href="{{ route('admin.attributes.create') }}" class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Add"><i class="fa fa-plus"></i></a>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="block-content">
@@ -39,7 +39,6 @@ Danh sách thuộc tính
                         <th class="text-center" style="width: 50px;">#</th>
                         <th>Thuộc tính</th>
                         <th class="d-none d-sm-table-cell">Slug</th>
-                        <th class="text-center" style="width: 100px;">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
