@@ -94,6 +94,9 @@ class ProductService
                 'price_regular' => $validatedData['price_regular'],
                 'price_sale' => $validatedData['price_sale'],
                 'description' => $validatedData['description'],
+                'meta_title' => $validatedData['meta_title'],
+                'meta_description' => $validatedData['meta_description'],
+                'meta_keywords' => $validatedData['meta_keywords'],
                 'content' => $validatedData['content'],
                 'material' => $validatedData['material'],
                 'is_active' => $validatedData['is_active'],
@@ -261,6 +264,9 @@ class ProductService
                 'price_regular' => $validatedData['price_regular'],
                 'price_sale' => $validatedData['price_sale'],
                 'description' => $validatedData['description'],
+                'meta_title' => $validatedData['meta_title'],
+                'meta_description' => $validatedData['meta_description'],
+                'meta_keywords' => $validatedData['meta_keywords'],
                 'content' => $validatedData['content'],
                 'material' => $validatedData['material'],
                 'is_active' => $validatedData['is_active'],
@@ -370,27 +376,44 @@ class ProductService
 
     // DELETE
     public function softDeleteProduct($id)
-    {
-        $product = Product::findOrFail($id);
+{
+    // Lấy sản phẩm theo ID
+    $product = Product::findOrFail($id);
 
-        foreach ($product->variants as $variant) {
-            foreach ($variant->images as $image) {
-                $image->delete();
-            }
-            $variant->delete();
+    // Kiểm tra sản phẩm có tồn tại trong các đơn hàng qua các biến thể
+    foreach ($product->variants as $variant) {
+        $variantInOrders = DB::table('order_items')->where('product_variant_id', $variant->id)->exists();
+
+        if ($variantInOrders) {
+            return false; // Không thể xóa nếu có biến thể trong đơn hàng
         }
+    }
 
-        foreach ($product->images as $image) {
+    // Nếu không có biến thể nào của sản phẩm trong đơn hàng, thực hiện xóa
+
+    // Xóa các ảnh và các biến thể của sản phẩm
+    foreach ($product->variants as $variant) {
+        foreach ($variant->images as $image) {
             $image->delete();
         }
-
-        $product->is_active = 0;
-        $product->save();
-
-        $product->delete();
-
-        return true;
+        $variant->delete();
     }
+
+    foreach ($product->images as $image) {
+        $image->delete();
+    }
+
+    // Đánh dấu sản phẩm là không hoạt động thay vì xóa
+    $product->is_active = 0;
+    $product->save();
+
+    // Xóa sản phẩm
+    $product->delete();
+
+    return true;
+}
+
+
 
     // RESTORE
     public function restoreProduct($id)

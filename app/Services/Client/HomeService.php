@@ -25,7 +25,6 @@ class HomeService
 
         foreach ($products as $product) {
             if ($product->variants->isNotEmpty()) {
-                // Lấy ngẫu nhiên một biến thể, hoặc có thể thay đổi logic theo nhu cầu
                 $product->selected_variant = $product->variants->first(); // Hoặc bất kỳ biến thể nào bạn muốn
                 $product->selected_variant_id = $product->selected_variant->id;
                 $product->selected_variant_stock = $product->selected_variant->stock;
@@ -38,15 +37,43 @@ class HomeService
     public function searchProducts($query)
     {
         $query = trim($query);
-
+        
         if (empty($query)) {
             return collect();
         }
-
-        return Product::where('name', 'LIKE', '%' . $query . '%')
-            ->where('is_active', 1)
-            ->get();
+    
+        $keywords = preg_split('/\s+/', $query); 
+        
+        return Product::where(function ($q) use ($keywords) {
+            foreach ($keywords as $keyword) {
+                $keyword = trim($keyword);
+                if (!empty($keyword)) {
+                    $q->orWhere('name', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('description', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('meta_keywords', 'LIKE', '%' . $keyword . '%');
+                }
+            }
+        })
+        ->where('is_active', 1)
+        ->get();
     }
+    
+    public function suggestRelatedProducts($query)
+    {
+        $keywords = explode(' ', $query);
+        $relatedProducts = Product::where(function ($q) use ($keywords) {
+            foreach ($keywords as $keyword) {
+                $q->orWhere('name', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            }
+        })
+        ->where('is_active', 1)
+        ->limit(5) 
+        ->get();
+    
+        return $relatedProducts;
+    }
+    
 
     public function getBannerShowHome()
     {
@@ -116,8 +143,8 @@ class HomeService
     {
         // Lấy tối đa 3 mã voucher mới nhất từ database, sắp xếp theo thời gian tạo gần nhất
         return Voucher::orderBy('created_at', 'desc')
-        ->limit(3)
-        ->get();
+            ->limit(3)
+            ->get();
     }
 
     public function calculateRatingsPercentage($product)

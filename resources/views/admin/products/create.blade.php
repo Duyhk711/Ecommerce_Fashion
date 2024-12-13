@@ -10,9 +10,6 @@
     <!-- Nhúng Summernote CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
     <!-- Nhúng jQuery (nếu chưa có) -->
-
-
-
     {{-- <link rel="stylesheet" href="{{ asset('admin/js/plugins/simplemde/simplemde.min.css') }}"> --}}
     <style>
         input[type="number"]::-webkit-outer-spin-button,
@@ -204,6 +201,19 @@
             border-color: #0056b3;
             color: #fff;
         }
+
+        .char-counter {
+            font-size: 0.9em;
+            color: #6c757d;
+            /* Màu ghi nhạt */
+            margin-top: 0.2rem;
+            text-align: right;
+        }
+
+        .char-counter.error {
+            color: red;
+            /* Đổi sang màu đỏ khi vượt giới hạn */
+        }
     </style>
 @endsection
 @section('content')
@@ -228,7 +238,7 @@
         {{-- Form bắt đầu --}}
         <form id="myForm" action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
             @csrf
-            {{-- @if ($errors->any())
+            @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
                         @foreach ($errors->all() as $error)
@@ -236,7 +246,7 @@
                         @endforeach
                     </ul>
                 </div>
-            @endif --}}
+            @endif
             <div class="block block-rounded">
                 <div class="block-content">
                     <h2 class="content-heading pt-0">Thêm mới sản phẩm</h2>
@@ -307,6 +317,41 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <label class="form-label">Meta: </label>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="meta-title-input">Meta Title</label>
+                                                <input type="text" name="meta_title" class="form-control"
+                                                    placeholder="Enter meta title" maxlength="60">
+                                                <div class="char-counter" id="meta-title-counter">60 ký tự còn lại</div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="meta-keywords-input">Meta Keywords</label>
+                                                <input type="text" name="meta_keywords" class="form-control"
+                                                    placeholder="Enter meta keywords" maxlength="255">
+                                                <div class="char-counter" id="meta-keywords-counter">255 ký tự còn lại
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                    <div class="mb-3">
+                                        <label class="form-label" for="meta-description-input">Meta Description</label>
+                                        <textarea class="form-control" name="meta_description" placeholder="Enter meta description" rows="3"
+                                            maxlength="160"></textarea>
+                                        <div class="char-counter" id="meta-description-counter">160 ký tự còn lại</div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- Cột bên phải: Thuộc tính sản phẩm và ảnh -->
@@ -784,7 +829,7 @@
                     reader.readAsDataURL(this.files[0]);
                 }
             });
-            
+
             // Xóa biến thể
             $(document).on('click', '.delete-variant', function() {
                 $(this).closest('tr').remove();
@@ -916,7 +961,6 @@
             }
         });
     </script>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1205,5 +1249,64 @@
             });
         });
     </script>
-@endsection
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const MAX_TITLE_LENGTH = 60;
+            const MAX_KEYWORDS_LENGTH = 255;
+            const MAX_DESCRIPTION_LENGTH = 160;
+
+            const metaTitleInput = document.querySelector('input[name="meta_title"]');
+            const metaKeywordsInput = document.querySelector('input[name="meta_keywords"]');
+            const metaDescriptionInput = document.querySelector('textarea[name="meta_description"]');
+
+            const metaTitleCounter = document.getElementById('meta-title-counter');
+            const metaKeywordsCounter = document.getElementById('meta-keywords-counter');
+            const metaDescriptionCounter = document.getElementById('meta-description-counter');
+
+            function updateCounter(input, counter, maxLength) {
+                const remaining = maxLength - input.value.length;
+                counter.textContent = `${remaining} ký tự còn lại`;
+
+                // Đổi màu cảnh báo nếu hết ký tự
+                counter.classList.toggle("error", remaining === 0);
+            }
+
+            function handleInputEvent(input, counter, maxLength) {
+                updateCounter(input, counter, maxLength);
+            }
+
+            function handleKeydownEvent(event, input, maxLength) {
+                const allowedKeys = [
+                    "Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"
+                ];
+                // Kiểm tra nếu đã đạt giới hạn và phím không thuộc danh sách cho phép
+                if (input.value.length >= maxLength && !allowedKeys.includes(event.key)) {
+                    event.preventDefault(); // Chặn ngay lập tức
+                }
+            }
+
+            // Thêm sự kiện `keydown` và `input` cho các trường
+            metaTitleInput.addEventListener("keydown", (event) =>
+                handleKeydownEvent(event, metaTitleInput, MAX_TITLE_LENGTH)
+            );
+            metaTitleInput.addEventListener("input", () =>
+                handleInputEvent(metaTitleInput, metaTitleCounter, MAX_TITLE_LENGTH)
+            );
+
+            metaKeywordsInput.addEventListener("keydown", (event) =>
+                handleKeydownEvent(event, metaKeywordsInput, MAX_KEYWORDS_LENGTH)
+            );
+            metaKeywordsInput.addEventListener("input", () =>
+                handleInputEvent(metaKeywordsInput, metaKeywordsCounter, MAX_KEYWORDS_LENGTH)
+            );
+
+            metaDescriptionInput.addEventListener("keydown", (event) =>
+                handleKeydownEvent(event, metaDescriptionInput, MAX_DESCRIPTION_LENGTH)
+            );
+            metaDescriptionInput.addEventListener("input", () =>
+                handleInputEvent(metaDescriptionInput, metaDescriptionCounter, MAX_DESCRIPTION_LENGTH)
+            );
+        });
+    </script>
+@endsection

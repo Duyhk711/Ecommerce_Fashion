@@ -2,11 +2,22 @@
 <html class="no-js" lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="description">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- SEO meta tags từ SEOTools -->
+    {!! SEOMeta::generate() !!}
+    {!! OpenGraph::generate() !!}
+    {!! JsonLd::generate() !!}
+
+    <!-- Thẻ meta fallback nếu chưa cấu hình SEOTools -->
+    <title>@yield('title', 'Poly Fashion')</title>
+    <meta name="description" content="@yield('meta_description', 'Trang thương mại điện tử Poly Fashion')">
+    <meta name="keywords" content="@yield('meta_keywords', 'thời trang, quần áo, Poly Fashion')">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+  
     {{-- CSS MENU --}}
     <link rel="stylesheet" href="{{ asset('client/css/menu.css') }}">
     <!-- Title Of Site -->
