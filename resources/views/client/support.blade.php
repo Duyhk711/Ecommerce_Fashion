@@ -2,7 +2,7 @@
 @section('title')
     Hỗ trợ
 @endsection
-@section('content')
+@section('css')
 <style>
     * {
         margin: 0;
@@ -92,6 +92,9 @@
         outline: none;
     }
 </style>
+@endsection
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 

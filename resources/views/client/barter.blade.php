@@ -1,6 +1,5 @@
 @extends('layouts.client')
-
-@section('content')
+@section('css')
 <style>
     * {
         margin: 0;
@@ -45,6 +44,9 @@
         font-size: 30px;
     }
 </style>
+@endsection
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 
