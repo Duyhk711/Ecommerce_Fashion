@@ -17,166 +17,238 @@
 </div>
 
 <div class="content">
-  <div class="row">
-
-    <div class="col-4">
-      <div class="chart-pie">
-        <div class="block">
-          <div class="card pb-3">
-              <div class="card-header">
-                  <h6>Tỷ lệ sử dụng mã khuyến mại</h6>
-              </div>
-              <div style="width: 89%; margin:  auto;" class="pt-3">
-                <canvas id="voucher-usage"></canvas>
-              </div>
+  <div class="block">
+      <div class="card">
+          <div class="card-header">
+              <form id="filterForm">
+                  <div class="d-flex justify-content-end">
+                      <div class="justify-content-end me-3">
+                          <label for="start_date">Từ ngày</label>
+                          <input type="date" class="form-control" id="start_date" name="start_date">
+                      </div>
+                      <div class="justify-content-end">
+                          <label for="end_date">Đến ngày</label>
+                          <input type="date" class="form-control" id="end_date" name="end_date">
+                      </div>
+                  </div>
+              </form>
           </div>
-        </div>
       </div>
-    </div>
-
-    <div class="col-8">
-      <div class="chart-pie">
-        <div class="block">
-          <div class="card pb-3 ">
-              <div class="card-header">
-                  <h6>Tổng doanh thu đơn hàng sử dụng mã khuyến mại</h6>
-              </div>
-              <div style="width: 85%; margin:  auto;" class="pt-3">
-                <canvas id="voucher-revenue"></canvas>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
-
   <div class="row">
-    <div class="col-6">
-      <div class="block">
-        <div class="card pb-3 ">
-            <div class="card-header">
-                <h6>Hiệu suất</h6>
-            </div>
-            <div style="width: 85%; margin:  auto;" class="pt-3">
-              <canvas id="voucher-performance"></canvas>
-            </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-6">
-      <div class="block">
-          <div class="card">
-              <div class="card-header border-0 align-items-center d-flex">
-                  <h5>Mã giảm giá gần đây</h5>
-              </div>
-              <div class="card-body">
-                  <table id="categoryDetailsTable" class="table table-bordered">
-                      <thead>
-                          <tr>
-                              <th>STT</th>
-                              <th>Mã</th>
-                              <th>Loại</th>
-                              <th>Số lượng</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Giam10%</td>
-                          <td>Giảm theo %</td>
-                          <td>100</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Giam20%</td>
-                          <td>Giảm theo %</td>
-                          <td>100</td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>Giam30%</td>
-                          <td>Giảm theo %</td>
-                          <td>100</td>
-                        </tr>
-                      </tbody>
-                  </table>
+      <div class="col-4">
+          <div class="chart-pie">
+              <div class="block">
+                  <div class="card pb-3">
+                      <div class="card-header">
+                          <h6>Tỷ lệ sử dụng mã khuyến mại</h6>
+                      </div>
+                      <div style="width: 89%; margin:  auto;" class="pt-3">
+                          <canvas id="voucher-usage"></canvas>
+                      </div>
+                  </div>
               </div>
           </div>
       </div>
-    </div>
+
+      <div class="col-8">
+          <div class="chart-pie">
+              <div class="block">
+                  <div class="card pb-4 ">
+                      <div class="card-header">
+                          <h6>Tổng doanh thu đơn hàng sử dụng mã khuyến mại</h6>
+                      </div>
+                      <div style="width: 85%; margin:  auto;" class="pt-3">
+                          <canvas id="voucher-revenue"></canvas>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="block">
+      <div class="card">
+          <div class="card-header border-0 align-items-center d-flex">
+              <h5>Danh sách mã giảm giá</h5>
+          </div>
+          <div class="card-body">
+              <table id="categoryDetailsTable" class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Mã</th>
+                          <th>Loại</th>
+                          <th>Thời gian</th>
+                          <th>Số lần sử dụng</th>
+                          <th>Doanh thu tạo ra (VND)</th>
+                          <th>Lợi nhuận (VND)</th>
+                          <th>Độ hiệu quả</th>
+                      </tr>
+                  </thead>
+                  <tbody id="voucherTableBody">
+                      <!-- Dữ liệu sẽ được cập nhật qua AJAX -->
+                  </tbody>
+              </table>
+          </div>
+      </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  const ctx1 = document.getElementById('voucher-usage').getContext('2d');
-  new Chart(ctx1, {
-    type: 'pie',
-    data: {
-      labels: ['Đã sử dụng', 'Không được sử dụng'],
-      datasets: [{
-        data: [65, 35], // Example data: 65% used, 35% not used
-        backgroundColor: ['#36a2eb', '#ff6384']
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'top' },
+  // Function to fetch data and update charts
+  function fetchDataAndUpdateCharts(start_date, end_date) {
+    $.ajax({
+        url: "{{ route('statistic.voucherUsageRate') }}",
+        method: 'GET',
+        data: {
+            start_date: start_date || '', // Nếu không có ngày bắt đầu, gửi rỗng
+            end_date: end_date || '' // Nếu không có ngày kết thúc, gửi rỗng
+        },
+        success: function(data) {
+            // Kiểm tra và hủy biểu đồ cũ nếu có
+            if (window.chartVoucherUsage) {
+                window.chartVoucherUsage.destroy();
+            }
+
+            // Vẽ lại biểu đồ mới
+            const ctx1 = document.getElementById('voucher-usage').getContext('2d');
+            window.chartVoucherUsage = new Chart(ctx1, {
+                type: 'pie',
+                data: {
+                    labels: ['Đã sử dụng', 'Không được sử dụng'],
+                    datasets: [{
+                        data: [data.used_vouchers, data.total_vouchers - data.used_vouchers],
+                        backgroundColor: ['#36a2eb', '#ff6384']
+                    }]
+                }
+            });
+        }
+    });
+
+      $.ajax({
+        url: "{{ route('statistic.getTotalRevenue') }}",
+        method: 'GET',
+        data: {
+            start_date: start_date || '',
+            end_date: end_date || ''
+        },
+        success: function(data) {
+            // Kiểm tra và hủy biểu đồ cũ nếu có
+            if (window.chartVoucherRevenue) {
+                window.chartVoucherRevenue.destroy();
+            }
+
+            // Vẽ lại biểu đồ mới
+            const ctx2 = document.getElementById('voucher-revenue').getContext('2d');
+            const revenueWithVoucher = formatCurrency(data.revenue_with_voucher);
+            const revenueWithoutVoucher = formatCurrency(data.revenue_without_voucher);
+            window.chartVoucherRevenue = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Đơn hàng sử dụng voucher', 'Đơn hàng không sử dụng voucher'],
+                    datasets: [{
+                        label: 'Doanh thu (VND)',
+                        data: [data.revenue_with_voucher, data.revenue_without_voucher],
+                        backgroundColor: ['#4caf50', '#f57c00']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Lặp lại cho biểu đồ khác nếu cần
+            if (window.chartOther) {
+                window.chartOther.destroy();
+            }
+
+            const ctx3 = document.getElementById('other-chart').getContext('2d');
+            window.chartOther = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Label1', 'Label2', 'Label3'],
+                    datasets: [{
+                        label: 'Another Chart',
+                        data: [12, 19, 3],
+                        backgroundColor: '#ff0000'
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+    });
+
+
+      $.ajax({
+        url: "{{ route('statistic.getDiscountStatistics') }}",
+        method: 'GET',
+        data: {
+            start_date: start_date,
+            end_date: end_date
+        },
+        success: function(data) {
+            console.log(data); // Kiểm tra dữ liệu trả về
+            // const sortedData = data.sort((a, b) => b.effectiveness - a.effectiveness);
+            // console.log("Dữ liệu đã sắp xếp:", sortedData);
+            // Chuyển đối tượng thành mảng và duyệt qua các phần tử
+            let tableBody = '';
+            Object.values(data).forEach(function(voucher) {
+                tableBody += `
+                    <tr>
+                        <td>${voucher.code}</td>
+                        <td>${voucher.discount_type}</td>
+                        <td>${voucher.start_date} - ${voucher.end_date}</td>
+                        <td>${voucher.usage_count}</td>
+                        <td>${formatNumber(voucher.revenue)}</td>
+                        <td>${formatNumber(voucher.profit)}</td>
+                        <td>${voucher.effectiveness}%</td>
+                    </tr>
+                `;
+            });
+            $('#voucherTableBody').html(tableBody);
+        }
+    });
+
+  }
+
+  function formatCurrency(number) {
+      return number.toLocaleString('vi-VN');
+  }
+
+  function formatNumber(number) {
+      // Nhân số với 1000
+      let formattedNumber = number * 1000;
+
+      // Chuyển đổi thành chuỗi và ngắt thành phần hàng nghìn
+      return formattedNumber.toLocaleString('en', { maximumFractionDigits: 0 });
+  }
+
+  $(document).ready(function() {
+      // Lắng nghe sự kiện change của các trường ngày
+      $('#start_date, #end_date').on('change', function() {
+          const start_date = $('#start_date').val();
+          const end_date = $('#end_date').val();
+          fetchDataAndUpdateCharts(start_date, end_date);
+      });
+
+      // Kiểm tra nếu có giá trị ngày đã chọn và gọi API khi tải trang
+      const start_date = $('#start_date').val();
+      const end_date = $('#end_date').val();
+      if (start_date && end_date) {
+          fetchDataAndUpdateCharts(start_date, end_date);
+      } else {
+          fetchDataAndUpdateCharts(); // Gọi API để hiển thị dữ liệu toàn bộ nếu không có ngày lọc
       }
-    }
   });
+
 </script>
 
-<script>
-  const ctx2 = document.getElementById('voucher-revenue').getContext('2d');
-  new Chart(ctx2, {
-    type: 'bar',
-    data: {
-      labels: ['Đơn hàng sử dụng voucher', 'Đơn hàng không sử dụng voucher'],
-      datasets: [{
-        label: 'Doanh thu (VND)',
-        data: [50000000, 150000000], // Example: Revenue from voucher vs. no voucher
-        backgroundColor: ['#4caf50', '#f57c00']
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { beginAtZero: true }
-      },
-      plugins: {
-        legend: { display: false },
-      }
-    }
-  });
-</script>
-
-<script>
-  const ctx3 = document.getElementById('voucher-performance').getContext('2d');
-  new Chart(ctx3, {
-    type: 'bar',
-    data: {
-      labels: ['Số tiền theo %', 'Số tiền cố định'], // Example voucher types
-      datasets: [{
-        label: 'Số lần sử dụng',
-        data: [120, 90], // Example usage data
-        backgroundColor: ['#ff9800', '#3f51b5', '#8bc34a']
-      }]
-    },
-    options: {
-      responsive: true,
-      indexAxis: 'y', // Makes it horizontal
-      scales: {
-        x: { beginAtZero: true }
-      },
-      plugins: {
-        legend: { position: 'top' },
-      }
-    }
-  });
-</script>
 @endsection

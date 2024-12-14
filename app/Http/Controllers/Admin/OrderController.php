@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\OrderUpdated;
-use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Notifications\OrderStatusUpdated;
-use App\Services\OrderService;
+use App\Events\OrderUpdated;
 use Illuminate\Http\Request;
+use App\Services\OrderService;
+use App\Http\Controllers\Controller;
+use App\Notifications\OrderStatusUpdated;
+use App\Events\OrderStatusUpdatedEventNotify;
 
 class OrderController extends Controller
 {
@@ -109,7 +110,7 @@ class OrderController extends Controller
                     $statusMessage = "đang trên đường giao tới bạn";
                     break;
                 case 4:
-                    $statusMessage = "đã giao thành công";
+                    $statusMessage = "đã giao thành công, vui lòng xác nhận đã nhận được hàng để đánh giá đơn hàng";
                     break;
                 case 'huy_don_hang':
                     $statusMessage = "đã bị hủy";
@@ -121,13 +122,13 @@ class OrderController extends Controller
 
             // Thêm trạng thái vào thông báo
             $message .= $statusMessage . ".";
-
+            $user = $order->user;
             $title = "Cập nhật đơn hàng";
             $user->notify(new OrderStatusUpdated($order, $message, $title));
         }
 
         broadcast(new OrderUpdated($order))->toOthers();
-
+        $this->orderService->sendMailNotifyOrderUpdate($order);
         return redirect()->back()->with('success', 'Thay đổi trạng thái thành công');
        } catch (\Exception $e) {
         return redirect()->back()->with('error', $e->getMessage());

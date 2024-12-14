@@ -13,7 +13,7 @@
     <p>Địa chỉ: {{ $order->address_line1 }}, {{ $order->ward }}, {{ $order->district }},
         {{ $order->ward }}</p>
     <p>Ngày đặt: {{ $order->created_at }}</p>
-    <p>Tổng tiền: {{ $order->total_price }} VND</p>
+    <p>Tổng tiền: {{ number_format($order->total_price * 1000, 0, '.', '.') }} VND</p>
     {{-- @if ($order->user_id != '') --}}
     <a href="{{ route('orderOneDetail', ['id' => $order->id]) }}">Xem chi tiết đơn hàng</a>
     {{-- @else
