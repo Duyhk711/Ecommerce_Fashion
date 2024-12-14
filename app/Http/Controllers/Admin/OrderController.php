@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\OrderUpdated;
-use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Notifications\OrderStatusUpdated;
-use App\Services\OrderService;
+use App\Events\OrderUpdated;
 use Illuminate\Http\Request;
+use App\Services\OrderService;
+use App\Http\Controllers\Controller;
+use App\Notifications\OrderStatusUpdated;
+use App\Events\OrderStatusUpdatedEventNotify;
 
 class OrderController extends Controller
 {

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\VoucherRequest;
+use App\Events\CreateNewVoucherNotify;
 use App\Models\User;
 use App\Models\Voucher;
-use App\Notifications\NewVoucherNotification;
 use App\Services\VoucherService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\VoucherRequest;
+use App\Notifications\NewVoucherNotification;
 
 class VoucherController extends Controller
 {
@@ -78,6 +80,7 @@ class VoucherController extends Controller
 
             $voucher = $this->voucherService->storeVoucher($data);
             $this->voucherService->sendNewVoucherNotification($voucher);
+            broadcast(new CreateNewVoucherNotify($voucher))->toOthers();
 
             $users = User::all(); // Hoặc filter user theo tiêu chí cụ thể
             $message = "Mã giảm giá mới <strong>{$voucher->code}</strong> giảm {$voucher->discount_value}";
@@ -90,7 +93,6 @@ class VoucherController extends Controller
             foreach ($users as $user) {
                 $user->notify(new NewVoucherNotification($voucher, $message, $title));
             }
-
             return redirect()
                 ->route('admin.vouchers.index')
                 ->with('success', 'Voucher mới đã được tạo thành công.');

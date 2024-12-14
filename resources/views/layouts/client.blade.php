@@ -55,6 +55,7 @@
 
         <script src="{{ asset('client/js/main.js') }}"></script>
         @yield('js')
+        @vite(['resources/js/new_voucher.js'])
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             function filterCate() {
