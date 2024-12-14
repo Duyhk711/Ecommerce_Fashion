@@ -376,44 +376,36 @@ class ProductService
 
     // DELETE
     public function softDeleteProduct($id)
-{
-    // Lấy sản phẩm theo ID
-    $product = Product::findOrFail($id);
+    {
+        $product = Product::findOrFail($id);
 
-    // Kiểm tra sản phẩm có tồn tại trong các đơn hàng qua các biến thể
-    foreach ($product->variants as $variant) {
-        $variantInOrders = DB::table('order_items')->where('product_variant_id', $variant->id)->exists();
+        foreach ($product->variants as $variant) {
+            $variantInOrders = DB::table('order_items')->where('product_variant_id', $variant->id)->exists();
 
-        if ($variantInOrders) {
-            return false; // Không thể xóa nếu có biến thể trong đơn hàng
+            if ($variantInOrders) {
+                return false;
+            }
         }
-    }
 
-    // Nếu không có biến thể nào của sản phẩm trong đơn hàng, thực hiện xóa
 
-    // Xóa các ảnh và các biến thể của sản phẩm
-    foreach ($product->variants as $variant) {
-        foreach ($variant->images as $image) {
+        foreach ($product->variants as $variant) {
+            foreach ($variant->images as $image) {
+                $image->delete();
+            }
+            $variant->delete();
+        }
+
+        foreach ($product->images as $image) {
             $image->delete();
         }
-        $variant->delete();
+
+        $product->is_active = 0;
+        $product->save();
+
+        $product->delete();
+
+        return true;
     }
-
-    foreach ($product->images as $image) {
-        $image->delete();
-    }
-
-    // Đánh dấu sản phẩm là không hoạt động thay vì xóa
-    $product->is_active = 0;
-    $product->save();
-
-    // Xóa sản phẩm
-    $product->delete();
-
-    return true;
-}
-
-
 
     // RESTORE
     public function restoreProduct($id)

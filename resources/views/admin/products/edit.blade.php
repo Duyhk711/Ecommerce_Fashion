@@ -152,38 +152,37 @@
                                 @enderror
                             </div>
 
-                            <label class="form-label">Meta: </label>
+                            <label class="form-label">Thông tin SEO: </label>
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label class="form-label" for="meta-title-input">Meta Title</label>
+                                                <label class="form-label" for="meta-title-input">Tiêu đề SEO (Meta Title)</label>
                                                 <input type="text" name="meta_title" class="form-control"
-                                                    placeholder="Enter meta title" maxlength="60"
+                                                    placeholder="Nhập tiêu đề SEO" maxlength="60"
                                                     value="{{ old('meta_title', $product->meta_title) }}">
-                                                <div class="char-counter" id="meta-title-counter">60 ký tự còn lại</div>
+                                                <div class="char-counter" id="meta-title-counter">Còn lại 60 ký tự</div>
                                             </div>
                                         </div>
                                         <!-- end col -->
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label class="form-label" for="meta-keywords-input">Meta Keywords</label>
+                                                <label class="form-label" for="meta-keywords-input">Từ khóa SEO (Meta Keywords)</label>
                                                 <input type="text" name="meta_keywords" class="form-control"
-                                                    placeholder="Enter meta keywords"
-                                                    maxlength="255"value="{{ old('meta_keywords', $product->meta_keywords) }}">
-                                                <div class="char-counter" id="meta-keywords-counter">255 ký tự còn lại
-                                                </div>
+                                                    placeholder="Nhập từ khóa SEO"
+                                                    maxlength="255" value="{{ old('meta_keywords', $product->meta_keywords) }}">
+                                                <div class="char-counter" id="meta-keywords-counter">Còn lại 255 ký tự</div>
                                             </div>
                                         </div>
                                         <!-- end col -->
                                     </div>
                                     <!-- end row -->
                                     <div class="mb-3">
-                                        <label class="form-label" for="meta-description-input">Meta Description</label>
-                                        <textarea class="form-control" name="meta_description" placeholder="Enter meta description" rows="3"
+                                        <label class="form-label" for="meta-description-input">Mô tả SEO (Meta Description)</label>
+                                        <textarea class="form-control" name="meta_description" placeholder="Nhập mô tả SEO" rows="3"
                                             maxlength="160">{{ old('meta_description', $product->meta_description) }}</textarea>
-                                        <div class="char-counter" id="meta-description-counter">160 ký tự còn lại</div>
+                                        <div class="char-counter" id="meta-description-counter">Còn lại 160 ký tự</div>
                                     </div>
                                 </div>
                             </div>

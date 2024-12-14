@@ -76,7 +76,7 @@
 
         p {
             /* margin: 10px 0 0;
-                                        padding: 0; */
+                                            padding: 0; */
             list-style-type: disc;
             /* padding-left: 20px; */
             /* color: #555; */
@@ -161,6 +161,71 @@
             overflow-y: auto;
             margin-bottom: 10px;
         }
+
+        #category-chart {
+            display: block;
+            width: 100%;
+            height: 350px;
+            /* Điều chỉnh độ cao cứng theo ý muốn */
+        }
+
+        .pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination-controls button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.pagination-controls button.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+.pagination-controls button:disabled {
+    background-color: #e9ecef;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.pagination-controls button i {
+    font-size: 14px;
+}
+#pagination button {
+    border: 1px solid #ddd; /* Đường viền nhẹ */
+    border-radius: 4px; /* Góc bo tròn */
+    padding: 5px 10px; /* Khoảng cách bên trong */
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    background-color: #f9f9f9; /* Màu nền nhạt */
+    color: #333; /* Màu chữ */
+    cursor: pointer;
+    font-size: 14px; /* Kích thước chữ */
+}
+
+#pagination button.active {
+    background-color: #007bff; /* Màu nền nút đang chọn */
+    color: white; /* Màu chữ nút đang chọn */
+    border-color: #007bff;
+}
+
+#pagination button:disabled {
+    background-color: #e9ecef; /* Màu nền nút vô hiệu hóa */
+    color: #6c757d; /* Màu chữ nút vô hiệu hóa */
+    cursor: not-allowed;
+}
+
     </style>
 @endsection
 @section('content')
@@ -174,22 +239,25 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Tổng quan bán hàng tuần này</h3>
             </div>
-            
+
             <div class="info-box">
                 <div class="justify-content-between align-items-center p-3 bg-light border rounded">
                     <p class="mb-0">Tổng doanh thu: <span class="highlight fw-bold  text-primary">Loading...</span></p>
                 </div>
                 <div class="justify-content-between align-items-center p-3 bg-light border rounded">
-                    <p class="mb-0">Đơn hàng chờ xác nhận: <span id="waiting_confirmation" class="text-warning fw-bold ">Loading...</span></p>
+                    <p class="mb-0">Đơn hàng chờ xác nhận: <span id="waiting_confirmation"
+                            class="text-warning fw-bold ">Loading...</span></p>
                 </div>
                 <div class="justify-content-between align-items-center p-3 bg-light border rounded">
-                    <p class="mb-0">Đơn hàng đã giao: <span id="delivered" class=" fw-bold text-success">Loading...</span></p>
+                    <p class="mb-0">Đơn hàng đã giao: <span id="delivered" class=" fw-bold text-success">Loading...</span>
+                    </p>
                 </div>
                 <div class="justify-content-between align-items-center p-3 bg-light border rounded">
-                    <p class="mb-0">Đơn hàng đã hủy: <span id="cancelled" class=" fw-bold text-danger">Loading...</span></p>
+                    <p class="mb-0">Đơn hàng đã hủy: <span id="cancelled" class=" fw-bold text-danger">Loading...</span>
+                    </p>
                 </div>
             </div>
-            
+
             <div class="chart">
                 (Biểu đồ số lượng đơn hàng theo trạng thái)
                 <canvas id="ordersChart" style="display: block; width: 100%; height: 400px;"></canvas>
@@ -212,7 +280,7 @@
                         </select>
                     </div>
                 </div>
-                
+
             </div>
             <table id="product-table">
                 <thead>
@@ -228,10 +296,12 @@
                     <!-- Các dòng sản phẩm sẽ được đổ dữ liệu vào đây -->
                 </tbody>
             </table>
+            <div id="pagination" class="pagination-controls"></div>
 
-            <div class="chart">(Biểu đồ doanh thu theo danh mục sản phẩm)</div>
-            {{-- <h3></h3> --}}
-            <canvas id="category-chart" style="display: block; width: 100%; height: 400px !important;"></canvas>
+
+            <div class="chart">(Biểu đồ doanh thu theo danh mục sản phẩm)
+                <canvas id="category-chart" ></canvas>
+            </div>
         </div>
 
         <div class="section">
@@ -327,11 +397,12 @@
                             <div class="highlight text-primary fw-bold fs-5" id="new-carts">0</div>
                         </div>
 
-                        <div class="info-box d-flex justify-content-between align-items-center p-3 bg-light border rounded">
+                        <div
+                            class="info-box d-flex justify-content-between align-items-center p-3 bg-light border rounded">
                             <div>
                                 <p class="mb-0">Giá trị giỏ hàng chưa <br>thanh toán: </p>
                             </div>
-                            <div class="highlight text-success fw-bold fs-5" id="total-cart-value">0 đ</div>
+                            <div class="highlight text-success fw-bold fs-5" id="total-cart-value">0 ₫</div>
 
                         </div>
                     </div>
@@ -344,7 +415,7 @@
                             <div class="col-6">
                                 <h6 class="block-title">Phản hồi khách hàng</h6>
                             </div>
-                            <div class="col-4 d-flex align-items-end">
+                            <div class="col-5 d-flex align-items-end">
                                 <label for="filter-date" class="form-label me-2">Lọc theo:</label>
                                 <select id="filter-date" class="form-select w-auto">
                                     <option value="week">Tuần này</option>
@@ -366,7 +437,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   
+
                                 </tbody>
                             </table>
                         </div>

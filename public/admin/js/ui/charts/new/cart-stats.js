@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             // Hiển thị số liệu giỏ hàng
             document.getElementById('new-carts').textContent = data.newCartsCount;
-            document.getElementById('total-cart-value').textContent = data.totalCartValue;
+            // Thêm ký tự ₫ vào tổng giá trị giỏ hàng
+            document.getElementById('total-cart-value').textContent = `${data.totalCartValue.toLocaleString()} ₫`;
         })
         .catch(error => console.error('Lỗi khi gọi API:', error));
 });
