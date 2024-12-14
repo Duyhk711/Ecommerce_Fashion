@@ -230,7 +230,7 @@
                             <div id="loading" style="display: none;">Đang tải thêm...</div> <!-- Hiển thị khi đang tải -->
                         </div>
                     </div>
-                </div>
+                 </div>
 
                  <!--End notify-->
                  <!--Minicart-->
@@ -634,6 +634,7 @@
         });
     });
 </script>
+@vite(['resources/js/app.js'])
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const notificationList = document.getElementById('notifyBox');  // Bạn cần sử dụng đúng ID

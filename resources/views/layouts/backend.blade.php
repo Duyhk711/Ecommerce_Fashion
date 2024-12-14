@@ -22,7 +22,7 @@
         href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Modules -->
-    
+
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
 
@@ -410,14 +410,14 @@
                                     <i class="nav-main-link-icon fa fa-keyboard"></i>
                                     <span class="nav-main-link-name">Thống kê</span>
                                 </a>
-                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                {{-- <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
                                             href="{{ route('admin.statistics.index') }}">
                                             <span class="nav-main-link-name">Thống kê</span>
                                         </a>
                                     </li>
-                                </ul>
+                                </ul> --}}
                                 <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"

@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\OrderUpdateNotify;
 use App\Models\Order;
 use Illuminate\Support\Carbon;
 use App\Models\OrderStatusChange;
+use Illuminate\Support\Facades\Mail;
 
 class OrderService{
     public function getOrder($status = null, $perPage = 6, $payment_status = null, $order_date_start = null, $order_date_end = null, $order_search = null) {
@@ -69,6 +71,10 @@ class OrderService{
         }
 
         return $order;
+    }
+
+    public function sendMailNotifyOrderUpdate($order)  {
+        Mail::to($order->customer_email)->queue(new OrderUpdateNotify($order));
     }
 }
 

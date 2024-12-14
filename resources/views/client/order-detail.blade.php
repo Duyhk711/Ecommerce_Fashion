@@ -1,4 +1,7 @@
 @extends('layouts.client')
+@section('title')
+    Theo dõi đơn hàng
+@endsection
 @section('css')
     {{-- CSS order-detail --}}
     {{-- <link rel="stylesheet" href="{{ asset('client/css/order-detail.css') }}"> --}}
@@ -138,7 +141,8 @@
                             '1' => 'Chờ xác nhận',
                             '2' => 'Chờ vận chuyển',
                             '3' => 'Đang vận chuyển',
-                            '4' => 'Hoàn thành',
+                            '4' => 'Đã giao',
+                            '5' => 'Hoàn thành',
                             'huy_don_hang' => 'Hủy đơn hàng',
                         ];
                     @endphp
@@ -148,6 +152,7 @@
                         @elseif($order->status == '2') bg-info
                         @elseif($order->status == '3') bg-primary text-dark
                         @elseif($order->status == '4') bg-success
+                        @elseif($order->status == '5') bg-success
                         @elseif($order->status == 'huy_don_hang') bg-danger @endif">
                         {{ $statusText[$order->status] ?? $order->status }}
                     </span>
@@ -187,10 +192,17 @@
                         $paymentText = [
                             'cho_thanh_toan' => 'Chờ thanh toán',
                             'da_thanh_toan' => 'Đã thanh toán',
+                            'huy_thanh_toan' => 'Đã hủy',
+                        ];
+                        $paymentMethodText = [
+                            'COD' => 'Thanh toán khi nhận hàng',
+                            'THANH_TOAN_ONLINE' => 'Thanh toán qua VNPay'
                         ];
                     @endphp
                     <p><b class="fw-bolder">Trạng thái thanh toán:</b>
                         {{ $paymentText[$order->payment_status] ?? $order->payment_status }}</p>
+
+                    <p><b class="fw-bolder">Hình thức thanh toán:</b> {{ $paymentMethodText[$order->payment_method] ?? $order->payment_method }}</p>
                 </div>
             </div> <br>
 
@@ -251,14 +263,14 @@
                                         @endphp
                                         @if ($price_regular == $price_sale)
                                             <span style="">{{ number_format($price_regular * 1000, 0, '.', ',') }}
-                                                đ</span>
+                                                ₫</span>
                                         @else
                                             <span
                                                 style="text-decoration: line-through;">{{ number_format($price_regular * 1000, 0, '.', ',') }}
-                                                đ</span>
+                                                ₫</span>
                                             <span
                                                 style="color: red; font-weight: bold;">{{ number_format($price_sale * 1000, 0, '.', ',') }}
-                                                đ</span>
+                                                ₫</span>
                                         @endif
                                     </p>
                                 </div>
@@ -267,11 +279,11 @@
                                 @if ($price_regular == $price_sale)
                                     <strong
                                         style="">{{ number_format($price_regular * $item->quantity * 1000, 0, '.', ',') }}
-                                        đ</strong>
+                                        ₫</strong>
                                 @else
                                     <strong
                                         style="">{{ number_format($price_sale * $item->quantity * 1000, 0, '.', ',') }}
-                                        đ</strong>
+                                        ₫</strong>
                                 @endif
 
                             </td>
@@ -331,15 +343,15 @@
                     <tr>
                         <td class="text-end" style="width: 75%" colspan="2">Tổng cộng:</td>
                         <td class="text-end">
-                            {{ number_format(($order->total_price + $item->discount) * 1000, 0, '.', ',') }} đ</td>
+                            {{ number_format(($order->total_price + $item->discount) * 1000, 0, '.', ',') }}₫</td>
                     </tr>
                     <tr>
                         <td class="text-end" style="width: 75%" colspan="2">Giảm giá:</td>
                         <td class="text-end">
                             @if ($order->voucher)
-                                {{ number_format($item->discount * 1000, 0, '.', ',') }} đ
+                                {{ number_format($item->discount * 1000, 0, '.', ',') }}₫
                             @else
-                                0 đ
+                                0₫
                             @endif
                         </td>
                     </tr>
@@ -347,8 +359,11 @@
                         <td class="text-end" style="width: 75%" colspan="2"><strong>Tổng đã trả:</strong></td>
                         <td class="text-end">
                             <strong class="total-amount" style="font-weight: normal;">
-
-                                <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }} đ</strong>
+                                @if ($order->payment_status == 'da_thanh_toan')
+                                    <strong>{{ number_format($order->total_price * 1000, 0, '.', ',') }}₫</strong>
+                                @else
+                                    0₫
+                                @endif
                             </strong>
                         </td>
                     </tr>
@@ -480,6 +495,7 @@
         </div>
     </div>
 @endsection
+@vite(['resources/js/app.js'])
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- Hủy đơn hàng --}}
