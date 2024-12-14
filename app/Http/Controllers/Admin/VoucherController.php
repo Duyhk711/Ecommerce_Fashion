@@ -9,6 +9,7 @@ use App\Services\VoucherService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VoucherRequest;
+use App\Notifications\CreateNewVoucherAdmin;
 use App\Notifications\NewVoucherNotification;
 
 class VoucherController extends Controller
@@ -92,6 +93,7 @@ class VoucherController extends Controller
             $title = "Bạn đã nhận được voucher mới";
             foreach ($users as $user) {
                 $user->notify(new NewVoucherNotification($voucher, $message, $title));
+                $user->notify(new CreateNewVoucherAdmin($voucher, "Có mã giảm giá mới!", $title));
             }
             return redirect()
                 ->route('admin.vouchers.index')
