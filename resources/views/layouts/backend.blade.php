@@ -217,7 +217,16 @@
                         <li class="nav-main-heading">Various</li>
                         {{-- SAN PHAM --}}
 
-                        @if (Auth::user()->can('xem danh sách sản phâm') || Auth::user()->can('xem danh sách danh mục'))
+                        @if (Auth::user()->can('xem danh sách sản phâm') ||
+                                Auth::user()->can('Xóa sản phẩm') ||
+                                Auth::user()->can('Chỉnh sửa sản phẩm') ||
+                                Auth::user()->can('Thêm mới sản phẩm') ||
+                                Auth::user()->can('Khôi phục sản phẩm') ||
+                                Auth::user()->can('xem danh sách danh mục') ||
+                                Auth::user()->can('Xóa danh mục') ||
+                                Auth::user()->can('Chỉnh sửa danh mục') ||
+                                Auth::user()->can('Thêm mới danh mục') ||
+                                Auth::user()->can('Kích hoạt danh mục'))
                             <li
                                 class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -229,22 +238,30 @@
                                 </a>
                                 <ul
                                     class="nav-main-submenu{{ request()->is('admin/products*') || request()->is('admin/products') ? ' show' : '' }}">
-                                    @can('xem danh sách sản phâm')
+                                    @if (Auth::user()->can('xem danh sách sản phâm') ||
+                                            Auth::user()->can('Xóa sản phẩm') ||
+                                            Auth::user()->can('Chỉnh sửa sản phẩm') ||
+                                            Auth::user()->can('Thêm mới sản phẩm') ||
+                                            Auth::user()->can('Khôi phục sản phẩm'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/products') ? ' active' : '' }}"
                                                 href="{{ route('admin.products.index') }}">
                                                 <span class="nav-main-link-name">Sản phẩm</span>
                                             </a>
                                         </li>
-                                    @endcan
-                                    @can('xem danh sách danh mục')
+                                    @endif
+                                    @if (Auth::user()->can('xem danh sách danh mục') ||
+                                            Auth::user()->can('Xóa danh mục') ||
+                                            Auth::user()->can('Chỉnh sửa danh mục') ||
+                                            Auth::user()->can('Thêm mới danh mục') ||
+                                            Auth::user()->can('Kích hoạt danh mục'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/catalogues') ? ' active' : '' }}"
                                                 href="{{ route('admin.catalogues.index') }}">
                                                 <span class="nav-main-link-name">Danh mục sản phẩm</span>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endif
 
 
                                 </ul>
@@ -253,7 +270,12 @@
 
 
                         {{-- THUOC TINH --}}
-                        @if (Auth::user()->can('xem danh sách thuộc tính') || Auth::user()->can('xem danh sách giá trị thuộc tính'))
+                        @if (Auth::user()->can('xem danh sách thuộc tính') ||
+                                Auth::user()->can('Thêm mới thuộc tính') ||
+                                Auth::user()->can('xem danh sách giá trị thuộc tính') ||
+                                Auth::user()->can('Chỉnh sửa giá trị thuộc tính') ||
+                                Auth::user()->can('Xóa giá trị thuộc tính') ||
+                                Auth::user()->can('Thêm mới giá trị thuộc tính'))
                             <li
                                 class="nav-main-item{{ request()->is('admin/attributes*') || request()->is('admin/attribute_values') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -264,22 +286,25 @@
                                     <span class="nav-main-link-name">Quản lý Thuộc tính</span>
                                 </a>
                                 <ul class="nav-main-submenu{{ request()->is('admin/attributes*') ? ' show' : '' }}">
-                                    @can('xem danh sách thuộc tính')
+                                    @if (Auth::user()->can('xem danh sách thuộc tính') || Auth::user()->can('Thêm mới thuộc tính'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/attributes') ? ' active' : '' }}"
                                                 href="{{ route('admin.attributes.index') }}">
                                                 <span class="nav-main-link-name">Thuộc tính biến thể</span>
                                             </a>
                                         </li>
-                                    @endcan
-                                    @can('xem danh sách giá trị thuộc tính')
+                                    @endif
+                                    @if (Auth::user()->can('xem danh sách giá trị thuộc tính') ||
+                                            Auth::user()->can('Chỉnh sửa giá trị thuộc tính') ||
+                                            Auth::user()->can('Xóa giá trị thuộc tính') ||
+                                            Auth::user()->can('Thêm mới giá trị thuộc tính'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/attribute_values') ? ' active' : '' }}"
                                                 href="{{ route('admin.attribute_values.index') }}">
                                                 <span class="nav-main-link-name">Giá trị thuộc tính</span>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endif
 
 
                                 </ul>
@@ -291,7 +316,7 @@
                                 Auth::user()->can('xem danh sách vai trò'))
                             {{-- USER --}}
                             <li
-                                class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+                                class="nav-main-item{{ request()->is('admin/clients*') || request()->is('admin/roles') || request()->is('admin/staffs') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}"
@@ -302,7 +327,7 @@
                                 <ul class="nav-main-submenu{{ request()->is('admin/users*') ? ' show' : '' }}">
                                     @can('xem danh sách khách hàng')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/clients') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.clients') }}">
                                                 <span class="nav-main-link-name">Khách hàng</span>
                                             </a>
@@ -310,7 +335,7 @@
                                     @endcan
                                     @can('xem danh sách nhân viên')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/staffs') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.staffs') }}">
                                                 <span class="nav-main-link-name">Nhân viên</span>
                                             </a>
@@ -318,7 +343,7 @@
                                     @endcan
                                     @can('phân quyền')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/roles') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.roles') }}">
                                                 <span class="nav-main-link-name">Vai trò</span>
                                             </a>
@@ -334,7 +359,7 @@
                         {{-- DON HANG --}}
                         @if (Auth::user()->can('xem danh sách đơn hàng') || Auth::user()->can('xem danh sách khuyến mãi'))
                             <li
-                                class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders') ? ' open' : '' }}">
+                                class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/vouchers*') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/orders*') ? 'true' : 'false' }}"
@@ -355,7 +380,7 @@
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}"
                                                 href="{{ route('admin.vouchers.index') }}">
-                                                <span class="nav-main-link-name">Voucher</span>
+                                                <span class="nav-main-link-name">Khuyến mãi</span>
                                             </a>
                                         </li>
                                     @endcan
@@ -711,8 +736,7 @@
             @if (session('success'))
                 toastr.success(
                     '{{ session('success') }}',
-                    'Thành công',
-                    {
+                    'Thành công', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
                     }
@@ -722,8 +746,7 @@
             @if (session('error'))
                 toastr.error(
                     '{{ session('error') }}',
-                    'Lỗi',
-                    {
+                    'Lỗi', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
                     }

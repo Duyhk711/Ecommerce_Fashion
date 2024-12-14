@@ -4,18 +4,21 @@ namespace App\Services;
 
 use App\Mail\OrderUpdateNotify;
 use App\Models\Order;
-use Illuminate\Support\Carbon;
 use App\Models\OrderStatusChange;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
-class OrderService{
-    public function getOrder($status = null, $perPage = 6, $payment_status = null, $order_date_start = null, $order_date_end = null, $order_search = null) {
+
+class OrderService
+{
+    public function getOrder($status = null, $perPage = 6, $payment_status = null, $order_date_start = null, $order_date_end = null, $order_search = null)
+    {
         $query = Order::with('items');
 
         if ($order_search) {
             $query->where(function ($q) use ($order_search) {
                 $q->where('sku', 'like', "%$order_search%")
-                  ->orWhere('customer_name', 'like', "%$order_search%");
+                    ->orWhere('customer_name', 'like', "%$order_search%");
             });
         }
 
@@ -36,8 +39,8 @@ class OrderService{
         return $query->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
-
-    public function getOrderDetail($id){
+    public function getOrderDetail($id)
+    {
         return $order = Order::with([
             'user',
             'voucher',
@@ -77,5 +80,3 @@ class OrderService{
         Mail::to($order->customer_email)->queue(new OrderUpdateNotify($order));
     }
 }
-
-?>

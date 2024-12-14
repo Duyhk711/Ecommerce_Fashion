@@ -2,7 +2,7 @@
 @section('title')
     Hỗ trợ
 @endsection
-@section('content')
+@section('css')
 <style>
     * {
         margin: 0;
@@ -18,13 +18,6 @@
     .contact-section {
         background-color: #ffffff;
         padding: 50px 0;
-    }
-
-    .container {
-        width: 80%;
-        margin: 0 auto;
-        max-width: 1200px;
-        text-align: center;
     }
 
     .faq-section {
@@ -99,6 +92,9 @@
         outline: none;
     }
 </style>
+@endsection
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 

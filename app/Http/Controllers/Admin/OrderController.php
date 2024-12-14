@@ -91,6 +91,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+
        try {
         $order = $this->orderService->updateOrderStatus($id, $request->input('status'), auth()->id());
         if ($order->user_id) {
@@ -133,6 +134,7 @@ class OrderController extends Controller
        } catch (\Exception $e) {
         return redirect()->back()->with('error', $e->getMessage());
        }
+
         return redirect()->back()->with('success', 'Trạng thái đơn hàng đã được cập nhật.');
     }
 

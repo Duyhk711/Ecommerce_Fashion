@@ -84,7 +84,7 @@
                                             </button>
                                         </form> --}}
                                         <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Show"
-                                            href="{{ route('admin.users.show', $user) }}">
+                                            href="{{ route('admin.users.clients.show', $user) }}">
                                             <i class="fa fa-fw fa-eye"></i>
                                         </a>
                                         {{-- <a class="btn btn-sm btn-alt-secondary" data-bs-toggle="tooltip" title="Show"
@@ -129,6 +129,7 @@
 
     <!-- Page JS Code -->
     @vite(['resources/js/pages/datatables.js'])
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
