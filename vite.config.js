@@ -16,6 +16,8 @@ export default defineConfig({
                 'resources/sass/dashmix/themes/xplay.scss',
                 'resources/js/dashmix/app.js',
                 'resources/js/app.js',
+                'resources/js/order_update_notify.js',
+                'resources/js/new_voucher.js',
                 'resources/js/chat.js',
                 'resources/js/voucher.js',
                 'resources/js/pages/datatables.js',

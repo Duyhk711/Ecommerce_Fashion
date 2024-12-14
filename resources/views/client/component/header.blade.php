@@ -208,7 +208,7 @@
                                 }
                             </style>
                             <ul class="m-0" id="notification-list">
-                                <li class="mb-2"><strong>Thông báo</strong></li>
+                                <li class="mb-2 fixed-title"><strong>Thông báo</strong></li>
 
                                 @if(auth()->check())
                                     @if(auth()->user()->notifications->count() > 0)
@@ -230,7 +230,7 @@
                             <div id="loading" style="display: none;">Đang tải thêm...</div> <!-- Hiển thị khi đang tải -->
                         </div>
                     </div>
-                </div>
+                 </div>
 
                  <!--End notify-->
                  <!--Minicart-->
@@ -609,6 +609,7 @@
      </ul>
  </div>
  <!--End Mobile Menu-->
+ @vite(['resources/js/new_voucher.js'])
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const links = document.querySelectorAll('.mark-as-read');
@@ -634,6 +635,7 @@
         });
     });
 </script>
+@vite(['resources/js/app.js'])
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const notificationList = document.getElementById('notifyBox');  // Bạn cần sử dụng đúng ID

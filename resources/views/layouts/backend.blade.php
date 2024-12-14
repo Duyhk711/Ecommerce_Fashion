@@ -435,14 +435,14 @@
                                     <i class="nav-main-link-icon fa fa-keyboard"></i>
                                     <span class="nav-main-link-name">Thống kê</span>
                                 </a>
-                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                {{-- <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
                                             href="{{ route('admin.statistics.index') }}">
                                             <span class="nav-main-link-name">Thống kê</span>
                                         </a>
                                     </li>
-                                </ul>
+                                </ul> --}}
                                 <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
@@ -537,23 +537,20 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
                             <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
-                                User Options
+                                Tùy chọn
                             </div>
                             <div class="p-2">
                                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                                     <i class="far fa-fw fa-user me-1"></i> Profile
                                 </a>
 
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    <i class="far fa-fw fa-file-alt me-1"></i> Invoices
-                                </a>
                                 <div role="separator" class="dropdown-divider"></div>
 
                                 <!-- Toggle Side Overlay -->
                                 <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
                                 <a class="dropdown-item" href="javascript:void(0)" data-toggle="layout"
                                     data-action="side_overlay_toggle">
-                                    <i class="far fa-fw fa-building me-1"></i> Settings
+                                    <i class="far fa-fw fa-building me-1"></i> Cài đặt
                                 </a>
                                 <!-- END Side Overlay -->
 
@@ -580,20 +577,28 @@
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-notifications-dropdown">
                             <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
-                                Notifications
+                                Thông báo
                             </div>
-                            <ul class="nav-items my-2">
-                                <li>
-                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 mx-3">
-                                            <i class="fa fa-fw fa-check-circle text-success"></i>
-                                        </div>
-                                        <div class="flex-grow-1 fs-sm pe-2">
-                                            <div class="fw-semibold">App was updated to v5.6!</div>
-                                            <div class="text-muted">3 min ago</div>
-                                        </div>
-                                    </a>
-                                </li>
+                            <ul class="nav-items my-2" style="max-height: 325px; overflow-y: auto; width: 300px;">
+                                @if(auth()->check())
+                                    @if(auth()->user()->notifications->count() > 0)
+                                        @foreach(auth()->user()->notifications as $notification)
+                                            <li>
+                                                <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                                                    <div class="flex-shrink-0 mx-3">
+                                                        <i class="far fa-fw fa-file-alt me-1"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1 fs-sm pe-2">
+                                                        <div class="fw-semibold" style="max-width: 200px; word-wrap: break-word; white-space: pre-wrap; display: block;">{!! $notification->data['message'] !!}</div>
+                                                        <div class="text-muted">{{$notification->created_at}}</div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
+                                    @endif
+                                @endif
                                 <li>
                                     <a class="d-flex text-dark py-2" href="javascript:void(0)">
                                         <div class="flex-shrink-0 mx-3">
@@ -641,11 +646,6 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div class="p-2 border-top">
-                                <a class="btn btn-alt-primary w-100 text-center" href="javascript:void(0)">
-                                    <i class="fa fa-fw fa-eye opacity-50 me-1"></i> View All
-                                </a>
-                            </div>
                         </div>
                     </div>
                     <!-- END Notifications Dropdown -->
