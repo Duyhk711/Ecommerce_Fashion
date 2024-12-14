@@ -53,7 +53,9 @@ public function checkSession()
     $existingSession = ChatSession::where('user_id', auth()->id())
         ->whereNull('ended_at')
         ->first();
-
+        if (!auth()->check()) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
     return response()->json([
         'session' => $existingSession ? $existingSession : null
     ]);
@@ -84,20 +86,23 @@ public function checkSession()
         return response()->json(['message' => $message]);
     }
 
-    public function endSession(Request $request, $sessionId)
+    public function endSession(Request $request, $sessionId) 
 {
     $session = ChatSession::where('id', $sessionId)
-        ->where('user_id', auth()->id()) 
+        ->where('user_id', auth()->id())
         ->first();
     
     if (!$session) {
         return response()->json(['error' => 'Session not found or you are not authorized to end this session.'], 403);
     }
+    
     Message::where('chat_session_id', $sessionId)->delete();
     $session->ended_at = now();
     $session->status = 'ended';
-    $session->save(); 
-    event(new SessionEnded($sessionId)); 
+    $session->save();
+    
+    event(new SessionEnded($sessionId, auth()->id()));
+    
     return response()->json(['success' => true, 'message' => 'Session ended successfully.']);
 }
 
