@@ -2,7 +2,7 @@
 @section('title')
     Liên hệ
 @endsection
-@section('content')
+@section('css')
 <style>
     * {
         margin: 0;
@@ -18,13 +18,6 @@
     .contact-section {
         background-color: #ffffff;
         padding: 50px 20px;
-    }
-
-    .container {
-        width: 80%;
-        margin: 0 auto;
-        max-width: 1200px;
-        text-align: left;
     }
 
     .h1 {
@@ -50,6 +43,8 @@
         color: #333;
     }
 </style>
+@endsection
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
