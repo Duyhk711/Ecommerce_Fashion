@@ -18,13 +18,6 @@
         padding: 50px 20px;
     }
 
-    .container {
-        width: 80%;
-        margin: 0 auto;
-        max-width: 1200px;
-        text-align: left;
-    }
-
     h1 {
         color: red;
         line-height: 1.6;

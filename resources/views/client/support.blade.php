@@ -20,13 +20,6 @@
         padding: 50px 0;
     }
 
-    .container {
-        width: 80%;
-        margin: 0 auto;
-        max-width: 1200px;
-        text-align: center;
-    }
-
     .faq-section {
         background-color: #ffffff;
         padding: 50px 0;
