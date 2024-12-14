@@ -125,12 +125,12 @@ class VouchersController extends Controller
             ->with('voucher')
             ->get();
 
-            if ($userVouchers->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Bạn chưa lưu mã giảm giá nào.'
-                ]);
-            }
+        if ($userVouchers->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn chưa lưu mã giảm giá nào.',
+            ]);
+        }
 
         return response()->json([
             'success' => true,
@@ -193,6 +193,11 @@ class VouchersController extends Controller
         $voucher->discount_value;
 
         // Đảm bảo rằng giảm giá không vượt quá tổng đơn hàng
+        if ($discount > $orderTotal) {
+            $discount = $orderTotal - 10;
+        } elseif ($orderTotal - $discount < 10) {
+            $discount = $orderTotal - 10;
+        }
         $discount = min($discount, $orderTotal);
 
         // Cập nhật voucher đã dùng trong bảng trung gian `user_voucher`
