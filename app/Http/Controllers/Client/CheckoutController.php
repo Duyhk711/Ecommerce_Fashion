@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Order;
-use App\Models\CartItem;
-use App\Models\OrderItem;
-use App\Models\UserVoucher;
-use Illuminate\Http\Request;
-use App\Models\ProductVariant;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Services\Client\CartService;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Client\CheckoutService;
+use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\ProductVariant;
+use App\Models\UserVoucher;
 use App\Notifications\OrderStatusUpdated;
+use App\Services\Client\CartService;
+use App\Services\Client\CheckoutService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -37,18 +37,18 @@ class CheckoutController extends Controller
                 $address = $dataAddress->where('is_default', 1)->first();
                 // dd($dataAddress, $address);
             }
-            session()->put('checkoutItem', $this->checkoutService->getCartItems($request->input('selected_items', [])));
-            // dd($address);
-            $dataCart = session()->get('checkoutItem');
 
             // dd($dataCart);
         } else {
             $dataAddress = [];
             $address = '';
-            session()->put('checkoutItem', $this->checkoutService->getCartItems($request->input('selected_items', [])));
-            $dataCart = session('checkoutItem', []);
             // dd($dataCart);
         }
+        if ($request->has('selected_items')) {
+
+            session()->put('checkoutItem', $this->checkoutService->getCartItems($request->input('selected_items', [])));
+        }
+        $dataCart = session('checkoutItem', []);
         // dd(session('checkoutItem'));
         return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
 
@@ -69,7 +69,8 @@ class CheckoutController extends Controller
         }
         $productVariantId = $request['product_variant_id'];
         $quantity = $request['quantity'];
-        $dataCart = $this->checkoutService->buyNow($productVariantId, $quantity);
+        session()->put('checkoutItem', $this->checkoutService->buyNow($productVariantId, $quantity));
+        $dataCart = session('checkoutItem', []);
 
         return view('client.checkout', compact('dataAddress', 'dataCart', 'address'));
     }
@@ -115,6 +116,7 @@ class CheckoutController extends Controller
             $order->city = $request->input('city');
             $order->district = $request->input('district');
             $order->ward = $request->input('ward');
+            $order->note = $request->input('note');
             $order->address_line1 = $request->input('address_line1');
             $order->address_line1 = $request->input('address_line1');
             $order->total_price = $request->input('total_price');

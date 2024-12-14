@@ -116,13 +116,16 @@
                         <div id="nav-tabs" class="step-checkout">
                             <ul class="nav nav-tabs step-items">
                                 <li class="nav-item onactive active">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#steps1">Giỏ hàng</a>
+                                    <a class="nav-link active" style="pointer-events: none;" data-bs-toggle="tab"
+                                        href="#steps1">Giỏ hàng</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#steps2">Địa Chỉ</a>
+                                    <a class="nav-link" style="pointer-events: none;" data-bs-toggle="tab"
+                                        href="#steps2">Địa Chỉ</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#steps3">Thanh Toán</a>
+                                    <a class="nav-link" style="pointer-events: none;" data-bs-toggle="tab"
+                                        href="#steps3">Thanh Toán</a>
                                 </li>
                             </ul>
                         </div>
@@ -200,7 +203,7 @@
                                                 <fieldset>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                            <textarea class="resize-both form-control" rows="3" placeholder="Viết ghi chú ở đáy" name="comment"></textarea>
+                                                            <textarea class="resize-both form-control" rows="3" placeholder="Viết ghi chú ở đáy" name="note"></textarea>
                                                         </div>
                                                     </div>
                                                 </fieldset>
@@ -306,7 +309,7 @@
                                                 <div class="form-group col-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label for="customer_phone" class="form-label">Số điện thoại <span
                                                             class="required">*</span></label>
-                                                    <input name="customer_phone" id="customer_phone" type="tel"
+                                                    <input name="customer_phone" id="customer_phone" type="number"
                                                         required class="form-control"
                                                         value="{{ $address == '' ? old('customer_phone') : $address->customer_phone }}">
                                                 </div>
@@ -485,6 +488,9 @@
                                         <!--Cart Summary-->
                                     </div>
                                 </div>
+                                <div class="d-flex justify-content-start">
+                                    <button type="button" class="btn btn-secondary me-1 btnPrevious">Back</button>
+                                </div>
                             </div>
                         </div>
                         <!--End Tab checkout content-->
@@ -506,7 +512,8 @@
                 @foreach ($dataAddress as $add)
                     <div class="address-item d-flex gap-2">
                         <div class="check-icon">
-                            <input type="radio" value="{{ $add->id }}" name="address" {{-- @if ($add->id == $address->id) {{ 'checked' }} @endif --}}>
+                            <input type="radio" value="{{ $add->id }}" name="address"
+                                @if ($add->id == $address->id) checked @endif>
                         </div>
                         <div>
                             <div class="d-flex justify-content-sm-start gap-1">
@@ -560,15 +567,48 @@
             // Thêm lớp active cho tab hiện tại
             var checkoutList = document.getElementById("nav-tabs");
             var checkoutItems = checkoutList.getElementsByClassName("nav-item");
+            // Hàm lấy giá trị của tham số URL
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
 
-            for (var i = 0; i < checkoutItems.length; i++) {
-                checkoutItems[i].addEventListener("click", function() {
-                    var current = document.getElementsByClassName("onactive");
-                    if (current.length > 0) {
-                        current[0].classList.remove("onactive");
-                    }
-                    this.classList.add("onactive");
-                });
+            // Đặt tab mặc định nếu có tham số address
+            function setDefaultTab() {
+                const addressParam = getQueryParam("address");
+                if (addressParam) {
+                    const defaultTab = checkoutItems[1]; // Nav-item số 1 (index 1)
+                    const activeTabLink = defaultTab.querySelector(".nav-link");
+                    const tabInstance = new bootstrap.Tab(activeTabLink);
+                    tabInstance.show();
+                    updateNav(defaultTab);
+                } else {
+                    const firstTab = checkoutItems[0]; // Nav-item mặc định (index 0)
+                    const activeTabLink = firstTab.querySelector(".nav-link");
+                    const tabInstance = new bootstrap.Tab(activeTabLink);
+                    tabInstance.show();
+                    updateNav(firstTab);
+                }
+            }
+
+            // Gọi hàm thiết lập tab mặc định
+            setDefaultTab();
+
+            // for (var i = 0; i < checkoutItems.length; i++) {
+            //     checkoutItems[i].addEventListener("click", function() {
+            //         var current = document.getElementsByClassName("onactive");
+            //         if (current.length > 0) {
+            //             current[0].classList.remove("onactive");
+            //         }
+            //         this.classList.add("onactive");
+            //         // console.log("Current nav-item index:", getActiveNavIndex());
+            //     });
+            // }
+            // Hàm lấy chỉ số của nav-item hiện tại
+            function getActiveNavIndex() {
+                const itemsArray = Array.from(checkoutItems); // Chuyển NodeList thành mảng
+                const activeItem = document.querySelector(".onactive");
+                return activeItem ? itemsArray.indexOf(activeItem) : -1; // Trả về -1 nếu không tìm thấy
             }
 
             // Cập nhật nav khi chuyển đổi tab
@@ -578,21 +618,129 @@
                     current[0].classList.remove("onactive");
                 }
                 newActiveItem.classList.add("onactive");
+
+            }
+
+            function validateField(input, field) {
+                const value = input.value.trim();
+                let errorMessage = '';
+
+                // Kiểm tra nếu input rỗng
+                if (!value) {
+                    errorMessage = field.message;
+                }
+
+                // Kiểm tra định dạng số điện thoại
+                if (field.id === 'customer_phone' && value && !/^[0-9]{10,11}$/.test(value)) {
+                    errorMessage = 'Số điện thoại không hợp lệ';
+                }
+
+                // Kiểm tra định dạng email
+                if (field.id === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    errorMessage = 'Email không hợp lệ';
+                }
+
+                // Hiển thị hoặc xóa lỗi
+                if (errorMessage) {
+                    showError(input, errorMessage);
+                } else {
+                    clearError(input);
+                }
+            }
+
+            // Hiển thị lỗi dưới input
+            function showError(input, message) {
+                let errorElement = input.nextElementSibling;
+
+                // Tạo phần tử lỗi nếu chưa có
+                if (!errorElement || !errorElement.classList.contains('error-message')) {
+                    errorElement = document.createElement('div');
+                    errorElement.classList.add('error-message', 'text-danger', 'mt-1');
+                    input.parentElement.appendChild(errorElement);
+                }
+
+                errorElement.textContent = message;
+                input.classList.add('is-invalid');
+            }
+
+            // Xóa lỗi
+            function clearError(input) {
+                const errorElement = input.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.remove();
+                }
+                input.classList.remove('is-invalid');
             }
 
 
 
             // Chuyển đến tab tiếp theo
             $('.btnNext').click(function() {
-                const activeTab = $('.nav-link.active').closest('li');
-                const nextTab = activeTab.next('li');
+                const activeTabIndex = getActiveNavIndex();
+                if (activeTabIndex != 1) {
+                    const activeTab = $('.nav-link.active').closest('li');
+                    const nextTab = activeTab.next('li');
 
-                if (nextTab.length > 0) {
-                    const nextTabLinkEl = nextTab.find('a')[0];
-                    const nextTabInstance = new bootstrap.Tab(nextTabLinkEl);
-                    nextTabInstance.show();
-                    updateNav(activeTab.next('li')[0]);
+                    if (nextTab.length > 0) {
+                        const nextTabLinkEl = nextTab.find('a')[0];
+                        const nextTabInstance = new bootstrap.Tab(nextTabLinkEl);
+                        nextTabInstance.show();
+                        updateNav(activeTab.next('li')[0]);
+                    }
+                } else {
+                    const fields = [{
+                            id: 'customer_name',
+                            message: 'Vui lòng nhập họ tên'
+                        },
+                        {
+                            id: 'customer_phone',
+                            message: 'Vui lòng nhập số điện thoại'
+                        },
+                        {
+                            id: 'email',
+                            message: 'Vui lòng nhập email'
+                        },
+                        {
+                            id: 'city',
+                            message: 'Vui lòng chọn tỉnh/thành phố'
+                        },
+                        {
+                            id: 'district',
+                            message: 'Vui lòng chọn quận/huyện'
+                        },
+                        {
+                            id: 'ward',
+                            message: 'Vui lòng chọn phường/xã'
+                        },
+                        {
+                            id: 'address_line1',
+                            message: 'Vui lòng nhập địa chỉ'
+                        },
+                    ];
+
+                    hasError = false;
+                    // Kiểm tra từng trường
+                    fields.forEach(field => {
+                        const input = document.getElementById(field.id);
+                        validateField(input, field);
+                        if (input.classList.contains('is-invalid')) {
+                            hasError = true;
+                        }
+                    });
+
+                    if (!hasError) {
+                        const activeTab = $('.nav-link.active').closest('li');
+                        const nextTab = activeTab.next('li');
+
+                        if (nextTab.length > 0) {
+                            const nextTabLinkEl = nextTab.find('a')[0];
+                            const nextTabInstance = new bootstrap.Tab(nextTabLinkEl);
+                            nextTabInstance.show();
+                            updateNav(activeTab.next('li')[0]);
+                        }
+                    }
                 }
+
             });
 
             // Quay lại tab trước đó
@@ -605,6 +753,7 @@
                     const prevTabInstance = new bootstrap.Tab(prevTabLinkEl);
                     prevTabInstance.show();
                     updateNav(activeTab.prev('li')[0]);
+                    // console.log("Current nav-item index after Previous:", getActiveNavIndex());
                 }
             });
         });
