@@ -37,7 +37,6 @@ Route::get('/stats/total-sold-products', [ChartController::class, 'getTotalSoldP
 Route::get('/revenue-data', [ChartController::class, 'getRevenueData']);
 
 
-Route::get('/orders', [ChartController::class, 'getOrders']);
 
 Route::get('/sales-statistics', [ChartController::class, 'getSalesStatistics']);
 Route::get('/products/top-rated', [ChartController::class, 'topRatedProducts']);
@@ -81,3 +80,5 @@ Route::get('product-activity', [ChartController::class, 'productActivity']);
 Route::get('/customer-stats', [ChartController::class, 'getCustomerStats'])->name('customer_stats');
 Route::get('/cart/stats', [ChartController::class, 'getCartStats']);
 Route::get('/voucher-usage-rate', [ChartController::class, 'getVoucherUsageRate']);
+Route::get('comments-report', [ChartController::class, 'commentReport']);
+Route::get('/orders', [ChartController::class, 'getOrders']);

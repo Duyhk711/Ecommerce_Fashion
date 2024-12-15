@@ -62,18 +62,19 @@ class AdminChatController extends Controller
         return response()->json(['message' => $message]);
     }
     public function endSession($sessionId)
-    {
-        $session = ChatSession::findOrFail($sessionId);
-        if ($session->status === 'active') {
-            $session->messages()->delete();
-            $session->status = 'ended';
-            $session->ended_at = now();
-            $session->save();
-            event(new SessionEnded($sessionId));
-            return response()->json(['message' => 'Session ended and messages deleted successfully.']);
-        }
-        return response()->json(['message' => 'Session is already ended or inactive.'], 400);
+{
+    $session = ChatSession::findOrFail($sessionId);
+    if ($session->status === 'active') {
+        $session->messages()->delete();
+        $session->status = 'ended';
+        $session->ended_at = now();
+        $session->save();
+        
+        event(new SessionEnded($sessionId, auth()->id()));
+        
+        return response()->json(['message' => 'Session ended and messages deleted successfully.']);
     }
-
+    return response()->json(['message' => 'Session is already ended or inactive.'], 400);
+}
 
 }

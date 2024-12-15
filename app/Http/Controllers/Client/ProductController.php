@@ -8,12 +8,18 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\ProductDetailService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\JsonLd;
+
 
 class ProductController extends Controller
 {
     protected $productDetailService;
 
-    public function __construct(ProductDetailService $productDetailService){
+    public function __construct(ProductDetailService $productDetailService)
+    {
         $this->productDetailService = $productDetailService;
     }
 
@@ -22,6 +28,21 @@ class ProductController extends Controller
     {
         // Lấy thông tin sản phẩm
         $product = $this->productDetailService->getProduct($id);
+        SEOMeta::setTitle($product->meta_title ?? $product->name);
+        SEOMeta::setDescription($product->meta_description ?? Str::limit($product->description, 150));
+        SEOMeta::setCanonical(route('productDetail', ['slug' => $product->slug]));
+        SEOMeta::addKeyword($product->meta_keywords);
+
+        OpenGraph::setTitle($product->meta_title ?? $product->name);
+        OpenGraph::setDescription($product->meta_description ?? Str::limit($product->description, 150));
+        OpenGraph::setUrl(route('productDetail', ['slug' => $product->slug]));
+        OpenGraph::addProperty('type', 'article');
+        OpenGraph::addImage(asset('storage/' . $product->img_thumbnail));
+
+        JsonLd::setTitle($product->meta_title ?? $product->name);
+        JsonLd::setDescription($product->meta_description ?? Str::limit($product->description, 150));
+        JsonLd::addImage(asset('storage/' . $product->img_thumbnail));
+
         // Thông tin khác liên quan đến sản phẩm
         $variantDetails = $this->productDetailService->getVariantDetails($product);
         $totalStock = $this->productDetailService->calculateTotalStock($product);
@@ -38,9 +59,9 @@ class ProductController extends Controller
         $user = auth()->user();
         $isFavorite = $user ? Favorite::where('user_id', $user->id)->where('product_id', $product->id)->exists() : false;
         foreach ($relatedProducts as $relatedProduct) {
-              $relatedProduct->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                             ->where('product_id', $relatedProduct->id)
-                                                             ->exists() : false;
+            $relatedProduct->isFavorite = $user ? Favorite::where('user_id', $user->id)
+                ->where('product_id', $relatedProduct->id)
+                ->exists() : false;
         }
         $relatedRatings = $this->productDetailService->getRatingsForRelatedProducts($relatedProducts);
         // Kiểm tra nếu có tham số cho bình luận

@@ -17,17 +17,20 @@
             overflow-y: auto;
             box-sizing: border-box;
         }
+
         .chat-frame {
             width: 70%;
             display: flex;
             flex-direction: column;
             height: 100%;
         }
+
         .chat-header {
             padding: 10px;
             border-bottom: 1px solid #ddd;
             flex-shrink: 0;
         }
+
         #messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -35,6 +38,7 @@
             box-sizing: border-box;
             background-color: #EEF0F1;
         }
+
         #messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -44,6 +48,7 @@
             scrollbar-width: thin;
             scrollbar-color: #007bff #E4E4E4;
         }
+
         #messages::-webkit-scrollbar {
             width: 12px;
         }
@@ -113,22 +118,26 @@
         #user-list li.selected {
             background-color: #E5EFFF;
         }
+
         .list-header {
             text-align: center;
             border: 1px solid #ddd;
         }
+
         .chat-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background-color: #FFFFFF;
         }
+
         #user-avatar {
             width: 60px;
             height: 60px;
             border-radius: 50%;
             margin-right: 10px;
         }
+
         .chat-header #end-session {
             margin-left: auto;
             background-color: #dc3545;
@@ -145,6 +154,7 @@
             padding: 0;
             margin-bottom: 15px;
         }
+
         .message.user {
             text-align: left;
             background-color: #F7F7F7;
@@ -158,6 +168,7 @@
             float: left;
             box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
         }
+
         .message.admin {
             text-align: left;
             background-color: #dbebff;
@@ -172,12 +183,12 @@
             float: right;
             box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
         }
+
         .message-time {
-            font-size: 0.8rem;
-            color: #6c757d;
-            text-align: left;
-            display: block;
-            clear: both;
+            font-size: 12px;
+        color: gray;
+        text-align: left;
+        margin-top: 5px;
         }
 
         #user-list li {
@@ -279,6 +290,9 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
     <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
     @vite(['resources/js/chat.js'])
     <script>
@@ -309,15 +323,15 @@
             adminChannel.bind('new-session-assigned', function(data) {
                 console.log('New session assigned to you:', data);
 
-                loadSessions(); 
+                loadSessions();
             });
 
             adminChannel.bind('new-message', function(data) {
                 console.log('New message received:', data);
 
-                loadSessions(); 
+                loadSessions();
                 if (sessionId === data.chat_session_id) {
-                    markMessagesRead(); 
+                    markMessagesRead();
                 }
             });
 
@@ -377,33 +391,39 @@
                                     $('#send').prop('disabled', false);
                                     $('#end-session').prop('disabled', false);
                                     li.find('.unread-count')
-                                        .remove(); 
+                                        .remove();
 
                                     const channel = pusher.subscribe(
                                         `chat-session.${sessionId}`);
                                     channel.bind('session-ended', function(data) {
+                                        if (data.initiatorId !== {{ auth()->id() }}) {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        title: 'Phiên chat đã kết thúc',
+                                        text: 'Phiên hỗ trợ khách hàng đã được đóng.',
+                                        confirmButtonText: 'OK'
+                                    });
                                         pusher.unsubscribe(
                                             `chat-session.${sessionId}`);
                                         $('#user-list li.selected').removeClass(
                                             'selected');
                                         $('#messages')
-                                            .empty(); 
+                                            .empty();
                                         $('.chat-header')
-                                            .hide(); 
+                                            .hide();
                                         $('.chat-footer')
-                                            .hide(); 
+                                            .hide();
                                         $('.welcome-frame')
-                                            .show(); 
-                                        alert('Phiên chat đã kết thúc.');
+                                            .show();                               
                                         loadSessions();
+    }
                                     });
 
                                     channel.bind('new-message', function(data) {
                                         const senderType = data.sender_id ===
                                             {{ auth()->id() }} ? 'admin' :
                                             'user';
-                                        const formattedTime = new Date(data
-                                            .created_at).toLocaleString();
+                                        const formattedTime = new Date(data.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                                         appendMessage(data.message, senderType,
                                             formattedTime);
 
@@ -414,7 +434,7 @@
                                     });
 
                                     markMessagesRead
-                                        (); 
+                                        ();
                                 });
                                 userList.append(li);
                             });
@@ -461,7 +481,7 @@
                         messages.forEach(msg => {
                             const senderType = msg.sender_id === {{ auth()->id() }} ? 'admin' :
                                 'user';
-                            const formattedTime = new Date(msg.created_at).toLocaleString();
+                                const formattedTime = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                             appendMessage(msg.message, senderType, formattedTime);
                         });
                         scrollToBottom()
@@ -474,59 +494,84 @@
 
             $('#send').on('click', function() {
                 const message = $('#message').val();
-                if (!message || !sessionId) return; 
+                if (!message || !sessionId) return;
 
                 $.ajax({
                     url: `/admin/send-message/${sessionId}`,
                     method: 'POST',
                     data: {
                         message: message
-                    }, 
+                    },
                     success: function(response) {
-                        $('#message').val(''); 
+                        $('#message').val('');
                         scrollToBottom();
                     },
                     error: function(error) {
-                        console.error(error); 
+                        console.error(error);
                         alert(
                             'Failed to send message.'
-                        ); 
+                        );
                     }
                 });
             });
 
             $('#message').on('keypress', function(event) {
                 if (event.key === 'Enter' && !event
-                    .shiftKey) { 
+                    .shiftKey) {
                     event.preventDefault();
                     $('#send').trigger('click');
                 }
             });
 
             $('#end-session').on('click', function() {
-                if (confirm('Bạn có muốn kết thúc phiên chat hay không ?')) {
-                    if (!sessionId) return;
+    if (!sessionId) return;
+
+    // Thay thế confirm bằng SweetAlert2
+    Swal.fire({
+        title: 'Kết thúc phiên chat?',
+        text: 'Bạn có chắc chắn muốn kết thúc phiên chat này?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `/admin/end-session/${sessionId}`,
+                method: 'POST',
+                success: function() {
+                    pusher.unsubscribe(`chat-session.${sessionId}`);
+                    sessionId = null;
+                    $('#user-list li.selected').removeClass('selected');
+                    $('#messages').empty(); // Xóa tin nhắn
+                    $('.chat-header').hide();
+                    $('.chat-footer').hide();
+                    $('.welcome-frame').show();
+                    loadSessions();
+
+                    // Hiển thị thông báo SweetAlert2
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Phiên chat đã được kết thúc.',
+                    });
+                },
+                error: function(error) {
+                    console.error(error);
+                    // Thông báo lỗi
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Không thể kết thúc phiên chat. Vui lòng thử lại.',
+                    });
                 }
-                $.ajax({
-                    url: `/admin/end-session/${sessionId}`,
-                    method: 'POST',
-                    success: function() {
-                        pusher.unsubscribe(`chat-session.${sessionId}`);
-                        sessionId = null;
-                        $('#user-list li.selected').removeClass('selected');
-                        $('#messages').empty(); 
-                        $('.chat-header').hide();
-                        $('.chat-footer').hide();
-                        $('.welcome-frame').show();
-                        loadSessions();
-                        alert('Phiên chat đã kết thúc.');
-                    },
-                    error: function(error) {
-                        console.error(error);
-                        alert('lỗi khi hủy session');
-                    }
-                });
             });
+        }
+    });
+});
+
             loadSessions();
         });
     </script>

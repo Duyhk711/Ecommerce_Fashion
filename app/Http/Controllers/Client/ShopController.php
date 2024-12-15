@@ -7,6 +7,9 @@ use App\Models\Favorite;
 use App\Services\Client\HomeService;
 use App\Services\Client\ShopService;
 use Illuminate\Http\Request;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\JsonLd;
 
 class ShopController extends Controller
 {
@@ -21,6 +24,18 @@ class ShopController extends Controller
 
     public function index(Request $request)
     {
+        SEOMeta::setTitle('Poly Fashion - Cửa hàng');
+        SEOMeta::setDescription('Khám phá danh mục quần áo thời trang mới nhất tại Poly Fashion.');
+        SEOMeta::setCanonical(route('shop'));
+
+        OpenGraph::setTitle('Poly Fashion - Cửa hàng');
+        OpenGraph::setDescription('Khám phá danh mục quần áo thời trang mới nhất tại Poly Fashion.');
+        OpenGraph::setUrl(route('shop'));
+        OpenGraph::addProperty('type', 'website');
+
+        JsonLd::setTitle('Poly Fashion - Cửa hàng');
+        JsonLd::setDescription('Khám phá danh mục quần áo thời trang mới nhất tại Poly Fashion.');
+        JsonLd::addImage(asset('client/images/title.png'));
         $user = auth()->user();
         $pageTitle = 'Cửa Hàng';
         $categories = $this->shopService->getCategories();

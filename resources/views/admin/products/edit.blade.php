@@ -13,18 +13,37 @@
     <link rel="stylesheet" href="{{ asset('admin/css/products/form-edit.css') }}">
 
     <style>
-       .custom-file2 {
-    position: absolute; /* Hoặc relative, tùy thuộc vào bố cục */
-    width: 100px;
-    height: 70px; /* Tự động chiếm toàn bộ kích thước cha */
-    opacity: 0; /* Ẩn hoàn toàn input file */
-    cursor: pointer; /* Thay đổi con trỏ khi di chuột */
-    margin: 0; /* Xóa khoảng cách không cần thiết */
-}
-.custom-file2 input[type="file"]{
-    width: 100px !important;
-    height: 70px !important; 
-}
+        .custom-file2 {
+            position: absolute;
+            /* Hoặc relative, tùy thuộc vào bố cục */
+            width: 100px;
+            height: 70px;
+            /* Tự động chiếm toàn bộ kích thước cha */
+            opacity: 0;
+            /* Ẩn hoàn toàn input file */
+            cursor: pointer;
+            /* Thay đổi con trỏ khi di chuột */
+            margin: 0;
+            /* Xóa khoảng cách không cần thiết */
+        }
+
+        .custom-file2 input[type="file"] {
+            width: 100px !important;
+            height: 70px !important;
+        }
+
+        .char-counter {
+            font-size: 0.9em;
+            color: #6c757d;
+            /* Màu ghi nhạt */
+            margin-top: 0.2rem;
+            text-align: right;
+        }
+
+        .char-counter.error {
+            color: red;
+            /* Đổi sang màu đỏ khi vượt giới hạn */
+        }
     </style>
 @endsection
 @section('content')
@@ -131,6 +150,41 @@
                                 @error('content')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            <label class="form-label">Thông tin SEO: </label>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="meta-title-input">Tiêu đề SEO (Meta Title)</label>
+                                                <input type="text" name="meta_title" class="form-control"
+                                                    placeholder="Nhập tiêu đề SEO" maxlength="60"
+                                                    value="{{ old('meta_title', $product->meta_title) }}">
+                                                <div class="char-counter" id="meta-title-counter">Còn lại 60 ký tự</div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="meta-keywords-input">Từ khóa SEO (Meta Keywords)</label>
+                                                <input type="text" name="meta_keywords" class="form-control"
+                                                    placeholder="Nhập từ khóa SEO"
+                                                    maxlength="255" value="{{ old('meta_keywords', $product->meta_keywords) }}">
+                                                <div class="char-counter" id="meta-keywords-counter">Còn lại 255 ký tự</div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                    <div class="mb-3">
+                                        <label class="form-label" for="meta-description-input">Mô tả SEO (Meta Description)</label>
+                                        <textarea class="form-control" name="meta_description" placeholder="Nhập mô tả SEO" rows="3"
+                                            maxlength="160">{{ old('meta_description', $product->meta_description) }}</textarea>
+                                        <div class="char-counter" id="meta-description-counter">Còn lại 160 ký tự</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -617,7 +671,7 @@
                     if (totalCombinations > 50) {
                         const confirmContinue = confirm(
                             'Số lượng biến thể vượt quá giới hạn cho phép (tối đa 50 biến thể mỗi lần). Bạn có muốn chỉ tạo 50 biến thể không?'
-                            );
+                        );
                         if (!confirmContinue) {
                             return; // Hủy tạo biến thể nếu người dùng không đồng ý
                         }
@@ -888,40 +942,97 @@
                 displayMultipleImages(this, subImagesContainer, subImageList);
             });
 
-            });
-
-            // Hàm hiển thị nhiều ảnh phụ khi chọn từ input
-            function displayMultipleImages(input, container, imageList) {
-                Array.from(input.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const imgWrapper = document.createElement('div');
-                        imgWrapper.classList.add('img-wrapper');
-
-                        const imgElement = document.createElement('img');
-                        imgElement.src = e.target.result;
-                        imgElement.style.maxWidth = '100px'; // Kích thước ảnh phụ
-
-                        // Nút xóa
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('delete-btn');
-                        deleteBtn.textContent = 'x';
-                        deleteBtn.addEventListener('click', function() {
-                            imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
-                        });
-
-                        imgWrapper.appendChild(imgElement);
-                        imgWrapper.appendChild(deleteBtn);
-                        container.appendChild(imgWrapper);
-                    };
-                    reader.readAsDataURL(file);
-                });
-            }
         });
+
+        // Hàm hiển thị nhiều ảnh phụ khi chọn từ input
+        function displayMultipleImages(input, container, imageList) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgWrapper = document.createElement('div');
+                    imgWrapper.classList.add('img-wrapper');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.style.maxWidth = '100px'; // Kích thước ảnh phụ
+
+                    // Nút xóa
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.classList.add('delete-btn');
+                    deleteBtn.textContent = 'x';
+                    deleteBtn.addEventListener('click', function() {
+                        imgWrapper.remove(); // Xóa ảnh khi nhấn nút xóa
+                    });
+
+                    imgWrapper.appendChild(imgElement);
+                    imgWrapper.appendChild(deleteBtn);
+                    container.appendChild(imgWrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+       
     </script>
 
     {{-- validate variant --}}
     <script src="{{ asset('admin/js/ui/validations/product-edit.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const MAX_TITLE_LENGTH = 60;
+            const MAX_KEYWORDS_LENGTH = 255;
+            const MAX_DESCRIPTION_LENGTH = 160;
 
+            const metaTitleInput = document.querySelector('input[name="meta_title"]');
+            const metaKeywordsInput = document.querySelector('input[name="meta_keywords"]');
+            const metaDescriptionInput = document.querySelector('textarea[name="meta_description"]');
+
+            const metaTitleCounter = document.getElementById('meta-title-counter');
+            const metaKeywordsCounter = document.getElementById('meta-keywords-counter');
+            const metaDescriptionCounter = document.getElementById('meta-description-counter');
+
+            function updateCounter(input, counter, maxLength) {
+                const remaining = maxLength - input.value.length;
+                counter.textContent = `${remaining} ký tự còn lại`;
+
+                // Đổi màu cảnh báo nếu hết ký tự
+                counter.classList.toggle("error", remaining === 0);
+            }
+
+            function handleInputEvent(input, counter, maxLength) {
+                updateCounter(input, counter, maxLength);
+            }
+
+            function handleKeydownEvent(event, input, maxLength) {
+                const allowedKeys = [
+                    "Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"
+                ];
+                // Kiểm tra nếu đã đạt giới hạn và phím không thuộc danh sách cho phép
+                if (input.value.length >= maxLength && !allowedKeys.includes(event.key)) {
+                    event.preventDefault(); // Chặn ngay lập tức
+                }
+            }
+
+            // Thêm sự kiện `keydown` và `input` cho các trường
+            metaTitleInput.addEventListener("keydown", (event) =>
+                handleKeydownEvent(event, metaTitleInput, MAX_TITLE_LENGTH)
+            );
+            metaTitleInput.addEventListener("input", () =>
+                handleInputEvent(metaTitleInput, metaTitleCounter, MAX_TITLE_LENGTH)
+            );
+
+            metaKeywordsInput.addEventListener("keydown", (event) =>
+                handleKeydownEvent(event, metaKeywordsInput, MAX_KEYWORDS_LENGTH)
+            );
+            metaKeywordsInput.addEventListener("input", () =>
+                handleInputEvent(metaKeywordsInput, metaKeywordsCounter, MAX_KEYWORDS_LENGTH)
+            );
+
+            metaDescriptionInput.addEventListener("keydown", (event) =>
+                handleKeydownEvent(event, metaDescriptionInput, MAX_DESCRIPTION_LENGTH)
+            );
+            metaDescriptionInput.addEventListener("input", () =>
+                handleInputEvent(metaDescriptionInput, metaDescriptionCounter, MAX_DESCRIPTION_LENGTH)
+            );
+        });
+    </script>
 @endsection
-

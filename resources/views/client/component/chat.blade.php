@@ -74,21 +74,21 @@
     .message.user {
         background-color: #dbebff;
         color: #081b3a;
-        align-self: flex-start;
+        align-self: flex-end;
         box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
     }
 
     .message.admin {
         background-color: #F7F7F7;
         border-radius: 10px;
-        align-self: flex-end;
+        align-self: flex-start;
         box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
     }
 
     .message-time {
         font-size: 12px;
         color: gray;
-        text-align: right;
+        text-align: left;
         margin-top: 5px;
     }
 
@@ -123,10 +123,12 @@
         cursor: pointer;
         font-size: 14px;
     }
+
     #send:disabled {
         background-color: #cccccc;
         cursor: not-allowed;
     }
+
     #start-chat-container {
         display: flex;
         justify-content: center;
@@ -165,6 +167,9 @@
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
 @vite(['resources/js/chat.js'])
 <script>
+    const currentUserId = {{ auth()->check() ? auth()->id() : 'null' }};
+</script>
+<script>
     $(document).ready(function() {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         var sessionId = null;
@@ -174,9 +179,19 @@
             cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
         });
         $('#chat-icon').on('click', function() {
+            if (currentUserId === null) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Bạn chưa đăng nhập',
+                    text: 'Vui lòng đăng nhập để sử dụng chức năng chat.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
             $('#chatbox').slideToggle();
             checkExistingSession();
         });
+
 
         function checkExistingSession() {
             $.ajax({
@@ -230,19 +245,31 @@
                 }
             });
         }
+
         function setupPusherChannel(sessionId) {
             const userChannel = pusher.subscribe('chat-session.' + sessionId);
             userChannel.bind('session-ended', function(data) {
-                alert('Phiên chat đã kết thúc');
-                $('#send').prop('disabled', true);
-                $('#end-chat').prop('disabled', true);
-                $('#start-chat-container').show();
-                $('#messages').hide();
-                $('#chat-footer').hide();
+                if (data.initiatorId !== currentUserId) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Phiên chat đã kết thúc',
+                        text: 'Phiên hỗ trợ khách hàng đã được đóng.',
+                        confirmButtonText: 'OK'
+                    });
+                    $('#send').prop('disabled', true);
+                    $('#end-chat').prop('disabled', true);
+                    $('#start-chat-container').show();
+                    $('#messages').hide();
+                    $('#chat-footer').hide();
+                }
             });
             userChannel.bind('new-message', function(data) {
-                if (data.sender_id !== {{ auth()->id() }}) {
-                    const time = new Date().toLocaleTimeString();
+                const currentUserId = {{ auth()->check() ? auth()->id() : 'null' }};
+                if (data.sender_id !== currentUserId) {
+                    const time = new Date().toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
                     $('#messages').append(`
                         <div class="message admin">
                             ${data.message}
@@ -268,7 +295,10 @@
                             message: message
                         },
                         success: function() {
-                            const time = new Date().toLocaleTimeString();
+                            const time = new Date().toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
                             $('#messages').append(`
                                 <div class="message user">
                                     ${message}
@@ -282,54 +312,37 @@
                             alert('Failed to send message.');
                         },
                     });
-                }, 200);
+                }, 10);
             }
         });
 
         $('#message').on('keypress', function(event) {
-            if (event.key === 'Enter') { 
-                event.preventDefault(); 
+            if (event.key === 'Enter') {
+                event.preventDefault();
                 $('#send').trigger('click');
             }
         });
 
         $('#end-chat').on('click', function() {
-            if (confirm('Bạn có muốn kết thúc phiên chat hay không ?')) {
-                endChatSession();
-            }
-        });
-        function scrollToBottom() {
-            const messagesDiv = $('#messages');
-            messagesDiv.scrollTop(messagesDiv.prop('scrollHeight'));
-        }
-        function loadMessages(sessionId) {
-            $.ajax({
-                url: `/messages/${sessionId}`,
-                type: 'GET',
-                success: function(messagesResponse) {
-                    const messagesDiv = $('#messages');
-                    messagesDiv.empty();
-
-                    if (messagesResponse && Array.isArray(messagesResponse.messages)) {
-                        messagesResponse.messages.forEach(function(message) {
-                            const time = new Date(message.created_at).toLocaleTimeString();
-                            const cssClass = message.sender_id === {{ auth()->id() }} ?
-                                'user' : 'admin';
-                            messagesDiv.append(`
-                                <div class="message ${cssClass}">
-                                    ${message.message}
-                                    <div class="message-time">${time}</div>
-                                </div>
-                            `);
-                        });
-                    }
-                    scrollToBottom();
-                },
-                error: function() {
-                    alert('Failed to load messages.');
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn kết thúc phiên chat không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Có, kết thúc!',
+                cancelButtonText: 'Hủy',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    endChatSession();
+                    Swal.fire(
+                        'Đã kết thúc!',
+                        'Phiên chat của bạn đã được kết thúc.',
+                        'success'
+                    );
                 }
             });
-        }
+        });
+
         function endChatSession() {
             $.ajax({
                 url: `/end-session/${sessionId}`,
@@ -346,7 +359,76 @@
                     $('#chat-footer').hide();
                 },
                 error: function() {
-                    alert('Failed to end the chat.');
+                    Swal.fire(
+                        'Lỗi!',
+                        'Không thể kết thúc phiên chat. Vui lòng thử lại.',
+                        'error'
+                    );
+                }
+            });
+        }
+
+
+        function scrollToBottom() {
+            const messagesDiv = $('#messages');
+            messagesDiv.scrollTop(messagesDiv.prop('scrollHeight'));
+        }
+
+        function loadMessages(sessionId) {
+            $.ajax({
+                url: `/messages/${sessionId}`,
+                type: 'GET',
+                success: function(messagesResponse) {
+                    const messagesDiv = $('#messages');
+                    messagesDiv.empty();
+
+                    if (messagesResponse && Array.isArray(messagesResponse.messages)) {
+                        messagesResponse.messages.forEach(function(message) {
+                            const time = new Date(message.created_at).toLocaleTimeString(
+                        [], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                            const cssClass = message.sender_id === currentUserId ? 'user' :
+                                'admin';
+
+                            messagesDiv.append(`
+                                <div class="message ${cssClass}">
+                                    ${message.message}
+                                    <div class="message-time">${time}</div>
+                                </div>
+                            `);
+                        });
+                    }
+                    scrollToBottom();
+                },
+                error: function() {
+                    alert('Failed to load messages.');
+                }
+            });
+        }
+
+        function endChatSession() {
+            $.ajax({
+                url: `/end-session/${sessionId}`,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function() {
+                    sessionId = null;
+                    $('#send').prop('disabled', true);
+                    $('#end-chat').prop('disabled', true);
+                    $('#start-chat-container').show();
+                    $('#messages').hide();
+                    $('#chat-footer').hide();
+                },
+                error: function() {
+                    Swal.fire(
+                        'Lỗi!',
+                        'Không thể kết thúc phiên chat. Vui lòng thử lại.',
+                        'error'
+                    );
                 }
             });
         }
