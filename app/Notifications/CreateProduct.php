@@ -8,17 +8,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class NewUser extends Notification
+class CreateProduct extends Notification
 {
     use Queueable;
 
-    protected $user;
+    protected $product;
     protected $message;
     protected $title;
 
-    public function __construct($user, $message, $title)
+    public function __construct($product, $message, $title)
     {
-        $this->user = $user;
+        $this->product = $product;
         $this->message = $message;
         $this->title = $title;
     }
@@ -32,9 +32,9 @@ class NewUser extends Notification
     {
         return [
             'category' => 'admin',
-            'product_id' => $this->user->id,
+            'product_id' => $this->product->id,
             'message' => $this->message,
-            'link' => route('admin.customer.index'),
+            'link' => route('admin.products.index'),
             'title' => $this->title,
         ];
     }
@@ -43,9 +43,9 @@ class NewUser extends Notification
     {
         return new BroadcastMessage([
             'category' => 'admin',
-            'voucher_id' => $this->user->id,
+            'voucher_id' => $this->product->id,
             'message' => $this->message,
-            'link' => route('admin.user.index'),
+            'link' => route('admin.products.index'),
             'title' => $this->title,
         ]);
     }

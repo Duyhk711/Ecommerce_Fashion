@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Models\Catalogue;
+use App\Models\User;
 use App\Models\Product;
+use App\Models\Catalogue;
+use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\UpdateProductRequest;
+use App\Notifications\CreateProduct;
 
 class ProductController extends Controller
 {

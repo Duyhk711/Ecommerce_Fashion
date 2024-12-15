@@ -2,15 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\Catalogue;
+use App\Models\User;
 use App\Models\Product;
+use App\Models\Attribute;
+use App\Models\Catalogue;
+use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
-use App\Models\Attribute;
 use App\Models\VariantAttribute;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\CreateProduct;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ProductService
 {
@@ -114,7 +116,10 @@ class ProductService
             }
 
             $this->storeVariants($product, $validatedData, $request);
-
+            $users = User::all();
+            foreach ($users as $userNotify) {
+                $userNotify->notify(new CreateProduct($product, 'Có sản phẩm mới.', 'khách hàng mới'));
+            }
             DB::commit();
             return $product;
         } catch (\Exception $e) {

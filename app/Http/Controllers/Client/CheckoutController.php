@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\CartItem;
 use App\Models\OrderItem;
-use App\Models\ProductVariant;
+use App\Events\CreateOrder;
 use App\Models\UserVoucher;
-use App\Notifications\OrderStatusUpdated;
-use App\Services\Client\CartService;
-use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\CreateProduct;
+use App\Services\Client\CartService;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\CreateNewOrder;
+use App\Services\Client\CheckoutService;
+use App\Notifications\OrderStatusUpdated;
 
 class CheckoutController extends Controller
 {
@@ -213,6 +217,10 @@ class CheckoutController extends Controller
                 $message = "Đơn hàng <strong>{$order->sku}</strong> đã được đặt thành công, đang chờ xác nhận từ cửa hàng.";
                 $title = "Cập nhật đơn hàng";
                 $user->notify(new OrderStatusUpdated($order, $message, $title));
+            }
+            $users = User::all();
+            foreach ($users as $userNotify) {
+                $userNotify->notify(new CreateNewOrder($order, 'Çó đơn hàng mới!', $title));
             }
             // Commit transaction nếu không có lỗi
             DB::commit();
