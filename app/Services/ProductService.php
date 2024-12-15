@@ -94,6 +94,9 @@ class ProductService
                 'price_regular' => $validatedData['price_regular'],
                 'price_sale' => $validatedData['price_sale'],
                 'description' => $validatedData['description'],
+                'meta_title' => $validatedData['meta_title'],
+                'meta_description' => $validatedData['meta_description'],
+                'meta_keywords' => $validatedData['meta_keywords'],
                 'content' => $validatedData['content'],
                 'material' => $validatedData['material'],
                 'is_active' => $validatedData['is_active'],
@@ -261,6 +264,9 @@ class ProductService
                 'price_regular' => $validatedData['price_regular'],
                 'price_sale' => $validatedData['price_sale'],
                 'description' => $validatedData['description'],
+                'meta_title' => $validatedData['meta_title'],
+                'meta_description' => $validatedData['meta_description'],
+                'meta_keywords' => $validatedData['meta_keywords'],
                 'content' => $validatedData['content'],
                 'material' => $validatedData['material'],
                 'is_active' => $validatedData['is_active'],
@@ -372,6 +378,15 @@ class ProductService
     public function softDeleteProduct($id)
     {
         $product = Product::findOrFail($id);
+
+        foreach ($product->variants as $variant) {
+            $variantInOrders = DB::table('order_items')->where('product_variant_id', $variant->id)->exists();
+
+            if ($variantInOrders) {
+                return false;
+            }
+        }
+
 
         foreach ($product->variants as $variant) {
             foreach ($variant->images as $image) {

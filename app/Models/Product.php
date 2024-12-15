@@ -18,6 +18,9 @@ class Product extends Model
         'price_regular',
         'price_sale',
         'description',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
         'content',
         'material',
         'user_manual',
@@ -121,5 +124,4 @@ class Product extends Model
         }
         return $query; // Nếu không có màu, trả về query gốc
     }
-
 }

@@ -43,7 +43,7 @@ Route::prefix('admin')
         Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtpAdmin'])->name('verify-otp.post');
         Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
         Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
-
+        Route::get('/products/trashed', [ProductController::class, 'trashed'])->name('products.trashed');
         Route::middleware('checkAdmin')->group(function () {
 
             Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -133,6 +133,5 @@ Route::prefix('admin')
             Route::view('statistics/revenues', 'admin.statistics.revenues')->name('statistics.revenues');
             Route::view('statistics/vouchers', 'admin.statistics.vouchers')->name('statistics.vouchers');
             Route::view('statistics/customer', 'admin.statistics.customer')->name('statistics.customer');
-
         });
     });
