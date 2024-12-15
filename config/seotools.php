@@ -10,12 +10,12 @@ return [
          */
         'defaults'       => [
             'title'        => 'Poly Fashion - Thời trang hiện đại', // Tiêu đề mặc định cho toàn bộ website
-            'titleBefore'  => false, // Put defaults.title before page title, like 'It's Over 9000! - Dashboard'
+            'titleBefore'  => false, // Đặt title mặc định trước tiêu đề trang
             'description'  => 'Poly Fashion - Cửa hàng thời trang trực tuyến với mẫu mã đa dạng, chất lượng cao, giá cả phải chăng. Mua sắm ngay hôm nay!', 
             'separator'    => ' - ',
             'keywords'     => ['thời trang', 'quần áo', 'Poly Fashion', 'mua sắm', 'đầm váy', 'áo thun'],
-            'canonical'    => null, // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
-            'robots'       => false, // Set to 'all', 'none' or any combination of index/noindex and follow/nofollow
+            'canonical'    => env('APP_URL'), // Sử dụng APP_URL từ .env thay vì Url::full()
+            'robots'       => 'index,follow', // Mặc định cho SEO
         ],
         /*
          * Webmaster tags are always added.
@@ -36,12 +36,12 @@ return [
          * The default configurations to be used by the opengraph generator.
          */
         'defaults' => [
-            'title'       => 'Poly Fashion - Thời trang hiện đại',// set false to total remove
+            'title'       => 'Poly Fashion - Thời trang hiện đại', // Đặt tiêu đề Open Graph mặc định
             'description' => 'Khám phá bộ sưu tập thời trang hot nhất tại Poly Fashion. Chất lượng đảm bảo, giao hàng nhanh chóng!',
-            'url'         => null, // Set null for using Url::current(), set false to total remove
+            'url'         => env('APP_URL'), // Thay vì sử dụng Url::current(), dùng URL tĩnh
             'type'        => 'website',
             'site_name'   => 'Poly Fashion',
-            'images'      => [ asset('client/images/title.png')],
+            'images'      => [env('APP_URL') . '/client/images/title.png'], // URL tĩnh thay vì asset()
         ],
     ],
     'twitter' => [
@@ -49,8 +49,8 @@ return [
          * The default values to be used by the twitter cards generator.
          */
         'defaults' => [
-            //'card'        => 'summary',
-            //'site'        => '@LuizVinicius73',
+            // 'card'        => 'summary',
+            // 'site'        => '@PolyFashion', // Thêm handle Twitter nếu có
         ],
     ],
     'json-ld' => [
@@ -60,9 +60,9 @@ return [
         'defaults' => [
             'title'       => 'Poly Fashion - Thời trang hiện đại',
             'description' => 'Cửa hàng thời trang trực tuyến Poly Fashion - Nơi mua sắm đáng tin cậy cho bạn và gia đình.',
-            'url'         => null, // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
+            'url'         => env('APP_URL'), // Dùng URL tĩnh
             'type'        => 'website',
-            'images'      => [ asset('client/images/title.png')],
+            'images'      => [env('APP_URL') . '/client/images/title.png'], // Thay asset() bằng URL tĩnh
         ],
     ],
 ];
