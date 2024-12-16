@@ -576,9 +576,9 @@
                             <span class="notification-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 @if(auth()->check())
                                     @php
-                                        $clientNotifications = auth()->user()->unreadNotifications->where('data.category', 'client');
+                                        $adminNotifications = auth()->user()->unreadNotifications->where('data.category', 'admin');
                                     @endphp
-                                    {{ $clientNotifications->count() }}
+                                    {{ $adminNotifications->count() }}
                                 @else
                                     0
                                 @endif
@@ -602,43 +602,49 @@
                                     @php
                                         $adminNotifications = auth()->user()->notifications->where('data.category', 'admin');
                                         $type = auth()->user()->notifications;
-                                        foreach ($type as $notification) {
-                                            switch ($notification->type) {
-                                                case 'App\Notifications\CreateNewVoucherAdmin':
-                                                    $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>'; // Icon cho CreateNewVoucherAdmin
-                                                    break;
-
-                                                case 'App\Notifications\CreateNewOrder':
-                                                    $icon = '<i class="far fa-fw fa-file-alt me-1"></i>';
-                                                    break;
-
-                                                case 'App\Notifications\NewUser':
-                                                    $icon = '<i class="fa fa-fw fa-user-plus text-info"></i>';
-                                                    break;
-                                                case 'App\Notifications\NewUser':
-                                                    $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>';
-                                                    break;
-
-                                                default:
-                                                    $icon = '<i class="fa fa-info-circle"></i>'; // Icon mặc định
-                                                    break;
-                                                }
-                                            }
+                                        // foreach ($type as $notification) {
+                                        //     if ($notification->type === 'App\Notifications\CreateNewVoucherAdmin') {
+                                        //         $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>'; // Icon cho CreateNewVoucherAdmin
+                                        //     } elseif ($notification->type === 'App\Notifications\CreateNewOrder') {
+                                        //         $icon = '<i class="far fa-fw fa-file-alt me-1"></i>';
+                                        //     } elseif ($notification->type === 'App\Notifications\NewUser') {
+                                        //         $icon = '<i class="fa fa-fw fa-user-plus text-info"></i>';
+                                        //     } elseif ($notification->type === 'App\Notifications\CreateProduct') {
+                                        //         $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>';
+                                        //     } else {
+                                        //         $icon = '<i class="fa fa-info-circle"></i>'; // Icon mặc định
+                                        //     }
+                                        // }
                                     @endphp
                                     @if($adminNotifications->count() > 0)
-                                        @foreach($adminNotifications as $notification)
-                                            <li class="{{ $notification->read_at ? 'read' : 'unread' }}" data-id="{{ $notification->id }}">
-                                                <a class="d-flex text-dark py-2 mark-as-read"   href="{{ $notification->data['link']}}" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
-                                                    <div class="flex-shrink-0 mx-3 mt-2">
-                                                        {!!$icon!!}
-                                                    </div>
-                                                    <div class="flex-grow-1 fs-sm pe-2">
-                                                        <div class="fw-semibold" style="max-width: 200px; word-wrap: break-word; white-space: pre-wrap; display: block;">{!! $notification->data['message'] !!}</div>
-                                                        <div class="text-muted">{{ $notification->created_at->format('d-m-Y') }}</div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        @endforeach
+                                    @foreach($adminNotifications as $notification)
+                                        @php
+                                            // Xác định icon dựa vào loại thông báo
+                                            if ($notification->type === 'App\Notifications\CreateNewVoucherAdmin') {
+                                                $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>'; // Icon cho CreateNewVoucherAdmin
+                                            } elseif ($notification->type === 'App\Notifications\CreateNewOrder') {
+                                                $icon = '<i class="far fa-fw fa-file-alt me-1"></i>';
+                                            } elseif ($notification->type === 'App\Notifications\NewUser') {
+                                                $icon = '<i class="fa fa-fw fa-user-plus text-info"></i>';
+                                            } elseif ($notification->type === 'App\Notifications\CreateProduct') {
+                                                $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>';
+                                            } else {
+                                                $icon = '<i class="fa fa-info-circle"></i>'; // Icon mặc định
+                                            }
+                                        @endphp
+
+                                        <li class="{{ $notification->read_at ? 'read' : 'unread' }}" data-id="{{ $notification->id }}">
+                                            <a class="d-flex text-dark py-2 mark-as-read" href="{{ $notification->data['link'] }}" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
+                                                <div class="flex-shrink-0 mx-3 mt-2">
+                                                    {!! $icon !!}
+                                                </div>
+                                                <div class="flex-grow-1 fs-sm pe-2">
+                                                    <div class="fw-semibold" style="max-width: 200px; word-wrap: break-word; white-space: pre-wrap; display: block;">{!! $notification->data['message'] !!}</div>
+                                                    <div class="text-muted">{{ $notification->created_at->format('d-m-Y') }}</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endforeach
                                     @else
                                         <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
                                     @endif

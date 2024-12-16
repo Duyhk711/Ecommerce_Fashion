@@ -34,7 +34,7 @@ class NewUser extends Notification
             'category' => 'admin',
             'product_id' => $this->user->id,
             'message' => $this->message,
-            'link' => route('admin.customer.index'),
+            'link' => route('admin.users.clients'),
             'title' => $this->title,
         ];
     }
@@ -45,7 +45,7 @@ class NewUser extends Notification
             'category' => 'admin',
             'voucher_id' => $this->user->id,
             'message' => $this->message,
-            'link' => route('admin.user.index'),
+            'link' => route('admin.users.clients'),
             'title' => $this->title,
         ]);
     }
