@@ -52,21 +52,21 @@
           <div class="row push p-sm-2 p-lg-4">
             <div class="offset-xl-1 col-xl-4 order-xl-1">
               <p class="bg-body-light p-4 rounded-3 text-muted fs-sm">
-                Your account’s vital info. Your username will be publicly visible.
+                Thông tin quan trọng của tài khoản của bạn. Tên người dùng của bạn sẽ được hiển thị công khai.
               </p>
             </div>
             <div class="col-xl-6 order-xl-0">
               <form id="updateProfileForm"  enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
-                  <label class="form-label" for="dm-profile-edit-username">Username</label>
+                  <label class="form-label" for="dm-profile-edit-username">Tên tài khoản</label>
                   <input type="text" class="form-control" id="dm-profile-edit-username" name="name" placeholder="Enter your username.." value="{{ Auth::user()->name }}">
                   @error('name')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="mb-4">
-                  <label class="form-label" for="dm-profile-edit-email">Email Address</label>
+                  <label class="form-label" for="dm-profile-edit-email">Email</label>
                   <input type="email" class="form-control" id="dm-profile-edit-email" name="email" placeholder="Enter your email.." value="{{ Auth::user()->email }}">
                   @error('email')
                     <span class="text-danger">{{ $message }}</span>
@@ -89,7 +89,7 @@
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
-                
+
                 <button type="submit" class="btn btn-alt-primary">
                   <i class="fa fa-check-circle opacity-50 me-1"></i> Cập nhật hồ sơ
                 </button>
@@ -101,7 +101,7 @@
           <div class="row push p-sm-2 p-lg-4">
             <div class="offset-xl-1 col-xl-4 order-xl-1">
               <p class="bg-body-light p-4 rounded-3 text-muted fs-sm">
-                Changing your sign in password is an easy way to keep your account secure.
+                Thay đổi mật khẩu đăng nhập là cách dễ dàng để giữ an toàn cho tài khoản của bạn.
               </p>
             </div>
             <div class="col-xl-6 order-xl-0">
@@ -136,24 +136,24 @@
                     <i class="fa fa-check-circle opacity-50 me-1"></i> Cập nhật mật khẩu
                 </button>
             </form>
-            
+
             </div>
           </div>
         </div>
-        
+
       </div>
     </div>
     <!-- END Edit Account -->
   </div>
 
-</main>      
+</main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
   function previewAvatar() {
     const avatarInput = document.getElementById('dm-profile-edit-avatar');
     const preview = document.getElementById('avatar-preview');
-    
+
     if (avatarInput.files && avatarInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
