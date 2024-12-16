@@ -97,7 +97,7 @@
                      <div class="search-drawer offcanvas offcanvas-top" tabindex="-1" id="search-drawer">
                          <div class="container">
                              <div class="search-header d-flex-center justify-content-between mb-3">
-                                 <h3 class="title m-0">What are you looking for?</h3>
+                                 <h3 class="title m-0">Bạn đang tìm kiếm gì?</h3>
                                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                                      aria-label="Close"></button>
                              </div>
@@ -107,12 +107,12 @@
                                      @csrf
                                      <!--Search Field-->
                                      <div class="d-flex searchField">
-                                         <div class="search-category">
+                                         {{-- <div class="search-category">
                                              <select class="rgsearch-category rounded-end-0">
                                                  <option value="0">All Categories</option>
                                                  <option value="1">- All</option>
                                              </select>
-                                         </div>
+                                         </div> --}}
                                          <div class="input-box d-flex fl-1">
                                              <input type="text" class="input-text border-start-0 border-end-0"
                                                  placeholder="Search for products..." value="{{ request('query') }}"
@@ -126,14 +126,14 @@
                                      <!--End Search Field-->
 
                                      <!--Search popular-->
-                                     <div class="popular-searches d-flex-justify-center mt-3">
+                                     {{-- <div class="popular-searches d-flex-justify-center mt-3">
                                          <span class="title fw-600">Trending Now:</span>
                                          <div class="d-flex-wrap searches-items">
                                              <a class="text-link ms-2" href="#">T-Shirt,</a>
                                              <a class="text-link ms-2" href="#">Shoes,</a>
                                              <a class="text-link ms-2" href="#">Bags</a>
                                          </div>
-                                     </div>
+                                     </div> --}}
                                      <!--End Search popular-->
                                      <!--Search products-->
                                      <!--End Search products-->

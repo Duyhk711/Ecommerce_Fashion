@@ -43,11 +43,17 @@ class ProductController extends Controller
             $product->total_stock = $product->variants->sum('stock');
             $product->variant_count = $product->variants->count();
         }
+
+        return view('admin.products.index', compact('products', 'searchTerm', 'catalogueId', 'minPrice', 'maxPrice', 'stockStatus', 'catalogues'));
+    }
+
+    public function trashed(Request $request)
+    {
         $deletedProducts = Product::onlyTrashed()
             ->orderBy('deleted_at', 'desc')
-            ->get();
+            ->paginate(10);
 
-        return view('admin.products.index', compact('products', 'searchTerm', 'catalogueId', 'minPrice', 'maxPrice', 'stockStatus', 'deletedProducts', 'catalogues'));
+        return view('admin.products.trashed', compact('deletedProducts'));
     }
 
     public function create()
@@ -59,9 +65,7 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        // dd($request->all());
         $validatedData = $request->validated();
-
         try {
             $this->productService->storeProduct($validatedData, $request);
 
@@ -119,7 +123,6 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $id)
     {
-        // dd($request->all());
         try {
             $this->productService->updateProduct($id, $request->validated(), $request);
 
@@ -131,10 +134,15 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $this->productService->softDeleteProduct($id);
-
-        return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công.');
+        $result = $this->productService->softDeleteProduct($id);
+    
+        if ($result) {
+            return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công.');
+        } else {
+            return redirect()->route('admin.products.index')->with('error', 'Không thể xóa sản phẩm vì nó đã có trong đơn hàng.');
+        }
     }
+    
 
     public function restore($id)
     {

@@ -178,7 +178,7 @@ class ChartController extends Controller
             ->value('total_value');
 
         // Chuyển đổi giá trị thành định dạng tiền tệ (VND)
-        $formattedTotalValue =number_format($totalCartValue * 1000 , 0, '.', '.')  ;
+        $formattedTotalValue = number_format($totalCartValue * 1000, 0, '.', '.');
 
         // Trả về dữ liệu dưới dạng JSON
         return response()->json([
@@ -205,4 +205,70 @@ class ChartController extends Controller
             'usage_rate' => number_format($usageRate, 2) . '%'
         ]);
     }
+
+    public function commentReport(Request $request)
+    {
+        // Lọc theo loại thời gian: tuần, tháng, năm
+        $type = $request->get('type', 'week'); // Mặc định là tuần
+        $startDate = null;
+        $endDate = now(); // Ngày hiện tại
+    
+        // Xác định khoảng thời gian
+        switch ($type) {
+            case 'week':
+                $startDate = now()->startOfWeek();
+                break;
+            case 'month':
+                $startDate = now()->startOfMonth();
+                break;
+            case 'year':
+                $startDate = now()->startOfYear();
+                break;
+            default:
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Loại thời gian không hợp lệ.'
+                ], 400);
+        }
+    
+        // Truy vấn tên khách hàng, bình luận, ngày bình luận và đánh giá
+        $comments = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->select(
+                'users.name as customer_name',
+                'comments.comment',
+                'comments.created_at as comment_date',
+                'comments.rating'
+            )
+            ->whereBetween('comments.created_at', [$startDate, $endDate])
+            ->orderBy('comments.created_at', 'desc') // Sắp xếp theo ngày bình luận giảm dần
+            ->get()
+            ->map(function ($comment) {
+                // Định dạng ngày khi trả về
+                $comment->comment_date = \Carbon\Carbon::parse($comment->comment_date)->format('H:i d/m/Y');
+                return $comment;
+            });
+    
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'comments' => $comments
+            ]
+        ]);
+    }
+
+    public function getOrders(Request $request)
+    {
+        // Lọc các đơn hàng mới nhất, kèm theo thông tin các sản phẩm trong đơn hàng
+        $orders = Order::with('items')  // Lấy thông tin các OrderItem liên quan
+            ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo, từ mới nhất
+            ->take(5) // Chỉ lấy 5 đơn hàng mới nhất
+            ->get();
+
+        // Trả về dữ liệu dưới dạng JSON
+        return response()->json([
+            'data' => $orders
+        ]);
+    }
+    
 }
