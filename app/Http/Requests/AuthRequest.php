@@ -34,9 +34,9 @@ class AuthRequest extends FormRequest
                 return $this->verifyOtpRules();
             case 'admin.reset-password.post':
                 return $this->resetPasswordRules();
-            case 'admin.api.profile.update':
+            case 'admin.update-profile':
                 return $this->profileRules();
-            case 'admin.api.profile.updatePassword':
+            case 'admin.update-password':
                 return $this->updatePasswordRules();
             default:
                 return [];

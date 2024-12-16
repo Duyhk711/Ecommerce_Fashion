@@ -106,6 +106,7 @@ class VouchersController extends Controller
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
                 'is_used' => false,
+                'limit' => $voucher->usage_limit,
             ]);
 
             $voucher->decrement('quantity');
@@ -122,6 +123,11 @@ class VouchersController extends Controller
         $userId = Auth::id();
 
         $userVouchers = UserVoucher::where('user_id', $userId)
+            ->whereColumn('is_used', '<', 'limit')
+            ->whereHas('voucher', function($query) {
+                $query->where('end_date', '>', now()) // Điều kiện để voucher chưa hết hạn
+                    ->where('is_active', 1); // Chỉ lấy voucher còn hoạt động
+            })
             ->with('voucher')
             ->get();
 

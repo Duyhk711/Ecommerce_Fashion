@@ -104,7 +104,7 @@ Route::prefix('admin')
 
             // profile
             Route::view('/profile', 'admin.auth.account-profile')->name('account-profile');
-            Route::post('/profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
+            Route::post('/profile/update-profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
             Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
 
             // BANNER
