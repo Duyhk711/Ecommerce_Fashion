@@ -185,7 +185,7 @@
                                     <div class="slideshow-content-in">
                                         <div class="wrap-caption animation style1">
                                             <h2 class="ss-mega-title">
-                                                Lan tỏa Năng Lượng Tích Cực <br /> Với Hema
+                                                Lan tỏa Năng Lượng Tích Cực <br /> Với PolyFashion
                                             </h2>
                                             <p class="ss-sub-title xs-hide">
                                                 Những món đồ thiết yếu không thể thiếu trong tủ đồ của phụ nữ cho năm nay
