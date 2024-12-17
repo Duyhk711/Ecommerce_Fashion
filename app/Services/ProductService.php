@@ -85,6 +85,10 @@ class ProductService
             'is_hot_deal' => $request->has('is_hot_deal') ? 1 : 0,
             'is_show_home' => $request->has('is_show_home') ? 1 : 0,
         ]);
+
+        if (empty($validatedData['price_sale'])) {
+            $validatedData['price_sale'] = $validatedData['price_regular'];
+        }
         DB::beginTransaction();
         try {
             // Lưu thông tin chung của sản phẩm
@@ -245,7 +249,9 @@ class ProductService
             'is_hot_deal' => $request->has('is_hot_deal') ? 1 : 0,
             'is_show_home' => $request->has('is_show_home') ? 1 : 0,
         ]);
-
+        if (empty($validatedData['price_sale'])) {
+            $validatedData['price_sale'] = $validatedData['price_regular'];
+        }
         DB::beginTransaction();
 
         try {
