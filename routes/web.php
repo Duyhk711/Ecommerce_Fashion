@@ -54,6 +54,8 @@ Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/count', [CartController::class, 'getCartCount']);
+Route::get('/cart/check-stock', [CartController::class, 'checkStock'])->name('cart.checkStock');
+
 
 // page
 Route::view('/contact', 'client.contact')->name('contact');

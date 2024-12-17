@@ -92,18 +92,23 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="minimum_order_value" class="required-label">Giá trị đơn hàng tối thiểu</label>
+                        <label for="minimum_order_value " class="required-label">Giá trị đơn hàng tối thiểu</label>
+                        <span class="form-text text-muted ms-3">(Giá trị nhập sẽ nhân với 1,000 đ)</span>
                         <input type="number" name="minimum_order_value" class="form-control" id="minimum_order_value"
                             placeholder="Nhập giá trị tối thiểu" value="{{ old('minimum_order_value') }}" min="0">
                         <span id="minimum_order_value_error" class="error-message"></span>
+
                     </div>
 
                     <div id="discount_value_container" class="form-group mb-3">
                         <label for="discount_value" class="required-label">Giá trị giảm</label>
+                        <span class="form-text text-muted ms-3">Giá trị nhập sẽ nhân với 1,000 (đ)</span>
                         <input type="number" name="discount_value" class="form-control" id="discount_value"
                             placeholder="Nhập giá trị giảm" value="{{ old('discount_value') }}" min="1">
                         <span id="discount_value_error" class="error-message"></span>
+
                     </div>
+
 
                     <div class="form-group mb-3">
                         <label for="quantity" class="required-label">Số lượng</label>
@@ -183,9 +188,9 @@
             discountValueError.innerHTML = '';
 
             // Kiểm tra nếu giá trị giảm lớn hơn giá trị đơn hàng tối thiểu
-            if (minimumOrderValue > 0 && discountValue > minimumOrderValue) {
+            if (minimumOrderValue > 0 && discountValue >= minimumOrderValue) {
                 discountValueError.innerHTML =
-                    '<span style="color: red;">Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.</span>';
+                    '<span style="color: red;">Giá trị giảm không thể lớn hơn hoặc bằng giá trị đơn hàng tối thiểu.</span>';
             }
 
             // Kiểm tra loại giảm giá là phần trăm và giá trị giảm lớn hơn 100%

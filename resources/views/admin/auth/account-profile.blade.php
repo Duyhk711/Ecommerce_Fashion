@@ -18,7 +18,7 @@
                   <h1 class="fs-4 fw-bold mb-1">{{ Auth::user()->name }}</h1>
           @endif
           <h2 class="fs-sm fw-medium text-muted mb-0">
-            Edit Account
+            Chỉnh sửa thông tin tài khoản
           </h2>
         </div>
         <div class="space-x-1">
@@ -59,22 +59,22 @@
               <form id="updateProfileForm"  enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
-                  <label class="form-label" for="dm-profile-edit-username">Tên tài khoản</label>
-                  <input type="text" class="form-control" id="dm-profile-edit-username" name="name" placeholder="Enter your username.." value="{{ Auth::user()->name }}">
+                  <label class="form-label" for="dm-profile-edit-username">Tên người dùng</label>
+                  <input type="text" class="form-control" id="dm-profile-edit-username" name="name" placeholder="Nhập tên người dùng của bạn.." value="{{ Auth::user()->name }}">
                   @error('name')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="mb-4">
-                  <label class="form-label" for="dm-profile-edit-email">Email</label>
-                  <input type="email" class="form-control" id="dm-profile-edit-email" name="email" placeholder="Enter your email.." value="{{ Auth::user()->email }}">
+                  <label class="form-label" for="dm-profile-edit-email">Địa chỉ email</label>
+                  <input type="email" class="form-control" id="dm-profile-edit-email" name="email" placeholder="Nhập email của bạn.." value="{{ Auth::user()->email }}">
                   @error('email')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="mb-4">
                   <label class="form-label" for="dm-profile-edit-tel">Số điện thoại</label>
-                  <input type="text" class="form-control" id="dm-profile-edit-email" name="phone" placeholder="Enter your số điện thoại.." value="{{ Auth::user()->phone }}">
+                  <input type="text" class="form-control" id="dm-profile-edit-tel" name="phone" placeholder="Nhập số điện thoại của bạn.." value="{{ Auth::user()->phone }}">
                   @error('phone')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
@@ -192,7 +192,7 @@
         const formData = new FormData(this);
 
         $.ajax({
-            url: '/admin/profile/update',
+            url: '/admin/profile/update-profile',
             method: 'POST',
             data: formData,
             contentType: false,

@@ -150,7 +150,16 @@
                         Giảm ${voucher.discount_value}K cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
-                        <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                        <div class="voucher-expiry"> 
+                           HSD: ${new Date(voucher.end_date).toLocaleString('vi-VN', { 
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    })}
+                            </div>
                         <div>
                             <button class="${buttonClass}" 
                                     data-code="${voucher.code}" 

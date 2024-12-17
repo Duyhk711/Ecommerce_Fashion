@@ -50,12 +50,12 @@ class VoucherController extends Controller
             }
             if (
                 isset($data['minimum_order_value']) &&
-                $data['discount_value'] > $data['minimum_order_value']
+                $data['discount_value'] >= $data['minimum_order_value']
             ) {
                 return redirect()
                     ->back()
                     ->withErrors([
-                        'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
+                        'discount_value' => 'Giá trị giảm không thể lớn hơn hoặc bằng giá trị đơn hàng tối thiểu.',
                     ])
                     ->withInput();
             }
@@ -126,12 +126,12 @@ class VoucherController extends Controller
             // Kiểm tra điều kiện bổ sung nếu cần
             if (
                 isset($data['minimum_order_value']) &&
-                $data['discount_value'] > $data['minimum_order_value']
+                $data['discount_value'] >= $data['minimum_order_value']
             ) {
                 return redirect()
                     ->back()
                     ->withErrors([
-                        'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
+                        'discount_value' => 'Giá trị giảm không thể lớn hơn hoặc bằng giá trị đơn hàng tối thiểu.',
                     ])
                     ->withInput();
             }

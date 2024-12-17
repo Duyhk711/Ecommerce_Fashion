@@ -76,48 +76,53 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
-    $.ajax({
-        url: "{{ route('user.vouchers') }}",
-        type: "GET",
-        success: function(response) {
-            let container = $('#saved-vouchers-container');
-            container.empty();
-
-            if (response.success) {
-                let vouchers = response.vouchers;
-                vouchers.forEach(voucher => {
-                    container.append(`
+            $.ajax({
+                url: "{{ route('user.vouchers') }}",
+                type: "GET",
+                success: function(response) {
+                    let container = $('#saved-vouchers-container');
+                    container.empty();
+                    if (response.success) {
+                        let vouchers = response.vouchers;
+                        vouchers.forEach(voucher => {
+                            container.append(`
                         <div class="voucher-card mb-4">
                             <div class="voucher-header">${voucher.description}</div>
                             <div class="voucher-code" id="voucher-code-${voucher.id}">${voucher.code}</div>
                             <div class="voucher-description">Giảm ${voucher.discount_type === 'percentage' ? voucher.discount_value + '%' : voucher.discount_value + 'K'} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K</div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry">HSD: ${voucher.expiry_date}</div>
-                                ${
-                                voucher.is_used 
-                                ? `<button class="voucher-copy used-button" disabled>Đã dùng</button>` 
-                                : `<a href="{{ route('shop') }}">
+                                <div class="voucher-expiry">
+                                    HSD: ${new Date(voucher.expiry_date).toLocaleString('vi-VN', { 
+                                        year: 'numeric', 
+                                        month: '2-digit', 
+                                        day: '2-digit', 
+                                        hour: '2-digit', 
+                                        minute: '2-digit',
+                                        hour12: false 
+                                    })}
+                                </div>
+
+                            <a href="{{ route('shop') }}">
                                    <button class="voucher-copy" onclick="copyCode('voucher-code-${voucher.id}')">Dùng ngay</button>
-                               </a>`
-                                }
+                            </a>
                             </div>
                         </div>
                     `);
-                });
-            } else {
-                container.append(`
+                        });
+                    } else {
+                        container.append(`
                     <div class="text-center">
                         <img src="https://png.pngtree.com/png-vector/20220524/ourmid/pngtree-voucher-discount-png-image_4613299.png" alt="Chưa có voucher" class="img-fluid" style="max-width: 300px; margin: 20px auto;">
                         <h3 class="text-muted"> Bạn chưa lưu mã giảm giá nào.</h3>
                     </div>
                 `);
-            }
-        },
-        error: function() {
-            alert('Không thể load dữ liệu voucher');
-        }
-    });
-});
+                    }
+                },
+                error: function() {
+                    alert('Không thể load dữ liệu voucher');
+                }
+            });
+        });
 
 
         function copyCode(voucherId) {
