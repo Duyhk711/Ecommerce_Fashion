@@ -104,7 +104,7 @@
                                                         @csrf
 
                                                         <button type="submit" class="btn btn-sm btn-alt-success"
-                                                            style="height: 30px" data-bs-toggle="tooltip" title="Activate">
+                                                            style="height: 30px" data-bs-toggle="tooltip">
                                                             <i class="fa fa-fw fa-check"></i>
                                                         </button>
                                                     </form>
@@ -164,7 +164,7 @@
                                                         @csrf
 
                                                         <button type="submit" class="btn btn-sm btn-alt-danger"
-                                                            data-bs-toggle="tooltip" title="Deactivate">
+                                                            data-bs-toggle="tooltip">
                                                             <i class="fa-solid fa-power-off"></i>
                                                         </button>
                                                     </form>
@@ -173,7 +173,7 @@
                                                         method="POST" style="display:inline;" class="form-activate">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-alt-success"
-                                                            data-bs-toggle="tooltip" title="Activate">
+                                                            data-bs-toggle="tooltip">
                                                             <i class="fa fa-fw fa-check"></i>
                                                         </button>
                                                     </form>

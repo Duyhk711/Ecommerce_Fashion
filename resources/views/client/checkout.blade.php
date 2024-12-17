@@ -402,8 +402,7 @@
                                                                 <input id="paymentRadio4" value="COD"
                                                                     name="payment_method" type="radio" class="radio"
                                                                     checked="checked" />
-                                                                <label for="paymentRadio4 font-uppercase"
-                                                                    class="mb-0">Thanh
+                                                                <label for="paymentRadio4" class="mb-0">Thanh
                                                                     toán khi nhận hàng</label>
                                                             </span>
                                                         </div>
@@ -631,7 +630,7 @@
                 }
 
                 // Kiểm tra định dạng số điện thoại
-                if (field.id === 'customer_phone' && value && !/^[0-9]{10,11}$/.test(value)) {
+                if (field.id === 'customer_phone' && value && !/^0[0-9]{9,10}$/.test(value)) {
                     errorMessage = 'Số điện thoại không hợp lệ';
                 }
 
@@ -1114,7 +1113,13 @@
                         // discount.innerHTML = data.discount;
                         // console.log(`Giảm giá: ${data.voucher}`);
                     } else {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: data.message, // Lấy lỗi đầu tiên
+                            confirmButtonText: 'OK'
+                        });
+                        // alert(data.message);
                     }
                 })
                 .catch(error => console.error('Error:', error));

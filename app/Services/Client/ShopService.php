@@ -34,9 +34,9 @@ class ShopService
             $cate = Catalogue::where('slug', $request->input('danhmuc'))->first();
             // dd($request->has('categories'));
             $products->filterByCategory($cate->id);
-        } else if ($request->has('price_text')) {
+        } else if ($request->has('gia')) {
             // dd('ok');
-            $products->filterByPrice($request->input('price_text'));
+            $products->filterByPrice($request->input('gia'));
         } else if ($request->has('mau')) {
             $products->filterByAttributes($request->input('mau'));
         } else if ($request->has('kichco')) {

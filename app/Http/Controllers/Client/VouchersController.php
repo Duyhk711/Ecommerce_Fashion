@@ -156,8 +156,9 @@ class VouchersController extends Controller
         // Lấy các mã giảm giá khả dụng cho người dùng hiện tại
         $vouchers = Voucher::join('user_voucher', 'vouchers.id', '=', 'user_voucher.voucher_id')
             ->where('user_voucher.user_id', $user->id)
-            ->where('user_voucher.is_used', 0)
+            ->whereColumn('user_voucher.is_used', '<', 'user_voucher.limit')
             ->where('vouchers.is_active', 1)
+            ->where('vouchers.quantity', '>', 0)
             ->whereDate('vouchers.start_date', '<=', now())
             ->whereDate('vouchers.end_date', '>=', now())
             ->select('vouchers.code', 'vouchers.discount_type', 'vouchers.discount_value', 'vouchers.minimum_order_value')
@@ -179,7 +180,8 @@ class VouchersController extends Controller
             ->whereDate('end_date', '>=', now())
             ->whereHas('users', function ($query) use ($userId) {
                 $query->where('user_id', $userId)
-                    ->where('is_used', 0); // Chỉ lấy mã giảm giá chưa được sử dụng
+
+                    ->whereColumn('is_used', '<', 'limit'); // Chỉ lấy mã giảm giá chưa được sử dụng
             })
             ->first();
 
