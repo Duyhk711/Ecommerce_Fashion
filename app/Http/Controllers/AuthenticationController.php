@@ -203,12 +203,22 @@ class AuthenticationController extends Controller
 
     public function updatePassword(AuthRequest $request)
     {
+        // Kiểm tra mật khẩu hiện tại
         $user = User::find(Auth::user()->id);
         if (!Hash::check($request->input('current_password'), $user->password)) {
             return response()->json(['success' => false, 'message' => 'Mật khẩu hiện tại không đúng'], 422);
         }
+
+        // Kiểm tra mật khẩu xác nhận
+        if ($request->input('new_password') !== $request->input('new_password_confirmation')) {
+            return response()->json(['success' => false, 'message' => 'Mật khẩu xác nhận không khớp'], 422);
+        }
+
+        // Cập nhật mật khẩu mới
         $user->password = Hash::make($request->input('new_password'));
         $user->save();
+
         return response()->json(['success' => true, 'message' => 'Mật khẩu đã được cập nhật thành công!']);
     }
+
 }

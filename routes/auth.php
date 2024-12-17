@@ -21,6 +21,8 @@ Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswo
 Route::post('/reset-password', [AuthenticationController::class, 'resetPassword'])->name('reset-password');
 
 Route::get('/login-otp-email', [OtpController::class, 'loginOtpEmail'])->name('login-otp-email');
+Route::post('/resend-otp-email', [OtpController::class, 'resendOtp_mail'])->name('resend-otp-email');
+
 Route::get('/login-otp-phone', [OtpController::class, 'loginOtpPhone'])->name('login-otp-phone');
 
 Route::post('/send-otp-email', [OtpController::class, 'sendOtp'])->name('send-otp-email');
@@ -31,6 +33,9 @@ Route::post('/login-otp-phone', [OtpController::class, 'verifyOtpPhone'])->name(
 Route::post('/send-otp-phone', [OtpController::class, 'sendOtpPhone'])->name('send.otp.phone');
 Route::post('/resend-otp-phone', [OtpController::class, 'resendOtpPhone'])->name('resend.otp.phone');
 Route::post('/verify-otp-phone', [OtpController::class, 'verifyOtpPhone'])->name('verifyOtpPhone');
+
+Route::post('/send-otp', [OtpController::class, 'resendOtp'])->name('resend-otp');
+
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);

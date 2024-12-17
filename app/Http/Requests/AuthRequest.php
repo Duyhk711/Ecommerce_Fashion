@@ -42,6 +42,7 @@ class AuthRequest extends FormRequest
                 return [];
         }
     }
+
     public function messages()
     {
         return [
@@ -64,6 +65,7 @@ class AuthRequest extends FormRequest
             'new_password.confirmed' => 'Xác nhận mật khẩu không khớp.',
         ];
     }
+
     private function loginRules()
     {
         return [
@@ -71,6 +73,7 @@ class AuthRequest extends FormRequest
             'password' => 'required',
         ];
     }
+
     private function registerRules()
     {
         return [
@@ -79,32 +82,36 @@ class AuthRequest extends FormRequest
             'password' => 'required|confirmed|min:8',
         ];
     }
+
     private function otpRules()
     {
         return [
             'email' => 'required|email',
         ];
     }
+
     private function verifyOtpRules()
     {
         return [
             'otp' => 'required',
         ];
     }
+
     private function resetPasswordRules()
     {
         return [
             'password' => 'required|confirmed|min:8',
         ];
     }
+
     public function profileRules()
     {
-    return [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email,' . $this->user()->id,
-        'phone' => 'nullable|regex:/^[0-9]{10}$/',
-        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ];  
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $this->user()->id,
+            'phone' => 'nullable|regex:/^[0-9]{10}$/',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
     }
 
     public function updatePasswordRules()

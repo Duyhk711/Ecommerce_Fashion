@@ -10,13 +10,13 @@ use Carbon\Carbon;
 class ReleaseVoucherCommand extends Command
 {
     protected $signature = 'voucher:release';
-    protected $description = 'Giải phóng voucher không sử dụng sau 2 tiếng kể từ lúc lưu';
+    protected $description = 'Giải phóng voucher không sử dụng sau 5 phút kể từ lúc lưu';
 
     public function handle()
     {
-        $twoHoursAgo = now()->subHours(2);
+        $fiveMinutesAgo = now()->subMinutes(5);
         // Lấy danh sách UserVoucher đủ điều kiện giải phóng
-        $userVouchers = UserVoucher::where('created_at', '<=', $twoHoursAgo)
+        $userVouchers = UserVoucher::where('created_at', '<=', $fiveMinutesAgo)
             ->whereHas('voucher', function ($query) {
                 $query->whereColumn('user_voucher.is_used', '<', 'vouchers.usage_limit');
             })

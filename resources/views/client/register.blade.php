@@ -35,11 +35,14 @@
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="phone">Số điện thoại <span class="required">*</span></label>
-                                    <input type="phone" name="phone" placeholder="Số điện thoại" id="CustomerPhone" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" />
+                                    <input type="text" name="phone" placeholder="Số điện thoại" id="CustomerPhone" value="{{ old('phone') }}"
+                                        class="form-control @error('phone') is-invalid @enderror"
+                                        pattern="^(0|\+84)(3|5|7|8|9)\d{8}$" title="Số điện thoại không hợp lệ" />
                                     @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+
                                 <div class="form-group col-12">
                                     <label for="password">Mật khẩu <span class="required">*</span></label>
                                     <input type="password" name="password" placeholder="Mật khẩu" id="CustomerPassword" class="form-control @error('password') is-invalid @enderror" />
