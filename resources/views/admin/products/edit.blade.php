@@ -285,7 +285,7 @@
                             <div class="form-group image-preview" id="sub-images-preview">
                                 <label class="form-label">Tải lên ảnh phụ<span class="text-danger">*</span>:</label>
                                 <div class="custom-file">
-                                    <input type="file" name="images[]" class="form-control-file"
+                                    <input type="file" name="images[]" class="form-control-file" multiple
                                         id="sub-images-input">
                                     <label class="custom-file-label" for="sub-images-input"></label>
                                     <input type="hidden" id="deleted-images" name="deleted_images" value="[]">
@@ -682,7 +682,7 @@
 
                     // Tạo biến thể từ tổ hợp giá trị
                     let variantIndex2 = $('.variant').length; // Lấy số lượng biến thể hiện có
-
+                    let newVariantIndex = 0;
                     combinations.forEach((combination) => {
                         // Lấy giá trị của kích cỡ và màu sắc từ tổ hợp
                         const size = getAttributeValueName(attributesData[0].attributeId,
@@ -733,19 +733,18 @@
 
                         // Thêm biến thể mới vào cuối danh sách biến thể
                         variantsContainer.append(variantHtml);
-
-                        // Lưu thông tin thuộc tính của từng biến thể
+                        // let variantIndex2 = $('.variant').length;
                         combination.forEach((valueId, attrIndex) => {
                             const attributeId = attributesData[attrIndex]
                                 .attributeId;
-                            const variantIndex2 = 0;
-                            $(`<input type="hidden" name="new_values[${variantIndex2}][${attrIndex}][attribute_id]" value="${attributeId}">`)
-                                .appendTo(variantsContainer);
-                            $(`<input type="hidden" name="new_values[${variantIndex2}][${attrIndex}][attribute_value_id]" value="${valueId}">`)
-                                .appendTo(variantsContainer);
+                            // const variantIndex2 = 0;
+                            $(`<input type="hidden" name="new_values[${newVariantIndex}][${attrIndex}][attribute_id]" value="${attributeId}">`)
+            .appendTo(variantsContainer);
+        $(`<input type="hidden" name="new_values[${newVariantIndex}][${attrIndex}][attribute_value_id]" value="${valueId}">`)
+            .appendTo(variantsContainer);
                         });
 
-                        variantIndex2++; // Tăng chỉ số cho biến thể tiếp theo
+                        newVariantIndex++; // Tăng chỉ số cho biến thể tiếp theo
                     });
                 });
             });
@@ -762,8 +761,7 @@
 
                 firstArray.forEach(value => {
                     combinations = combinations.concat(generateCombinations(restArrays, [...prefix,
-                        value
-                    ]));
+                    value]));
                 });
 
                 return combinations;
@@ -971,7 +969,7 @@
                 reader.readAsDataURL(file);
             });
         }
-       
+
     </script>
 
     {{-- validate variant --}}

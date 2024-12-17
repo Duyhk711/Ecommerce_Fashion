@@ -484,13 +484,25 @@
           // Tải dữ liệu khi trang được tải lần đầu
           loadTableData();
 
-          function formatNumber(number) {
-              // Nhân số với 1000
-              let formattedNumber = number * 1000;
+          function safeParseNumber(input) {
+                const number = Number(input);
+                return isNaN(number) ? 0 : number; // Trả về 0 nếu không chuyển được thành số
+            }
 
-              // Chuyển đổi thành chuỗi và ngắt thành phần hàng nghìn
-              return formattedNumber.toLocaleString('en', { maximumFractionDigits: 0 });
-          }
+            function formatNumber(number) {
+                if (typeof number !== 'number' || isNaN(number)) {
+                    console.error('Giá trị không hợp lệ:', number);
+                    return '0';
+                }
+
+                // Nhân số với 1000
+                const multipliedNumber = number * 1000;
+
+                // Định dạng số và thay dấu ',' thành '.'
+                const formattedNumber = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 }).format(multipliedNumber);
+                return formattedNumber.replace(/,/g, '.');
+            }
+
 
       });
 

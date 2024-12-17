@@ -114,7 +114,7 @@ class OrderController extends Controller
                     $statusMessage = "đã giao thành công, vui lòng xác nhận đã nhận được hàng để đánh giá đơn hàng";
                     break;
                 case 'huy_don_hang':
-                    $statusMessage = "đã bị hủy";
+                    $statusMessage = "đã bị hủy bởi hệ thống do đơn hàng đã gặp sự cố.";
                     break;
                 default:
                     $statusMessage = "trạng thái không xác định";

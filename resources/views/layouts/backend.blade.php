@@ -25,6 +25,8 @@
 
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
+    @vite(['resources/js/new_order_notify_admin.js'])
+    @vite(['resources/js/new_user_notify_admin.js'])
 
 </head>
 
@@ -573,33 +575,70 @@
                         <button type="button" class="btn btn-alt-secondary" id="page-header-notifications-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-bell"></i>
+                            <span class="notification-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @if(auth()->check())
+                                    @php
+                                        $adminNotifications = auth()->user()->unreadNotifications->where('data.category', 'admin');
+                                    @endphp
+                                    {{ $adminNotifications->count() }}
+                                @else
+                                    0
+                                @endif
+                            </span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-notifications-dropdown">
                             <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
                                 Thông báo
                             </div>
+                            <style>
+                                .read {
+                                    background-color: #ffffff !important;
+                                }
+                                .unread {
+                                    background-color: rgb(255, 250, 244) !important;
+                                }
+                            </style>
                             <ul class="nav-items my-2" style="max-height: 325px; overflow-y: auto; width: 300px;">
                                 @if(auth()->check())
-                                    @if(auth()->user()->notifications->count() > 0)
-                                        @foreach(auth()->user()->notifications as $notification)
-                                            <li>
-                                                <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                                                    <div class="flex-shrink-0 mx-3">
-                                                        <i class="far fa-fw fa-file-alt me-1"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 fs-sm pe-2">
-                                                        <div class="fw-semibold" style="max-width: 200px; word-wrap: break-word; white-space: pre-wrap; display: block;">{!! $notification->data['message'] !!}</div>
-                                                        <div class="text-muted">{{$notification->created_at}}</div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        @endforeach
+                                    @php
+                                        $adminNotifications = auth()->user()->notifications->where('data.category', 'admin');
+                                        $type = auth()->user()->notifications;
+                                    @endphp
+                                    @if($adminNotifications->count() > 0)
+                                    @foreach($adminNotifications as $notification)
+                                        @php
+                                            // Xác định icon dựa vào loại thông báo
+                                            if ($notification->type === 'App\Notifications\CreateNewVoucherAdmin') {
+                                                $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>'; // Icon cho CreateNewVoucherAdmin
+                                            } elseif ($notification->type === 'App\Notifications\CreateNewOrder') {
+                                                $icon = '<i class="far fa-fw fa-file-alt me-1"></i>';
+                                            } elseif ($notification->type === 'App\Notifications\NewUser') {
+                                                $icon = '<i class="fa fa-fw fa-user-plus text-info"></i>';
+                                            } elseif ($notification->type === 'App\Notifications\CreateProduct') {
+                                                $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>';
+                                            } else {
+                                                $icon = '<i class="fa fa-info-circle"></i>'; // Icon mặc định
+                                            }
+                                        @endphp
+
+                                        <li class="{{ $notification->read_at ? 'read' : 'unread' }}" data-id="{{ $notification->id }}">
+                                            <a class="d-flex text-dark py-2 mark-as-read" href="{{ $notification->data['link'] }}" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
+                                                <div class="flex-shrink-0 mx-3 mt-2">
+                                                    {!! $icon !!}
+                                                </div>
+                                                <div class="flex-grow-1 fs-sm pe-2">
+                                                    <div class="fw-semibold" style="max-width: 200px; word-wrap: break-word; white-space: pre-wrap; display: block;">{!! $notification->data['message'] !!}</div>
+                                                    <div class="text-muted">{{ $notification->created_at->format('d-m-Y') }}</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endforeach
                                     @else
                                         <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
                                     @endif
                                 @endif
-                                <li>
+                                {{-- <li>
                                     <a class="d-flex text-dark py-2" href="javascript:void(0)">
                                         <div class="flex-shrink-0 mx-3">
                                             <i class="fa fa-fw fa-user-plus text-info"></i>
@@ -644,7 +683,7 @@
                                             <div class="text-muted">2 hours ago</div>
                                         </div>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </div>
@@ -757,6 +796,44 @@
 
 </body>
 @yield('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.mark-as-read');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.dataset.url; // URL để đánh dấu đã đọc
+                const redirectLink = this.getAttribute('href'); // URL của thông báo
+                const notificationItem = this.closest('li'); // Phần tử thông báo
 
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    },
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Đổi class để thay đổi background
+                        notificationItem.classList.remove('unread');
+                        notificationItem.classList.add('read');
+
+                        // Giảm số lượng thông báo chưa đọc
+                        const countElement = document.querySelector('.notification-count');
+                        const currentCount = parseInt(countElement.textContent.trim());
+                        if (currentCount > 0) {
+                            countElement.textContent = currentCount - 1;
+                        }
+
+                        // Chuyển trang sau khi đánh dấu
+                        window.location.href = redirectLink;
+                    }
+                });
+            });
+        });
+    });
+
+</script>
 
 </html>

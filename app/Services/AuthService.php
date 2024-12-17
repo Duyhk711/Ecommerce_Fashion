@@ -65,6 +65,28 @@ class AuthService
 
         return $otp;
     }
+    public function resendOtp($email)
+    {
+        // Sinh mã OTP
+        $otp = rand(100000, 999999);
+        Session::put('otp', $otp);
+        Session::put('email', $email);
+        Session::put('otp_expires_at', now()->addMinutes(1));
+        Mail::to($email)->send(new OtpMail($otp));
+
+        return ['success' => true, 'message' => 'Mã OTP đã được gửi lại!'];
+    }
+    public function resendOtp_mail($email)
+    {
+        // Sinh mã OTP
+        $otp = rand(100000, 999999);
+        Session::put('otp', $otp);
+        Session::put('email', $email);
+        Session::put('otp_expires_at', now()->addMinutes(1));
+        Mail::to($email)->send(new OtpMail($otp));
+
+        return ['success' => true, 'message' => 'Mã OTP đã được gửi lại!'];
+    }
     public function verifyOtp($otp)
     {
         $storedOtp = Session::get('otp');
@@ -130,7 +152,7 @@ class AuthService
 
         $response = Http::withBasicAuth($this->sidKey, $this->secretKey)
             ->post($url, [
-                'from' => 'OTP phone', 
+                'from' => 'OTP phone',
                 'to' => $phone,
                 'text' => "Mã OTP của bạn là: $otp",
             ]);

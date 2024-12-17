@@ -188,23 +188,26 @@ class ChartController extends Controller
     }
 
     public function getVoucherUsageRate()
-    {
-        // Lấy tổng số voucher
-        $totalVouchers = Voucher::count();
+{
+    // Lấy tổng số voucher
+    $totalVouchers = Voucher::count();
 
-        // Lấy số lượng voucher đã được sử dụng
-        $usedVouchers = UserVoucher::distinct('voucher_id')->count('voucher_id');
+    // Lấy số lượng voucher đã được sử dụng (is_used = 1)
+    $usedVouchers = UserVoucher::where('is_used', 1)
+                                ->distinct('voucher_id')
+                                ->count('voucher_id');
 
-        // Tính tỷ lệ sử dụng voucher
-        $usageRate = $totalVouchers > 0 ? ($usedVouchers / $totalVouchers) * 100 : 0;
+    // Tính tỷ lệ sử dụng voucher
+    $usageRate = $totalVouchers > 0 ? ($usedVouchers / $totalVouchers) * 100 : 0;
 
-        // Trả về kết quả dưới dạng JSON
-        return response()->json([
-            'total_vouchers' => $totalVouchers,
-            'used_vouchers' => $usedVouchers,
-            'usage_rate' => number_format($usageRate, 2) . '%'
-        ]);
-    }
+    // Trả về kết quả dưới dạng JSON
+    return response()->json([
+        'total_vouchers' => $totalVouchers,
+        'used_vouchers' => $usedVouchers,
+        'usage_rate' => number_format($usageRate, 2) . '%'
+    ]);
+}
+
 
     public function commentReport(Request $request)
     {

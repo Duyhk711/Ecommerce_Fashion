@@ -236,7 +236,7 @@
                                     CHUYỂN
                                 </p>
                                 <div class="customCheckbox cart-tearm">
-                                    <input type="checkbox" value="allen-vela" id="cart-tearm">
+                                    <input type="checkbox" value="allen-vela" id="cart-tearm" checked>
                                     <label for="cart-tearm">Tôi đồng ý với các điều khoản và điều kiện</label>
                                 </div>
                                 <button type="submit" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">THANH

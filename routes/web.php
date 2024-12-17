@@ -54,6 +54,8 @@ Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/count', [CartController::class, 'getCartCount']);
+Route::get('/cart/check-stock', [CartController::class, 'checkStock'])->name('cart.checkStock');
+
 
 // page
 Route::view('/contact', 'client.contact')->name('contact');
@@ -116,6 +118,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
     Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
+    Route::get('/notifications/admin', [NotificationController::class, 'getNotifyAdmin']);
+    Route::get('/notifications/client', [NotificationController::class, 'getNotifyClient']);
 });
 
 // checkout
@@ -138,4 +142,4 @@ Route::get('/not-found', function () {
 })->name('not-found');
 
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
+Route::get('/notifications', [NotificationController::class, 'fetchNotificationsClient'])->name('notifications.fetch');

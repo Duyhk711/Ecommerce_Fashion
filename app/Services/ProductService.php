@@ -2,20 +2,24 @@
 
 namespace App\Services;
 
-use App\Models\Catalogue;
+use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Attribute;
+use App\Models\Catalogue;
+use App\Models\OrderItem;
+use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
-use App\Models\Attribute;
 use App\Models\VariantAttribute;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\CreateProduct;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ProductService
 {
 
-    public function listProducts($searchTerm, $catalogueId = null, $minPrice = null, $maxPrice = null, $stockStatus = null)
+    public function listProducts($searchTerm, $catalogueId = null, $minPrice = null, $maxPrice = null, $filterStatus = null)
     {
         $query = Product::with([
             'catalogue',
@@ -45,26 +49,28 @@ class ProductService
             $query->where('price_regular', '<=', $maxPrice);
         }
 
-        if ($stockStatus) {
-            $query->whereHas('variants', function ($query) use ($stockStatus) {
-                $query->select(DB::raw('sum(stock) as total_stock'))
-                    ->groupBy('product_id');
+        if ($filterStatus !== null) {
+            if ($filterStatus === '0' || $filterStatus === '1') {
+                $query->where('is_active', $filterStatus);
+            } else {
+                $query->whereHas('variants', function ($query) use ($filterStatus) {
+                    $query->select(DB::raw('sum(stock) as total_stock'))
+                        ->groupBy('product_id');
 
-                if ($stockStatus == 'low') {
-                    $query->havingRaw('sum(stock) < 10');
-                } elseif ($stockStatus == 'in_stock') {
-                    $query->havingRaw('sum(stock) >= 10');
-                } elseif ($stockStatus == 'out_of_stock') {
-                    $query->havingRaw('sum(stock) = 0');
-                }
-            });
+                    if ($filterStatus == 'low') {
+                        $query->havingRaw('sum(stock) < 10');
+                    } elseif ($filterStatus == 'in_stock') {
+                        $query->havingRaw('sum(stock) >= 10');
+                    } elseif ($filterStatus == 'out_of_stock') {
+                        $query->havingRaw('sum(stock) = 0');
+                    }
+                });
+            }
         }
 
         // Sắp xếp và phân trang
         return $query->orderBy('created_at', 'desc')->paginate(10);
     }
-
-
 
     public function getCreateData()
     {
@@ -83,6 +89,10 @@ class ProductService
             'is_hot_deal' => $request->has('is_hot_deal') ? 1 : 0,
             'is_show_home' => $request->has('is_show_home') ? 1 : 0,
         ]);
+
+        if (empty($validatedData['price_sale'])) {
+            $validatedData['price_sale'] = $validatedData['price_regular'];
+        }
         DB::beginTransaction();
         try {
             // Lưu thông tin chung của sản phẩm
@@ -117,7 +127,10 @@ class ProductService
             }
 
             $this->storeVariants($product, $validatedData, $request);
-
+            $users = User::all();
+            foreach ($users as $userNotify) {
+                $userNotify->notify(new CreateProduct($product, 'Có sản phẩm mới.', 'Sản phẩm mới'));
+            }
             DB::commit();
             return $product;
         } catch (\Exception $e) {
@@ -243,7 +256,9 @@ class ProductService
             'is_hot_deal' => $request->has('is_hot_deal') ? 1 : 0,
             'is_show_home' => $request->has('is_show_home') ? 1 : 0,
         ]);
-
+        if (empty($validatedData['price_sale'])) {
+            $validatedData['price_sale'] = $validatedData['price_regular'];
+        }
         DB::beginTransaction();
 
         try {
@@ -429,5 +444,24 @@ class ProductService
         $product->save();
 
         return true;
+    }
+
+    public function updateStockProductAfterCancleOrder($orderId){
+        $order = Order::find($orderId);
+        if (!$order) {
+            return redirect()->back()->with('error','Đơn hàng không tồn tại');
+        }
+
+        $orderItems = $order->items;
+        // dd($orderItems);
+        foreach ($orderItems as $item) {
+            $productVariant = ProductVariant::find($item->product_variant_id);
+
+            if ($productVariant) {
+                // Cộng lại số lượng
+                $productVariant->stock += $item->quantity;
+                $productVariant->save();
+            }
+        }
     }
 }

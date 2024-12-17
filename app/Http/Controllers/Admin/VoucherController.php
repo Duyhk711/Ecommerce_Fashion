@@ -50,12 +50,12 @@ class VoucherController extends Controller
             }
             if (
                 isset($data['minimum_order_value']) &&
-                $data['discount_value'] > $data['minimum_order_value']
+                $data['discount_value'] >= $data['minimum_order_value']
             ) {
                 return redirect()
                     ->back()
                     ->withErrors([
-                        'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
+                        'discount_value' => 'Giá trị giảm không thể lớn hơn hoặc bằng giá trị đơn hàng tối thiểu.',
                     ])
                     ->withInput();
             }
@@ -84,11 +84,16 @@ class VoucherController extends Controller
             broadcast(new CreateNewVoucherNotify($voucher))->toOthers();
 
             $users = User::all(); // Hoặc filter user theo tiêu chí cụ thể
-            $message = "Mã giảm giá mới <strong>{$voucher->code}</strong> giảm {$voucher->discount_value}";
+            $message = "Mã giảm giá mới <strong>{$voucher->code}</strong> giảm ";
             if ($voucher->discount_type == 'fixed') {
-                $message .= "K cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
+                $discountValue = number_format($voucher->discount_value * 1000, 0, '.', '.');
+                $minimumOrderValue = number_format($voucher->minimum_order_value * 1000, 0, '.', '.');
+
+                $message .= "{$discountValue}₫ cho đơn hàng từ {$minimumOrderValue}₫! Click để nhận ngay ưu đãi!!";
             } elseif ($voucher->discount_type == 'percentage') {
-                $message .= "% cho đơn hàng từ {$voucher->minimum_order_value}K! Click để nhận ngay ưu đãi!!";
+                $minimumOrderValue = number_format($voucher->minimum_order_value * 1000, 0, '.', '.');
+
+                $message .= "{$voucher->discount_value}% cho đơn hàng từ {$minimumOrderValue}₫! Click để nhận ngay ưu đãi!!";
             }
             $title = "Bạn đã nhận được voucher mới";
             foreach ($users as $user) {
@@ -121,12 +126,12 @@ class VoucherController extends Controller
             // Kiểm tra điều kiện bổ sung nếu cần
             if (
                 isset($data['minimum_order_value']) &&
-                $data['discount_value'] > $data['minimum_order_value']
+                $data['discount_value'] >= $data['minimum_order_value']
             ) {
                 return redirect()
                     ->back()
                     ->withErrors([
-                        'discount_value' => 'Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.',
+                        'discount_value' => 'Giá trị giảm không thể lớn hơn hoặc bằng giá trị đơn hàng tối thiểu.',
                     ])
                     ->withInput();
             }

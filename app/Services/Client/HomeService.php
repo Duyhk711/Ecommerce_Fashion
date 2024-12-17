@@ -35,45 +35,45 @@ class HomeService
 
     // Tìm kiếm sản phẩm theo tên
     public function searchProducts($query)
-    {
-        $query = trim($query);
-        
-        if (empty($query)) {
-            return collect();
+{
+    $query = trim($query);
+    
+    if (empty($query)) {
+        return collect();
+    }
+
+    // Tách từ khóa trong query
+    $keywords = preg_split('/\s+/', $query);
+
+    return Product::where(function ($q) use ($keywords) {
+        foreach ($keywords as $keyword) {
+            $keyword = trim($keyword);
+            if (!empty($keyword)) {
+                // Tìm kiếm theo tên sản phẩm (ưu tiên khớp chính xác)
+                $q->orWhere(function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', '%' . $keyword . '%')
+                      ->whereRaw('LENGTH(name) = ?', [strlen($keyword)]);
+                })
+                  // Tìm kiếm trong danh mục (cũng ưu tiên khớp chính xác)
+                  ->orWhereHas('catalogue', function ($q) use ($keyword) {
+                      $q->where('name', 'LIKE', '%' . $keyword . '%')
+                        ->whereRaw('LENGTH(name) = ?', [strlen($keyword)]);
+                  });
+            }
         }
-    
-        $keywords = preg_split('/\s+/', $query); 
-        
-        return Product::where(function ($q) use ($keywords) {
-            foreach ($keywords as $keyword) {
-                $keyword = trim($keyword);
-                if (!empty($keyword)) {
-                    $q->orWhere('name', 'LIKE', '%' . $keyword . '%')
-                      ->orWhere('description', 'LIKE', '%' . $keyword . '%')
-                      ->orWhere('meta_keywords', 'LIKE', '%' . $keyword . '%');
-                }
-            }
-        })
-        ->where('is_active', 1)
-        ->get();
-    }
-    
-    public function suggestRelatedProducts($query)
-    {
-        $keywords = explode(' ', $query);
-        $relatedProducts = Product::where(function ($q) use ($keywords) {
-            foreach ($keywords as $keyword) {
-                $q->orWhere('name', 'LIKE', '%' . $keyword . '%')
-                  ->orWhere('description', 'LIKE', '%' . $keyword . '%');
-            }
-        })
-        ->where('is_active', 1)
-        ->limit(5) 
-        ->get();
-    
-        return $relatedProducts;
-    }
-    
+    })
+    ->where('is_active', 1)  // Chỉ lấy sản phẩm hoạt động
+    ->orderByRaw('
+        CASE
+            WHEN name LIKE ? THEN 1
+            WHEN name LIKE ? THEN 2
+            ELSE 3
+        END', ['%' . $query . '%', $query])
+    ->get();
+}
+
+
+
 
     public function getBannerShowHome()
     {

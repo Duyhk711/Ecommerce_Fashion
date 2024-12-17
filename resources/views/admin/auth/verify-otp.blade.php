@@ -6,6 +6,7 @@
     <title>Dashmix - Xác Minh OTP</title>
     <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('admin/css/dashmix.min.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="page-container">

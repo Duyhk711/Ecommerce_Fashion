@@ -49,6 +49,30 @@ class OtpController extends Controller
         return response()->json(['success' => true, 'message' => 'OTP đã được gửi tới email của bạn.']);
     }
 
+    public function resendOtp(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        // Gọi phương thức resendOtp từ service
+        $result = $this->authService->resendOtp($request->email);
+
+        return response()->json($result);
+    }
+    public function resendOtp_mail(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        // Gọi phương thức resendOtp từ service
+        $result = $this->authService->resendOtp_mail($request->email);
+
+        return response()->json($result);
+    }
 
     // Phương thức để xác thực OTP
     public function verifyOtp(Request $request)
@@ -74,7 +98,13 @@ class OtpController extends Controller
 
             return redirect()->route('home')->with('success', 'Đăng nhập thành công!');
         } else {
-            return redirect()->back()->with('error', 'Mã OTP không chính xác. Vui lòng thử lại.');
+            session()->put('otp', $sessionOtp);
+            session()->put('email', $email);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã OTP không chính xác. Vui lòng nhập lại.',
+            ]);
         }
     }
     // Hiển thị form đăng nhập OTP qua email
