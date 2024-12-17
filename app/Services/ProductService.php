@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Attribute;
 use App\Models\Catalogue;
+use App\Models\OrderItem;
 use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
@@ -121,7 +123,7 @@ class ProductService
             $this->storeVariants($product, $validatedData, $request);
             $users = User::all();
             foreach ($users as $userNotify) {
-                $userNotify->notify(new CreateProduct($product, 'Có sản phẩm mới.', 'khách hàng mới'));
+                $userNotify->notify(new CreateProduct($product, 'Có sản phẩm mới.', 'Sản phẩm mới'));
             }
             DB::commit();
             return $product;
@@ -434,5 +436,24 @@ class ProductService
         $product->save();
 
         return true;
+    }
+
+    public function updateStockProductAfterCancleOrder($orderId){
+        $order = Order::find($orderId);
+        if (!$order) {
+            return redirect()->back()->with('error','Đơn hàng không tồn tại');
+        }
+
+        $orderItems = $order->items;
+        // dd($orderItems);
+        foreach ($orderItems as $item) {
+            $productVariant = ProductVariant::find($item->product_variant_id);
+
+            if ($productVariant) {
+                // Cộng lại số lượng
+                $productVariant->stock += $item->quantity;
+                $productVariant->save();
+            }
+        }
     }
 }

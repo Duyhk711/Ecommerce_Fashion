@@ -118,11 +118,11 @@
             window.chartVoucherUsage = new Chart(ctx1, {
                 type: 'pie',
                 data: {
-                    labels: ['Đã sử dụng', 'Không được sử dụng'],
+                    labels: ['Đã sử dụng (%)', 'Không được sử dụng (%)'],
                     datasets: [{
-                        data: [data.used_vouchers, data.total_vouchers - data.used_vouchers],
+                        data: [data.usage_rate, 100 - data.used_vouchers],
                         backgroundColor: ['#36a2eb', '#ff6384']
-                    }]
+                    }],
                 }
             });
         }
@@ -219,17 +219,24 @@
 
   }
 
-  function formatCurrency(number) {
-      return number.toLocaleString('vi-VN');
-  }
+    function safeParseNumber(input) {
+        const number = Number(input);
+        return isNaN(number) ? 0 : number; // Trả về 0 nếu không chuyển được thành số
+    }
 
-  function formatNumber(number) {
-      // Nhân số với 1000
-      let formattedNumber = number * 1000;
+    function formatNumber(number) {
+        if (typeof number !== 'number' || isNaN(number)) {
+            console.error('Giá trị không hợp lệ:', number);
+            return '0';
+        }
 
-      // Chuyển đổi thành chuỗi và ngắt thành phần hàng nghìn
-      return formattedNumber.toLocaleString('en', { maximumFractionDigits: 0 });
-  }
+        // Nhân số với 1000
+        const multipliedNumber = number * 1000;
+
+        // Định dạng số và thay dấu ',' thành '.'
+        const formattedNumber = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 }).format(multipliedNumber);
+        return formattedNumber.replace(/,/g, '.');
+    }
 
   $(document).ready(function() {
       // Lắng nghe sự kiện change của các trường ngày

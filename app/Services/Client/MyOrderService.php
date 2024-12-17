@@ -4,6 +4,7 @@ namespace App\Services\Client;
 
 use App\Models\Order;
 use App\Models\Comment;
+use App\Services\ProductService;
 use App\Models\OrderStatusChange;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\OrderStatusUpdated;
@@ -72,9 +73,11 @@ class MyOrderService
         $order->status = 'huy_don_hang';
 
         $user = $order->user;
-        $message = "Đơn hàng <strong>{$order->sku}</strong> đã bị huỷ";
+        $message = "Đơn hàng <strong>{$order->sku}</strong> đã hủy thành công";
         $title = "Cập nhật đơn hàng";
         $user->notify(new OrderStatusUpdated($order, $message, $title));
+        $productUpdate = new ProductService();
+        $productUpdate->updateStockProductAfterCancleOrder($order_id);
         $order->save();
 
         OrderStatusChange::create([

@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\User;
 use App\Models\Order;
 use App\Models\CartItem;
+use App\Events\TestEvent;
 use App\Models\OrderItem;
 use App\Events\CreateOrder;
+use App\Events\NewOrderNotifyAdmin;
 use App\Models\UserVoucher;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Notifications\CreateProduct;
 use App\Services\Client\CartService;
 use Illuminate\Support\Facades\Auth;
@@ -222,6 +225,8 @@ class CheckoutController extends Controller
             foreach ($users as $userNotify) {
                 $userNotify->notify(new CreateNewOrder($order, 'Çó đơn hàng mới!', $title));
             }
+            broadcast(new NewOrderNotifyAdmin($order));
+            Log::info('Broadcasting CreateOrder event for order: ', ['order' => $order]);
             // Commit transaction nếu không có lỗi
             DB::commit();
             // Kiểm tra phương thức thanh toán

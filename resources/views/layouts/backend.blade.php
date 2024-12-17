@@ -25,6 +25,8 @@
 
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
+    @vite(['resources/js/new_order_notify_admin.js'])
+    @vite(['resources/js/new_user_notify_admin.js'])
 
 </head>
 
@@ -602,19 +604,6 @@
                                     @php
                                         $adminNotifications = auth()->user()->notifications->where('data.category', 'admin');
                                         $type = auth()->user()->notifications;
-                                        // foreach ($type as $notification) {
-                                        //     if ($notification->type === 'App\Notifications\CreateNewVoucherAdmin') {
-                                        //         $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>'; // Icon cho CreateNewVoucherAdmin
-                                        //     } elseif ($notification->type === 'App\Notifications\CreateNewOrder') {
-                                        //         $icon = '<i class="far fa-fw fa-file-alt me-1"></i>';
-                                        //     } elseif ($notification->type === 'App\Notifications\NewUser') {
-                                        //         $icon = '<i class="fa fa-fw fa-user-plus text-info"></i>';
-                                        //     } elseif ($notification->type === 'App\Notifications\CreateProduct') {
-                                        //         $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>';
-                                        //     } else {
-                                        //         $icon = '<i class="fa fa-info-circle"></i>'; // Icon mặc định
-                                        //     }
-                                        // }
                                     @endphp
                                     @if($adminNotifications->count() > 0)
                                     @foreach($adminNotifications as $notification)
