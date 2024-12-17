@@ -145,6 +145,10 @@
         border-radius: 5px;
         cursor: pointer;
     }
+    .swal2-container {
+    z-index: 10000 !important; /* Đảm bảo SweetAlert luôn nằm trên cùng */
+}
+
 </style>
 
 <div id="chat-icon">💬</div>
@@ -165,6 +169,7 @@
 </div>
 
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 @vite(['resources/js/chat.js'])
 <script>
     const currentUserId = {{ auth()->check() ? auth()->id() : 'null' }};

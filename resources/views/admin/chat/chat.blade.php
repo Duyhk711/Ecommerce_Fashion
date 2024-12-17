@@ -291,6 +291,7 @@
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
     <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
