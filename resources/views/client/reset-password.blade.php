@@ -31,7 +31,8 @@
                                             <div class="login-remember-forgot d-flex justify-content-between align-items-center">
                                                 <input type="submit" class="btn btn-primary btn-lg" value="Đặt lại mật khẩu" />
                                                 <a href="{{ route('login') }}" class="d-flex justify-content-center btn-link">
-                                                    <i class="icon anm anm-angle-left-r me-2"></i> Trở về Đăng Nhập
+                                                    {{-- <i class="icon anm anm-angle-left-r me-2"></i> --}}
+                                                    Trở về Đăng Nhập
                                                 </a>
                                             </div>
                                         </div>

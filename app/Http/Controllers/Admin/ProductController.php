@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Models\Catalogue;
+use App\Models\User;
 use App\Models\Product;
+use App\Models\Catalogue;
+use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\UpdateProductRequest;
+use App\Notifications\CreateProduct;
 
 class ProductController extends Controller
 {
@@ -41,11 +43,17 @@ class ProductController extends Controller
             $product->total_stock = $product->variants->sum('stock');
             $product->variant_count = $product->variants->count();
         }
+
+        return view('admin.products.index', compact('products', 'searchTerm', 'catalogueId', 'minPrice', 'maxPrice', 'stockStatus', 'catalogues'));
+    }
+
+    public function trashed(Request $request)
+    {
         $deletedProducts = Product::onlyTrashed()
             ->orderBy('deleted_at', 'desc')
-            ->get();
+            ->paginate(10);
 
-        return view('admin.products.index', compact('products', 'searchTerm', 'catalogueId', 'minPrice', 'maxPrice', 'stockStatus', 'deletedProducts', 'catalogues'));
+        return view('admin.products.trashed', compact('deletedProducts'));
     }
 
     public function create()
@@ -59,7 +67,6 @@ class ProductController extends Controller
     {
         // dd($request->all());
         $validatedData = $request->validated();
-
         try {
             $this->productService->storeProduct($validatedData, $request);
 
@@ -129,10 +136,15 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $this->productService->softDeleteProduct($id);
-
-        return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công.');
+        $result = $this->productService->softDeleteProduct($id);
+    
+        if ($result) {
+            return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công.');
+        } else {
+            return redirect()->route('admin.products.index')->with('error', 'Không thể xóa sản phẩm vì nó đã có trong đơn hàng.');
+        }
     }
+    
 
     public function restore($id)
     {
@@ -142,57 +154,64 @@ class ProductController extends Controller
     }
 
     public function updateVariant(Request $request)
-    {
-        $variantsData = $request->input('variants');
-        $product = null;
-        foreach ($variantsData as $variantId => $data) {
-            $validator = Validator::make($data, [
-                'price_regular' => 'required|numeric',
-                'price_sale' => 'required|numeric|lt:price_regular',
-                'stock' => 'required|integer|min:0',
-            ], [
-                'price_regular.required' => 'Giá bán là bắt buộc.',
-                'price_regular.numeric' => 'Giá bán phải là một số.',
-                'price_sale.required' => 'Giá khuyến mãi là bắt buộc.',
-                'price_sale.numeric' => 'Giá khuyến mãi phải là một số.',
-                'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá bán.',
-                'stock.required' => 'Số lượng là bắt buộc.',
-                'stock.integer' => 'Số lượng phải là một số nguyên.',
-                'stock.min' => 'Số lượng phải lớn hơn hoặc bằng 0.',
-            ]);
+{
+    $variantsData = $request->input('variants');
+    $product = null;
+    
+    foreach ($variantsData as $variantId => $data) {
+        // Kiểm tra và gán giá trị mặc định là 0 nếu không có input cho stock
+        $data['stock'] = isset($data['stock']) ? $data['stock'] : 0;
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Xác thực dữ liệu không thành công.',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
+        $validator = Validator::make($data, [
+            'price_regular' => 'required|numeric',
+            'price_sale' => 'required|numeric|lt:price_regular',
+            'stock' => 'required|integer|min:0',
+        ], [
+            'price_regular.required' => 'Giá bán là bắt buộc.',
+            'price_regular.numeric' => 'Giá bán phải là một số.',
+            'price_sale.required' => 'Giá khuyến mãi là bắt buộc.',
+            'price_sale.numeric' => 'Giá khuyến mãi phải là một số.',
+            'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá bán.',
+            'stock.required' => 'Số lượng là bắt buộc.',
+            'stock.integer' => 'Số lượng phải là một số nguyên.',
+            'stock.min' => 'Số lượng phải lớn hơn hoặc bằng 0.',
+        ]);
 
-            $variant = ProductVariant::find($variantId);
-            if ($variant) {
-                $variant->price_regular = $data['price_regular'];
-                $variant->price_sale = $data['price_sale'];
-                $variant->stock = $data['stock'];
-                $variant->save();
-
-                if ($product === null) {
-                    $product = $variant->product;
-                }
-            }
-        }
-        if ($product) {
-            $totalStock = $product->variants->sum('stock');
-
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'Biến thể sản phẩm đã được cập nhật thành công!',
-                'total_stock' => $totalStock,
-            ]);
+                'status' => 'error',
+                'message' => 'Xác thực dữ liệu không thành công.',
+                'errors' => $validator->errors(),
+            ], 422);
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Sản phẩm không tồn tại.',
-        ], 404);
+
+        $variant = ProductVariant::find($variantId);
+        if ($variant) {
+            $variant->price_regular = $data['price_regular'];
+            $variant->price_sale = $data['price_sale'];
+            $variant->stock = $data['stock'];
+            $variant->save();
+
+            if ($product === null) {
+                $product = $variant->product;
+            }
+        }
     }
+
+    if ($product) {
+        $totalStock = $product->variants->sum('stock');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Biến thể sản phẩm đã được cập nhật thành công!',
+            'total_stock' => $totalStock,
+        ]);
+    }
+
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Sản phẩm không tồn tại.',
+    ], 404);
+}
+
 }

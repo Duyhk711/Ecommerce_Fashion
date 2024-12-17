@@ -8,6 +8,9 @@ use App\Models\Favorite;
 use App\Models\Product;
 use App\Services\Client\HomeService;
 use Illuminate\Http\Request;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\JsonLd;
 
 class HomeController extends Controller
 {
@@ -21,6 +24,18 @@ class HomeController extends Controller
     // Lấy 12 sản phẩm trang chủ
     public function index()
     {
+        SEOMeta::setTitle('Poly Fashion - Trang chủ');
+        SEOMeta::setDescription('Thương mại điện tử bán quần áo chất lượng cao với nhiều khuyến mãi hấp dẫn.');
+        SEOMeta::setCanonical(route('home'));
+
+        OpenGraph::setTitle('Poly Fashion - Trang chủ');
+        OpenGraph::setDescription('Thương mại điện tử bán quần áo chất lượng cao với nhiều khuyến mãi hấp dẫn.');
+        OpenGraph::setUrl(route('home'));
+        OpenGraph::addProperty('type', 'website');
+
+        JsonLd::setTitle('Poly Fashion - Trang chủ');
+        JsonLd::setDescription('Thương mại điện tử bán quần áo chất lượng cao với nhiều khuyến mãi hấp dẫn.');
+        JsonLd::addImage(asset('client/images/title.png'));
         $user = auth()->user();
         $products = $this->homeService->getHomeProducts();
         $banners  = $this->homeService->getBannerShowHome();
@@ -34,65 +49,87 @@ class HomeController extends Controller
         $bestsaleRatings = $this->homeService->getRatingsForRelatedProducts($bestsaleProducts);
         foreach ($newProducts as $product) {
             $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                 ->where('product_id', $product->id)
-                                                 ->exists() : false;
+                ->where('product_id', $product->id)
+                ->exists() : false;
         }
-    
+
         foreach ($saleProduct as $product) {
             $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                 ->where('product_id', $product->id)
-                                                 ->exists() : false;
+                ->where('product_id', $product->id)
+                ->exists() : false;
         }
-    
+
         foreach ($bestsaleProducts as $product) {
             $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                 ->where('product_id', $product->id)
-                                                 ->exists() : false;
+                ->where('product_id', $product->id)
+                ->exists() : false;
         }
         // dd($banners);
-        return view('client.home', compact('products', 'banners', 'catalogues',
-        'newProducts', 'saleProduct', 'bestsaleProducts',
-        'vouchers', 'newRatings','saleRatings','bestsaleRatings'));
+        return view('client.home', compact(
+            'products',
+            'banners',
+            'catalogues',
+            'newProducts',
+            'saleProduct',
+            'bestsaleProducts',
+            'vouchers',
+            'newRatings',
+            'saleRatings',
+            'bestsaleRatings'
+        ));
     }
 
-
-    // Tìm kiếm sản phẩm theo tên
     public function search(Request $request)
-    {
-        $user = auth()->user();
-        $query    = $request->get('query', '');
-        $products = $this->homeService->searchProducts($query);
-        foreach ($products as $product) {
-            $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
-                                                 ->where('product_id', $product->id)
-                                                 ->exists() : false;
-        }
+{
+    $user = auth()->user();
+    $query = $request->get('query', '');
+
+    // Kiểm tra nếu query rỗng
+    if (empty($query)) {
+        $products = collect();  // Khởi tạo mảng rỗng nếu không có truy vấn
         return view('client.search', compact('products', 'query'));
     }
 
+    $products = Product::with([
+        'catalogue',
+        'mainImage',
+        'variants.variantAttributes.attribute',
+        'variants.variantAttributes.attributeValue',
+        'images'
+    ])
+    ->where(function ($q) use ($query) {
+        $q->where('name', 'like', '%' . $query . '%') // Tìm kiếm theo tên sản phẩm
+          ->orWhere('sku', 'like', '%' . $query . '%') // Tìm kiếm theo SKU
+          ->orWhereHas('catalogue', function ($q) use ($query) {
+              $q->where('name', 'like', '%' . $query . '%'); // Tìm kiếm theo tên danh mục
+          });
+    })
+    ->where('is_active', 1) // Chỉ lấy sản phẩm đang hoạt động
+    ->orderByRaw('
+        CASE
+            WHEN name LIKE ? THEN 1  -- Nếu tên sản phẩm khớp chính xác
+            WHEN name LIKE ? THEN 2  -- Nếu tên sản phẩm khớp gần đúng
+            ELSE 3
+        END', ['%' . $query . '%', $query]) // Ưu tiên kết quả tìm kiếm chính xác hơn
+    ->get();
 
-    // public function showQuickView($id)
-    // {
-    //     // Tìm sản phẩm theo ID
-    //     $product = Product::find($id);
+    // Cập nhật xem sản phẩm có phải là yêu thích của người dùng không
+    foreach ($products as $product) {
+        $product->isFavorite = $user ? Favorite::where('user_id', $user->id)
+            ->where('product_id', $product->id)
+            ->exists() : false;
+    }
 
-    //     // Lấy tất cả biến thể của sản phẩm
-    //     $product_variants = $product->variants;
+    // Thiết lập SEO meta cho trang tìm kiếm
+    SEOMeta::setTitle("Tìm kiếm sản phẩm: $query - Poly Fashion");
+    SEOMeta::setDescription("Kết quả tìm kiếm cho từ khóa '$query' trên Poly Fashion.");
+    SEOMeta::setKeywords($query);
 
-    //     // Lấy màu sắc từ biến thể của sản phẩm
-    //     $colors = $product->colors;
+    OpenGraph::setTitle("Tìm kiếm sản phẩm: $query - Poly Fashion");
+    OpenGraph::setDescription("Kết quả tìm kiếm cho từ khóa '$query' trên Poly Fashion.");
+    OpenGraph::setUrl(route('search') . "?query=" . urlencode($query));
 
-    //     // Lấy kích thước từ biến thể của sản phẩm
-    //     $sizes = $product->sizes;
-
-    //     // Trả về dữ liệu JSON để sử dụng trong AJAX
-    //     return response()->json([
-    //         'product' => $product,
-    //         'product_variants' => $product_variants,
-    //         'colors' => $colors,
-    //         'sizes' => $sizes,
-    //     ]);
-    // }
-
+    return view('client.search', compact('products', 'query'));
+}
 
 }

@@ -1,21 +1,21 @@
 <?php
 
-use App\Http\Controllers\Client\UserChatController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\MyOrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\UserChatController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\VouchersController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +54,8 @@ Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/count', [CartController::class, 'getCartCount']);
+Route::get('/cart/check-stock', [CartController::class, 'checkStock'])->name('cart.checkStock');
+
 
 // page
 Route::view('/contact', 'client.contact')->name('contact');
@@ -116,12 +118,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
     Route::get('/comments/show/{id}', [CommentController::class, 'show'])->name('comment.show');
+    Route::get('/notifications/admin', [NotificationController::class, 'getNotifyAdmin']);
+    Route::get('/notifications/client', [NotificationController::class, 'getNotifyClient']);
 });
 
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'renderCheckout'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'storeCheckout'])->name('postCheckout');
 Route::get('/order-payment', [CheckoutController::class, 'orderPayment'])->name('checkout.payment');
+Route::get('/order-success/{session_id}', [CheckoutController::class, 'orderSuccess'])->name('client.orderSuccess');
 Route::get('/vnpay-payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
 Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('orderSuccess');
 Route::get('/api/available-vouchers', [VouchersController::class, 'getAvailableVouchers'])->name('vouchers.available');
@@ -137,4 +142,4 @@ Route::get('/not-found', function () {
 })->name('not-found');
 
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
+Route::get('/notifications', [NotificationController::class, 'fetchNotificationsClient'])->name('notifications.fetch');

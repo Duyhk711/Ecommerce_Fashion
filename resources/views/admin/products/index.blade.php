@@ -41,637 +41,361 @@
                     @can('Thêm mới sản phẩm')
                         <div class="block-options-item">
                             <a href="{{ route('admin.products.create') }}" class="btn btn-sm btn-alt-secondary"
-                                data-bs-toggle="tooltip" title="Add">
+                                data-bs-toggle="tooltip" title="Thêm mới">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </div>
                     @endcan
+                    <div class="block-options-item">
+                        <!-- Thêm icon "Lưu trữ" cho sản phẩm đã xóa -->
+                        <a href="{{ route('admin.products.trashed') }}" class="btn btn-sm btn-alt-info"
+                            data-bs-toggle="tooltip" title="Lưu trữ">
+                            <i class="fas fa-archive"></i>
+                        </a>
+
+                    </div>
                 </div>
 
             </div>
-            <ul class="nav nav-tabs mb-3 mt-3">
-                <li class="nav-item">
-                    <a class="nav-link active" id="products-tab" data-bs-toggle="tab" href="#products" role="tab">Danh
-                        sách</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="deleted-products-tab" data-bs-toggle="tab" href="#deleted-products"
-                        role="tab">Đã xóa</a>
-                </li>
-            </ul>
+            <div class="block-content align-middle">
+                <form method="GET" id="filter-form" action="{{ route('admin.products.index') }}">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <!-- Tìm kiếm theo tên hoặc SKU -->
+                        <div>
+                            <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+                                placeholder="Tìm kiếm sản phẩm theo tên, sku">
+                        </div>
 
-            <div class="tab-content">
-                <!-- Tab sản phẩm thường -->
-                <div class="tab-pane fade show active" id="products" role="tabpanel" aria-labelledby="products-tab">
-                    <div class="block-content align-middle">
-                        <form method="GET" id="filter-form" action="{{ route('admin.products.index') }}">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <!-- Tìm kiếm theo tên hoặc SKU -->
-                                <div>
-                                    <input type="text" name="search" value="{{ request('search') }}"
-                                        class="form-control" placeholder="Tìm kiếm sản phẩm theo tên, sku">
+                        <!-- Lọc theo giá (dropdown) -->
+                        <div class="dropdown ms-3">
+                            <button class="btn btn-sm btn-alt dropdown-toggle p-2"
+                                style="font-weight: 400;border:1.5px solid #d1d7dd" type="button" id="priceFilterDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Lọc theo giá
+                            </button>
+
+                            <div class="dropdown-menu p-3 " aria-labelledby="priceFilterDropdown">
+                                <div class="form-group">
+                                    {{-- <label for="min_price">Giá từ</label> --}}
+                                    <input type="number" name="min_price" style="font-size: 14px;" id="min_price"
+                                        value="{{ request('min_price') }}" class="form-control" placeholder="Giá tối thiểu">
                                 </div>
-
-                                <!-- Lọc theo giá (dropdown) -->
-                                <div class="dropdown ms-3">
-                                    <button class="btn btn-sm btn-alt dropdown-toggle p-2"
-                                        style="font-weight: 400;border:1.5px solid #d1d7dd" type="button"
-                                        id="priceFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Lọc theo giá
-                                    </button>
-
-                                    <div class="dropdown-menu p-3 " aria-labelledby="priceFilterDropdown">
-                                        <div class="form-group">
-                                            {{-- <label for="min_price">Giá từ</label> --}}
-                                            <input type="number" name="min_price" style="font-size: 14px;" id="min_price"
-                                                value="{{ request('min_price') }}" class="form-control"
-                                                placeholder="Giá tối thiểu">
-                                        </div>
-                                        <div class="form-group mt-2">
-                                            {{-- <label for="max_price">Giá đến</label> --}}
-                                            <input type="number" name="max_price" style="font-size: 14px;" id="max_price"
-                                                value="{{ request('max_price') }}" class="form-control"
-                                                placeholder="Giá tối đa">
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-alt-secondary mt-3">Áp dụng</button>
-                                    </div>
+                                <div class="form-group mt-2">
+                                    {{-- <label for="max_price">Giá đến</label> --}}
+                                    <input type="number" name="max_price" style="font-size: 14px;" id="max_price"
+                                        value="{{ request('max_price') }}" class="form-control" placeholder="Giá tối đa">
                                 </div>
-
-                                <!-- Lọc theo danh mục (category_id) -->
-                                <div class="ms-3">
-                                    <select name="catalogue_id" id="catalogue-select" class="form-select">
-                                        <option value="">Tất cả danh mục</option>
-                                        @foreach ($catalogues as $catalogue)
-                                            <option value="{{ $catalogue->id }}"
-                                                {{ request('catalogue_id') == $catalogue->id ? 'selected' : '' }}>
-                                                {{ $catalogue->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <!-- Lọc theo trạng thái số lượng (stock_status) -->
-                                <div class="ms-3">
-                                    <select name="stock_status" class="form-select" id="stock-status-select">
-                                        <option value="">Tất cả trạng thái</option>
-                                        <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Sắp
-                                            hết hàng</option>
-                                        <option value="in_stock"
-                                            {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>Còn hàng</option>
-                                        <option value="out_of_stock"
-                                            {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <!-- Nút đặt lại -->
-                                <div class="ms-3">
-                                    <button type="button" class="btn btn-sm btn-alt-secondary p-2 px-4"
-                                        id="reset-button">Đặt lại</button>
-                                </div>
+                                <button type="submit" class="btn btn-sm btn-alt-secondary mt-3">Áp dụng</button>
                             </div>
+                        </div>
 
-                        </form>
-
-                    </div>
-                    <div class="block-content block-content-full ">
-                        <!-- Table with data -->
-                        <table id="" class="table  align-middle ">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">STT</th>
-                                    <th class="text-center">Tên sản phẩm</th>
-                                    <th class="text-center">Giá</th>
-                                    <th class="text-center">Số lượng</th>
-                                    <th class="text-center">Đã cập nhật</th>
-                                    <th class="text-center">Trạng thái</th>
-                                    <th class="text-center">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($products as $index => $product)
-                                    <tr>
-                                        <td>{{ ($products->currentPage() - 1) * $products->perPage() + $index + 1 }}</td>
-                                        <td class="fs-sm">
-                                            <div class="d-flex align-items-center">
-                                                <!-- Hình ảnh -->
-                                                <div class="image-container"
-                                                    style="width: 60px; height: height: 100%; position: relative;">
-                                                    <img src="{{ Storage::url($product->img_thumbnail) }}"
-                                                        alt="Ảnh sản phẩm" class="img-thumbnail">
-                                                    <div class="overlay">
-                                                        <i class="fa fa-eye eye-icon"></i>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Popup để hiển thị ảnh lớn -->
-                                                <div class="popup" id="imagePopup">
-                                                    <span class="close">&times;</span>
-                                                    <img class="popup-content" id="popupImage" alt="Ảnh lớn">
-                                                </div>
-
-                                                <!-- Thông tin sản phẩm, căn cách đều với hình ảnh -->
-                                                <div class="ms-3" style="flex: 1;">
-                                                    <!-- Thêm flex: 1 để chiếm hết không gian còn lại -->
-                                                    <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}
-                                                    </div>
-                                                    <div class="text-muted" style="font-size: 13px;">
-                                                        Phân loại: <span>{{ $product->catalogue->name }}</span>
-                                                    </div>
-                                                    <div class="text-muted" style="font-size: 13px;">
-                                                        Sku: <span>{{ $product->sku }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class=" fs-sm">
-                                            {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', '.') }}₫
-                                        </td>
-                                        <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
-                                            @if ($product->total_stock > 5)
-                                                <span class="">{{ $product->total_stock }}</span>
-                                            @elseif ($product->total_stock > 0 && $product->total_stock <= 5)
-                                                <span class="text-warning" data-bs-toggle="tooltip" title="Sắp hết hàng">
-                                                    {{ $product->total_stock }}</span>
-                                            @else
-                                                <span class=" text-danger " data-bs-toggle="tooltip"
-                                                    title="Hết hàng">{{ $product->total_stock }}</span>
-                                            @endif
-                                        </td>
-
-                                        <td class="fs-sm">{{ $product->updated_at->format('H:i d-m-Y') }}</td>
-
-                                        <td class="fs-sm text-center">
-                                            @if ($product->is_active)
-                                                <span class="text-success">
-                                                    <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip"
-                                                        title="Hoạt động"></i>
-                                                </span>
-                                            @else
-                                                <span class="text-danger">
-                                                    <i class="fa fa-ban text-danger"data-bs-toggle="tooltip"
-                                                        title="Không hoạt động"></i>
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center fs-sm">
-                                            <div class="d-flex justify-content-center align-items-center">
-                                                <a href="{{ route('admin.products.show', $product) }}"
-                                                    class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
-                                                    title="Xem">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-
-                                                @can('Chỉnh sửa sản phẩm')
-                                                    <a href="{{ route('admin.products.edit', $product) }}"
-                                                        class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
-                                                        title="Sửa">
-                                                        <i class="fa fa-pencil-alt"></i>
-                                                    </a>
-                                                @endcan
-
-                                                @can('Xóa sản phẩm')
-                                                    <form action="{{ route('admin.products.destroy', $product->id) }}"
-                                                        method="POST" class="form-delete">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-alt-secondary mx-1"
-                                                            data-bs-toggle="tooltip" title="Xóa">
-                                                            <i class="fa fa-fw fa-times text-danger"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Hàng thứ hai chứa nội dung mở rộng -->
-                                    <tr class="product-row">
-                                        <td colspan="7" class="content-row">
-                                            <div class="row mb-2">
-                                                <div class="col-1"></div>
-                                                <div class="col-3 text-muted fs-sm">Tổng mặt hàng:
-                                                    {{ $product->variant_count }}
-                                                </div>
-                                                <div class="col-5"></div>
-                                                <div class="col-3 text-end">
-                                                    <a href="#"
-                                                        class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
-                                                        style="font-weight: 400;"
-                                                        data-target="#content-{{ $product->id }}"
-                                                        data-state="collapsed">
-                                                        <span class="toggle-text">Mở rộng</span>
-                                                        <i class="fa fa-angle-down"></i>
-                                                    </a>
-                                                </div>
-                                                <div id="content-{{ $product->id }}" class="content2 mt-1 mb-2"
-                                                    style="display: none;">
-                                                    <div class="row">
-                                                        @can('Chỉnh sửa sản phẩm')
-                                                            <div class="col-10 text-end mb-2">
-                                                                <!-- Nút chỉnh sửa hàng loạt -->
-                                                                <button
-                                                                    class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
-                                                                    sửa
-                                                                    hàng loạt <i class="fa fa-angle-down"></i></button>
-                                                            </div>
-                                                        @endcan
-                                                        <div class="col-2 text-end">
-                                                            <!-- Nút lưu và hủy, ban đầu ẩn đi -->
-                                                            <button class="btn btn-sm btn-alt save-all-btn d-none">Lưu
-                                                            </button>
-                                                            <button
-                                                                class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="batch-edit-form d-none mt-3 mb-2"
-                                                        data-product-id="{{ $product->id }}">
-                                                        <div class="row d-flex justify-content-center">
-                                                            <div class="col-3"></div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <input type="number"
-                                                                        id="batch-price-{{ $product->id }}"
-                                                                        class="form-control fs-sm batch-input"
-                                                                        placeholder="Nhập vào đơn giá">
-                                                                    <span class="text-danger error-message"
-                                                                        id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <input type="number"
-                                                                        id="batch-price_sale-{{ $product->id }}"
-                                                                        class="form-control fs-sm batch-input"
-                                                                        placeholder="Giá khuyến mãi">
-                                                                    <span class="text-danger error-message"
-                                                                        id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <input type="number"
-                                                                        id="batch-stock-{{ $product->id }}"
-                                                                        class="form-control fs-sm batch-input"
-                                                                        placeholder="Nhập vào số lượng">
-                                                                    <span class="text-danger error-message"
-                                                                        id="error-stock-{{ $product->id }}"></span>
-                                                                    <!-- Chỗ để hiển thị lỗi -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <button class="btn btn-sm btn-alt apply-all"
-                                                                        data-product-id="{{ $product->id }}" disabled>Áp
-                                                                        dụng cho tất cả</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <!-- Tạo form để gửi tất cả biến thể -->
-                                                    <form class="variant-form-all" id="variant-form-{{ $product->id }}">
-                                                        @foreach ($product->variants as $variant)
-                                                            @php
-                                                                $color = null;
-                                                                $size = null;
-                                                                foreach ($variant->variantAttributes as $attribute) {
-                                                                    if ($attribute->attribute->name === 'Color') {
-                                                                        $color = $attribute->attributeValue->value;
-                                                                    }
-                                                                    if ($attribute->attribute->name === 'Size') {
-                                                                        $size = $attribute->attributeValue->value;
-                                                                    }
-                                                                }
-                                                            @endphp
-                                                            <input type="hidden" name="product_id"
-                                                                value="{{ $product->id }}">
-                                                            <div class="row d-flex justify-content-center variant-row"
-                                                                data-variant-id="{{ $variant->id }}">
-                                                                <div class="col-3 align-content-center">
-                                                                    <div class="mb-2">
-                                                                        <label for="quantity" class="text-muted">Biến
-                                                                            thể:</label>
-                                                                        <span>{{ $color }}-{{ $size }}</span>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-2">
-                                                                    <div class="mb-2">
-                                                                        <label for="price_regular"
-                                                                            class="text-muted fs-sm">Đơn
-                                                                            giá</label>
-                                                                        <input type="number"
-                                                                            name="variants[{{ $variant->id }}][price_regular]"
-                                                                            @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
-                                                                            class="form-control fs-sm batch-input price-regular"
-                                                                            value="{{ $variant->price_regular }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-2">
-                                                                    <div class="mb-2">
-                                                                        <label for="price_sale"
-                                                                            class="text-muted fs-sm">Giá
-                                                                            khuyến mãi</label>
-                                                                        <input type="number"
-                                                                            @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
-                                                                            name="variants[{{ $variant->id }}][price_sale]"
-                                                                            class="form-control fs-sm batch-input price-sale"
-                                                                            value="{{ $variant->price_sale }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-2">
-                                                                    <div class="mb-2">
-                                                                        <label for="stock" class="text-muted fs-sm">Số
-                                                                            lượng</label>
-                                                                        <input type="number"
-                                                                            @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
-                                                                            name="variants[{{ $variant->id }}][stock]"
-                                                                            class="form-control fs-sm batch-input stock"
-                                                                            value="{{ $variant->stock }}">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-2">
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        {{-- <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td> --}}
-                                    </tr>
+                        <!-- Lọc theo danh mục (category_id) -->
+                        <div class="ms-3">
+                            <select name="catalogue_id" id="catalogue-select" class="form-select">
+                                <option value="">Tất cả danh mục</option>
+                                @foreach ($catalogues as $catalogue)
+                                    <option value="{{ $catalogue->id }}"
+                                        {{ request('catalogue_id') == $catalogue->id ? 'selected' : '' }}>
+                                        {{ $catalogue->name }}
+                                    </option>
                                 @endforeach
-                            </tbody>
-                        </table>
-                        <div class="">{{ $products->links() }}</div>
+                            </select>
+                        </div>
+
+                        <!-- Lọc theo trạng thái số lượng (stock_status) -->
+                        <div class="ms-3">
+                            <select name="stock_status" class="form-select" id="stock-status-select">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Sắp hết hàng</option>
+                                <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>Còn hàng</option>
+                                <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng</option>
+                                <option value="1" {{ request('stock_status') == '1' ? 'selected' : '' }}>Hoạt động</option>
+                                <option value="0" {{ request('stock_status') == '0' ? 'selected' : '' }}>Không hoạt động</option>
+                            </select>
+                            
+                        </div>
+
+                        <!-- Nút đặt lại -->
+                        <div class="ms-3">
+                            <button type="button" class="btn btn-sm btn-alt-secondary p-2 px-4" id="reset-button">Đặt
+                                lại</button>
+                        </div>
                     </div>
-                </div>
 
-                {{-- SP DA XOA --}}
-                <div class="tab-pane fade" id="deleted-products" role="tabpanel" aria-labelledby="deleted-products-tab">
+                </form>
 
-                    <div class="block-content block-content-full">
-                        <!-- Table with data -->
-                        <table id="" class="table table-striped align-middle ">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Tên sản phẩm</th>
-                                    <th class="text-center">Giá</th>
-                                    <th class="text-center">Số lượng</th>
-                                    <th class="text-center">Ngày xóa</th>
-                                    <th class="text-center">Trạng thái</th>
-                                    <th class="text-center">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($deletedProducts as $product)
-                                    <tr>
-                                        <td class="fs-sm">
-                                            <div class="d-flex align-items-center">
-                                                <!-- Hình ảnh -->
-                                                <div style="width: 60px; height: 100%;">
-                                                    <img src="{{ Storage::url($product->img_thumbnail) }}"
-                                                        alt="Ảnh sản phẩm"
-                                                        style="width: 100%; height: 100%; object-fit: cover;"
-                                                        class="img-fluid">
-                                                </div>
-
-                                                <!-- Thông tin sản phẩm, căn cách đều với hình ảnh -->
-                                                <div class="ms-3" style="flex: 1;">
-                                                    <!-- Thêm flex: 1 để chiếm hết không gian còn lại -->
-                                                    <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}
-                                                    </div>
-                                                    <div class="text-muted" style="font-size: 13px;">
-                                                        Phân loại: <span>{{ $product->catalogue->name }}</span>
-                                                    </div>
-                                                    <div class="text-muted" style="font-size: 13px;">
-                                                        Sku: <span>{{ $product->sku }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class=" fs-sm">{{ number_format($product->price_regular) }}₫</td>
-                                        <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
-                                            @if ($product->total_stock > 5)
-                                                <span class="">{{ $product->total_stock }}</span>
-                                            @elseif ($product->total_stock > 0 && $product->total_stock <= 5)
-                                                <span class="text-warning" data-bs-toggle="tooltip" title="Sắp hết hàng">
-                                                    {{ $product->total_stock }}</span>
-                                            @else
-                                                <span class=" text-danger" data-bs-toggle="tooltip"
-                                                    title="Hết hàng">{{ $product->total_stock }}</span>
-                                            @endif 0
-                                        </td>
-
-                                        <td class="fs-sm">{{ $product->deleted_at->format('H:i d-m-Y') }}</td>
-
-                                        <td class="fs-sm text-center">
-                                            @if ($product->is_active)
-                                                <span class="text-success">
-                                                    <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip"
-                                                        title="Hoạt động"></i>
-                                                </span>
-                                            @else
-                                                <span class="text-danger">
-                                                    <i class="fa fa-ban text-danger" data-bs-toggle="tooltip"
-                                                        title="Không hoạt động"></i>
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center fs-sm">
-                                            <div class="d-flex justify-content-center align-items-center">
-                                                {{-- <a href="{{ route('admin.products.edit', $product) }}"
-                                                    class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
-                                                    title="Sửa">
-                                                    <i class="fa fa-pencil-alt"></i>
-                                                </a> --}}
-                                                @can('Khôi phục sản phẩm')
-                                                    <form action="{{ route('admin.products.restore', $product->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-sm btn-alt-secondary"
-                                                            data-bs-toggle="tooltip" title="Khôi phục sản phẩm">
-                                                            <i class="fa fa-undo"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Hàng thứ hai chứa nội dung mở rộng -->
-                                    <tr class="product-row">
-                                        <td colspan="6" class="content-row">
-                                            <div class="row mb-2">
-                                                <div class="col-3 text-muted fs-sm">Tổng mặt hàng:
-                                                    {{ $product->variant_count }}
-                                                </div>
-                                                <div class="col-6"></div>
-                                                <div class="col-3 text-end">
-                                                    <a href="#"
-                                                        class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
-                                                        style="font-weight: 400;"
-                                                        data-target="#content-{{ $product->id }}"
-                                                        data-state="collapsed">
-                                                        <span class="toggle-text">Mở rộng</span>
-                                                        <i class="fa fa-angle-down"></i>
-                                                    </a>
-                                                </div>
-                                                <div id="content-{{ $product->id }}" class="content2 mt-1 mb-2"
-                                                    style="display: none;">
-                                                    <div class="row">
-                                                        @can('Chỉnh sửa sản phẩm')
-                                                            <div class="col-10 text-end mb-2">
-                                                                <!-- Nút chỉnh sửa hàng loạt -->
-                                                                <button
-                                                                    class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
-                                                                    sửa
-                                                                    hàng loạt <i class="fa fa-angle-down"></i></button>
-                                                            </div>
-                                                        @endcan
-                                                        <div class="col-2 text-end">
-                                                            <!-- Nút lưu và hủy, ban đầu ẩn đi -->
-                                                            <button class="btn btn-sm btn-alt save-all-btn d-none">Lưu
-                                                            </button>
-                                                            <button
-                                                                class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="batch-edit-form d-none mt-3 mb-2"
-                                                        data-product-id="{{ $product->id }}">
-                                                        <div class="row d-flex justify-content-center">
-                                                            <div class="col-3"></div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <input type="number"
-                                                                        id="batch-price-{{ $product->id }}"
-                                                                        class="form-control fs-sm batch-input"
-                                                                        placeholder="Nhập vào đơn giá">
-                                                                    <span class="text-danger error-message"
-                                                                        id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <input type="number"
-                                                                        id="batch-price_sale-{{ $product->id }}"
-                                                                        class="form-control fs-sm batch-input"
-                                                                        placeholder="Giá khuyến mãi">
-                                                                    <span class="text-danger error-message"
-                                                                        id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <input type="number"
-                                                                        id="batch-stock-{{ $product->id }}"
-                                                                        class="form-control fs-sm batch-input"
-                                                                        placeholder="Nhập vào số lượng">
-                                                                    <span class="text-danger error-message"
-                                                                        id="error-stock-{{ $product->id }}"></span>
-                                                                    <!-- Chỗ để hiển thị lỗi -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <div class="mb-2">
-                                                                    <button class="btn btn-sm btn-alt apply-all"
-                                                                        data-product-id="{{ $product->id }}" disabled>Áp
-                                                                        dụng cho tất cả</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <!-- Tạo form để gửi tất cả biến thể -->
-                                                    <form class="variant-form-all" id="variant-form-{{ $product->id }}">
-                                                        @foreach ($product->variants as $variant)
-                                                            @php
-                                                                $color = null;
-                                                                $size = null;
-                                                                foreach ($variant->variantAttributes as $attribute) {
-                                                                    if ($attribute->attribute->name === 'Color') {
-                                                                        $color = $attribute->attributeValue->value;
-                                                                    }
-                                                                    if ($attribute->attribute->name === 'Size') {
-                                                                        $size = $attribute->attributeValue->value;
-                                                                    }
-                                                                }
-                                                            @endphp
-                                                            <input type="hidden" name="product_id"
-                                                                value="{{ $product->id }}">
-                                                            <div class="row d-flex justify-content-center variant-row"
-                                                                data-variant-id="{{ $variant->id }}">
-                                                                <div class="col-3 align-content-center">
-                                                                    <div class="mb-2">
-                                                                        <label for="quantity" class="text-muted">Biến
-                                                                            thể:</label>
-                                                                        <span>{{ $color }}-{{ $size }}</span>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-2">
-                                                                    <div class="mb-2">
-                                                                        <label for="price_regular"
-                                                                            class="text-muted fs-sm">Đơn
-                                                                            giá</label>
-                                                                        <input type="number"
-                                                                            name="variants[{{ $variant->id }}][price_regular]"
-                                                                            class="form-control fs-sm batch-input price-regular"
-                                                                            value="{{ $variant->price_regular }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-2">
-                                                                    <div class="mb-2">
-                                                                        <label for="price_sale"
-                                                                            class="text-muted fs-sm">Giá
-                                                                            khuyến mãi</label>
-                                                                        <input type="number"
-                                                                            name="variants[{{ $variant->id }}][price_sale]"
-                                                                            class="form-control fs-sm batch-input price-sale"
-                                                                            value="{{ $variant->price_sale }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-2">
-                                                                    <div class="mb-2">
-                                                                        <label for="stock" class="text-muted fs-sm">Số
-                                                                            lượng</label>
-                                                                        <input type="number"
-                                                                            name="variants[{{ $variant->id }}][stock]"
-                                                                            class="form-control fs-sm batch-input stock"
-                                                                            value="{{ $variant->stock }}">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-2">
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        {{-- <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td> --}}
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="">{{ $products->links() }}</div>
-                    </div>
-                </div>
             </div>
+            <div class="block-content block-content-full ">
+                <!-- Table with data -->
+                <table id="" class="table  align-middle ">
+                    <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Tên sản phẩm</th>
+                            <th class="text-center">Giá</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-center">Đã cập nhật</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($products as $index => $product)
+                            <tr>
+                                <td class="text-center">
+                                    {{ ($products->currentPage() - 1) * $products->perPage() + $index + 1 }}</td>
+                                <td class="fs-sm">
+                                    <div class="d-flex align-items-center">
+                                        <!-- Hình ảnh -->
+                                        <div class="image-container"
+                                            style="width: 60px; height: height: 100%; position: relative;">
+                                            <img src="{{ Storage::url($product->img_thumbnail) }}" alt="Ảnh sản phẩm"
+                                                class="img-thumbnail">
+                                            <div class="overlay">
+                                                <i class="fa fa-eye eye-icon"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Popup để hiển thị ảnh lớn -->
+                                        <div class="popup" id="imagePopup">
+                                            <span class="close">&times;</span>
+                                            <img class="popup-content" id="popupImage" alt="Ảnh lớn">
+                                        </div>
+
+                                        <!-- Thông tin sản phẩm, căn cách đều với hình ảnh -->
+                                        <div class="ms-3" style="flex: 1;">
+                                            <!-- Thêm flex: 1 để chiếm hết không gian còn lại -->
+                                            <div class="pt-1 pd-2" style="font-weight: 500;">{{ $product->name }}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 13px;">
+                                                Phân loại: <span>{{ $product->catalogue->name }}</span>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 13px;">
+                                                Sku: <span>{{ $product->sku }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class=" fs-sm">
+                                    {{ number_format(($product->price_sale ?: $product->price_regular) * 1000, 0, '.', '.') }}₫
+                                </td>
+                                <td class="text-center fs-sm total-stock" data-id="{{ $product->id }}">
+                                    @if ($product->total_stock > 5)
+                                        <span class="">{{ $product->total_stock }}</span>
+                                    @elseif ($product->total_stock > 0 && $product->total_stock <= 5)
+                                        <span class="text-warning" data-bs-toggle="tooltip" title="Sắp hết hàng">
+                                            {{ $product->total_stock }}</span>
+                                    @else
+                                        <span class="text-danger " data-bs-toggle="tooltip"
+                                            title="Hết hàng">{{ $product->total_stock }}</span>
+                                    @endif
+                                </td>
+
+                                <td class="fs-sm">{{ $product->updated_at->format('H:i d-m-Y') }}</td>
+
+                                <td class="fs-sm text-center">
+                                    @if ($product->is_active)
+                                        <span class="text-success">
+                                            <i class="fa fa-check-circle text-success" data-bs-toggle="tooltip"
+                                                title="Hoạt động"></i>
+                                        </span>
+                                    @else
+                                        <span class="text-danger">
+                                            <i class="fa fa-ban text-danger"data-bs-toggle="tooltip"
+                                                title="Không hoạt động"></i>
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-center fs-sm">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <a href="{{ route('admin.products.show', $product) }}"
+                                            class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
+                                            title="Xem">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+
+                                        @can('Chỉnh sửa sản phẩm')
+                                            <a href="{{ route('admin.products.edit', $product) }}"
+                                                class="btn btn-sm btn-alt-secondary mx-1 " data-bs-toggle="tooltip"
+                                                title="Sửa">
+                                                <i class="fa fa-pencil-alt"></i>
+                                            </a>
+                                        @endcan
+
+                                        @can('Xóa sản phẩm')
+                                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                                class="form-delete">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-alt-secondary mx-1"
+                                                    data-bs-toggle="tooltip" title="Xóa">
+                                                    <i class="fa fa-fw fa-times text-danger"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Hàng thứ hai chứa nội dung mở rộng -->
+                            <tr class="product-row">
+                                <td colspan="7" class="content-row">
+                                    <div class="row mb-2">
+                                        <div class="col-1"></div>
+                                        <div class="col-3 text-muted fs-sm">Tổng mặt hàng:
+                                            {{ $product->variant_count }}
+                                        </div>
+                                        <div class="col-5"></div>
+                                        <div class="col-3 text-end">
+                                            <a href="#" class="btn btn-sm btn-alt mx-1 toggle-content text-muted"
+                                                style="font-weight: 400;" data-target="#content-{{ $product->id }}"
+                                                data-state="collapsed">
+                                                <span class="toggle-text">Mở rộng</span>
+                                                <i class="fa fa-angle-down"></i>
+                                            </a>
+                                        </div>
+                                        <div id="content-{{ $product->id }}" class="content2 mt-1 mb-2"
+                                            style="display: none;">
+                                            <div class="row">
+                                                @can('Chỉnh sửa sản phẩm')
+                                                    <div class="col-10 text-end mb-2">
+                                                        <!-- Nút chỉnh sửa hàng loạt -->
+                                                        <button class="btn btn-sm btn-alt-secondary toggle-batch-edit">Chỉnh
+                                                            sửa
+                                                            hàng loạt <i class="fa fa-angle-down"></i></button>
+                                                    </div>
+                                                @endcan
+                                                <div class="col-2 text-end">
+                                                    <!-- Nút lưu và hủy, ban đầu ẩn đi -->
+                                                    <button class="btn btn-sm btn-alt save-all-btn d-none">Lưu
+                                                    </button>
+                                                    <button class="btn btn-sm btn-alt cancel-btn d-none">Hủy</button>
+                                                </div>
+                                            </div>
+                                            <div class="batch-edit-form d-none mt-3 mb-2"
+                                                data-product-id="{{ $product->id }}">
+                                                <div class="row d-flex justify-content-center">
+                                                    <div class="col-3"></div>
+                                                    <div class="col-2">
+                                                        <div class="mb-2">
+                                                            <input type="number" id="batch-price-{{ $product->id }}"
+                                                                class="form-control fs-sm batch-input"
+                                                                placeholder="Nhập vào đơn giá">
+                                                            <span class="text-danger error-message"
+                                                                id="error-price-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="mb-2">
+                                                            <input type="number"
+                                                                id="batch-price_sale-{{ $product->id }}"
+                                                                class="form-control fs-sm batch-input"
+                                                                placeholder="Giá khuyến mãi">
+                                                            <span class="text-danger error-message"
+                                                                id="error-price_sale-{{ $product->id }}"></span><!-- Chỗ để hiển thị lỗi -->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="mb-2">
+                                                            <input type="number" id="batch-stock-{{ $product->id }}"
+                                                                class="form-control fs-sm batch-input"
+                                                                placeholder="Nhập vào số lượng">
+                                                            <span class="text-danger error-message"
+                                                                id="error-stock-{{ $product->id }}"></span>
+                                                            <!-- Chỗ để hiển thị lỗi -->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="mb-2">
+                                                            <button class="btn btn-sm btn-alt apply-all"
+                                                                data-product-id="{{ $product->id }}" disabled>Áp
+                                                                dụng cho tất cả</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Tạo form để gửi tất cả biến thể -->
+                                            <form class="variant-form-all" id="variant-form-{{ $product->id }}">
+                                                @foreach ($product->variants as $variant)
+                                                    @php
+                                                        $color = null;
+                                                        $size = null;
+                                                        foreach ($variant->variantAttributes as $attribute) {
+                                                            if ($attribute->attribute->name === 'Color') {
+                                                                $color = $attribute->attributeValue->value;
+                                                            }
+                                                            if ($attribute->attribute->name === 'Size') {
+                                                                $size = $attribute->attributeValue->value;
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <div class="row d-flex justify-content-center variant-row"
+                                                        data-variant-id="{{ $variant->id }}">
+                                                        <div class="col-3 align-content-center">
+                                                            <div class="mb-2">
+                                                                <label for="quantity" class="text-muted">Biến
+                                                                    thể:</label>
+                                                                <span>{{ $color }}-{{ $size }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-2">
+                                                            <div class="mb-2">
+                                                                <label for="price_regular" class="text-muted fs-sm">Đơn
+                                                                    giá</label>
+                                                                <input type="number"
+                                                                    name="variants[{{ $variant->id }}][price_regular]"
+                                                                    @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
+                                                                    class="form-control fs-sm batch-input price-regular"
+                                                                    value="{{ $variant->price_regular }}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-2">
+                                                            <div class="mb-2">
+                                                                <label for="price_sale" class="text-muted fs-sm">Giá
+                                                                    khuyến mãi</label>
+                                                                <input type="number"
+                                                                    @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
+                                                                    name="variants[{{ $variant->id }}][price_sale]"
+                                                                    class="form-control fs-sm batch-input price-sale"
+                                                                    value="{{ $variant->price_sale }}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-2">
+                                                            <div class="mb-2">
+                                                                <label for="stock" class="text-muted fs-sm">Số
+                                                                    lượng</label>
+                                                                <input type="number"
+                                                                    @if (!Auth::user()->can('Chỉnh sửa sản phẩm')) disabled @endif
+                                                                    name="variants[{{ $variant->id }}][stock]"
+                                                                    class="form-control fs-sm batch-input stock"
+                                                                    value="{{ $variant->stock }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                                {{-- <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td> --}}
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="">{{ $products->links() }}</div>
+            </div>
+
         </div>
     </div>
 @endsection

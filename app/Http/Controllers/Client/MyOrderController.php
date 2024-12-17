@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Client;
 
+use Illuminate\Http\Request;
+use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use App\Services\Client\MyOrderService;
-use App\Services\UserService;
-use Illuminate\Http\Request;
+use App\Notifications\OrderStatusUpdated;
+use App\Services\ProductService;
 
 class MyOrderController extends Controller
 {
     protected $myOrderService;
     protected $userService;
+    protected $productService;
 
-    public function __construct(MyOrderService $myOrderService, UserService $userService)
+    public function __construct(MyOrderService $myOrderService, UserService $userService, ProductService $productService)
     {
         $this->myOrderService = $myOrderService;
         $this->userService = $userService;
+        $this->productService = $productService;
     }
 
     public function myOrders(Request $request)
@@ -118,7 +122,6 @@ class MyOrderController extends Controller
     {
         // Gọi service để hủy đơn hàng
         $result = $this->myOrderService->cancelOrder($order_id);
-
         // Kiểm tra kết quả
         if ($result['success']) {
             return redirect()->back()->with('success', $result['message']);

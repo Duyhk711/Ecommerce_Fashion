@@ -41,18 +41,7 @@
                             </p>
                         </div>
                     </a>
-                @elseif($orderDetail->payment_status == 'cho_thanh_toan' && $orderDetail->status == 'huy_don_hang')
-                    <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
-                        <div class="block-content py-5">
-                            <div class="item rounded-circle bg-body mx-auto mb-3">
-                                <i class="fa fa-times text-muted"></i>
-                            </div>
-                            <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                                Đã hủy
-                            </p>
-                        </div>
-                    </a>
-                @elseif($orderDetail->payment_status == 'da_thanh_toan' && $orderDetail->status == 'huy_don_hang')
+                @elseif($orderDetail->payment_status == 'huy_thanh_toan')
                     <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
                         <div class="block-content py-5">
                             <div class="item rounded-circle bg-body mx-auto mb-3">
@@ -67,7 +56,6 @@
             </div>
 
             {{-- ô 3 --}}
-
             <div class="col-6 col-lg-3">
                 @if ($orderDetail->status == '1')
                     <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
@@ -80,14 +68,36 @@
                             </p>
                         </div>
                     </a>
-                @elseif($orderDetail->status == '2' || $orderDetail->status == '3' || $orderDetail->status == '4')
+                @elseif($orderDetail->status == '2' || $orderDetail->status == '3')
+                    <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+                        <div class="block-content py-5">
+                            <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
+                                <i class="fa fa-sync fa-spin text-xsmooth-dark"></i>
+                            </div>
+                            <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                                Đã xác nhận
+                            </p>
+                        </div>
+                    </a>
+                @elseif($orderDetail->status == '4')
                     <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
                         <div class="block-content py-5">
                             <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
                                 <i class="fa fa-check text-xeco-dark"></i>
                             </div>
                             <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                                Đã xác nhận
+                                Đã giao
+                            </p>
+                        </div>
+                    </a>
+                @elseif($orderDetail->status == '5')
+                    <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
+                        <div class="block-content py-5">
+                            <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
+                                <i class="fa fa-check text-xeco-dark"></i>
+                            </div>
+                            <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                                Hoàn thành
                             </p>
                         </div>
                     </a>
@@ -107,7 +117,6 @@
 
             {{-- ô 4 --}}
             <div class="col-6 col-lg-3">
-
                 @if ($orderDetail->status == 'huy_don_hang')
                     <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
                         <div class="block-content py-5">
@@ -119,7 +128,7 @@
                             </p>
                         </div>
                     </a>
-                @elseif($orderDetail->status == '2')
+                @elseif($orderDetail->status == '2' || $orderDetail->status == '1')
                     <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
                         <div class="block-content py-5">
                             <div class="item rounded-circle bg-xsmooth-lighter mx-auto mb-3">
@@ -152,19 +161,18 @@
                             </p>
                         </div>
                     </a>
-                @elseif($orderDetail->status != '3' || $orderDetail->status != '4' || $orderDetail->status != '2')
+                @elseif($orderDetail->status == '5')
                     <a class="block block-rounded block-link-shadow text-center h-100 mb-0" href="javascript:void(0)">
                         <div class="block-content py-5">
-                            <div class="item rounded-circle bg-body mx-auto mb-3">
-                                <i class="fa fa-times text-muted"></i>
+                            <div class="item rounded-circle bg-xeco-lighter mx-auto mb-3">
+                                <i class="fa fa-check text-xeco-dark"></i>
                             </div>
                             <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
-                                Giao hàng
+                                Hoàn thành
                             </p>
                         </div>
                     </a>
                 @endif
-
             </div>
         </div>
         <!-- END Quick Overview -->
@@ -221,7 +229,7 @@
             <div class="block-header block-header-default d-flex justify-content-between">
                 <h3 class="block-title">Sản phẩm</h3>
                 @can('Chỉnh sửa trạng thái đơn hàng')
-                    @if ($orderDetail->status == '4' || $orderDetail->status == 'huy_don_hang')
+                    @if ($orderDetail->status == '4' || $orderDetail->status == 'huy_don_hang' || $orderDetail->status == '5')
                         <button type="button" class="btn btn-sm btn-primary "
                             style="height: 30px; cursor: not-allowed; background-color: #e0e0e0; color: #999; border: none;"
                             data-bs-toggle="tooltip" title="Không thể chỉnh sửa">
@@ -335,7 +343,7 @@
                                         </td>
                                         <td style="width: 220px;">
                                             <span
-                                                class="fw-semibold">{{ $change->created_at->format('F d, Y - H:i') }}</span>
+                                                class="fw-semibold">{{ $change->created_at->format('d-m-Y H:i') }}</span>
                                         </td>
                                         <td>
                                             <a href="javascript:void(0)">{{ $change->user->name ?? 'Support' }}</a>

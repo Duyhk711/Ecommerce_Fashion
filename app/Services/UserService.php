@@ -118,7 +118,7 @@ class UserService
     public function updateProfile(array $data, User $user)
     {
         $old_avatar = $user->avatar;
-        // dd($data);
+
         if (isset($data['avatar'])) {
             Log::info('Uploaded file info', [
                 'name' => $data['avatar']->getClientOriginalName(),
@@ -126,8 +126,13 @@ class UserService
                 'size' => $data['avatar']->getSize(),
                 'path' => $data['avatar']->getRealPath(), // Kiểm tra đường dẫn thực tế
             ]);
+
+            // Lưu ảnh vào thư mục public và lấy đường dẫn tuyệt đối
             $data['avatar'] = $data['avatar']->store('avatars', 'public');
+            $data['avatar'] = Storage::url($data['avatar']); // Lấy đường dẫn đầy đủ
+
             Log::info('Avatar stored at:', ['path' => $data['avatar']]);
+
             if ($old_avatar && Storage::disk('public')->exists($old_avatar)) {
                 Storage::disk('public')->delete($old_avatar);
                 Log::info('Old avatar deleted:', ['path' => $old_avatar]);
@@ -135,6 +140,8 @@ class UserService
         } else {
             $data['avatar'] = $old_avatar;
         }
+
         return $user->update($data);
     }
+
 }

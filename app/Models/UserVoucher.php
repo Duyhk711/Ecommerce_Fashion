@@ -11,7 +11,7 @@ class UserVoucher extends Model
     use HasFactory;
 
     protected $table = 'user_voucher';
-    protected $fillable = ['user_id', 'voucher_id','saved_at', 'is_used'];
+    protected $fillable = ['user_id', 'voucher_id','saved_at', 'is_used', 'limit'];
 
     public function voucher()
     {

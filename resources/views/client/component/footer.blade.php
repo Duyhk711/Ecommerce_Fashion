@@ -13,11 +13,11 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="input-group">
-                            <input type="email" class="form-control input-group-field newsletter-input"
+                            {{-- <input type="email" class="form-control input-group-field newsletter-input"
                                 name="email" value="" placeholder=""
                                 required />
                             <button type="submit" class="input-group-btn btn btn-secondary newsletter-submit"
-                                name="commit">Đăng kí</button>
+                                name="commit">Đăng kí</button> --}}
                         </div>
                     </div>
                 </div>

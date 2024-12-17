@@ -9,12 +9,9 @@ use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\StatisticsController;
-use App\Http\Controllers\Admin\ThongkeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\ChatsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,7 +43,7 @@ Route::prefix('admin')
         Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtpAdmin'])->name('verify-otp.post');
         Route::get('/reset-password', [AuthenticationController::class, 'showResetPasswordAdminForm'])->name('reset-password');
         Route::post('/reset-password', [AuthenticationController::class, 'resetPasswordAdmin'])->name('reset-password.post');
-
+        Route::get('/products/trashed', [ProductController::class, 'trashed'])->name('products.trashed');
         Route::middleware('checkAdmin')->group(function () {
 
             Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -84,6 +81,7 @@ Route::prefix('admin')
             Route::resource('users', UserController::class);
             // Route::post('/user/{user}/active', [UserController::class, 'active'])->name('users.active');
             Route::get('clients', [UserController::class, 'getAllClient'])->name('users.clients')->middleware('permission:xem danh sách khách hàng');
+            Route::get('clients/show/{user}', [UserController::class, 'show'])->name('users.clients.show')->middleware('permission:xem danh sách khách hàng');
             Route::get('staffs', [UserController::class, 'getAllStaff'])->name('users.staffs')->middleware('permission:xem danh sách nhân viên');
             Route::get('staffs/create', [UserController::class, 'createStaff'])->name('users.staffs.create')->middleware('role:admin');
             Route::post('staffs/store', [UserController::class, 'storeStaff'])->name('users.staffs.store')->middleware('role:admin');
@@ -104,7 +102,7 @@ Route::prefix('admin')
 
             // profile
             Route::view('/profile', 'admin.auth.account-profile')->name('account-profile');
-            Route::post('/profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
+            Route::post('/profile/update-profile', [AuthenticationController::class, 'updateProfile'])->name('update-profile');
             Route::post('/profile/update-password', [AuthenticationController::class, 'updatePassword'])->name('update-password');
 
             // BANNER
@@ -135,6 +133,5 @@ Route::prefix('admin')
             Route::view('statistics/revenues', 'admin.statistics.revenues')->name('statistics.revenues');
             Route::view('statistics/vouchers', 'admin.statistics.vouchers')->name('statistics.vouchers');
             Route::view('statistics/customer', 'admin.statistics.customer')->name('statistics.customer');
-
         });
     });

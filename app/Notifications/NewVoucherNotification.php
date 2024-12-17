@@ -31,6 +31,7 @@ class NewVoucherNotification extends Notification
     public function toArray($notifiable)
     {
         return [
+            'category' => 'client',
             'voucher_id' => $this->voucher->id,
             'message' => $this->message,
             'link' => route('vouchers.index'), // Link tới trang voucher
@@ -41,6 +42,7 @@ class NewVoucherNotification extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
+            'category' => 'client',
             'voucher_id' => $this->voucher->id,
             'message' => $this->message,
             'link' => route('vouchers.index'),

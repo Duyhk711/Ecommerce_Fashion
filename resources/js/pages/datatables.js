@@ -23,7 +23,7 @@ class pageTablesDatatables {
       language: {
         lengthMenu: "_MENU_",
         search: "_INPUT_",
-        searchPlaceholder: "Search..",
+        searchPlaceholder: "Tìm kiếm..",
         info: "Page <strong>_PAGE_</strong> of <strong>_PAGES_</strong>",
         paginate: {
           first: '<i class="fa fa-angle-double-left"></i>',

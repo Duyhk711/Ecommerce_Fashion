@@ -1,64 +1,64 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const ctx = document.getElementById("orderStatusPieChart").getContext("2d");
+// document.addEventListener("DOMContentLoaded", function () {
+//   const ctx = document.getElementById("orderStatusPieChart").getContext("2d");
 
-  fetch("/api/orders/status-distribution")
-    .then((response) => response.json())
-    .then((data) => {
-      const labels = data.map((item) => item.status);
-      const values = data.map((item) => item.count);
-      const percentages = data.map((item) => `${item.percentage}%`);
+//   fetch("/api/orders/status-distribution")
+//     .then((response) => response.json())
+//     .then((data) => {
+//       const labels = data.map((item) => item.status);
+//       const values = data.map((item) => item.count);
+//       const percentages = data.map((item) => `${item.percentage}%`);
 
-      // Gán màu sắc theo trạng thái
-      const backgroundColors = labels.map((status) => {
-        switch (status) {
-          case "huy_don_hang":
-            return "#F7464A"; // Đỏ đậm
-          case "Chờ xác nhận":
-            return "#FFCE56"; // Vàng
-          case "Chờ vận chuyển":
-            return "#36A2EB"; // Xanh dương nhạt
-          case "Đã vận chuyển":
-            return "#1E5D8C"; // Xanh dương đậm hơn
-          case "Hoàn thành":
-            return "#4BC0C0"; // Xanh lá
-          default:
-            return "#FF6384"; // Màu mặc định nếu không tìm thấy trạng thái
-        }
-      });
+//       // Gán màu sắc theo trạng thái
+//       const backgroundColors = labels.map((status) => {
+//         switch (status) {
+//           case "huy_don_hang":
+//             return "#F7464A"; // Đỏ đậm
+//           case "Chờ xác nhận":
+//             return "#FFCE56"; // Vàng
+//           case "Chờ vận chuyển":
+//             return "#36A2EB"; // Xanh dương nhạt
+//           case "Đã vận chuyển":
+//             return "#1E5D8C"; // Xanh dương đậm hơn
+//           case "Hoàn thành":
+//             return "#4BC0C0"; // Xanh lá
+//           default:
+//             return "#FF6384"; // Màu mặc định nếu không tìm thấy trạng thái
+//         }
+//       });
 
-      new Chart(ctx, {
-        type: "doughnut",
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              data: values,
-              backgroundColor: backgroundColors, // Gán màu sắc đã thay đổi
-              hoverOffset: 4,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
-            },
-            tooltip: {
-              callbacks: {
-                label: function (tooltipItem) {
-                  return `${tooltipItem.label}: ${
-                    values[tooltipItem.dataIndex]
-                  } (${percentages[tooltipItem.dataIndex]})`;
-                },
-              },
-            },
-          },
-        },
-      });
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-});
+//       new Chart(ctx, {
+//         type: "doughnut",
+//         data: {
+//           labels: labels,
+//           datasets: [
+//             {
+//               data: values,
+//               backgroundColor: backgroundColors, // Gán màu sắc đã thay đổi
+//               hoverOffset: 4,
+//             },
+//           ],
+//         },
+//         options: {
+//           responsive: true,
+//           plugins: {
+//             legend: {
+//               position: "top",
+//             },
+//             tooltip: {
+//               callbacks: {
+//                 label: function (tooltipItem) {
+//                   return `${tooltipItem.label}: ${
+//                     values[tooltipItem.dataIndex]
+//                   } (${percentages[tooltipItem.dataIndex]})`;
+//                 },
+//               },
+//             },
+//           },
+//         },
+//       });
+//     })
+//     .catch((error) => console.error("Error fetching data:", error));
+// });
 
 document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/orders") // Thay đổi đường dẫn nếu cần
