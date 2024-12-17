@@ -115,12 +115,13 @@
 
             // Vẽ lại biểu đồ mới
             const ctx1 = document.getElementById('voucher-usage').getContext('2d');
+
             window.chartVoucherUsage = new Chart(ctx1, {
                 type: 'pie',
                 data: {
                     labels: ['Đã sử dụng (%)', 'Không được sử dụng (%)'],
                     datasets: [{
-                        data: [data.usage_rate, 100 - data.used_vouchers],
+                        data: [data.usage_rate, 100 - data.usage_rate],
                         backgroundColor: ['#36a2eb', '#ff6384']
                     }],
                 }
@@ -143,8 +144,8 @@
 
             // Vẽ lại biểu đồ mới
             const ctx2 = document.getElementById('voucher-revenue').getContext('2d');
-            const revenueWithVoucher = formatCurrency(data.revenue_with_voucher);
-            const revenueWithoutVoucher = formatCurrency(data.revenue_without_voucher);
+            const revenueWithVoucher = data.revenue_with_voucher;
+            const revenueWithoutVoucher = data.revenue_without_voucher;
             window.chartVoucherRevenue = new Chart(ctx2, {
                 type: 'bar',
                 data: {

@@ -993,12 +993,12 @@
             let params = new URLSearchParams();
             if (selectedCategories.length) {
                 params.append('danhmuc', selectedCategories);
-            } else if (priceRange) {
-                params.append('gia', priceRange);
             } else if (selectedColors.length) {
                 params.append('mau', selectedColors);
             } else if (selectedSizes.length) {
                 params.append('kickco', selectedSizes);
+            } else if (priceRange) {
+                params.append('gia', priceRange);
             }
 
             // Điều hướng đến URL mới với các tham số
