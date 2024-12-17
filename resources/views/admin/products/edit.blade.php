@@ -285,7 +285,7 @@
                             <div class="form-group image-preview" id="sub-images-preview">
                                 <label class="form-label">Tải lên ảnh phụ<span class="text-danger">*</span>:</label>
                                 <div class="custom-file">
-                                    <input type="file" name="images[]" class="form-control-file"
+                                    <input type="file" name="images[]" class="form-control-file" multiple
                                         id="sub-images-input">
                                     <label class="custom-file-label" for="sub-images-input"></label>
                                     <input type="hidden" id="deleted-images" name="deleted_images" value="[]">
@@ -969,7 +969,7 @@
                 reader.readAsDataURL(file);
             });
         }
-       
+
     </script>
 
     {{-- validate variant --}}

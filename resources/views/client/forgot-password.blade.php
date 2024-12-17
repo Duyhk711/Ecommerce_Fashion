@@ -39,15 +39,16 @@
                                             @error('email')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
-                                            <div class="text-right">
+                                            {{-- <div class="text-right">
                                                 <small><a href="{{ url()->current() }}?method=phone">Gửi OTP qua Số Điện Thoại</a></small>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <div class="form-group col-12 mb-0">
                                             <div class="login-remember-forgot d-flex justify-content-between align-items-center">
                                                 <input type="submit" class="btn btn-primary btn-lg" value="Đặt lại mật khẩu" />
                                                 <a href="{{ route('login') }}" class="d-flex justify-content-center btn-link">
-                                                    <i class="icon anm anm-angle-left-r me-2"></i> Quay lại Đăng Nhập
+                                                    {{-- <i class="icon anm anm-angle-left-r me-2"></i> --}}
+                                                    Quay lại Đăng Nhập
                                                 </a>
                                             </div>
                                         </div>
