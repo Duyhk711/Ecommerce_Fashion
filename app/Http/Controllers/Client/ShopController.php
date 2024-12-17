@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Favorite;
 use App\Services\Client\HomeService;
 use App\Services\Client\ShopService;
-use Illuminate\Http\Request;
-use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\JsonLd;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
@@ -73,6 +73,7 @@ class ShopController extends Controller
         session(['perPage' => $perPage, 'sortBy' => $sortBy]);
 
         // dd($categories);
+        // dd($request->all());
         $products = $this->shopService->getFilteredProducts($request, session('perPage'), session('sortBy'));
         $filter = 'filter';
         // $products = $this->shopService->getShopProducts(session('perPage'), session('sortBy'));

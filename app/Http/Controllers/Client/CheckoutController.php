@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\User;
-use App\Models\Order;
-use App\Models\CartItem;
-use App\Events\TestEvent;
-use App\Models\OrderItem;
-use App\Events\CreateOrder;
 use App\Events\NewOrderNotifyAdmin;
-use App\Models\UserVoucher;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Models\User;
+use App\Models\UserVoucher;
+use App\Notifications\CreateNewOrder;
+use App\Notifications\OrderStatusUpdated;
+use App\Services\Client\CartService;
+use App\Services\Client\CheckoutService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Notifications\CreateProduct;
-use App\Services\Client\CartService;
-use Illuminate\Support\Facades\Auth;
-use App\Notifications\CreateNewOrder;
-use App\Services\Client\CheckoutService;
-use App\Notifications\OrderStatusUpdated;
 
 class CheckoutController extends Controller
 {
@@ -138,7 +135,7 @@ class CheckoutController extends Controller
                     ->first(); // Lấy bản ghi đầu tiên (chỉ có một)
 
                 if ($userVoucher) {
-                    $userVoucher->is_used = 1; // Cập nhật giá trị
+                    $userVoucher->is_used = $userVoucher->is_used + 1; // Cập nhật giá trị
                     $userVoucher->save(); // Lưu vào cơ sở dữ liệu
                 }
             }
@@ -230,9 +227,17 @@ class CheckoutController extends Controller
             // Commit transaction nếu không có lỗi
             DB::commit();
             // Kiểm tra phương thức thanh toán
+            // dd($request->payment_method);
             if ($request->payment_method == 'COD') {
                 // dd($product);
-                return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
+                // dd('ok');
+                // return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
+                // return redirect()->route('client.orderSuccess')->with([
+                //     'success' => 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.',
+                //     'orderItems' => $orderItems,
+                //     'order' => $order,
+                // ]);
+                return redirect()->route('client.orderSuccess', $order->session_id);
             } else {
                 return redirect()->route('vnpay.payment', ['order_id' => $order->id]);
             }
@@ -245,6 +250,37 @@ class CheckoutController extends Controller
     public function orderPayment($id)
     {
         return redirect()->route('vnpay.payment', ['order_id' => $id]);
+    }
+
+    public function orderSuccess($session_id)
+    {
+        $order = Order::where('session_id', $session_id)->first();
+        // dd($order->id);
+        $orderItems = OrderItem::with([
+            'productVariant.variantAttributes.attribute',
+            'productVariant.variantAttributes.attributeValue',
+        ])->where('order_id', $order->id)
+            ->get();
+
+        $orderItems = $orderItems->map(function ($orderItem) {
+            $variant = $orderItem->productVariant;
+
+            // Xử lý thuộc tính biến thể sản phẩm
+            $attributes = $variant->variantAttributes->map(function ($variantAttribute) {
+                return $variantAttribute->attribute->name . ': ' . $variantAttribute->attributeValue->value;
+            })->implode(', ');
+
+            return [
+                'product_name' => $orderItem->product_name,
+                'product_variant_id' => $orderItem->product_variant_id,
+                'variant_attributes' => $attributes,
+                'image' => $orderItem->variant_image,
+                'price' => $orderItem->variant_price_sale,
+                'quantity' => $orderItem->quantity,
+            ];
+        });
+
+        return view('client.order-success', compact('orderItems', 'order'))->with('success', 'Đơn hàng của bạn đã được tạo thành công. Vui lòng chờ xác nhận.');
     }
 
 }

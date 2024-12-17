@@ -50,9 +50,9 @@
                             <th>Email</th>
                             <th>Số điện thoại</th>
                             <th>Vai trò</th>
-                            <th>Trang thái</th>
+                            {{-- <th>Trang thái</th> --}}
                             @role('admin')
-                                <th class="text-center" style="width: 100px;">Actions</th>
+                                <th class="text-center">Hành động</th>
                             @endrole
                         </tr>
                     </thead>
@@ -70,13 +70,13 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ $user->roles->first()?->name ?? 'Không có vai trò' }}</td>
-                                <td>
+                                {{-- <td>
                                     @if ($user->is_active == 1)
                                         <span class="badge bg-success">Kích hoạt</span>
                                     @else
                                         <span class="badge bg-danger">Ngừng kích hoạt</span>
                                     @endif
-                                </td>
+                                </td> --}}
                                 @role('admin')
                                     <td class="text-center">
                                         <div class="btn-group">
@@ -84,7 +84,7 @@
                                                 href="{{ route('admin.users.staffs.edit', $user) }}">
                                                 <i class="fa fa-fw fa-pencil-alt"></i>
                                             </a>
-                                            <form action="{{ route('admin.users.active', $user) }}" method="POST"
+                                            {{-- <form action="{{ route('admin.users.active', $user) }}" method="POST"
                                                 style="display:inline;" class="form-activate me-1">
                                                 @csrf
 
@@ -93,7 +93,7 @@
                                                     title="{{ $user->is_active == 1 ? 'Deactivate' : 'Activate' }}">
                                                     <i class="fa-solid fa-power-off"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
                                             <button class="btn btn-sm btn-alt-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateRole" data-id="{{ $user->id }}"
                                                 data-role="{{ $user->roles->first()?->name ?? '' }}"
