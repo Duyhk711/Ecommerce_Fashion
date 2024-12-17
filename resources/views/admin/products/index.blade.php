@@ -186,7 +186,7 @@
                                         <span class="text-warning" data-bs-toggle="tooltip" title="Sắp hết hàng">
                                             {{ $product->total_stock }}</span>
                                     @else
-                                        <span class=" text-danger " data-bs-toggle="tooltip"
+                                        <span class="text-danger " data-bs-toggle="tooltip"
                                             title="Hết hàng">{{ $product->total_stock }}</span>
                                     @endif
                                 </td>
