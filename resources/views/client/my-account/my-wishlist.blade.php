@@ -38,7 +38,7 @@
                 <table class="table align-middle text-center order-table">
                     <thead>
                         <tr class="table-head text-nowrap">
-                            <th scope="col" class="color" style="width: 5%;">#</th>
+                            <th scope="col" class="color" style="width: 5%;">STT</th>
                             <th scope="col" class="color" style="width: 40%;">Sản phẩm</th>
                             <th scope="col" class="color" style="width: 20%;">Đơn giá</th>
                             <th scope="col" class="color" style="width: 20%;">Thao tác</th>
@@ -46,28 +46,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($favorites as $favorite)
+                        @forelse($favorites as $index => $favorite)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td> {{ ($favorites->currentPage() - 1) * $favorites->perPage() + $index + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="">
                                             <img class="blur-up lazyload me-2"
-                                            data-src="{{Storage::url($favorite->product->img_thumbnail) }}"
-                                            src="{{Storage::url($favorite->product->img_thumbnail) }}"
-                                            width="50" alt="{{ $favorite->product->name }}"
-                                            title="{{ $favorite->product->name }}" />
+                                                data-src="{{ Storage::url($favorite->product->img_thumbnail) }}"
+                                                src="{{ Storage::url($favorite->product->img_thumbnail) }}" width="50"
+                                                alt="{{ $favorite->product->name }}"
+                                                title="{{ $favorite->product->name }}" />
                                         </div>
 
                                         <div>
-                                            <a href="{{route('productDetail', $favorite->product->slug)}}" style="font-weight: 500;">{{ $favorite->product->name }}</a>
+                                            <a href="{{ route('productDetail', $favorite->product->slug) }}"
+                                                style="font-weight: 500;">{{ $favorite->product->name }}</a>
                                         </div>
                                     </div>
                                 </td>
 
                                 <!-- Hiển thị giá sản phẩm -->
                                 <td>
-                                    <span class="price-sale">{{ number_format($favorite->product->price_sale, 3, '.', 0) }}₫</span>
+                                    <span
+                                        class="price-sale">{{ number_format($favorite->product->price_sale, 3, '.', 0) }}₫</span>
                                 </td>
 
                                 <!-- Nút xóa sản phẩm yêu thích -->
@@ -98,57 +100,89 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    const deleteBtns = document.querySelectorAll('.form-delete');
+            const deleteBtns = document.querySelectorAll('.form-delete');
 
-    for (const btn of deleteBtns) {
-        btn.querySelector('.btn-delete').addEventListener('click', function(e) {
-            e.preventDefault();
+            for (const btn of deleteBtns) {
+                btn.querySelector('.btn-delete').addEventListener('click', function(e) {
+                    e.preventDefault();
 
-            Swal.fire({
-                title: "Xóa sản phẩm này khỏi danh sách yêu thích?",
-                text: "Nếu xóa bạn sẽ không thể khôi phục!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Đồng ý',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = this.closest('.form-delete');
-                    const actionUrl = form.getAttribute('action');
+                    Swal.fire({
+                        title: "Xóa sản phẩm này khỏi danh sách yêu thích?",
+                        text: "Nếu xóa bạn sẽ không thể khôi phục!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const form = this.closest('.form-delete');
+                            const actionUrl = form.getAttribute('action');
 
-                    fetch(actionUrl, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            fetch(actionUrl, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                            'meta[name="csrf-token"]').getAttribute(
+                                            'content')
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Xóa dòng sản phẩm khỏi bảng
+                                        const row = form.closest('tr');
+                                        row.remove();
+                                        // Cập nhật số lượng wishlist
+                                        const wishlistCountElem = document.getElementById(
+                                            'wishlist-count');
+                                        let currentCount = parseInt(wishlistCountElem
+                                            .textContent.trim());
+                                        if (!isNaN(currentCount) && currentCount > 0) {
+                                            wishlistCountElem.textContent = currentCount - 1;
+                                        }
+                                        // Cập nhật lại STT
+                                        updateRowNumbers();
+
+                                        // Hiển thị thông báo thành công
+                                        Swal.fire({
+                                            title: 'Thành công!',
+                                            text: data.message,
+                                            icon: 'success'
+                                        });
+                                    } else {
+                                        // Hiển thị thông báo lỗi
+                                        Swal.fire({
+                                            title: 'Lỗi!',
+                                            text: 'Có lỗi xảy ra, vui lòng thử lại.',
+                                            icon: 'error'
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: 'Có lỗi xảy ra, vui lòng thử lại.',
+                                        icon: 'error'
+                                    });
+                                });
                         }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            form.closest('tr').remove();
-                            Swal.fire({
-                                title: 'Thành công!',
-                                text: data.message,
-                                icon: 'success'
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: 'Có lỗi xảy ra, vui lòng thử lại.',
-                                icon: 'error'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
                     });
-                }
-            });
-        });
-    }
-});
+                });
+            }
 
+            // Hàm cập nhật lại STT sau khi xóa
+            function updateRowNumbers() {
+                const rows = document.querySelectorAll('table tbody tr');
+                rows.forEach((row, index) => {
+                    const sttCell = row.querySelector('td:first-child');
+                    if (sttCell) {
+                        sttCell.textContent = index + 1; // Cập nhật STT
+                    }
+                });
+            }
+        });
     </script>
 @endsection

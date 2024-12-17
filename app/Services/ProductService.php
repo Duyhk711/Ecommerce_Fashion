@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 class ProductService
 {
 
-    public function listProducts($searchTerm, $catalogueId = null, $minPrice = null, $maxPrice = null, $stockStatus = null)
+    public function listProducts($searchTerm, $catalogueId = null, $minPrice = null, $maxPrice = null, $filterStatus = null)
     {
         $query = Product::with([
             'catalogue',
@@ -45,26 +45,28 @@ class ProductService
             $query->where('price_regular', '<=', $maxPrice);
         }
 
-        if ($stockStatus) {
-            $query->whereHas('variants', function ($query) use ($stockStatus) {
-                $query->select(DB::raw('sum(stock) as total_stock'))
-                    ->groupBy('product_id');
+        if ($filterStatus !== null) {
+            if ($filterStatus === '0' || $filterStatus === '1') {
+                $query->where('is_active', $filterStatus);
+            } else {
+                $query->whereHas('variants', function ($query) use ($filterStatus) {
+                    $query->select(DB::raw('sum(stock) as total_stock'))
+                        ->groupBy('product_id');
 
-                if ($stockStatus == 'low') {
-                    $query->havingRaw('sum(stock) < 10');
-                } elseif ($stockStatus == 'in_stock') {
-                    $query->havingRaw('sum(stock) >= 10');
-                } elseif ($stockStatus == 'out_of_stock') {
-                    $query->havingRaw('sum(stock) = 0');
-                }
-            });
+                    if ($filterStatus == 'low') {
+                        $query->havingRaw('sum(stock) < 10');
+                    } elseif ($filterStatus == 'in_stock') {
+                        $query->havingRaw('sum(stock) >= 10');
+                    } elseif ($filterStatus == 'out_of_stock') {
+                        $query->havingRaw('sum(stock) = 0');
+                    }
+                });
+            }
         }
 
         // Sắp xếp và phân trang
         return $query->orderBy('created_at', 'desc')->paginate(10);
     }
-
-
 
     public function getCreateData()
     {

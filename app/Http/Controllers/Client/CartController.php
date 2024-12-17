@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\ProductVariant;
 use App\Services\Client\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class CartController extends Controller
         $urlWithoutParams = url()->previous();
         $urlWithoutParams = strtok($urlWithoutParams, '?');
         try {
-            $this->cartService->addToCart($productId, $productVariantId, $quantity,$slug);
+            $this->cartService->addToCart($productId, $productVariantId, $quantity, $slug);
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
@@ -151,4 +152,27 @@ class CartController extends Controller
 
         return redirect()->back(); // Quay lại trang trước đó
     }
+
+    public function checkStock(Request $request)
+{
+    $items = $request->input('items');
+    $response = [];
+
+    if (empty($items)) {
+        return response()->json(['error' => 'Không có dữ liệu gửi lên.'], 400);
+    }
+
+    foreach ($items as $item) {
+        $productVariant = ProductVariant::find($item['product_variant_id']);
+        $currentStock = $productVariant ? $productVariant->stock : 0;
+
+        $response[] = [
+            'product_variant_id' => $item['product_variant_id'],
+            'stock' => $currentStock
+        ];
+    }
+
+    return response()->json($response);
+}
+
 }

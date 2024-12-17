@@ -106,14 +106,13 @@
                         <div class="ms-3">
                             <select name="stock_status" class="form-select" id="stock-status-select">
                                 <option value="">Tất cả trạng thái</option>
-                                <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Sắp
-                                    hết hàng</option>
-                                <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>
-                                    Còn hàng</option>
-                                <option value="out_of_stock"
-                                    {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng
-                                </option>
+                                <option value="low" {{ request('stock_status') == 'low' ? 'selected' : '' }}>Sắp hết hàng</option>
+                                <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>Còn hàng</option>
+                                <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>Hết hàng</option>
+                                <option value="1" {{ request('stock_status') == '1' ? 'selected' : '' }}>Hoạt động</option>
+                                <option value="0" {{ request('stock_status') == '0' ? 'selected' : '' }}>Không hoạt động</option>
                             </select>
+                            
                         </div>
 
                         <!-- Nút đặt lại -->
@@ -143,7 +142,8 @@
                     <tbody>
                         @foreach ($products as $index => $product)
                             <tr>
-                                <td class="text-center">{{ ($products->currentPage() - 1) * $products->perPage() + $index + 1 }}</td>
+                                <td class="text-center">
+                                    {{ ($products->currentPage() - 1) * $products->perPage() + $index + 1 }}</td>
                                 <td class="fs-sm">
                                     <div class="d-flex align-items-center">
                                         <!-- Hình ảnh -->

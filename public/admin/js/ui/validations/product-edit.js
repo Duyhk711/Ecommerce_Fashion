@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
         validatePriceSale();
     });
 
-    document.getElementById('description').addEventListener('input', function() {
-        validateDescription();
-    });
+    // document.getElementById('description').addEventListener('input', function() {
+    //     validateDescription();
+    // });
 
     document.getElementById('catalogue-select').addEventListener('change', function() {
         validateCatalogue();
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!validateName()) isValid = false;
         if (!validatePriceRegular()) isValid = false;
         if (!validatePriceSale()) isValid = false;
-        if (!validateDescription()) isValid = false;
+        // if (!validateDescription()) isValid = false;
         if (!validateCatalogue()) isValid = false;
 
         return isValid;
@@ -90,15 +90,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    function validateDescription() {
-        const description = document.getElementById('description');
-        clearError(description);
-        if (!description.value.trim()) {
-            showError(description, 'Mô tả không được để trống');
-            return false;
-        }
-        return true;
-    }
+    // // function validateDescription() {
+    // //     const description = document.getElementById('description');
+    // //     clearError(description);
+    // //     if (!description.value.trim()) {
+    // //         showError(description, 'Mô tả không được để trống');
+    // //         return false;
+    // //     }
+    // //     return true;
+    // }
 
     function validateCatalogue() {
         const catalogueSelect = document.getElementById('catalogue-select');
