@@ -115,8 +115,8 @@ class VoucherStatisticController extends Controller
 
             // Determine the discount type text
             $discountType = $voucher->discount_type == 'percentage' ? 'Giảm theo %' : 'Số tiền cố định';
-            $formattedRevenue = number_format($revenue * 1000, 0, '.', '.');
-            $formattedProfit = number_format($profit * 1000, 0, '.', '.');
+            $formattedRevenue = $revenue ;
+            $formattedProfit = $profit;
 
             return [
                 'id' => $voucher->id,
