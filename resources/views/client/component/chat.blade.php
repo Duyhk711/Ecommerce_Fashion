@@ -145,6 +145,10 @@
         border-radius: 5px;
         cursor: pointer;
     }
+    .swal2-container {
+    z-index: 10000 !important; /* Đảm bảo SweetAlert luôn nằm trên cùng */
+}
+
 </style>
 
 <div id="chat-icon">💬</div>
@@ -165,6 +169,7 @@
 </div>
 
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 @vite(['resources/js/chat.js'])
 <script>
     const currentUserId = {{ auth()->check() ? auth()->id() : 'null' }};
@@ -178,6 +183,12 @@
         const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
             cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
         });
+
+        const userRole = '{{ auth()->user() ? auth()->user()->role : '' }}'; // Lấy role từ backend
+
+        if (userRole === 'admin') {
+            $('#chat-icon').hide(); // Ẩn nút chatbox nếu người dùng có role là admin
+        }
         $('#chat-icon').on('click', function() {
             if (currentUserId === null) {
                 Swal.fire({
@@ -385,10 +396,10 @@
                     if (messagesResponse && Array.isArray(messagesResponse.messages)) {
                         messagesResponse.messages.forEach(function(message) {
                             const time = new Date(message.created_at).toLocaleTimeString(
-                        [], {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            });
+                                [], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
                             const cssClass = message.sender_id === currentUserId ? 'user' :
                                 'admin';
 
