@@ -159,12 +159,13 @@
             <div class="bg-header-dark">
                 <div class="content-header bg-white-5">
                     <!-- Logo -->
-                    <a class="fw-semibold text-white tracking-wide" href="/">
+                    <a class="fw-semibold text-white tracking-wide" href="{{route('admin.dashboard')}}">
                         <span class="smini-visible">
-                            D<span class="opacity-75">x</span>
+                            {{-- D<span class="opacity-75">x</span> --}}
+                            Poly
                         </span>
                         <span class="smini-hidden">
-                            Dash<span class="opacity-75">mix</span>
+                            Poly<span class="opacity-75">Fashion</span>
                         </span>
                     </a>
                     <!-- END Logo -->
@@ -213,10 +214,10 @@
                                 href="/admin/dashboard">
                                 <i class="nav-main-link-icon fa fa-location-arrow"></i>
                                 <span class="nav-main-link-name">Dashboard</span>
-                                <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span>
+                                {{-- <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span> --}}
                             </a>
                         </li>
-                        <li class="nav-main-heading">Various</li>
+                        {{-- <li class="nav-main-heading">Various</li> --}}
                         {{-- SAN PHAM --}}
 
                         @if (Auth::user()->can('xem danh sách sản phâm') ||
@@ -482,7 +483,7 @@
 
 
 
-                        <li class="nav-main-heading">More</li>
+                        {{-- <li class="nav-main-heading">More</li> --}}
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="/">
                                 <i class="nav-main-link-icon fa fa-globe"></i>

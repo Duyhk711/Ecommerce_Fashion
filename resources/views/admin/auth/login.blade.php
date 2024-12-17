@@ -24,7 +24,13 @@
                         <div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
                             <div class="mb-2 text-center">
                                 <a class="link-fx fw-bold fs-1" href="#">
-                                    <span class="text-dark">Dash</span><span class="text-primary">mix</span>
+                                    <span class="smini-visible">
+                                        {{-- D<span class="opacity-75">x</span> --}}
+                                        Poly
+                                    </span>
+                                    <span class="smini-hidden">
+                                        Poly<span class="opacity-75">Fashion</span>
+                                    </span>
                                 </a>
                                 <p class="text-uppercase fw-bold fs-sm text-muted">Đăng nhập</p>
                             </div>
