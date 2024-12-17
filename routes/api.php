@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ChartController;
 use App\Http\Controllers\Admin\Statistic\CustomerStatisticController;
 use App\Http\Controllers\Admin\Statistic\OrderStatisticController;
 use App\Http\Controllers\Admin\Statistic\RevenuStatisticController;
+use App\Http\Controllers\Admin\Statistic\VoucherStatisticController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\AttributeValueController;
@@ -62,9 +63,15 @@ Route::get('/revenue-by-payment-method', [RevenuStatisticController::class, 'get
 Route::get('/monthly-revenue-by-payment-method', [RevenuStatisticController::class, 'getMonthlyRevenueByPaymentMethod']);
 
 //custumer
-Route::get('/customer-statistics', [CustomerStatisticController::class, 'getPotentialCustomers']);
-Route::get('/customer-return-rate', [CustomerStatisticController::class, 'getReturningCustomerRate']);
-Route::get('/purchase-frequency', [CustomerStatisticController::class, 'getPurchaseFrequency']);
+Route::get('/customer-statistics', [CustomerStatisticController::class, 'getOrderSuccessRate'])->name('statistic.orderSuccessRate');
+Route::get('/customer-return-rate', [CustomerStatisticController::class, 'getReturningCustomerRate'])->name('statistic.returningCustomerRate');
+Route::get('/purchase-frequency', [CustomerStatisticController::class, 'getPurchaseFrequency'])->name('statistic.purchaseFrequency');
+Route::get('/top-spending-customers', [CustomerStatisticController::class, 'getTopSpendingCustomers'])->name('statistic.topSpendingCustomers');
+
+// voucher
+Route::get('/voucher-statistic/usage-rate', [VoucherStatisticController::class, 'getVoucherUsageRate'])->name('statistic.voucherUsageRate');
+Route::get('/voucher-statistic/revenue', [VoucherStatisticController::class, 'getTotalRevenue'])->name('statistic.getTotalRevenue');
+Route::get('/voucher-statistic/discount-statistics', [VoucherStatisticController::class, 'getDiscountStatistics'])->name('statistic.getDiscountStatistics');
 
 
 // dashboard

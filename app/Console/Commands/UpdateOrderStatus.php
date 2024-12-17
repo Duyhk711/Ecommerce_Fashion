@@ -19,10 +19,10 @@ class UpdateOrderStatus extends Command
 
         foreach ($orders as $order) {
             $order->status = 5; // Cập nhật trạng thái "hoàn thành"
-            $order->save();
             if ($order->payment_status == "cho_thanh_toan") {
                 $order->payment_status = "da_thanh_toan";
             }
+            $order->save();
         }
 
         $this->info('Order statuses updated successfully.');

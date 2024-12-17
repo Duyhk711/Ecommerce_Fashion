@@ -162,14 +162,19 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Vai trò đơn hàng đã được cập nhật.');
     }
 
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
         // dd($user);
         $totalOrders = Order::where('user_id', $user->id)->count();
         $totalOrderValue = Order::where('user_id', $user->id)->sum('total_price');
-        $orders = Order::where('user_id', $user->id)->get();
+        $status = $request->get('status');
+        $payment_status = $request->get('payment_status');
+        $order_search = $request->get('order_search');
+        $order_date_start = $request->get('order_date_start');
+        $order_date_end = $request->get('order_date_end');
+        $orders = Order::with('items')->where('user_id', $user->id)->get();
         // dd($orders);
-        return view(Self::PATH_VIEW . __FUNCTION__, compact('user', 'totalOrders', 'totalOrderValue', 'orders'));
+        return view('admin.users.client.show', compact('user', 'totalOrders', 'totalOrderValue', 'orders'));
     }
 
     public function edit(User $user)
