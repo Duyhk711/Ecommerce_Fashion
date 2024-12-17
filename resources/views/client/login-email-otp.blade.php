@@ -117,38 +117,38 @@
         </div>
     </div>
 
-    <!-- Modal for OTP input -->
-    <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="otpModalLabel">Nhập Mã OTP</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="{{ route('verify-otp-email') }}">
-                        @csrf
-                        <div class="form-group">
-                            <label for="otp">Mã OTP <span class="required">*</span></label>
-                            <input type="text" name="otp" placeholder="Nhập mã OTP" id="otp"
-                                   class="form-control @error('otp') is-invalid @enderror" required />
-                            @error('otp')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Xác nhận OTP</button>
-                    </form>
-                    <div class="mt-3 text-center">
-                        <span id="otpTimer">Bạn chưa nhận được OTP? Vui lòng thử lại mã <span id="timeRemaining">60</span> giây</span>
-                        <br>
-                        <button id="resendOtpButton" class="btn btn-link mt-2" disabled>Gửi lại OTP</button>
+ <!-- Modal for OTP input -->
+<div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="otpModalLabel">Nhập Mã OTP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="otpForm" method="post" action="{{ route('verify-otp-email') }}">
+                    @csrf
+                    <div class="form-group">
+                        <label for="otp">Mã OTP <span class="required">*</span></label>
+                        <input type="text" name="otp" placeholder="Nhập mã OTP" id="otp"
+                            class="form-control @error('otp') is-invalid @enderror" required />
+                        <!-- Thêm thông báo lỗi tại đây -->
+                        <span id="otpError" class="text-danger"></span>
                     </div>
-                </div>`
+                    <button type="button" id="submitOtpButton" class="btn btn-primary w-100">Xác nhận OTP</button>
+                </form>
+                <div class="mt-3 text-center">
+                    <span id="otpTimer">Bạn chưa nhận được OTP? Vui lòng thử lại mã <span id="timeRemaining">60</span> giây</span>
+                    <br>
+                    <button id="resendOtpButton" class="btn btn-link mt-2" disabled>Gửi lại OTP</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
 
 
 @endsection
@@ -171,7 +171,7 @@
 
         let recaptchaVerifier;
 
-        function render() {
+        function renderRecaptcha() {
             recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                 size: 'normal',
                 callback: (response) => {
@@ -187,15 +187,30 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            render();
+            renderRecaptcha();
             document.getElementById('sendOtpButton').disabled = true; // Khởi tạo nút gửi OTP là vô hiệu hóa
         });
-    </script>
 
-    <script>
-        document.getElementById('sendOtpButton').addEventListener('click', function() {
-            const emailInput = document.getElementById('email').value;
+        let otpExpiryTime = 60; // Thời gian tồn tại của OTP (giây)
+        let timer;
 
+        function startOtpTimer() {
+            document.getElementById('resendOtpButton').disabled = true; // Vô hiệu hóa nút gửi lại
+            document.getElementById('timeRemaining').innerText = otpExpiryTime;
+
+            timer = setInterval(() => {
+                otpExpiryTime--;
+                document.getElementById('timeRemaining').innerText = otpExpiryTime;
+
+                if (otpExpiryTime <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('resendOtpButton').disabled = false; // Kích hoạt nút gửi lại
+                    document.getElementById('otpTimer').innerText = "Mã OTP đã hết hạn!";
+                }
+            }, 1000);
+        }
+
+        function sendOtpRequest(emailInput, isResend = false) {
             // Hiển thị thông báo chờ
             Swal.fire({
                 title: 'Đang gửi mã OTP...',
@@ -207,8 +222,10 @@
                 }
             });
 
-            // Gửi AJAX request để yêu cầu OTP
-            fetch("{{ route('send-otp-email') }}", {
+            // Nếu không phải là yêu cầu resend, thì thực hiện kiểm tra reCAPTCHA
+            if (!isResend) {
+                // Nếu là lần đầu gửi, thực hiện kiểm tra reCAPTCHA
+                fetch("{{ route('send-otp-email') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -220,99 +237,123 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    Swal.close(); // Đóng thông báo chờ
+
                     if (data.success) {
-                        Swal.close(); // Đóng thông báo chờ
+                        otpExpiryTime = 60; // Reset thời gian
+                        startOtpTimer(); // Bắt đầu lại hẹn giờ
                         // Hiển thị modal nếu gửi thành công
                         $('#otpModal').modal('show');
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Lỗi',
-                            text: data.message,
+                            text: data.message || 'Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại.',
                         });
                     }
                 })
                 .catch(error => {
+                    Swal.close(); // Đóng thông báo chờ nếu có lỗi
                     Swal.fire({
                         icon: 'error',
                         title: 'Lỗi',
-                        text: 'Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại.',
+                        text: 'Có lỗi xảy ra khi gửi lại OTP. Vui lòng thử lại.',
                     });
                     console.error('Error:', error);
                 });
+            } else {
+                // Nếu là yêu cầu resend OTP, bỏ qua reCAPTCHA
+                fetch("{{ route('resend-otp-email') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        email: emailInput
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.close(); // Đóng thông báo chờ
+
+                    if (data.success) {
+                        otpExpiryTime = 60; // Reset thời gian
+                        startOtpTimer(); // Bắt đầu lại hẹn giờ
+                        // Hiển thị modal nếu gửi thành công
+                        $('#otpModal').modal('show');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: data.message || 'Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.close(); // Đóng thông báo chờ nếu có lỗi
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra khi gửi lại OTP. Vui lòng thử lại.',
+                    });
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        // Lắng nghe sự kiện bấm nút gửi OTP
+        document.getElementById('sendOtpButton').addEventListener('click', function() {
+            const emailInput = document.getElementById('email').value;
+            sendOtpRequest(emailInput); // Gửi OTP và bắt đầu hẹn giờ
         });
-        let otpExpiryTime = 60; // Thời gian tồn tại của OTP (giây)
-let timer;
 
-function startOtpTimer() {
-    document.getElementById('resendOtpButton').disabled = true; // Vô hiệu hóa nút gửi lại
-    document.getElementById('timeRemaining').innerText = otpExpiryTime;
+        // Lắng nghe sự kiện bấm nút gửi lại OTP
+        document.getElementById('resendOtpButton').addEventListener('click', function() {
+            const emailInput = document.getElementById('email').value;
+            sendOtpRequest(emailInput, true); // Gửi lại yêu cầu OTP mà không cần reCAPTCHA
+        });
+        document.getElementById('submitOtpButton').addEventListener('click', function() {
+    const otpInput = document.getElementById('otp').value;
 
-    timer = setInterval(() => {
-        otpExpiryTime--;
-        document.getElementById('timeRemaining').innerText = otpExpiryTime;
-
-        if (otpExpiryTime <= 0) {
-            clearInterval(timer);
-            document.getElementById('resendOtpButton').disabled = false; // Kích hoạt nút gửi lại
-            document.getElementById('otpTimer').innerText = "Mã OTP đã hết hạn!";
-        }
-    }, 1000);
-}
-
-document.getElementById('sendOtpButton').addEventListener('click', function () {
-    // Gửi OTP và bắt đầu hẹn giờ
-    startOtpTimer();
-});
-
-document.getElementById('resendOtpButton').addEventListener('click', function () {
-    // Gửi lại yêu cầu OTP
-    const emailInput = document.getElementById('email').value;
-
-    // Hiển thị thông báo chờ
-    Swal.fire({
-        title: 'Đang gửi mã OTP...',
-        text: 'Vui lòng chờ trong giây lát!',
-        icon: 'info',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    fetch("{{ route('send-otp-email') }}", {
+    fetch("{{ route('verify-otp-email') }}", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "X-CSRF-TOKEN": "{{ csrf_token() }}"
         },
-        body: JSON.stringify({ email: emailInput })
+        body: JSON.stringify({
+            otp: otpInput
+        })
     })
     .then(response => response.json())
     .then(data => {
-        Swal.close();
         if (data.success) {
-            otpExpiryTime = 60; // Reset thời gian
-            startOtpTimer(); // Bắt đầu lại hẹn giờ
-            // Hiển thị modal nếu gửi thành công
-            $('#otpModal').modal('show');
-        } else {
+            // OTP đúng => Hiển thị thông báo thành công và reload
             Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: data.message,
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Đăng nhập thành công!',
+            }).then(() => {
+                window.location.href = data.redirect_url; // Điều hướng sau khi thành công
             });
+        } else {
+            // OTP sai => Hiển thị thông báo lỗi bên dưới input
+            document.getElementById('otpError').innerText = data.message || 'Mã OTP không chính xác. Vui lòng thử lại.';
         }
     })
     .catch(error => {
+        console.error('Error:', error);
         Swal.fire({
             icon: 'error',
             title: 'Lỗi',
-            text: 'Có lỗi xảy ra khi gửi lại OTP. Vui lòng thử lại.',
+            text: 'Có lỗi xảy ra khi xác thực OTP. Vui lòng thử lại.',
         });
-        console.error('Error:', error);
     });
 });
 
     </script>
 @endsection
+
+
+

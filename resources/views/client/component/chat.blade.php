@@ -1,349 +1,447 @@
 <style>
-    .chat-container {
+    #chat-icon,
+    #chatbox {
+        z-index: 9999;
+        position: fixed;
+    }
+
+    #chat-icon {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        z-index: 1000;
-        transition: all 0.3s ease;
-    }
-
-    .chat-button {
-        background-color: #0084ff;
+        background-color: #007bff;
         color: white;
-        width: 60px;
-        height: 60px;
         border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 15px;
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        font-size: 25px;
-        transition: background-color 0.3s, transform 0.3s;
     }
 
-    .chat-button:hover {
-        background-color: #006dbf;
-        transform: scale(1.1);
-    }
-
-    .chat-box {
-        display: none;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        height: 450px;
-        /* Cố định chiều cao của khung chat */
-        width: 350px;
+    #chatbox {
         position: fixed;
         bottom: 80px;
         right: 20px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: none;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    #chat-header {
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-weight: bold;
+        position: relative;
+        font-size: 16px;
+    }
+
+    #end-chat {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: none;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #messages {
+        height: 340px;
+        overflow-y: auto;
+        padding: 15px;
         display: flex;
         flex-direction: column;
-        /* Chia chiều dọc cho header, body và footer */
-    }
-
-    .chat-header {
-        background-color: #fff;
-        color: rgb(0, 0, 0);
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 5px 5px 0 0;
-        border: 1px solid #ddd;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .close-chat {
-        background: none;
-        border: none;
-        color: rgb(14, 1, 1);
-        font-size: 20px;
-        cursor: pointer;
-        transition: color 0.3s;
-    }
-
-    .close-chat:hover {
-        color: #ff6b6b;
-    }
-
-    .chat-body {
-        padding: 10px;
-        flex: 1;
-        /* Chiếm toàn bộ không gian còn lại */
-        overflow-y: auto;
-        overflow-x: hidden;
-        border-bottom: 1px solid #ddd;
+        background-color: #EEF0F1;
     }
 
     .message {
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        max-width: 70%;
+        max-width: 75%;
+        margin: 8px 0;
+        padding: 10px 15px;
+        border-radius: 10px;
         word-wrap: break-word;
-        overflow-wrap: break-word;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
-    .sent {
-        margin-left: 30%;
+    .message.user {
+        background-color: #dbebff;
+        color: #081b3a;
         align-self: flex-end;
-        background-color: #0084ff;
-        color: white;
-        border-radius: 10px;
-        padding: 10px;
-        text-align: right;
-        animation: slideInRight 0.3s;
+        box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
     }
 
-    .received {
-        align-self: flex-start;
-        background-color: #f0f0f0;
-        color: black;
+    .message.admin {
+        background-color: #F7F7F7;
         border-radius: 10px;
-        padding: 10px;
-        text-align: left;
-        animation: slideInLeft 0.3s;
+        align-self: flex-start;
+        box-shadow: 0px 0px 1px 0px rgba(21, 39, 71, 0.25), 0px 1px 1px 0px rgba(21, 39, 71, 0.25);
     }
 
     .message-time {
-        font-size: 10px;
-        color: #888;
+        font-size: 12px;
+        color: gray;
+        text-align: left;
         margin-top: 5px;
     }
 
-    .chat-footer {
+    #chat-footer {
+        padding: 10px 15px;
+        background-color: white;
+        border-top: 1px solid #ddd;
         display: flex;
         align-items: center;
-        padding: 10px;
-        /* Thêm padding để tạo khoảng cách */
-        background-color: #f8f8f8;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
 
-    .chat-footer textarea {
+    #message {
         flex: 1;
-        resize: none;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
         border-radius: 20px;
-        padding: 10px 15px;
-        /* Thêm padding để tạo khoảng cách giữa nội dung và viền */
-        min-height: 35px;
+        outline: none;
         margin-right: 10px;
-        /* Tạo khoảng cách giữa textarea và nút gửi */
     }
 
-
-    .chat-footer textarea:focus {
-        border-color: #0084ff;
+    #send {
+        padding: 8px 14px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
     }
 
-    .chat-footer button {
-        margin-left: 10px;
-        border-radius: 50%;
-        height: 35px;
-        width: 35px;
+    #send:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    #start-chat-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0;
+        height: 100%;
     }
 
-    .chat-footer button:hover {
-        background-color: #006dbf;
-    }
-
-    #chatWithAdminName {
-        font-weight: 400;
-        font-size: large;
-    }
-
-    @keyframes slideInRight {
-        0% {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideInLeft {
-        0% {
-            transform: translateX(-100%);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .chat-box {
-            width: 90%;
-            max-height: 80%;
-            right: 5%;
-            bottom: 10px;
-        }
-    }
-
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: #f44336;
-        /* Màu đỏ */
-        color: white;
+    #start-chat-btn {
         padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
         border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        z-index: 1001;
-        /* Nằm trên chatbox */
+        cursor: pointer;
     }
+    .swal2-container {
+    z-index: 10000 !important; /* Đảm bảo SweetAlert luôn nằm trên cùng */
+}
+
 </style>
 
-<div class="chat-container">
-    <div class="chat-button" id="chatButton">
-        <i class="anm anm-chat"></i>
+<div id="chat-icon">💬</div>
+
+<div id="chatbox">
+    <div id="chat-header">
+        Hỗ trợ khách hàng
+        <button id="end-chat">❌</button>
     </div>
-    <div class="chat-box" id="chatBox" style="display: none;">
-        <div class="chat-header">
-            <span id="chatWithAdminName">Trò chuyện Hỗ trợ</span>
-            <button class="close-chat" id="closeChat">&times;</button>
-        </div>
-        <div class="chat-body">
-            <div id="chatMessages" class="chat-messages">
-                <div class="message received">
-                    <div class="message-text"></div>
-                    <div class="message-time"></div>
-                </div>
-                <div class="message sent">
-                    <div class="message-text"></div>
-                    <div class="message-time"></div>
-                </div>
-            </div>
-        </div>
-        <div class="chat-footer">
-            <textarea id="messageInput" class="form-control" rows="1" placeholder="Type a message..."></textarea>
-            <button id="sendMessage" class="btn btn-primary">
-                <i class="bi bi-send-fill"></i>
-            </button>
-        </div>
+    <div id="start-chat-container" style="display: none;">
+        <button id="start-chat-btn">Bắt đầu chat</button>
+    </div>
+    <div id="messages" style="display: none;"></div>
+    <div id="chat-footer" style="display: none;">
+        <input type="text" id="message" placeholder="Nhập tin nhắn để gửi...">
+        <button id="send" disabled><i class="bi bi-send-fill"></i></button>
     </div>
 </div>
 
-
 <script src="{{ asset('admin/js/lib/jquery.min.js') }}"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 @vite(['resources/js/chat.js'])
 <script>
+    const currentUserId = {{ auth()->check() ? auth()->id() : 'null' }};
+</script>
+<script>
     $(document).ready(function() {
-        let adminId;
-        let userId = {{ Auth::check() ? Auth::id() : 'null' }};
-        $('#chatButton').click(function() {
-            // Kiểm tra nếu người dùng chưa đăng nhập
-            if (userId === null) {
-                alert('Bạn phải đăng nhập để bắt đầu chat !'); // Thông báo yêu cầu đăng nhập
-                return; // Dừng việc mở chatbox
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var sessionId = null;
+        var debounceTimeout;
+
+        const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+        });
+
+        const userRole = '{{ auth()->user() ? auth()->user()->role : '' }}'; // Lấy role từ backend
+
+        if (userRole === 'admin') {
+            $('#chat-icon').hide(); // Ẩn nút chatbox nếu người dùng có role là admin
+        }
+        $('#chat-icon').on('click', function() {
+            if (currentUserId === null) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Bạn chưa đăng nhập',
+                    text: 'Vui lòng đăng nhập để sử dụng chức năng chat.',
+                    confirmButtonText: 'OK'
+                });
+                return;
             }
-            $('#chatBox').slideToggle(300);
-            $.get('/get-first-admin', function(response) {
-                if (response.admin_id) {
-                    adminId = response.admin_id;
-                    //$('#chatWithAdminName').text('   ' + response.admin_name);
-                    $.get('/fetch-messages', {
-                        receiver_id: adminId
-                    }, function(messagesResponse) {
-                        $('#chatMessages').empty();
-                        messagesResponse.messages.forEach(function(message) {
-                            let messageTime = new Date(message.created_at)
-                                .toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                });
-                            let messageHtml = `
-                                <div class="message ${message.sender_id == userId ? 'sent' : 'received'}">
-                                    <div class="message-text">${message.message}</div>
-                                    <div class="message-time">${messageTime}</div>
-                                </div>`;
-                            $('#chatMessages').append(messageHtml);
-                        });
-                        scrollToBottom();
+            $('#chatbox').slideToggle();
+            checkExistingSession();
+        });
+
+
+        function checkExistingSession() {
+            $.ajax({
+                url: '/check-session',
+                type: 'GET',
+                success: function(response) {
+                    if (response.session) {
+                        sessionId = response.session.id;
+                        $('#start-chat-container').hide();
+                        $('#messages').show();
+                        $('#chat-footer').show();
+                        $('#send').prop('disabled', false);
+                        $('#end-chat').prop('disabled', false);
+                        setupPusherChannel(sessionId);
+                        loadMessages(sessionId);
+                    } else {
+                        $('#start-chat-container').show();
+                        $('#messages').hide();
+                        $('#chat-footer').hide();
+                        $('#send').prop('disabled', true);
+                        $('#end-chat').prop('disabled', true);
+                    }
+                }
+            });
+        }
+
+        $(document).on('click', '#start-chat-btn', function() {
+            startChatSession();
+        });
+
+        function startChatSession() {
+            $.ajax({
+                url: '/start-session',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    const session = response.session;
+                    sessionId = session.id;
+                    $('#start-chat-container').hide();
+                    $('#messages').show();
+                    $('#chat-footer').show();
+                    $('#send').prop('disabled', false);
+                    $('#end-chat').prop('disabled', false);
+                    setupPusherChannel(sessionId);
+                    loadMessages(sessionId);
+                },
+                error: function() {
+                    alert('No admin available at the moment.');
+                }
+            });
+        }
+
+        function setupPusherChannel(sessionId) {
+            const userChannel = pusher.subscribe('chat-session.' + sessionId);
+            userChannel.bind('session-ended', function(data) {
+                if (data.initiatorId !== currentUserId) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Phiên chat đã kết thúc',
+                        text: 'Phiên hỗ trợ khách hàng đã được đóng.',
+                        confirmButtonText: 'OK'
                     });
+                    $('#send').prop('disabled', true);
+                    $('#end-chat').prop('disabled', true);
+                    $('#start-chat-container').show();
+                    $('#messages').hide();
+                    $('#chat-footer').hide();
+                }
+            });
+            userChannel.bind('new-message', function(data) {
+                const currentUserId = {{ auth()->check() ? auth()->id() : 'null' }};
+                if (data.sender_id !== currentUserId) {
+                    const time = new Date().toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    $('#messages').append(`
+                        <div class="message admin">
+                            ${data.message}
+                            <div class="message-time">${time}</div>
+                        </div>
+                    `);
+                    scrollToBottom();
+                }
+            });
+        }
+        $('#send').on('click', function() {
+            const message = $('#message').val();
+            if (message && sessionId) {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(function() {
+                    $.ajax({
+                        url: `/send-message/${sessionId}`,
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        data: {
+                            message: message
+                        },
+                        success: function() {
+                            const time = new Date().toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                            $('#messages').append(`
+                                <div class="message user">
+                                    ${message}
+                                    <div class="message-time">${time}</div>
+                                </div>
+                            `);
+                            $('#message').val('');
+                            scrollToBottom();
+                        },
+                        error: function() {
+                            alert('Failed to send message.');
+                        },
+                    });
+                }, 10);
+            }
+        });
+
+        $('#message').on('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                $('#send').trigger('click');
+            }
+        });
+
+        $('#end-chat').on('click', function() {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn kết thúc phiên chat không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Có, kết thúc!',
+                cancelButtonText: 'Hủy',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    endChatSession();
+                    Swal.fire(
+                        'Đã kết thúc!',
+                        'Phiên chat của bạn đã được kết thúc.',
+                        'success'
+                    );
                 }
             });
         });
 
-        $('#closeChat').click(function() {
-            $('#chatBox').slideUp(300);
-        });
-
-        $('#sendMessage').click(function() {
-            sendMessage();
-        });
-
-        $('#messageInput').keypress(function(event) {
-            if (event.which == 13 && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
-
-        function sendMessage() {
-            let message = $('#messageInput').val().trim();
-            if (message) {
-                $.post('/send-message', {
-                    _token: '{{ csrf_token() }}',
-                    message: message,
-                    receiver_id: adminId
-                }, function(response) {
-                    if (response.success) {
-                        let messageTime = new Date().toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                        let messageHtml = `
-                            <div class="message sent">
-                                <div class="message-text">${message}</div>
-                                <div class="message-time">${messageTime}</div>
-                            </div>`;
-                        $('#chatMessages').append(messageHtml);
-                        $('#messageInput').val('');
-                        scrollToBottom();
-                    }
-                });
-            }
+        function endChatSession() {
+            $.ajax({
+                url: `/end-session/${sessionId}`,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function() {
+                    sessionId = null;
+                    $('#send').prop('disabled', true);
+                    $('#end-chat').prop('disabled', true);
+                    $('#start-chat-container').show();
+                    $('#messages').hide();
+                    $('#chat-footer').hide();
+                },
+                error: function() {
+                    Swal.fire(
+                        'Lỗi!',
+                        'Không thể kết thúc phiên chat. Vui lòng thử lại.',
+                        'error'
+                    );
+                }
+            });
         }
 
-        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-            encrypted: true
-        });
-
-        var channel = pusher.subscribe('chat.' + userId);
-        channel.bind('admin-message', function(data) {
-            let messageTime = new Date(data.created_at).toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            let messageHtml = `
-                <div class="message received">
-                    <div class="message-text">${data.message}</div>
-                    <div class="message-time">${messageTime}</div>
-                </div>`;
-
-            $('#chatMessages').append(messageHtml);
-            scrollToBottom();
-        });
 
         function scrollToBottom() {
-            const chatBody = $('.chat-body');
-            chatBody.animate({
-                scrollTop: chatBody[0].scrollHeight
-            }, 300);
+            const messagesDiv = $('#messages');
+            messagesDiv.scrollTop(messagesDiv.prop('scrollHeight'));
+        }
+
+        function loadMessages(sessionId) {
+            $.ajax({
+                url: `/messages/${sessionId}`,
+                type: 'GET',
+                success: function(messagesResponse) {
+                    const messagesDiv = $('#messages');
+                    messagesDiv.empty();
+
+                    if (messagesResponse && Array.isArray(messagesResponse.messages)) {
+                        messagesResponse.messages.forEach(function(message) {
+                            const time = new Date(message.created_at).toLocaleTimeString(
+                                [], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+                            const cssClass = message.sender_id === currentUserId ? 'user' :
+                                'admin';
+
+                            messagesDiv.append(`
+                                <div class="message ${cssClass}">
+                                    ${message.message}
+                                    <div class="message-time">${time}</div>
+                                </div>
+                            `);
+                        });
+                    }
+                    scrollToBottom();
+                },
+                error: function() {
+                    alert('Failed to load messages.');
+                }
+            });
+        }
+
+        function endChatSession() {
+            $.ajax({
+                url: `/end-session/${sessionId}`,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function() {
+                    sessionId = null;
+                    $('#send').prop('disabled', true);
+                    $('#end-chat').prop('disabled', true);
+                    $('#start-chat-container').show();
+                    $('#messages').hide();
+                    $('#chat-footer').hide();
+                },
+                error: function() {
+                    Swal.fire(
+                        'Lỗi!',
+                        'Không thể kết thúc phiên chat. Vui lòng thử lại.',
+                        'error'
+                    );
+                }
+            });
         }
     });
 </script>

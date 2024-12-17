@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AttributeValueRequest;
 use App\Http\Requests\UpdateAttributeValueRequest;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Services\AttributeValueService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AttributeValueController extends Controller
 {
@@ -20,6 +18,10 @@ class AttributeValueController extends Controller
     public function __construct(AttributeValueService $attributeValueService)
     {
         $this->attributeValueService = $attributeValueService;
+        $this->middleware('permission:xem danh sách giá trị thuộc tính|Chỉnh sửa giá trị thuộc tính|Xóa giá trị thuộc tính|Thêm mới giá trị thuộc tính', ['only' => ['index']]);
+        $this->middleware('permission:Xóa giá trị thuộc tính', ['only' => ['destroy']]);
+        $this->middleware('permission:Chỉnh sửa giá trị thuộc tính', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Thêm mới giá trị thuộc tính', ['only' => ['create', 'store']]);
     }
 
     public function index()

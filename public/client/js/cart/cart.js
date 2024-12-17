@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hiển thị tổng tiền đã định dạng
     document.getElementById("totalPrice").textContent =
-      numberFormat(totalPrice * 1000, 0, ".", ",") + " ₫";
+      numberFormat(totalPrice * 1000, 0, ".", ".") + " ₫";
   }
   // XOA
   const removeButtons = document.querySelectorAll(".cart-remove");

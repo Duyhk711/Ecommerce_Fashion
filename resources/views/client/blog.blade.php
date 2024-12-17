@@ -1,6 +1,6 @@
 @extends('layouts.client')
 @section('title')
-    Blog
+Blog
 @endsection
 @section('css')
 <style>
@@ -50,25 +50,25 @@
 @endsection
 @section('js')
 <script>
-    const apiKey = 'a046cdd5c3d946f1bea4b8e1cfb4e68f';
-    const apiUrl = (query, page) => `https://newsapi.org/v2/everything?q=${query}&apiKey=${apiKey}&pageSize=12&page=${page}`;
+     const apiUrl = '/get-news'; // URL mới gọi route /get-news thay vì API của newsapi
     const blogContainer = document.getElementById('blog-container');
     const paginationContainer = document.getElementById('pagination');
     const searchInput = document.querySelector('.search-input');
-    const searchForm = document.querySelector('.search-form form'); 
+    const searchForm = document.querySelector('.search-form form');
 
     const pageSize = 12;
     let currentPage = 1;
     let totalResults = 0;
-    let currentQuery = 'fashion clothes'; 
+    let currentQuery = 'fashion clothes';
 
-  
+    // Fetch bài viết từ API
     async function fetchFashionArticles(query = currentQuery, page = 1) {
         try {
-            const response = await fetch(apiUrl(query, page));
+            const response = await fetch(`${apiUrl}?q=${query}&page=${page}&pageSize=${pageSize}`);
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
+
             const data = await response.json();
             if (data.articles && data.articles.length > 0) {
                 displayArticles(data.articles);
@@ -82,7 +82,8 @@
             blogContainer.innerHTML = '<p>Không thể tải bài viết.</p>';
         }
     }
-    
+
+    // Hiển thị bài viết
     function displayArticles(articles) {
         blogContainer.innerHTML = '';
         if (!articles || articles.length === 0) {
@@ -95,57 +96,57 @@
                 const articleElement = document.createElement('article');
                 articleElement.classList.add('col-item');
                 articleElement.innerHTML = `
-                <div class="blog-item col-item">
-                    <div class="blog-article zoomscal-hov">
-                        <div class="blog-img">
-                            <a class="featured-image rounded-0 zoom-scal" href="${article.url}" target="_blank">
-                                <img class="rounded-0 blur-up lazyload" data-src="${article.urlToImage}" src="${article.urlToImage}" alt="${article.title}" width="740" height="410" />
-                            </a>
-                        </div>
-                        <div class="blog-content">
-                            <h2 class="h3"><a href="${article.url}" target="_blank">${article.title}</a></h2>
-                                <ul class="publish-detail d-flex-wrap">                      
-                                    <li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Posted by:</span> ${article.author || 'Lỗi'}</li>
+                    <div class="blog-item col-item">
+                        <div class="blog-article zoomscal-hov">
+                            <div class="blog-img">
+                                <a class="featured-image rounded-0 zoom-scal" href="${article.url}" target="_blank">
+                                    <img class="rounded-0 blur-up lazyload" data-src="${article.urlToImage}" src="${article.urlToImage}" alt="${article.title}" width="740" height="410" />
+                                </a>
+                            </div>
+                            <div class="blog-content">
+                                <h2 class="h3"><a href="${article.url}" target="_blank">${article.title}</a></h2>
+                                <ul class="publish-detail d-flex-wrap">
+                                    <li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Người đăng:</span> ${article.author || 'Lỗi'}</li>
                                     <li><i class="icon anm anm-clock-r"></i> <time datetime="${new Date(article.publishedAt).toISOString()}">${new Date(article.publishedAt).toLocaleDateString()}</time></li>
-                                    <li><i class="icon anm anm-comments-l"></i> <a href="#">Comments</a></li>
+                                    <li><i class="icon anm anm-comments-l"></i> <a href="#">Bình luận</a></li>
                                 </ul>
-                    <p class="content">${article.description}</p>
-                    <a href="${article.url}" target="_blank" class="btn btn-secondary btn-sm">Read more</a>
+                                <p class="content">${article.description}</p>
+                                <a href="${article.url}" target="_blank" class="btn btn-secondary btn-sm">Xem thêm</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            `;
+                `;
                 blogContainer.appendChild(articleElement);
             }
         });
     }
 
-
+    // Cấu hình phân trang
     function setupPagination(totalResults, currentPage) {
         const totalPages = Math.ceil(totalResults / pageSize);
         const paginationHTML = generatePagination(totalPages, currentPage);
         paginationContainer.innerHTML = paginationHTML;
     }
 
-  
+    // Tạo HTML cho các trang
     function generatePagination(totalPages, currentPage) {
         let paginationHTML = '<ul class="pagination justify-content-center">';
 
-    
         paginationHTML += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
                         <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">
                             <i class="icon anm anm-angle-left-l"></i>
                         </a>
-                      </li>`;
+                    </li>`;
 
-       
+        // Hiển thị các số trang
         for (let i = 1; i <= totalPages; i++) {
             if (i === currentPage) {
                 paginationHTML += `<li class="page-item active"><a class="page-link" href="#">${i}</a></li>`;
             } else {
                 paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${i})">${i}</a></li>`;
             }
-          
+
+            // Dừng lại khi hiển thị 5 trang, và thêm dấu "..."
             if (i === 5) {
                 paginationHTML += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
                 break;
@@ -156,29 +157,29 @@
                         <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">
                             <i class="icon anm anm-angle-right-l"></i>
                         </a>
-                      </li>`;
+                    </li>`;
 
         paginationHTML += '</ul>';
         return paginationHTML;
     }
 
-    
+    // Chuyển trang
     function changePage(page) {
         fetchFashionArticles(currentQuery, page);
     }
 
-   
-    searchForm.addEventListener('submit', function(event) { 
-        event.preventDefault(); 
-        const query = searchInput.value.trim(); 
+    // Xử lý tìm kiếm
+    searchForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const query = searchInput.value.trim();
         if (query) {
-            currentQuery = query; 
-            currentPage = 1; 
-            fetchFashionArticles(currentQuery, currentPage); 
+            currentQuery = query;
+            currentPage = 1;
+            fetchFashionArticles(currentQuery, currentPage);
         }
     });
 
-   
+    // Lấy dữ liệu lần đầu
     fetchFashionArticles(currentQuery, currentPage);
 </script>
 @endsection

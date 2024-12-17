@@ -106,6 +106,7 @@ class VouchersController extends Controller
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
                 'is_used' => false,
+                'limit' => $voucher->usage_limit,
             ]);
 
             $voucher->decrement('quantity');
@@ -122,11 +123,19 @@ class VouchersController extends Controller
         $userId = Auth::id();
 
         $userVouchers = UserVoucher::where('user_id', $userId)
+            ->whereColumn('is_used', '<', 'limit')
+            ->whereHas('voucher', function($query) {
+                $query->where('end_date', '>', now()) // Điều kiện để voucher chưa hết hạn
+                    ->where('is_active', 1); // Chỉ lấy voucher còn hoạt động
+            })
             ->with('voucher')
             ->get();
 
         if ($userVouchers->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Không có voucher nào đã lưu.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn chưa lưu mã giảm giá nào.',
+            ]);
         }
 
         return response()->json([
@@ -153,8 +162,9 @@ class VouchersController extends Controller
         // Lấy các mã giảm giá khả dụng cho người dùng hiện tại
         $vouchers = Voucher::join('user_voucher', 'vouchers.id', '=', 'user_voucher.voucher_id')
             ->where('user_voucher.user_id', $user->id)
-            ->where('user_voucher.is_used', 0)
+            ->whereColumn('user_voucher.is_used', '<', 'user_voucher.limit')
             ->where('vouchers.is_active', 1)
+            ->where('vouchers.quantity', '>', 0)
             ->whereDate('vouchers.start_date', '<=', now())
             ->whereDate('vouchers.end_date', '>=', now())
             ->select('vouchers.code', 'vouchers.discount_type', 'vouchers.discount_value', 'vouchers.minimum_order_value')
@@ -176,7 +186,8 @@ class VouchersController extends Controller
             ->whereDate('end_date', '>=', now())
             ->whereHas('users', function ($query) use ($userId) {
                 $query->where('user_id', $userId)
-                    ->where('is_used', 0); // Chỉ lấy mã giảm giá chưa được sử dụng
+
+                    ->whereColumn('is_used', '<', 'limit'); // Chỉ lấy mã giảm giá chưa được sử dụng
             })
             ->first();
 
@@ -190,6 +201,11 @@ class VouchersController extends Controller
         $voucher->discount_value;
 
         // Đảm bảo rằng giảm giá không vượt quá tổng đơn hàng
+        if ($discount > $orderTotal) {
+            $discount = $orderTotal - 10;
+        } elseif ($orderTotal - $discount < 10) {
+            $discount = $orderTotal - 10;
+        }
         $discount = min($discount, $orderTotal);
 
         // Cập nhật voucher đã dùng trong bảng trung gian `user_voucher`

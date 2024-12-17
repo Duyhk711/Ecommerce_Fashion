@@ -185,7 +185,7 @@
                                     <div class="slideshow-content-in">
                                         <div class="wrap-caption animation style1">
                                             <h2 class="ss-mega-title">
-                                                Lan tỏa Năng Lượng Tích Cực <br /> Với Hema
+                                                Lan tỏa Năng Lượng Tích Cực <br /> Với PolyFashion
                                             </h2>
                                             <p class="ss-sub-title xs-hide">
                                                 Những món đồ thiết yếu không thể thiếu trong tủ đồ của phụ nữ cho năm nay
@@ -410,14 +410,14 @@
                 <div class="tabs-listing">
                     <ul class="nav nav-tabs style1 justify-content-center" id="productTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font" id="newarrivals-tab" data-bs-toggle="tab"
+                            <button class="nav-link head-font active" id="newarrivals-tab" data-bs-toggle="tab"
                                 data-bs-target="#newarrivals" type="button" role="tab" aria-controls="newarrivals"
                                 aria-selected="false">
                                 Hàng mới về
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link head-font active" id="bestsellers-tab" data-bs-toggle="tab"
+                            <button class="nav-link head-font " id="bestsellers-tab" data-bs-toggle="tab"
                                 data-bs-target="#bestsellers" type="button" role="tab" aria-controls="bestsellers"
                                 aria-selected="true">
                                 Sản phẩm bán chạy
@@ -435,7 +435,7 @@
 
                     <div class="tab-content" id="productTabsContent">
                         <!-- newarrivals -->
-                        <div class="tab-pane " id="newarrivals" role="tabpanel" aria-labelledby="newarrivals-tab">
+                        <div class="tab-pane show active" id="newarrivals" role="tabpanel" aria-labelledby="newarrivals-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
                                 <div
@@ -624,7 +624,7 @@
                             <!--End Product Grid-->
                         </div>
                         <!-- bestsellers -->
-                        <div class="tab-pane show active" id="bestsellers" role="tabpanel"
+                        <div class="tab-pane " id="bestsellers" role="tabpanel"
                             aria-labelledby="bestsellers-tab">
                             <!--Product Grid-->
                             <div class="grid-products grid-view-items">
@@ -998,21 +998,20 @@
                         <div class="container">
                             <div class="wrap-text center text-white">
                                 <h1 class="hero-title text-white">
-                                    Clearance Sale - Flat 50% Off
+                                    Giảm giá sốc - Giảm giá 50%
                                 </h1>
                                 <p class="hero-subtitle h3 text-white">
-                                    Sale will end soon in
+                                 Khuyến mãi sẽ kết thúc trong
                                 </p>
                                 <!--Countdown Timer-->
                                 <div class="hero-saleTime d-flex-center text-center justify-content-center"
                                     data-countdown="2028/10/01"></div>
                                 <!--End Countdown Timer-->
                                 <p class="hero-details">
-                                    Hema Multipurpose Template that will give you and your
-                                    customers a smooth shopping experience which can be used for
-                                    various kinds of stores such as fashion.
+                                    Mẫu áo đa năng Poly Fashion sẽ mang đến cho bạn và khách hàng trải nghiệm mua
+                                    sắm thuận tiện, có thể sử dụng cho nhiều loại sản phẩm khác nhau.
                                 </p>
-                                <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Shop now</a>
+                                <a href="{{ $bannerImage->link }}" class="hero-btn btn btn-light">Mua ngay</a>
                             </div>
                         </div>
                     </div>
@@ -1025,7 +1024,7 @@
 @endsection
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @vite(['resources/js/chat.js']);
+    {{-- @vite(['resources/js/chat.js']); --}}
     <script>
         $(document).ready(function() {
             var isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
@@ -1089,7 +1088,16 @@
                                 Giảm ${discountDisplay} cho đơn hàng từ ${voucher.minimum_order_value ?? 0}K
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div class="voucher-expiry"> HSD: ${new Date(voucher.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${new Date(voucher.end_date).toLocaleDateString()}</div>
+                                <div class="voucher-expiry">
+                                    HSD: ${new Date(voucher.end_date).toLocaleString('vi-VN', { 
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    })}
+                                </div>
                                 <div>
                                     <button class="voucher-copy ${buttonClass}"
                                             data-code="${voucher.code}"
@@ -1110,7 +1118,12 @@
 
                 $('.voucher-copy').on('click', function() {
                     if (!isAuthenticated) {
-                        alert('Vui lòng đăng nhập để lưu voucher!');
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Vui lòng đăng nhập',
+                            text: 'Bạn cần phải đăng nhập để lưu voucher!',
+                            confirmButtonText: 'OK'
+                        });
                         return;
                     }
                     const code = $(this).data('code');

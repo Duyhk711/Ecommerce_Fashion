@@ -32,6 +32,7 @@ class OrderStatusUpdated extends Notification
     public function toArray($notifiable)
     {
         return [
+            'category' => 'client',
             'order_sku' => $this->order->sku,
             'message' => $this->message,
             'link' => route('orderDetail', ['id' => $this->order->id]), // Đường link tới order detail
@@ -42,6 +43,7 @@ class OrderStatusUpdated extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
+            'category' => 'client',
             'order_sku' => $this->order->sku,
             'message' => $this->message,
             'link' => route('orderDetail', ['id' => $this->order->id]),

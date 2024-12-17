@@ -30,12 +30,14 @@
             <div class="block-header">
                 <h3 class="block-title">Danh sách danh mục chính</h3>
                 <div class="block-options">
-                    <div class="block-options-item">
-                        <a href="{{ route('admin.catalogues.create') }}" class="btn btn-sm btn-alt-secondary"
-                            data-bs-toggle="tooltip" title="Add">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
+                    @can('Thêm mới danh mục')
+                        <div class="block-options-item">
+                            <a href="{{ route('admin.catalogues.create') }}" class="btn btn-sm btn-alt-secondary"
+                                data-bs-toggle="tooltip" title="Add">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    @endcan
                 </div>
             </div>
 
@@ -50,7 +52,9 @@
                             <th>Mô tả</th>
                             <th>Ảnh</th>
                             <th class="d-none d-sm-table-cell">Trạng thái</th>
-                            <th>Thao tác</th>
+                            @if (Auth::user()->can('Kích hoạt danh mục') || Auth::user()->can('Chỉnh sửa danh mục'))
+                                <th class="text-center">Hành động</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -80,33 +84,40 @@
                                         <span class="badge bg-danger">Không hoạt động</span>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <div class="btn-group">
-                                        @if ($catalogue->is_active)
-                                            <form action="{{ route('admin.catalogues.deactivate', $catalogue->id) }}"
-                                                method="POST" style="display:inline;" class="form-activate">
-                                                @csrf
+                                @if (Auth::user()->can('Kích hoạt danh mục') || Auth::user()->can('Chỉnh sửa danh mục'))
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            @can('Kích hoạt danh mục')
+                                                @if ($catalogue->is_active)
+                                                    <form action="{{ route('admin.catalogues.deactivate', $catalogue->id) }}"
+                                                        method="POST" style="display:inline;" class="form-activate">
+                                                        @csrf
 
-                                                <button type="submit" class="btn  btn-sm btn-alt-danger" style="height: 30px"
-                                                    data-bs-toggle="tooltip" title="Activate">
-                                                    <i class="fa-solid fa-power-off"></i>
-                                                </button>
-                                            </form>
-                                        @else
-                                            <form action="{{ route('admin.catalogues.activate', $catalogue) }}"
-                                                method="POST" style="display:inline;" class="form-activate">
-                                                @csrf
+                                                        <button type="submit" class="btn  btn-sm btn-alt-danger"
+                                                            style="height: 30px" data-bs-toggle="tooltip" title="Activate">
+                                                            <i class="fa-solid fa-power-off"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('admin.catalogues.activate', $catalogue) }}"
+                                                        method="POST" style="display:inline;" class="form-activate">
+                                                        @csrf
 
-                                                <button type="submit" class="btn btn-sm btn-alt-success" style="height: 30px"
-                                                    data-bs-toggle="tooltip" title="Activate">
-                                                    <i class="fa fa-fw fa-check"></i>
-                                                </button>
-                                            </form>
-                                        @endif
+                                                        <button type="submit" class="btn btn-sm btn-alt-success"
+                                                            style="height: 30px" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-fw fa-check"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endcan
+                                            @can('Chỉnh sửa danh mục')
+                                                <a href="{{ route('admin.catalogues.edit', $catalogue->id) }}"class="btn mx-1 rounded-1 me-1 btn-sm btn-alt-secondary"
+                                                    style="height: 30px" data-bs-toggle="tooltip" title="Edit">
+                                                    <i class="fa fa-pencil-alt mt-1"></i>
+                                                </a>
+                                            @endcan
 
-                                        <a href="{{ route('admin.catalogues.edit', $catalogue->id) }}"class="btn mx-1 rounded-1 me-1 btn-sm btn-alt-secondary" style="height: 30px" data-bs-toggle="tooltip" title="Edit">
-                                            <i class="fa fa-pencil-alt mt-1"></i>
-                                        </a>
+
 
                                             {{-- <form action="{{ route('admin.catalogues.destroy', $catalogue->id) }}"
                                             method="POST" style="display:inline;" class="form-delete"
@@ -118,8 +129,9 @@
                                                 <i class="fa fa-fw fa-times text-danger rounded-1"></i>
                                             </button>
                                         </form> --}}
-                                    </div>
-                                </td>
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
 
                             @if ($catalogue->children->count())
@@ -152,7 +164,7 @@
                                                         @csrf
 
                                                         <button type="submit" class="btn btn-sm btn-alt-danger"
-                                                            data-bs-toggle="tooltip" title="Deactivate">
+                                                            data-bs-toggle="tooltip">
                                                             <i class="fa-solid fa-power-off"></i>
                                                         </button>
                                                     </form>
@@ -161,7 +173,7 @@
                                                         method="POST" style="display:inline;" class="form-activate">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-alt-success"
-                                                            data-bs-toggle="tooltip" title="Activate">
+                                                            data-bs-toggle="tooltip">
                                                             <i class="fa fa-fw fa-check"></i>
                                                         </button>
                                                     </form>

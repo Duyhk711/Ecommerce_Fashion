@@ -97,7 +97,7 @@
                      <div class="search-drawer offcanvas offcanvas-top" tabindex="-1" id="search-drawer">
                          <div class="container">
                              <div class="search-header d-flex-center justify-content-between mb-3">
-                                 <h3 class="title m-0">What are you looking for?</h3>
+                                 <h3 class="title m-0">Bạn đang tìm kiếm gì?</h3>
                                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                                      aria-label="Close"></button>
                              </div>
@@ -107,12 +107,12 @@
                                      @csrf
                                      <!--Search Field-->
                                      <div class="d-flex searchField">
-                                         <div class="search-category">
+                                         {{-- <div class="search-category">
                                              <select class="rgsearch-category rounded-end-0">
                                                  <option value="0">All Categories</option>
                                                  <option value="1">- All</option>
                                              </select>
-                                         </div>
+                                         </div> --}}
                                          <div class="input-box d-flex fl-1">
                                              <input type="text" class="input-text border-start-0 border-end-0"
                                                  placeholder="Search for products..." value="{{ request('query') }}"
@@ -126,14 +126,14 @@
                                      <!--End Search Field-->
 
                                      <!--Search popular-->
-                                     <div class="popular-searches d-flex-justify-center mt-3">
+                                     {{-- <div class="popular-searches d-flex-justify-center mt-3">
                                          <span class="title fw-600">Trending Now:</span>
                                          <div class="d-flex-wrap searches-items">
                                              <a class="text-link ms-2" href="#">T-Shirt,</a>
                                              <a class="text-link ms-2" href="#">Shoes,</a>
                                              <a class="text-link ms-2" href="#">Bags</a>
                                          </div>
-                                     </div>
+                                     </div> --}}
                                      <!--End Search popular-->
                                      <!--Search products-->
                                      <!--End Search products-->
@@ -190,15 +190,18 @@
                             <i class="hdr-icon icon anm bi-bell fs-5"></i>
                             <span class="wishlist-count" id="wishlist-count">
                                 <span class="notification-count">
-                                    @if(auth()->check()) 
-                                        {{ auth()->user()->unreadNotifications->count() }}
+                                    @if(auth()->check())
+                                        @php
+                                            $clientNotifications = auth()->user()->unreadNotifications->where('data.category', 'client');
+                                        @endphp
+                                        {{ $clientNotifications->count() }}
                                     @else
                                         0
                                     @endif
                                 </span>
                             </span>
                         </a>
-                        <div id="notifyBox">
+                        <div id="notifyBox" class="custom-scrollbar">
                             <style>
                                 .read{
                                     background-color: #ffffff;
@@ -208,17 +211,20 @@
                                 }
                             </style>
                             <ul class="m-0" id="notification-list">
-                                <li class="mb-2"><strong>Thông báo</strong></li>
+                                <li class="mb-2 fixed-title"><strong>Thông báo</strong></li>
 
                                 @if(auth()->check())
-                                    @if(auth()->user()->notifications->count() > 0)
-                                        @foreach(auth()->user()->notifications as $notification)
-                                            <li class="{{ $notification->read_at ? 'read' : 'unread' }} px-2 mb-2" data-id="{{ $notification->id }}">
-                                                <strong style="font-family: 'Quicksand', sans-serif">{{ $notification->data['title'] }}</strong><br>
-                                                <a href="{{ $notification->data['link'] }}" class="mark-as-read" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
-                                                    {!! $notification->data['message'] !!}
-                                                </a>
-                                            </li>
+                                    @php
+                                        $clientNotifications = auth()->user()->notifications->where('data.category', 'client');
+                                    @endphp
+                                    @if($clientNotifications->count() > 0)
+                                        @foreach($clientNotifications as $notification)
+                                                <li class="{{ $notification->read_at ? 'read' : 'unread' }} px-2 mb-2" data-id="{{ $notification->id }}">
+                                                    <strong style="font-family: 'Quicksand', sans-serif">{{ $notification->data['title'] }}</strong><br>
+                                                    <a href="{{ $notification->data['link'] }}" class="mark-as-read" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
+                                                        {!! $notification->data['message'] !!}
+                                                    </a>
+                                                </li>
                                         @endforeach
                                     @else
                                         <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
@@ -230,7 +236,7 @@
                             <div id="loading" style="display: none;">Đang tải thêm...</div> <!-- Hiển thị khi đang tải -->
                         </div>
                     </div>
-                </div>
+                 </div>
 
                  <!--End notify-->
                  <!--Minicart-->
@@ -609,6 +615,7 @@
      </ul>
  </div>
  <!--End Mobile Menu-->
+ @vite(['resources/js/new_voucher.js'])
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const links = document.querySelectorAll('.mark-as-read');
@@ -634,10 +641,11 @@
         });
     });
 </script>
+@vite(['resources/js/app.js'])
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const notificationList = document.getElementById('notifyBox');  // Bạn cần sử dụng đúng ID
+    document.addEventListener('DOMContentLoaded', () => { // Bạn cần sử dụng đúng ID
         const loading = document.getElementById('loading');
+        const notificationList = document.getElementById('notifyBox'); 
         let page = 1;
         let loadingData = false;
         let hasNextPage = true; // Kiểm tra nếu còn trang kế tiếp

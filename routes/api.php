@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\ChartController;
+use App\Http\Controllers\Admin\Statistic\CustomerStatisticController;
+use App\Http\Controllers\Admin\Statistic\OrderStatisticController;
+use App\Http\Controllers\Admin\Statistic\RevenuStatisticController;
+use App\Http\Controllers\Admin\Statistic\VoucherStatisticController;
+use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\AttributeValueController;
 // use App\Http\Controllers\Client\CartController;
@@ -23,18 +28,57 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Route::apiResource('attributes', AttributeController::class);
 // Route::apiResource('attribute-values', AttributeValueController::class);
-Route::get('/total-income', [ChartController::class, 'getTotalIncome'])->name('api.total-income');
+Route::get('/total-income', [ChartController::class, 'getTotalIncomeByWeek'])->name('api.total-income');
 
-Route::get('/total-orders', [ChartController::class, 'getTotalOrders'])->name('api.total-orders');
-Route::get('/total-customers', [ChartController::class, 'getTotalCustomers']);
-Route::get('/stats/total-sold-products', [ChartController::class, 'getTotalSoldProducts']);
+Route::get('/total-orders', [ChartController::class, 'getTotalOrdersByWeek'])->name('api.total-orders');
+Route::get('/total-customers', [ChartController::class, 'getTotalCustomersByWeek']);
+Route::get('/stats/total-sold-products', [ChartController::class, 'getTotalSoldProductsByWeek']);
 
 Route::get('/revenue-data', [ChartController::class, 'getRevenueData']);
-Route::get('revenue/monthly/{year}', [ChartController::class, 'getMonthlyRevenue']);
-Route::get('revenue/daily/{year}/{month}', [ChartController::class, 'getDailyRevenue']);
-Route::get('/revenue/daily-range/{startDate}/{endDate}', [ChartController::class, 'getRevenueByDateRange']);
-Route::get('/orders/status-distribution', [ChartController::class, 'getOrderStatusDistribution']);
-Route::get('/orders', [ChartController::class, 'getOrders']);
+
+
 
 Route::get('/sales-statistics', [ChartController::class, 'getSalesStatistics']);
 Route::get('/products/top-rated', [ChartController::class, 'topRatedProducts']);
+
+Route::get('revenue/monthly/{year}', [StatisticsController::class, 'getMonthlyRevenue']);
+Route::get('revenue/daily/{year}/{month}', [StatisticsController::class, 'getDailyRevenue']);
+Route::get('/revenue/daily-range/{startDate}/{endDate}', [StatisticsController::class, 'getRevenueByDateRange']);
+
+
+// statistic
+// order
+Route::get('order-statistics', [OrderStatisticController::class, 'getOrderStatistics']);
+Route::get('/orders/status-distribution', [OrderStatisticController::class, 'getOrderStatusDistribution']);
+Route::get('/orders/top', [OrderStatisticController::class, 'getTopOrders'])->name('orders.top');
+Route::get('/statistics/products', [OrderStatisticController::class, 'getProductStatistics']);
+Route::get('/monthly-sales', [OrderStatisticController::class, 'getMonthlySalesData']);
+Route::get('/monthly-order-product-stats', [OrderStatisticController::class, 'getMonthlyOrderAndProductStats']);
+
+
+// revenue
+Route::get('/category-revenue', [RevenuStatisticController::class, 'getCategoryRevenue']);
+Route::get('/category-details', [RevenuStatisticController::class, 'getCategoryDetails']);
+Route::get('/revenue-by-payment-method', [RevenuStatisticController::class, 'getRevenueByPaymentMethod']);
+Route::get('/monthly-revenue-by-payment-method', [RevenuStatisticController::class, 'getMonthlyRevenueByPaymentMethod']);
+
+//custumer
+Route::get('/customer-statistics', [CustomerStatisticController::class, 'getOrderSuccessRate'])->name('statistic.orderSuccessRate');
+Route::get('/customer-return-rate', [CustomerStatisticController::class, 'getReturningCustomerRate'])->name('statistic.returningCustomerRate');
+Route::get('/purchase-frequency', [CustomerStatisticController::class, 'getPurchaseFrequency'])->name('statistic.purchaseFrequency');
+Route::get('/top-spending-customers', [CustomerStatisticController::class, 'getTopSpendingCustomers'])->name('statistic.topSpendingCustomers');
+
+// voucher
+Route::get('/voucher-statistic/usage-rate', [VoucherStatisticController::class, 'getVoucherUsageRate'])->name('statistic.voucherUsageRate');
+Route::get('/voucher-statistic/revenue', [VoucherStatisticController::class, 'getTotalRevenue'])->name('statistic.getTotalRevenue');
+Route::get('/voucher-statistic/discount-statistics', [VoucherStatisticController::class, 'getDiscountStatistics'])->name('statistic.getDiscountStatistics');
+
+
+// dashboard
+Route::get('dashboard/overview', [ChartController::class, 'getOrdersOverview'])->name('dashboard.overview');
+Route::get('product-activity', [ChartController::class, 'productActivity']);
+Route::get('/customer-stats', [ChartController::class, 'getCustomerStats'])->name('customer_stats');
+Route::get('/cart/stats', [ChartController::class, 'getCartStats']);
+Route::get('/voucher-usage-rate', [ChartController::class, 'getVoucherUsageRate']);
+Route::get('comments-report', [ChartController::class, 'commentReport']);
+Route::get('/orders', [ChartController::class, 'getOrders']);

@@ -13,11 +13,11 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="input-group">
-                            <input type="email" class="form-control input-group-field newsletter-input"
+                            {{-- <input type="email" class="form-control input-group-field newsletter-input"
                                 name="email" value="" placeholder=""
                                 required />
                             <button type="submit" class="input-group-btn btn btn-secondary newsletter-submit"
-                                name="commit">Đăng kí</button>
+                                name="commit">Đăng kí</button> --}}
                         </div>
                     </div>
                 </div>
@@ -31,10 +31,10 @@
                     <h4 class="h4">Thông tin</h4>
                     <ul>
                         <li><a href="#">Tài khoản</a></li>
-                        <li><a href="">Liên hệ</a></li>
-                        <li><a href="">Đăng nhập</a></li>
+                        <li><a href="{{ route('contact') }}">Liên hệ</a></li>
+                        <li><a href="{{ route('support') }}">Hỗ trợ</a></li>
                         <li><a href="">Chính sách bảo mật</a></li>
-                        <li><a href="#">Bảo hành &amp; hoàn trả</a></li>
+                        <li><a href="{{ route('barter') }}">Bảo hành &amp; hoàn trả</a></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">

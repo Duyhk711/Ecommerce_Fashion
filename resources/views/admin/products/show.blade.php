@@ -7,6 +7,76 @@
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/app.min.css') }}">
+    <style>
+    .card-header {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+.text-primary {
+    color: #007bff;
+}
+
+.card-body .text-input {
+    font-size: 14px;
+    color: #333;
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+
+.google-search-preview {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.google-search-result {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* .search-logo img.favicon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+    display: inline-block;
+} */
+
+.search-title {
+    font-size: 18px;
+    font-weight: 400;
+    color: #1a0dab; /* Màu xanh tiêu đề */
+    line-height: 1.2;
+}
+
+.search-url {
+    font-size: 14px;
+    color: #006621; /* Màu xanh link */
+    line-height: 1.4;
+}
+
+.search-description p {
+    font-size: 14px;
+    color: #545454; /* Màu chữ mô tả */
+    line-height: 1.6;
+}
+
+
+
+    </style>
 @endsection
 @section('content')
     <div class="bg-body-light">
@@ -121,14 +191,14 @@
                                                                 <h6 class="mb-0">
                                                                     @if($product->price_sale)
                                                                         <span class="text-danger fw-bold">
-                                                                            {{ number_format($product->price_sale * 1000, 0, '.', ',') }}₫
+                                                                            {{ number_format($product->price_sale * 1000, 0, '.', '.') }}₫
                                                                         </span>
                                                                         <span class="text-muted text-decoration-line-through ms-2">
-                                                                            {{ number_format($product->price_regular * 1000, 0, '.', ',') }}₫
+                                                                            {{ number_format($product->price_regular * 1000, 0, '.', '.') }}₫
                                                                         </span>
                                                                     @else
                                                                         <span class="fw-bold">
-                                                                            {{ number_format($product->price_regular * 1000, 0, '.', ',') }}₫
+                                                                            {{ number_format($product->price_regular * 1000, 0, '.', '.') }}₫
                                                                         </span>
                                                                     @endif
                                                                 </h6>
@@ -184,7 +254,7 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <p class="text-muted mb-1">Tổng doanh thu :</p>
-                                                                <h6 class="mb-0">{{ number_format($orderData->total_revenue * 1000, 0, '.', ',') }}₫</h6>
+                                                                <h6 class="mb-0">{{ number_format($orderData->total_revenue * 1000, 0, '.', '.') }}₫</h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -311,12 +381,12 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endforeach
-                                                                    
+
                                                                             {{-- Hiển thị danh sách màu, cách nhau bởi dấu phẩy --}}
                                                                             {{ implode(', ', $displayedColors) }}
                                                                         </td>
                                                                     </tr>
-                                                                    
+
                                                                     <tr>
                                                                         <th scope="row">Chất liệu</th>
                                                                         <td>{{$product->material}}</td>
@@ -410,7 +480,7 @@
                                                             <div class="d-flex flex-wrap align-items-start gap-3">
                                                                 <h6 class="">Đánh giá: </h6>
                                                             </div>
-                                                    
+
                                                             <div class="me-lg-n3 pe-lg-4" data-simplebar style="max-height: 225px;">
                                                                 @if ($comments->isEmpty())
                                                                     <p class="text-muted">Chưa có đánh giá nào.</p>
@@ -430,12 +500,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                    
+
                                                                                     <div class="d-flex align-items-end">
                                                                                         <div class="flex-grow-1">
                                                                                             <span class="mb-0"><strong>{{ $comment->user_name }}</strong></span>
                                                                                         </div>
-                                                    
+
                                                                                         <div class="flex-shrink-0">
                                                                                             <p class="text-muted fs-13 mb-0">
                                                                                                 {{ \Carbon\Carbon::parse($comment->created_at)->locale('vi')->translatedFormat('d M, Y') }}
@@ -450,10 +520,64 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <!-- end card body -->
                                             </div>
+
+                                            <div class="seo-preview card shadow-sm mb-4 mt-4">
+                                                <div class="card-header bg-primary text-white">
+                                                    <h6 class="mb-0"><i class="fas fa-search"></i> Xem trước SEO</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <!-- Title -->
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Tiêu đề:</label>
+                                                        <p class="text-input mb-0">{{ $product->meta_title ?? 'Chưa có tiêu đề SEO' }}</p>
+                                                    </div>
+                                                    <!-- Mô tả -->
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Mô tả:</label>
+                                                        <p class="text-input mb-0">{{ $product->meta_description ?? 'Chưa có mô tả SEO' }}</p>
+                                                    </div>
+                                                    <!-- Từ khóa -->
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Từ khóa:</label>
+                                                        <p class="text-input mb-0">{{ $product->meta_keywords ?? 'Chưa có từ khóa SEO' }}</p>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="google-search-preview">
+                                                <div class="google-search-result">
+                                                    <div class="d-flex align-items-center">
+                                                         <!-- Logo hoặc favicon -->
+                                                        <div class="search-logo">
+                                                            <img src="{{ asset('client/images/title.png') }}" alt="Logo" style="width: 40px;height: 40px;" class="favicon">
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <span class="text-bold">Poly Fashion</span><br>
+                                                            <span class="text-muted">{{ url('/san-pham/'.$product->slug) }}</span>
+                                                        </div>
+                                                    </div>
+                                                  
+                                                   
+                                                    <!-- Tiêu đề -->
+                                                    <div class="search-title">
+                                                        <span>{{$product->name . ' | ' . $product->meta_title  ?? 'Chưa có tiêu đề SEO' }}</span>
+                                                    </div>
+                                                    <!-- URL -->
+                                                    
+                                                    <!-- Mô tả -->
+                                                    <div class="search-description">
+                                                        <p>{{ $product->meta_description ?? 'Chưa có mô tả SEO' }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                            
                                         </div>
                                         <!-- end col -->
                                     </div>

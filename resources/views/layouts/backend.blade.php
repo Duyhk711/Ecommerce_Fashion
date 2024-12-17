@@ -11,6 +11,8 @@
         content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Icons -->
     <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
@@ -23,6 +25,8 @@
 
     @yield('css')
     @vite(['resources/sass/main.scss', 'resources/js/dashmix/app.js'])
+    @vite(['resources/js/new_order_notify_admin.js'])
+    @vite(['resources/js/new_user_notify_admin.js'])
 
 </head>
 
@@ -155,12 +159,13 @@
             <div class="bg-header-dark">
                 <div class="content-header bg-white-5">
                     <!-- Logo -->
-                    <a class="fw-semibold text-white tracking-wide" href="/">
+                    <a class="fw-semibold text-white tracking-wide" href="{{route('admin.dashboard')}}">
                         <span class="smini-visible">
-                            D<span class="opacity-75">x</span>
+                            {{-- D<span class="opacity-75">x</span> --}}
+                            Poly
                         </span>
                         <span class="smini-hidden">
-                            Dash<span class="opacity-75">mix</span>
+                            Poly<span class="opacity-75">Fashion</span>
                         </span>
                     </a>
                     <!-- END Logo -->
@@ -209,13 +214,22 @@
                                 href="/admin/dashboard">
                                 <i class="nav-main-link-icon fa fa-location-arrow"></i>
                                 <span class="nav-main-link-name">Dashboard</span>
-                                <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span>
+                                {{-- <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span> --}}
                             </a>
                         </li>
-                        <li class="nav-main-heading">Various</li>
+                        {{-- <li class="nav-main-heading">Various</li> --}}
                         {{-- SAN PHAM --}}
 
-                        @if (Auth::user()->can('xem danh sách sản phâm') || Auth::user()->can('xem danh sách danh mục'))
+                        @if (Auth::user()->can('xem danh sách sản phâm') ||
+                                Auth::user()->can('Xóa sản phẩm') ||
+                                Auth::user()->can('Chỉnh sửa sản phẩm') ||
+                                Auth::user()->can('Thêm mới sản phẩm') ||
+                                Auth::user()->can('Khôi phục sản phẩm') ||
+                                Auth::user()->can('xem danh sách danh mục') ||
+                                Auth::user()->can('Xóa danh mục') ||
+                                Auth::user()->can('Chỉnh sửa danh mục') ||
+                                Auth::user()->can('Thêm mới danh mục') ||
+                                Auth::user()->can('Kích hoạt danh mục'))
                             <li
                                 class="nav-main-item{{ request()->is('admin/products*') || request()->is('admin/catalogues') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -227,22 +241,30 @@
                                 </a>
                                 <ul
                                     class="nav-main-submenu{{ request()->is('admin/products*') || request()->is('admin/products') ? ' show' : '' }}">
-                                    @can('xem danh sách sản phâm')
+                                    @if (Auth::user()->can('xem danh sách sản phâm') ||
+                                            Auth::user()->can('Xóa sản phẩm') ||
+                                            Auth::user()->can('Chỉnh sửa sản phẩm') ||
+                                            Auth::user()->can('Thêm mới sản phẩm') ||
+                                            Auth::user()->can('Khôi phục sản phẩm'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/products') ? ' active' : '' }}"
                                                 href="{{ route('admin.products.index') }}">
                                                 <span class="nav-main-link-name">Sản phẩm</span>
                                             </a>
                                         </li>
-                                    @endcan
-                                    @can('xem danh sách danh mục')
+                                    @endif
+                                    @if (Auth::user()->can('xem danh sách danh mục') ||
+                                            Auth::user()->can('Xóa danh mục') ||
+                                            Auth::user()->can('Chỉnh sửa danh mục') ||
+                                            Auth::user()->can('Thêm mới danh mục') ||
+                                            Auth::user()->can('Kích hoạt danh mục'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/catalogues') ? ' active' : '' }}"
                                                 href="{{ route('admin.catalogues.index') }}">
                                                 <span class="nav-main-link-name">Danh mục sản phẩm</span>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endif
 
 
                                 </ul>
@@ -251,7 +273,12 @@
 
 
                         {{-- THUOC TINH --}}
-                        @if (Auth::user()->can('xem danh sách thuộc tính') || Auth::user()->can('xem danh sách giá trị thuộc tính'))
+                        @if (Auth::user()->can('xem danh sách thuộc tính') ||
+                                Auth::user()->can('Thêm mới thuộc tính') ||
+                                Auth::user()->can('xem danh sách giá trị thuộc tính') ||
+                                Auth::user()->can('Chỉnh sửa giá trị thuộc tính') ||
+                                Auth::user()->can('Xóa giá trị thuộc tính') ||
+                                Auth::user()->can('Thêm mới giá trị thuộc tính'))
                             <li
                                 class="nav-main-item{{ request()->is('admin/attributes*') || request()->is('admin/attribute_values') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -262,22 +289,25 @@
                                     <span class="nav-main-link-name">Quản lý Thuộc tính</span>
                                 </a>
                                 <ul class="nav-main-submenu{{ request()->is('admin/attributes*') ? ' show' : '' }}">
-                                    @can('xem danh sách thuộc tính')
+                                    @if (Auth::user()->can('xem danh sách thuộc tính') || Auth::user()->can('Thêm mới thuộc tính'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/attributes') ? ' active' : '' }}"
                                                 href="{{ route('admin.attributes.index') }}">
                                                 <span class="nav-main-link-name">Thuộc tính biến thể</span>
                                             </a>
                                         </li>
-                                    @endcan
-                                    @can('xem danh sách giá trị thuộc tính')
+                                    @endif
+                                    @if (Auth::user()->can('xem danh sách giá trị thuộc tính') ||
+                                            Auth::user()->can('Chỉnh sửa giá trị thuộc tính') ||
+                                            Auth::user()->can('Xóa giá trị thuộc tính') ||
+                                            Auth::user()->can('Thêm mới giá trị thuộc tính'))
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/attribute_values') ? ' active' : '' }}"
                                                 href="{{ route('admin.attribute_values.index') }}">
                                                 <span class="nav-main-link-name">Giá trị thuộc tính</span>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endif
 
 
                                 </ul>
@@ -289,7 +319,7 @@
                                 Auth::user()->can('xem danh sách vai trò'))
                             {{-- USER --}}
                             <li
-                                class="nav-main-item{{ request()->is('admin/users*') || request()->is('admin/users') ? ' open' : '' }}">
+                                class="nav-main-item{{ request()->is('admin/clients*') || request()->is('admin/roles') || request()->is('admin/staffs') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/customers*') ? 'true' : 'false' }}"
@@ -300,7 +330,7 @@
                                 <ul class="nav-main-submenu{{ request()->is('admin/users*') ? ' show' : '' }}">
                                     @can('xem danh sách khách hàng')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/clients') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.clients') }}">
                                                 <span class="nav-main-link-name">Khách hàng</span>
                                             </a>
@@ -308,20 +338,20 @@
                                     @endcan
                                     @can('xem danh sách nhân viên')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/staffs') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.staffs') }}">
                                                 <span class="nav-main-link-name">Nhân viên</span>
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('phân quyền') --}}
+                                    @can('phân quyền')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('admin/users') ? ' active' : '' }}"
+                                            <a class="nav-main-link{{ request()->is('admin/roles') ? ' active' : '' }}"
                                                 href="{{ route('admin.users.roles') }}">
                                                 <span class="nav-main-link-name">Vai trò</span>
                                             </a>
                                         </li>
-                                    {{-- @endcan --}}
+                                    @endcan
 
 
 
@@ -332,7 +362,7 @@
                         {{-- DON HANG --}}
                         @if (Auth::user()->can('xem danh sách đơn hàng') || Auth::user()->can('xem danh sách khuyến mãi'))
                             <li
-                                class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/orders') ? ' open' : '' }}">
+                                class="nav-main-item{{ request()->is('admin/orders*') || request()->is('admin/vouchers*') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true"
                                     aria-expanded="{{ request()->is('admin/orders*') ? 'true' : 'false' }}"
@@ -353,7 +383,7 @@
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('admin/vouchers') ? ' active' : '' }}"
                                                 href="{{ route('admin.vouchers.index') }}">
-                                                <span class="nav-main-link-name">Voucher</span>
+                                                <span class="nav-main-link-name">Khuyến mãi</span>
                                             </a>
                                         </li>
                                     @endcan
@@ -401,18 +431,50 @@
 
                         {{-- THONGKE --}}
                         @can('xem thống kê')
-                            <li class="nav-main-item{{ request()->is('admin/thongkes*') ? ' open' : '' }}">
+                            <li class="nav-main-item{{ request()->is('admin/statistics*') ? ' open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-                                    aria-expanded="{{ request()->is('admin/thongkes*') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ request()->is('admin/statistics*') ? 'true' : 'false' }}"
                                     href="#">
                                     <i class="nav-main-link-icon fa fa-keyboard"></i>
                                     <span class="nav-main-link-name">Thống kê</span>
                                 </a>
-                                <ul class="nav-main-submenu{{ request()->is('admin/thongkes*') ? ' show' : '' }}">
+                                {{-- <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('admin/thongkes') ? ' active' : '' }}"
-                                            href="{{ route('admin.thongkes.index') }}">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.index') }}">
                                             <span class="nav-main-link-name">Thống kê</span>
+                                        </a>
+                                    </li>
+                                </ul> --}}
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.revenues') }}">
+                                            <span class="nav-main-link-name">Doanh thu</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.orders') }}">
+                                            <span class="nav-main-link-name">Đơn hàng</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.vouchers') }}">
+                                            <span class="nav-main-link-name">Khuyến mãi</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav-main-submenu{{ request()->is('admin/statistics*') ? ' show' : '' }}">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('admin/statistics') ? ' active' : '' }}"
+                                            href="{{ route('admin.statistics.customer') }}">
+                                            <span class="nav-main-link-name">Khách hàng</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -421,7 +483,7 @@
 
 
 
-                        <li class="nav-main-heading">More</li>
+                        {{-- <li class="nav-main-heading">More</li> --}}
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="/">
                                 <i class="nav-main-link-icon fa fa-globe"></i>
@@ -452,11 +514,11 @@
 
                     <!-- Open Search Section -->
                     <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                    <button type="button" class="btn btn-alt-secondary" data-toggle="layout"
+                    {{-- <button type="button" class="btn btn-alt-secondary" data-toggle="layout"
                         data-action="header_search_on">
                         <i class="fa fa-fw opacity-50 fa-search"></i> <span
                             class="ms-1 d-none d-sm-inline-block">Search</span>
-                    </button>
+                    </button> --}}
                     <!-- END Open Search Section -->
                 </div>
                 <!-- END Left Section -->
@@ -478,23 +540,20 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
                             <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
-                                User Options
+                                Tùy chọn
                             </div>
                             <div class="p-2">
                                 <a class="dropdown-item" href="{{ route('admin.account-profile') }}">
                                     <i class="far fa-fw fa-user me-1"></i> Profile
                                 </a>
 
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    <i class="far fa-fw fa-file-alt me-1"></i> Invoices
-                                </a>
                                 <div role="separator" class="dropdown-divider"></div>
 
                                 <!-- Toggle Side Overlay -->
                                 <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
                                 <a class="dropdown-item" href="javascript:void(0)" data-toggle="layout"
                                     data-action="side_overlay_toggle">
-                                    <i class="far fa-fw fa-building me-1"></i> Settings
+                                    <i class="far fa-fw fa-building me-1"></i> Cài đặt
                                 </a>
                                 <!-- END Side Overlay -->
 
@@ -517,25 +576,70 @@
                         <button type="button" class="btn btn-alt-secondary" id="page-header-notifications-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-bell"></i>
+                            <span class="notification-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @if(auth()->check())
+                                    @php
+                                        $adminNotifications = auth()->user()->unreadNotifications->where('data.category', 'admin');
+                                    @endphp
+                                    {{ $adminNotifications->count() }}
+                                @else
+                                    0
+                                @endif
+                            </span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-notifications-dropdown">
                             <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
-                                Notifications
+                                Thông báo
                             </div>
-                            <ul class="nav-items my-2">
-                                <li>
-                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 mx-3">
-                                            <i class="fa fa-fw fa-check-circle text-success"></i>
-                                        </div>
-                                        <div class="flex-grow-1 fs-sm pe-2">
-                                            <div class="fw-semibold">App was updated to v5.6!</div>
-                                            <div class="text-muted">3 min ago</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
+                            <style>
+                                .read {
+                                    background-color: #ffffff !important;
+                                }
+                                .unread {
+                                    background-color: rgb(255, 250, 244) !important;
+                                }
+                            </style>
+                            <ul class="nav-items my-2" style="max-height: 325px; overflow-y: auto; width: 300px;">
+                                @if(auth()->check())
+                                    @php
+                                        $adminNotifications = auth()->user()->notifications->where('data.category', 'admin');
+                                        $type = auth()->user()->notifications;
+                                    @endphp
+                                    @if($adminNotifications->count() > 0)
+                                    @foreach($adminNotifications as $notification)
+                                        @php
+                                            // Xác định icon dựa vào loại thông báo
+                                            if ($notification->type === 'App\Notifications\CreateNewVoucherAdmin') {
+                                                $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>'; // Icon cho CreateNewVoucherAdmin
+                                            } elseif ($notification->type === 'App\Notifications\CreateNewOrder') {
+                                                $icon = '<i class="far fa-fw fa-file-alt me-1"></i>';
+                                            } elseif ($notification->type === 'App\Notifications\NewUser') {
+                                                $icon = '<i class="fa fa-fw fa-user-plus text-info"></i>';
+                                            } elseif ($notification->type === 'App\Notifications\CreateProduct') {
+                                                $icon = '<i class="fa fa-fw fa-plus-circle text-primary"></i>';
+                                            } else {
+                                                $icon = '<i class="fa fa-info-circle"></i>'; // Icon mặc định
+                                            }
+                                        @endphp
+
+                                        <li class="{{ $notification->read_at ? 'read' : 'unread' }}" data-id="{{ $notification->id }}">
+                                            <a class="d-flex text-dark py-2 mark-as-read" href="{{ $notification->data['link'] }}" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
+                                                <div class="flex-shrink-0 mx-3 mt-2">
+                                                    {!! $icon !!}
+                                                </div>
+                                                <div class="flex-grow-1 fs-sm pe-2">
+                                                    <div class="fw-semibold" style="max-width: 200px; word-wrap: break-word; white-space: pre-wrap; display: block;">{!! $notification->data['message'] !!}</div>
+                                                    <div class="text-muted">{{ $notification->created_at->format('d-m-Y') }}</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                    @else
+                                        <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
+                                    @endif
+                                @endif
+                                {{-- <li>
                                     <a class="d-flex text-dark py-2" href="javascript:void(0)">
                                         <div class="flex-shrink-0 mx-3">
                                             <i class="fa fa-fw fa-user-plus text-info"></i>
@@ -580,13 +684,8 @@
                                             <div class="text-muted">2 hours ago</div>
                                         </div>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
-                            <div class="p-2 border-top">
-                                <a class="btn btn-alt-primary w-100 text-center" href="javascript:void(0)">
-                                    <i class="fa fa-fw fa-eye opacity-50 me-1"></i> View All
-                                </a>
-                            </div>
                         </div>
                     </div>
                     <!-- END Notifications Dropdown -->
@@ -672,31 +771,70 @@
     <!-- toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 toastr.success(
-                    '{{ session('
+                    '{{ session('success') }}',
                     'Thành công', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
+                    }
+                );
             @endif
 
             @if (session('error'))
                 toastr.error(
-                    '{{ session('
+                    '{{ session('error') }}',
                     'Lỗi', {
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
+                    }
+                );
             @endif
         });
     </script>
 
 </body>
 @yield('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.mark-as-read');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.dataset.url; // URL để đánh dấu đã đọc
+                const redirectLink = this.getAttribute('href'); // URL của thông báo
+                const notificationItem = this.closest('li'); // Phần tử thông báo
 
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    },
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Đổi class để thay đổi background
+                        notificationItem.classList.remove('unread');
+                        notificationItem.classList.add('read');
+
+                        // Giảm số lượng thông báo chưa đọc
+                        const countElement = document.querySelector('.notification-count');
+                        const currentCount = parseInt(countElement.textContent.trim());
+                        if (currentCount > 0) {
+                            countElement.textContent = currentCount - 1;
+                        }
+
+                        // Chuyển trang sau khi đánh dấu
+                        window.location.href = redirectLink;
+                    }
+                });
+            });
+        });
+    });
+
+</script>
 
 </html>

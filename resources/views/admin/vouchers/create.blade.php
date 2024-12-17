@@ -92,24 +92,23 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="minimum_order_value" class="required-label">Giá trị đơn hàng tối thiểu</label>
+                        <label for="minimum_order_value " class="required-label">Giá trị đơn hàng tối thiểu</label>
+                        <span class="form-text text-muted ms-3">(Giá trị nhập sẽ nhân với 1,000 đ)</span>
                         <input type="number" name="minimum_order_value" class="form-control" id="minimum_order_value"
-                            placeholder="( Lưu ý: Giá trị nhập sẽ được tự động nhân *1000 Đơn vị: VND. )" value="{{ old('minimum_order_value') }}" min="0">
-                        @if ($errors->has('minimum_order_value'))
-                            <span class="text-danger">{{ $errors->first('minimum_order_value') }}</span>
-                        @endif
+                            placeholder="Nhập giá trị tối thiểu" value="{{ old('minimum_order_value') }}" min="0">
+                        <span id="minimum_order_value_error" class="error-message"></span>
 
                     </div>
-
 
                     <div id="discount_value_container" class="form-group mb-3">
                         <label for="discount_value" class="required-label">Giá trị giảm</label>
+                        <span class="form-text text-muted ms-3">Giá trị nhập sẽ nhân với 1,000 (đ)</span>
                         <input type="number" name="discount_value" class="form-control" id="discount_value"
                             placeholder="Nhập giá trị giảm" value="{{ old('discount_value') }}" min="1">
-                        @if ($errors->has('discount_value'))
-                            <span class="text-danger">{{ $errors->first('discount_value') }}</span>
-                        @endif
+                        <span id="discount_value_error" class="error-message"></span>
+
                     </div>
+
 
                     <div class="form-group mb-3">
                         <label for="quantity" class="required-label">Số lượng</label>
@@ -117,7 +116,7 @@
                             placeholder="Nhập số lượng" value="{{ old('quantity') }}" min="0" required>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="usage_limit" class="required-label">Giới hạn số lượng dùng</label>
+                        <label for="usage_limit" class="required-label">Giới hạn số lượng dùng cho 1 khách hàng:</label>
                         <input type="number" name="usage_limit" class="form-control" id="usage_limit"
                             placeholder="Nhập giới hạn số lượng dùng" value="{{ old('usage_limit') }}" min="1">
                         @if ($errors->has('usage_limit'))
@@ -151,7 +150,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary mb-3" id="submitButton" data-original-text="Lưu">Lưu</button>
+                    <button type="submit" class="btn btn-primary mb-3" id="submitButton"
+                        data-original-text="Lưu">Lưu</button>
 
                 </form>
             </div>
@@ -159,54 +159,64 @@
     </div>
 
     <script>
-        document.getElementById('voucherForm').addEventListener('submit', function(event) {
-        var submitButton = document.getElementById('submitButton');
-        submitButton.disabled = true;
-        submitButton.setAttribute('data-original-text', submitButton.innerHTML);
-        submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
-         });
         function toggleDiscountValueField() {
             var discountValueContainer = document.getElementById('discount_value_container');
             var discountValueField = document.getElementById('discount_value');
-            var discountValue = parseFloat(discountValueField.value);
-            var minimumOrderValue = parseFloat(document.getElementById('minimum_order_value').value);
-
-            if (minimumOrderValue > 0 && discountValue > minimumOrderValue) {
-                discountValueField.setCustomValidity('Giá trị giảm không thể lớn hơn giá trị đơn hàng tối thiểu.');
-                discountValueField.reportValidity();
-            } else {
-                discountValueField.setCustomValidity('');
-            }
-
-
+            var minimumOrderValueField = document.getElementById('minimum_order_value');
             var discountType = document.getElementById('discount_type').value;
-            if (discountType === 'percentage' && discountValue > 20) {
-                discountValueField.setCustomValidity('Giảm giá phần trăm tối đa là 20%.');
-                discountValueField.reportValidity();
-            } else {
-                discountValueField.setCustomValidity('');
-            }
-            if (minimumOrderValue > 0) {
+            var discountValueError = document.getElementById('discount_value_error');
+
+            // Xóa thông báo lỗi cũ
+            discountValueError.innerHTML = '';
+
+            // Hiển thị trường discount_value nếu giá trị minimum_order_value lớn hơn 0
+            if (minimumOrderValueField.value > 0) {
                 discountValueContainer.classList.add('show');
             } else {
                 discountValueContainer.classList.remove('show');
             }
         }
 
+        function validateDiscountValue() {
+            var discountValueField = document.getElementById('discount_value');
+            var discountValue = parseFloat(discountValueField.value);
+            var minimumOrderValue = parseFloat(document.getElementById('minimum_order_value').value);
+            var discountType = document.getElementById('discount_type').value;
+            var discountValueError = document.getElementById('discount_value_error');
+
+            // Xóa thông báo lỗi cũ
+            discountValueError.innerHTML = '';
+
+            // Kiểm tra nếu giá trị giảm lớn hơn giá trị đơn hàng tối thiểu
+            if (minimumOrderValue > 0 && discountValue >= minimumOrderValue) {
+                discountValueError.innerHTML =
+                    '<span style="color: red;">Giá trị giảm không thể lớn hơn hoặc bằng giá trị đơn hàng tối thiểu.</span>';
+            }
+
+            // Kiểm tra loại giảm giá là phần trăm và giá trị giảm lớn hơn 100%
+            if (discountType === 'percentage' && discountValue > 100) {
+                discountValueError.innerHTML = '<span style="color: red;">Giảm giá phần trăm tối đa là 100%.</span>';
+            }
+        }
 
         document.getElementById('minimum_order_value').addEventListener('input', function() {
             toggleDiscountValueField();
-        });
-        document.getElementById('discount_value').addEventListener('input', function() {
-            toggleDiscountValueField();
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleDiscountValueField();
+            validateDiscountValue();
         });
 
-        document.getElementById('voucherForm').addEventListener('submit', function(event) {
-            var submitButton = document.getElementById('submitButton');
-            submitButton.disabled = true;
+        document.getElementById('discount_type').addEventListener('change', function() {
+            toggleDiscountValueField();
+            validateDiscountValue();
+        });
+
+        document.getElementById('discount_value').addEventListener('input', function() {
+            validateDiscountValue();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDiscountValueField();
+            validateDiscountValue();
         });
     </script>
+
 @endsection

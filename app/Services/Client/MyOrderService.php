@@ -4,6 +4,7 @@ namespace App\Services\Client;
 
 use App\Models\Order;
 use App\Models\Comment;
+use App\Services\ProductService;
 use App\Models\OrderStatusChange;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\OrderStatusUpdated;
@@ -28,7 +29,8 @@ class MyOrderService
           if ($status) {
               if ($status == 'cho_thanh_toan') {
                   $query->where('payment_method', 'THANH_TOAN_ONLINE')
-                      ->where('payment_status', 'cho_thanh_toan');
+                      ->where('payment_status', 'cho_thanh_toan')
+                      ->where('status', ['1', '2']);
               } else {
                   $query->where('status', $status);
               }
@@ -63,12 +65,46 @@ class MyOrderService
             return ['success' => false, 'message' => 'Bạn không có quyền hủy đơn hàng này.'];
         }
 
-        if ($order->payment_status == 'da_thanh_toan') {
-            $order->payment_status = 'cho_thanh_toan';
+        if ($order->payment_status == 'da_thanh_toan' || $order->payment_status == 'cho_thanh_toan') {
+            $order->payment_status = 'huy_thanh_toan';
         }
         $oldStatus = $order->status;
         // Cập nhật trạng thái đơn hàng thành "Đã hủy"
         $order->status = 'huy_don_hang';
+
+        $user = $order->user;
+        $message = "Đơn hàng <strong>{$order->sku}</strong> đã hủy thành công";
+        $title = "Cập nhật đơn hàng";
+        $user->notify(new OrderStatusUpdated($order, $message, $title));
+        $productUpdate = new ProductService();
+        $productUpdate->updateStockProductAfterCancleOrder($order_id);
+        $order->save();
+
+        OrderStatusChange::create([
+            'order_id' => $order->id,
+            'user_id' => Auth::id(),
+            'old_status' => $oldStatus,
+            'new_status' => 'huy_don_hang',
+        ]);
+
+        return ['success' => true, 'message' => 'Đơn hàng đã được hủy thành công.'];
+    }
+
+    public function orderSuccess($order_id){
+        $order = Order::find($order_id);
+
+        if (!$order) {
+            return ['success' => false, 'message' => 'Đơn hàng không tồn tại.'];
+        }
+
+
+        if ($order->payment_status == 'cho_thanh_toan') {
+            $order->payment_status = 'da_thanh_toan';
+        }
+
+        $oldStatus = $order->status;
+        // Cập nhật trạng thái đơn hàng thành "Đã hủy"
+        $order->status = '5';
 
         $user = $order->user;
         $message = "Đơn hàng <strong>{$order->sku}</strong> đã bị huỷ";
@@ -80,10 +116,10 @@ class MyOrderService
             'order_id' => $order->id,
             'user_id' => Auth::id(),
             'old_status' => $oldStatus,
-            'new_status' => 'huy_don_hang',
+            'new_status' => '5',
         ]);
 
-        return ['success' => true, 'message' => 'Đơn hàng đã được hủy thành công.'];
+        return ['success' => true, 'message' => 'Đơn hàng đã hoàn thành.'];
     }
 
 

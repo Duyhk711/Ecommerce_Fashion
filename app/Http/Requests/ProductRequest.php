@@ -18,7 +18,7 @@ class ProductRequest extends FormRequest
             'catalogue_id' => 'required|exists:catalogues,id',
             'sku' => 'required|string|max:255|unique:products,sku',
             'price_regular' => 'required|numeric|min:0',
-            'price_sale' => 'nullable|numeric|min:0|lt:price_regular',
+            'price_sale' => 'nullable|numeric|min:0|lte:price_regular',
             'img_thumbnail' => 'required',
             'images.*' => 'required|image',
             'variant_prices.*' => 'required|numeric|min:0',
@@ -27,6 +27,9 @@ class ProductRequest extends FormRequest
             'variant_skus.*' => 'required|string|max:255',
             'variant_images.*' => 'nullable',
             'description' => 'nullable|string|max:200',
+            'meta_title' => 'nullable|string|max:60',
+            'meta_description' => 'nullable|string|max:160',
+            'meta_keywords' => 'nullable|string|max:255',
             'content' => 'nullable|string',
             'material' => 'nullable|string|max:255',
             'is_active' => 'nullable',
@@ -47,11 +50,9 @@ class ProductRequest extends FormRequest
             'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá gốc.',
             'img_thumbnail.required' => 'Ảnh chính là bắt buộc.',
             'img_thumbnail.image' => 'Ảnh chính phải là tệp hình ảnh hợp lệ.',
-            'images.*'=>'Chọn ít nhất một ảnh phụ',
+            'images.*' => 'Chọn ít nhất một ảnh phụ',
             'variant_prices.*.required' => 'Giá biến thể là bắt buộc.',
             'variant_stocks.*.required' => 'Số lượng biến thể là bắt buộc.',
         ];
     }
-
 }
-

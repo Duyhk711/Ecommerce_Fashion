@@ -18,7 +18,7 @@
     <link rel="shortcut icon" href="{{ asset('admin/media/favicons/favicon.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('admin/media/favicons/favicon-192x192.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('admin/media/favicons/apple-touch-icon-180x180.png') }}">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Stylesheets -->
     <link rel="stylesheet" id="css-main" href="{{ asset('admin/css/dashmix.min.css') }}">
   </head>
@@ -34,7 +34,7 @@
                 <div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
                   <!-- Header -->
                   <div class="mb-2 text-center">
-                    <a class="link-fx fw-bold fs-1" href="index.html">
+                    <a class="link-fx fw-bold fs-1" href="#">
                       <span class="text-dark">Dash</span><span class="text-primary">mix</span>
                     </a>
                     <p class="text-uppercase fw-bold fs-sm text-muted">Quên mật khẩu</p>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="text-center mb-4">
                       <button type="submit" class="btn btn-hero btn-primary">
-                        <i class="fa fa-fw fa-reply opacity-50 me-1"></i> Reset Password
+                        <i class="fa fa-fw fa-reply opacity-50 me-1"></i> Đặt lại mật khẩu
                       </button>
                     </div>
                   </form>

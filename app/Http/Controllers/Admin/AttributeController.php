@@ -16,6 +16,8 @@ class AttributeController extends Controller
     public function __construct(AttributeService $attributeService)
     {
         $this->attributeService = $attributeService;
+        $this->middleware('permission:xem danh sách thuộc tính|Thêm mới thuộc tính', ['only' => ['index']]);
+        $this->middleware('permission:Thêm mới thuộc tính', ['only' => ['create', 'store']]);
     }
 
     public function index()
