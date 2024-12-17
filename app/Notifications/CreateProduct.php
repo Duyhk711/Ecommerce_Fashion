@@ -8,34 +8,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class OrderStatusUpdated extends Notification
+class CreateProduct extends Notification
 {
-
     use Queueable;
 
-    protected $order;
+    protected $product;
     protected $message;
     protected $title;
 
-    public function __construct($order, $message, $title)
+    public function __construct($product, $message, $title)
     {
-        $this->order = $order;
+        $this->product = $product;
         $this->message = $message;
         $this->title = $title;
     }
 
     public function via($notifiable)
     {
-        return ['database', 'broadcast']; // Lưu vào DB và realtime
+        return ['database', 'broadcast'];
     }
 
     public function toArray($notifiable)
     {
         return [
-            'category' => 'client',
-            'order_sku' => $this->order->sku,
+            'category' => 'admin',
+            'product_id' => $this->product->id,
             'message' => $this->message,
-            'link' => route('orderDetail', ['id' => $this->order->id]), // Đường link tới order detail
+            'link' => route('admin.products.index'),
             'title' => $this->title,
         ];
     }
@@ -43,12 +42,11 @@ class OrderStatusUpdated extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'category' => 'client',
-            'order_sku' => $this->order->sku,
+            'category' => 'admin',
+            'voucher_id' => $this->product->id,
             'message' => $this->message,
-            'link' => route('orderDetail', ['id' => $this->order->id]),
+            'link' => route('admin.products.index'),
             'title' => $this->title,
         ]);
     }
-
 }

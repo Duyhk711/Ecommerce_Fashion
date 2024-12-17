@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\FirebaseAuthService;
-use App\Http\Requests\AuthRequest;
 use App\Models\User;
-use App\Services\AuthService;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Services\AuthService;
+use App\Notifications\NewUser;
+use App\Http\Requests\AuthRequest;
+use App\Events\NewUserNotifyAdmin;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class AuthenticationController extends Controller
@@ -53,6 +54,11 @@ class AuthenticationController extends Controller
     {
         $isRegistered = $this->authService->postRegister($request, $user);
         if ($isRegistered) {
+            $users = User::all();
+            foreach ($users as $userNotify) {
+                $userNotify->notify(new NewUser($user, 'Có khách hàng mới vừa đăng kí tài khoản', 'khách hàng mới'));
+            }
+            broadcast(new NewUserNotifyAdmin($user));
             return redirect()->route('login')->with('success', 'Registration successful! Please login.');
         }
         return redirect()->back()->with('error', 'Registration failed. Please try again.');

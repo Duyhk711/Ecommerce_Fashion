@@ -191,7 +191,10 @@
                             <span class="wishlist-count" id="wishlist-count">
                                 <span class="notification-count">
                                     @if(auth()->check())
-                                        {{ auth()->user()->unreadNotifications->count() }}
+                                        @php
+                                            $clientNotifications = auth()->user()->unreadNotifications->where('data.category', 'client');
+                                        @endphp
+                                        {{ $clientNotifications->count() }}
                                     @else
                                         0
                                     @endif
@@ -211,14 +214,17 @@
                                 <li class="mb-2 fixed-title"><strong>Thông báo</strong></li>
 
                                 @if(auth()->check())
-                                    @if(auth()->user()->notifications->count() > 0)
-                                        @foreach(auth()->user()->notifications as $notification)
-                                            <li class="{{ $notification->read_at ? 'read' : 'unread' }} px-2 mb-2" data-id="{{ $notification->id }}">
-                                                <strong style="font-family: 'Quicksand', sans-serif">{{ $notification->data['title'] }}</strong><br>
-                                                <a href="{{ $notification->data['link'] }}" class="mark-as-read" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
-                                                    {!! $notification->data['message'] !!}
-                                                </a>
-                                            </li>
+                                    @php
+                                        $clientNotifications = auth()->user()->notifications->where('data.category', 'client');
+                                    @endphp
+                                    @if($clientNotifications->count() > 0)
+                                        @foreach($clientNotifications as $notification)
+                                                <li class="{{ $notification->read_at ? 'read' : 'unread' }} px-2 mb-2" data-id="{{ $notification->id }}">
+                                                    <strong style="font-family: 'Quicksand', sans-serif">{{ $notification->data['title'] }}</strong><br>
+                                                    <a href="{{ $notification->data['link'] }}" class="mark-as-read" data-url="{{ route('notifications.markAsRead', $notification->id) }}">
+                                                        {!! $notification->data['message'] !!}
+                                                    </a>
+                                                </li>
                                         @endforeach
                                     @else
                                         <li>Hiện tại bạn không có thông báo nào.</li> <!-- Nếu không có thông báo -->
@@ -637,9 +643,9 @@
 </script>
 @vite(['resources/js/app.js'])
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const notificationList = document.getElementById('notifyBox');  // Bạn cần sử dụng đúng ID
+    document.addEventListener('DOMContentLoaded', () => { // Bạn cần sử dụng đúng ID
         const loading = document.getElementById('loading');
+        const notificationList = document.getElementById('notifyBox'); 
         let page = 1;
         let loadingData = false;
         let hasNextPage = true; // Kiểm tra nếu còn trang kế tiếp

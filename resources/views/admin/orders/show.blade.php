@@ -343,7 +343,7 @@
                                         </td>
                                         <td style="width: 220px;">
                                             <span
-                                                class="fw-semibold">{{ $change->created_at->format('F d, Y - H:i') }}</span>
+                                                class="fw-semibold">{{ $change->created_at->format('d-m-Y H:i') }}</span>
                                         </td>
                                         <td>
                                             <a href="javascript:void(0)">{{ $change->user->name ?? 'Support' }}</a>

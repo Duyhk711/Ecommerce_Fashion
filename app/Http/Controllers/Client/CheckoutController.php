@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\CartItem;
+use App\Models\User;
 use App\Models\Order;
+use App\Models\CartItem;
+use App\Events\TestEvent;
 use App\Models\OrderItem;
-use App\Models\ProductVariant;
+use App\Events\CreateOrder;
+use App\Events\NewOrderNotifyAdmin;
 use App\Models\UserVoucher;
-use App\Notifications\OrderStatusUpdated;
-use App\Services\Client\CartService;
-use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Notifications\CreateProduct;
+use App\Services\Client\CartService;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\CreateNewOrder;
+use App\Services\Client\CheckoutService;
+use App\Notifications\OrderStatusUpdated;
 
 class CheckoutController extends Controller
 {
@@ -214,6 +221,12 @@ class CheckoutController extends Controller
                 $title = "Cập nhật đơn hàng";
                 $user->notify(new OrderStatusUpdated($order, $message, $title));
             }
+            $users = User::all();
+            foreach ($users as $userNotify) {
+                $userNotify->notify(new CreateNewOrder($order, 'Çó đơn hàng mới!', $title));
+            }
+            broadcast(new NewOrderNotifyAdmin($order));
+            Log::info('Broadcasting CreateOrder event for order: ', ['order' => $order]);
             // Commit transaction nếu không có lỗi
             DB::commit();
             // Kiểm tra phương thức thanh toán

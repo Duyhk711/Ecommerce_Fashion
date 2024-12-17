@@ -17,6 +17,8 @@ export default defineConfig({
                 'resources/js/dashmix/app.js',
                 'resources/js/app.js',
                 'resources/js/order_update_notify.js',
+                'resources/js/new_order_notify_admin.js',
+                'resources/js/new_user_notify_admin.js',
                 'resources/js/new_voucher.js',
                 'resources/js/chat.js',
                 'resources/js/voucher.js',

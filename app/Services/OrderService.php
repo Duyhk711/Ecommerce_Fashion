@@ -63,6 +63,8 @@ class OrderService
 
         try {
             $order->changeStatus($newStatus);
+            $productUpdate = new ProductService();
+            $productUpdate->updateStockProductAfterCancleOrder($orderId);
             OrderStatusChange::create([
                 'order_id' => $order->id,
                 'user_id' => $userId,

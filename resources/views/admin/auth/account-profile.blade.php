@@ -89,7 +89,7 @@
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
-                
+
                 <button type="submit" class="btn btn-alt-primary">
                   <i class="fa fa-check-circle opacity-50 me-1"></i> Cập nhật hồ sơ
                 </button>
@@ -136,24 +136,24 @@
                     <i class="fa fa-check-circle opacity-50 me-1"></i> Cập nhật mật khẩu
                 </button>
             </form>
-            
+
             </div>
           </div>
         </div>
-        
+
       </div>
     </div>
     <!-- END Edit Account -->
   </div>
 
-</main>      
+</main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
   function previewAvatar() {
     const avatarInput = document.getElementById('dm-profile-edit-avatar');
     const preview = document.getElementById('avatar-preview');
-    
+
     if (avatarInput.files && avatarInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {

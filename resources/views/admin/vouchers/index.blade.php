@@ -49,7 +49,7 @@
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">Voucher</li>
-                        <li class="breadcrumb-item active" aria-current="page">Danh sách danh mục</li>
+                        <li class="breadcrumb-item active" aria-current="page">Danh sách mã khuyến mại</li>
                     </ol>
                 </nav>
             </div>
@@ -183,7 +183,33 @@
     <script src="{{ asset('admin/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
     <script src="{{ asset('admin/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteBtns = document.querySelectorAll('.form-delete');
 
+            for (const btn of deleteBtns) {
+                btn.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: "Xác nhận xóa?",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.submit();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
     <!-- Page JS Code -->
     @vite(['resources/js/pages/datatables.js'])
 @endsection

@@ -31,6 +31,7 @@ class CreateNewVoucherAdmin extends Notification
     public function toArray($notifiable)
     {
         return [
+            'category' => 'admin',
             'voucher_id' => $this->voucher->id,
             'message' => $this->message,
             'link' => route('admin.vouchers.index'),
@@ -41,9 +42,10 @@ class CreateNewVoucherAdmin extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
+            'category' => 'admin',
             'voucher_id' => $this->voucher->id,
             'message' => $this->message,
-            'link' => route('vouchers.index'),
+            'link' => route('admin.vouchers.index'),
             'title' => $this->title,
         ]);
     }

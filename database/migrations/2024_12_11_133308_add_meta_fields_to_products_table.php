@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('meta_title')->nullable()->after('view'); 
-            $table->text('meta_description')->nullable()->after('meta_title'); 
-            $table->text(' meta_keywords')->nullable()->after('meta_description'); 
+            $table->string('meta_title')->nullable()->after('view');
+            $table->text('meta_description')->nullable()->after('meta_title');
+            $table->text('meta_keywords')->nullable()->after('meta_description');
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn(['meta_title', 'meta_description', 'meta_keywords']); 
+            $table->dropColumn(['meta_title', 'meta_description', 'meta_keywords']);
         });
     }
 };
